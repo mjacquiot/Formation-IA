@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation IA Territoriale - Simplifiée & Visuelle</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo" id="logo-home">IA <span>Territoriale</span></div>
+                <p class="subtitle">Parcours de Formation</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-home-btn active" id="btn-home">
+                    <span class="icon">🏠</span> Accueil
+                </button>
+                
+                <div class="nav-section-title">Thématiques</div>
+                <div id="sidebar-themes-list" class="themes-accordion">
+                    <!-- Injected by JS -->
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <p>Version 2.0 • Simplifiée</p>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main id="main-content" class="main-content">
+            <!-- Screen 1: Home Dashboard -->
+            <section id="home-screen" class="content-screen active">
+                <header class="home-header">
+                    <h1>Devenez acteur de la transition IA 🚀</h1>
+                    <p>Une formation concise, visuelle et narrative pensée pour les agents et stagiaires de la fonction publique territoriale.</p>
+                </header>
+
+                <div class="themes-grid" id="themes-grid">
+                    <!-- Injected by JS: 10 Theme Cards -->
+                </div>
+
+                <div class="quick-start-info">
+                    <div class="info-badge">💡 Astuce</div>
+                    <p>Utilisez la barre latérale à gauche ou cliquez sur un thème ci-dessus pour commencer votre lecture dynamique.</p>
+                </div>
+            </section>
+
+            <!-- Screen 2: Slide Viewer -->
+            <section id="presentation-screen" class="content-screen">
+                <div id="slide-container" class="slide-container">
+                    <!-- Dynamic Slide Content Injected by JS -->
+                </div>
+                
+                <footer class="slide-navigation">
+                    <button id="nav-prev" class="btn btn-secondary">
+                        <span class="arrow">◀</span> Slide précédente
+                    </button>
+                    <div id="slide-progress" class="slide-progress-bar">
+                        <div class="progress-track">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <span id="slide-indicator" class="indicator-text">Thème 1 • Slide 1/5</span>
+                    </div>
+                    <button id="nav-next" class="btn btn-primary">
+                        Slide suivante <span class="arrow">▶</span>
+                    </button>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="content.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
