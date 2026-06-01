@@ -1769,8 +1769,15 @@ class TrainingApp {
         // Bind panel close button
         const btnClosePanel = document.getElementById('btn-close-panel');
         if (btnClosePanel) {
-            btnClosePanel.onclick = () => {
+            btnClosePanel.onclick = async () => {
                 document.getElementById('interactivity-panel').classList.remove('open');
+                if (this.role === 'formateur') {
+                    if (this.activePoll) {
+                        await this.stopPoll();
+                    } else if (this.activeExercise) {
+                        await this.stopActiveExercise();
+                    }
+                }
             };
         }
 
@@ -1884,11 +1891,57 @@ class TrainingApp {
         const btnFloating = document.getElementById('btn-floating-poll');
         if (btnFloating) {
             btnFloating.style.display = 'flex';
-            btnFloating.onclick = () => {
+            btnFloating.onclick = async () => {
                 const panel = document.getElementById('interactivity-panel');
-                panel.classList.toggle('open');
-                if (panel.classList.contains('open')) {
+                const willOpen = !panel.classList.contains('open');
+                if (willOpen) {
+                    panel.classList.add('open');
+                    
+                    // Auto-start poll if we are on a theme with a quiz and nothing is active
+                    if (!this.activePoll && !this.activeExercise) {
+                        const theme = this.currentThemeIndex === -1 ? null : THEMES[this.currentThemeIndex];
+                        const poll = theme ? INTERACTIVE_QUESTIONS.find(q => q.themeId === theme.id) : null;
+                        if (poll) {
+                            await this.startPoll(poll);
+                        }
+                    }
                     this.refreshFormateurPanel();
+                } else {
+                    panel.classList.remove('open');
+                    // Auto-stop active poll or exercise when closing
+                    if (this.activePoll) {
+                        await this.stopPoll();
+                    } else if (this.activeExercise) {
+                        await this.stopActiveExercise();
+                    }
+                }
+            };
+        }
+
+        // Activer le bouton de réinitialisation de session (Formateur uniquement)
+        const btnReset = document.getElementById('btn-reset-session');
+        if (btnReset) {
+            btnReset.style.display = 'block';
+            btnReset.onclick = async () => {
+                if (confirm("Êtes-vous sûr de vouloir réinitialiser la session ? Cela déconnectera tous les stagiaires et supprimera tous les votes de la session courante.")) {
+                    if (this.supabase) {
+                        // Supprimer tous les votes pour la session 1
+                        await this.supabase.from('votes').delete().eq('session_id', 1);
+                        // Supprimer toutes les présences pour la session 1
+                        await this.supabase.from('presences').delete().eq('session_id', 1);
+                        // Réinitialiser la session en base de données
+                        await this.supabase.from('sessions').update({
+                            active_poll_id: null,
+                            active_exercise_id: null,
+                            show_results: false
+                        }).eq('id', 1);
+                    }
+                    this.activePoll = null;
+                    this.activeExercise = null;
+                    this.sessionState.show_results = false;
+                    document.getElementById('interactivity-panel').classList.remove('open');
+                    this.refreshFormateurPanel();
+                    this.refreshPresenceList();
                 }
             };
         }
@@ -1907,6 +1960,10 @@ class TrainingApp {
                 // Clear active states on slide change
                 this.activePoll = null;
                 this.activeExercise = null;
+                
+                // Fermer le panneau sur changement de slide
+                const panel = document.getElementById('interactivity-panel');
+                if (panel) panel.classList.remove('open');
                 
                 originalSelectSlide.call(this, themeIdx, slideIdx);
                 this.syncSessionState();
@@ -2040,32 +2097,42 @@ class TrainingApp {
         // 2. Synchroniser le sondage ou quiz
         this.activePoll = null;
         this.activeExercise = null;
+        this.revealState = 'hidden';
 
-        if (data.active_poll_id) {
-            if (data.active_poll_id.startsWith('test-idx-')) {
-                const maxThemeIdx = parseInt(data.active_poll_id.replace('test-idx-', ''), 10);
+        let activePollId = data.active_poll_id;
+        if (activePollId && activePollId.includes(':')) {
+            const parts = activePollId.split(':');
+            activePollId = parts[0];
+            this.revealState = parts[1];
+        } else if (activePollId) {
+            this.revealState = data.show_results ? 'answer' : 'hidden';
+        }
+
+        if (activePollId) {
+            if (activePollId.startsWith('test-idx-')) {
+                const maxThemeIdx = parseInt(activePollId.replace('test-idx-', ''), 10);
                 const testQuestions = INTERACTIVE_QUESTIONS.filter(q => {
                     const tIdx = THEMES.findIndex(t => t.id === q.themeId);
                     return tIdx >= 0 && tIdx <= maxThemeIdx;
                 });
                 const testObj = {
-                    id: data.active_poll_id,
+                    id: activePollId,
                     type: 'test-complet',
                     title: `Test Général (Thèmes 1 à ${maxThemeIdx + 1})`,
                     questions: testQuestions
                 };
                 this.activePoll = testObj;
                 if (this.role === 'stagiaire') {
-                    this.showStagiaireTestPanel(testObj, data.show_results);
+                    this.showStagiaireTestPanel(testObj, this.revealState);
                 } else if (this.role === 'formateur') {
                     this.refreshFormateurPanel();
                 }
             } else {
-                const poll = INTERACTIVE_QUESTIONS.find(q => q.id === data.active_poll_id);
+                const poll = INTERACTIVE_QUESTIONS.find(q => q.id === activePollId);
                 if (poll) {
                     this.activePoll = poll;
                     if (this.role === 'stagiaire') {
-                        this.showStagiairePollPanel(poll, data.show_results);
+                        this.showStagiairePollPanel(poll, this.revealState);
                     } else if (this.role === 'formateur') {
                         this.refreshFormateurPanel();
                     }
@@ -2120,8 +2187,8 @@ class TrainingApp {
             actionsSection.style.display = 'flex';
             const btnToggle = document.getElementById('btn-panel-toggle-results');
             btnToggle.style.display = 'block';
-            btnToggle.innerText = this.sessionState.show_results ? "Masquer les notes" : "Dévoiler les scores";
-            btnToggle.onclick = () => this.toggleResultsVisibility();
+            btnToggle.innerText = this.revealState === 'hidden' ? "📊 Dévoiler les scores" : (this.revealState === 'votes' ? "🟢 Révéler les corrections" : "🔒 Masquer les scores");
+            btnToggle.onclick = () => this.cycleRevealState(this.activePoll);
             
             const btnStop = document.getElementById('btn-panel-stop');
             btnStop.innerText = "Clôturer le Test";
@@ -2196,8 +2263,8 @@ class TrainingApp {
             const btnStop = document.getElementById('btn-panel-stop');
             
             btnToggle.style.display = 'block';
-            btnToggle.innerText = this.sessionState.show_results ? "Masquer les choix" : "Dévoiler les résultats";
-            btnToggle.onclick = () => this.toggleResultsVisibility();
+            btnToggle.innerText = this.revealState === 'hidden' ? "📊 Dévoiler les votes" : (this.revealState === 'votes' ? "🟢 Révéler la bonne réponse" : "🔒 Masquer les résultats");
+            btnToggle.onclick = () => this.cycleRevealState(poll);
             
             btnStop.innerText = "Clôturer le Quiz";
             btnStop.onclick = () => this.stopPoll();
@@ -2235,15 +2302,31 @@ class TrainingApp {
         this.refreshFormateurPanel();
     }
 
-    async toggleResultsVisibility() {
+    async cycleRevealState(poll) {
         if (!this.supabase || this.role !== 'formateur') return;
-        const nextShow = !this.sessionState.show_results;
+        
+        let nextPollIdWithSuffix = poll.id;
+        let nextShowResults = false;
+        
+        if (this.revealState === 'hidden') {
+            nextPollIdWithSuffix = `${poll.id}:votes`;
+            nextShowResults = true;
+        } else if (this.revealState === 'votes') {
+            nextPollIdWithSuffix = `${poll.id}:answer`;
+            nextShowResults = true;
+        } else {
+            nextPollIdWithSuffix = poll.id;
+            nextShowResults = false;
+        }
         
         await this.supabase.from('sessions').update({
-            show_results: nextShow
+            active_poll_id: nextPollIdWithSuffix,
+            show_results: nextShowResults
         }).eq('id', 1);
         
-        this.sessionState.show_results = nextShow;
+        this.revealState = nextPollIdWithSuffix.includes(':') ? nextPollIdWithSuffix.split(':')[1] : 'hidden';
+        this.sessionState.show_results = nextShowResults;
+        
         this.refreshFormateurPanel();
     }
 
@@ -2274,20 +2357,21 @@ class TrainingApp {
 
         const resultsSection = document.getElementById('panel-results-section');
         
-        if (this.sessionState.show_results) {
+        if (this.revealState === 'votes' || this.revealState === 'answer') {
             const counts = { A: 0, B: 0, C: 0, D: 0 };
             votesList.forEach(v => {
                 if (counts[v.reponse] !== undefined) counts[v.reponse]++;
             });
 
             const total = votesList.length || 1;
+            const revealAnswer = this.revealState === 'answer';
             
             resultsSection.innerHTML = `
                 <div class="results-chart" style="margin-top: 1rem;">
                     ${Object.entries(poll.options).map(([key, label]) => {
                         const count = counts[key] || 0;
                         const pct = Math.round((count / total) * 100);
-                        const isCorrect = poll.type === 'quiz' && poll.correct === key;
+                        const isCorrect = revealAnswer && poll.type === 'quiz' && poll.correct === key;
                         const barColor = isCorrect ? 'var(--accent-green)' : 'var(--accent-blue)';
                         const borderStyle = isCorrect ? 'border: 2px solid var(--accent-green);' : '';
                         
@@ -2304,7 +2388,7 @@ class TrainingApp {
                         `;
                     }).join('')}
                 </div>
-                ${poll.type === 'quiz' && poll.explanation ? `
+                ${revealAnswer && poll.type === 'quiz' && poll.explanation ? `
                     <div style="background:rgba(0,86,179,0.05); padding:0.75rem; border-radius:6px; font-size:0.78rem; border-left:3px solid var(--accent-blue); margin-top:0.75rem; line-height:1.4;">
                         <strong>Explication :</strong> ${poll.explanation}
                     </div>
@@ -2433,7 +2517,7 @@ class TrainingApp {
         }
     }
 
-    async showStagiairePollPanel(poll, showResults) {
+    async showStagiairePollPanel(poll, revealState) {
         const panel = document.getElementById('interactivity-panel');
         panel.classList.add('open');
 
@@ -2476,14 +2560,14 @@ class TrainingApp {
                         reponse: key,
                         is_correct: isCorrect
                     });
-                    this.showStagiairePollPanel(poll, showResults);
+                    this.showStagiairePollPanel(poll, revealState);
                 };
             });
         } else {
             voteFormSection.style.display = 'none';
             resultsSection.style.display = 'block';
             
-            if (showResults) {
+            if (revealState === 'votes' || revealState === 'answer') {
                 const counts = { A: 0, B: 0, C: 0, D: 0 };
                 const { data: allVotes } = await this.supabase.from('votes').select('*').eq('session_id', 1).eq('poll_id', poll.id);
                 const votesList = allVotes || [];
@@ -2491,17 +2575,22 @@ class TrainingApp {
                 
                 const total = votesList.length || 1;
                 const myChoice = myVote.reponse;
+                const revealAnswer = revealState === 'answer';
                 
                 let scoreHtml = '';
                 if (poll.type === 'quiz') {
-                    const isCorrect = myChoice === poll.correct;
-                    scoreHtml = isCorrect ? `
-                        <div class="score-banner correct" style="background:#f0fdf4; border:1px solid #bbf7d0; color:#14532d; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">🎉 Bravo, c'est correct ! (Réponse : ${myChoice})</div>
-                    ` : `
-                        <div class="score-banner incorrect" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">❌ Incorrect... La bonne réponse était ${poll.correct} (Votre réponse : ${myChoice})</div>
-                    `;
+                    if (revealAnswer) {
+                        const isCorrect = myChoice === poll.correct;
+                        scoreHtml = isCorrect ? `
+                            <div class="score-banner correct" style="background:#f0fdf4; border:1px solid #bbf7d0; color:#14532d; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">🎉 Bravo, c'est correct ! (Réponse : ${myChoice})</div>
+                        ` : `
+                            <div class="score-banner incorrect" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">❌ Incorrect... La bonne réponse était ${poll.correct} (Votre réponse : ${myChoice})</div>
+                        `;
+                    } else {
+                        scoreHtml = `<div class="score-banner general" style="background:rgba(30,41,59,0.6); border:1px solid rgba(255,255,255,0.15); padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">Votre vote a été enregistré : Option ${myChoice}</div>`;
+                    }
                 } else {
-                    scoreHtml = `<div class="score-banner general" style="background:var(--bg-main); border:1px solid var(--border-color); padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">Votre vote a été pris en compte : ${myChoice}</div>`;
+                    scoreHtml = `<div class="score-banner general" style="background:rgba(30,41,59,0.6); border:1px solid rgba(255,255,255,0.15); padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">Votre vote a été pris en compte : ${myChoice}</div>`;
                 }
 
                 resultsSection.innerHTML = `
@@ -2510,7 +2599,7 @@ class TrainingApp {
                         ${Object.entries(poll.options).map(([key, label]) => {
                             const count = counts[key] || 0;
                             const pct = Math.round((count / total) * 100);
-                            const isCorrect = poll.type === 'quiz' && poll.correct === key;
+                            const isCorrect = revealAnswer && poll.type === 'quiz' && poll.correct === key;
                             const barColor = isCorrect ? 'var(--accent-green)' : (key === myChoice ? 'var(--accent-purple)' : 'var(--accent-blue)');
                             
                             return `
@@ -2526,12 +2615,17 @@ class TrainingApp {
                             `;
                         }).join('')}
                     </div>
+                    ${revealAnswer && poll.type === 'quiz' && poll.explanation ? `
+                        <div style="background:rgba(0,86,179,0.05); padding:0.75rem; border-radius:6px; font-size:0.78rem; border-left:3px solid var(--accent-blue); margin-top:0.75rem; line-height:1.4;">
+                            <strong>Explication :</strong> ${poll.explanation}
+                        </div>
+                    ` : ''}
                 `;
             } else {
                 resultsSection.innerHTML = `
-                    <div style="text-align:center; padding:1.5rem; background:var(--bg-main); border:1px dashed var(--border-color); border-radius:6px; color:var(--text-muted); font-size:0.8rem;">
+                    <div style="text-align:center; padding:1.5rem; background:rgba(30,41,59,0.6); border:1px dashed rgba(255,255,255,0.15); border-radius:6px; color:#cbd5e1; font-size:0.8rem;">
                         🚀 Votre réponse (<strong>Option ${myVote.reponse}</strong>) a bien été envoyée ! <br>
-                        <span style="font-size:0.72rem; font-style:italic; display:inline-block; margin-top:0.4rem;">En attente de la fin des votes par le formateur pour afficher les résultats de la classe.</span>
+                        <span style="font-size:0.72rem; color:#94a3b8; font-style:italic; display:inline-block; margin-top:0.4rem;">En attente de la fin des votes par le formateur pour afficher les résultats de la classe.</span>
                     </div>
                 `;
             }
@@ -2683,11 +2777,13 @@ class TrainingApp {
         const votersCountSpan = document.getElementById('voters-count');
         const votersListDiv = document.getElementById('voters-names-list');
         
+        const showScoreText = (this.revealState === 'votes' || this.revealState === 'answer');
+        
         if (votersCountSpan) votersCountSpan.innerText = `${completedCount}/${voters.length}`;
         if (votersListDiv) {
             votersListDiv.innerHTML = voters.map(v => {
                 const isCompleted = v.answered >= totalQuestions;
-                const scoreText = this.sessionState.show_results ? ` (${v.correct}/${totalQuestions})` : ` (${v.answered}/${totalQuestions})`;
+                const scoreText = showScoreText ? ` (${v.correct}/${totalQuestions})` : ` (${v.answered}/${totalQuestions})`;
                 const badgeClass = isCompleted ? 'voter-badge-name voted' : 'voter-badge-name';
                 const icon = isCompleted ? '✅' : '⏳';
                 return `<span class="${badgeClass}">${icon} ${this.escapeHtml(v.prenom)}${scoreText}</span>`;
@@ -2697,8 +2793,9 @@ class TrainingApp {
         const resultsSection = document.getElementById('panel-results-section');
         if (!resultsSection) return;
         
-        if (this.sessionState.show_results) {
+        if (this.revealState === 'votes' || this.revealState === 'answer') {
             let html = `<div class="test-detailed-results" style="margin-top: 1rem; max-height: 400px; overflow-y: auto; padding-right: 5px;">`;
+            const revealAnswer = this.revealState === 'answer';
             
             testObj.questions.forEach((q, idx) => {
                 const qVotes = votesList.filter(v => v.poll_id === q.id);
@@ -2710,7 +2807,7 @@ class TrainingApp {
                 const qTotal = qVotes.length || 1;
                 
                 html += `
-                    <div class="test-question-result" style="border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); border-radius: 6px; padding: 0.65rem; margin-bottom: 0.75rem; text-align: left;">
+                    <div class="test-question-result" style="border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(15, 23, 42, 0.4); border-radius: 6px; padding: 0.65rem; margin-bottom: 0.75rem; text-align: left;">
                         <div style="font-size: 0.76rem; font-weight: 700; margin-bottom: 0.35rem; color: var(--accent-sky);">
                             Q${idx + 1}. ${this.escapeHtml(q.question)}
                         </div>
@@ -2718,14 +2815,14 @@ class TrainingApp {
                             ${Object.entries(q.options).map(([key, label]) => {
                                 const count = counts[key] || 0;
                                 const pct = Math.round((count / qTotal) * 100);
-                                const isCorrect = q.type === 'quiz' && q.correct === key;
+                                const isCorrect = revealAnswer && q.type === 'quiz' && q.correct === key;
                                 const barColor = isCorrect ? 'var(--accent-green)' : 'var(--accent-blue)';
                                 const textWeight = isCorrect ? 'bold' : 'normal';
                                 const checkIcon = isCorrect ? '🟢' : '';
                                 
                                 return `
                                     <div style="font-size: 0.68rem; line-height: 1.3;">
-                                        <div style="display:flex; justify-content:space-between; font-weight:${textWeight}; margin-bottom: 0.1rem;">
+                                        <div style="display:flex; justify-content:space-between; font-weight:${textWeight}; margin-bottom: 0.1rem; color: #e2e8f0;">
                                             <span>${checkIcon} <strong>${key}</strong>: ${label}</span>
                                             <span>${count} vote${count > 1 ? 's' : ''} (${pct}%)</span>
                                         </div>
@@ -2744,14 +2841,14 @@ class TrainingApp {
             resultsSection.innerHTML = html;
         } else {
             resultsSection.innerHTML = `
-                <div style="text-align:center; padding:1.5rem; background:var(--bg-main); border:1px dashed var(--border-color); border-radius:6px; color:var(--text-muted); font-size:0.82rem; font-style:italic; margin-top:1rem;">
+                <div style="text-align:center; padding:1.5rem; background:rgba(30, 41, 59, 0.6); border:1px dashed rgba(255, 255, 255, 0.15); border-radius:6px; color:#cbd5e1; font-size:0.82rem; font-style:italic; margin-top:1rem;">
                     🔒 Les scores détaillés du test sont masqués. <br>Attente du formateur pour dévoiler les résultats de la classe.
                 </div>
             `;
         }
     }
 
-    async showStagiaireTestPanel(testObj, showResults) {
+    async showStagiaireTestPanel(testObj, revealState) {
         const panel = document.getElementById('interactivity-panel');
         if (panel) panel.classList.add('open');
 
@@ -2787,6 +2884,8 @@ class TrainingApp {
         const answeredCount = myVotesList.length;
         const totalCount = testObj.questions.length;
         const isCompleted = answeredCount >= totalCount;
+        const showResults = (revealState === 'votes' || revealState === 'answer');
+        const showDetailedAnswers = (revealState === 'answer');
 
         if (!isCompleted) {
             let html = `
@@ -2847,7 +2946,7 @@ class TrainingApp {
                         is_correct: isCorrect
                     });
                     
-                    this.showStagiaireTestPanel(testObj, showResults);
+                    this.showStagiaireTestPanel(testObj, revealState);
                 };
             });
         } else {
@@ -2872,34 +2971,47 @@ class TrainingApp {
                     const myAnswer = myVotesMap[q.id];
                     const isCorrect = myAnswer === q.correct;
                     
-                    html += `
-                        <div class="test-question-card" style="background: rgba(255,255,255,0.03); border: 1px solid ${isCorrect ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; border-radius: 6px; padding: 0.65rem;">
-                            <div style="font-size:0.78rem; font-weight:700; color:#f8fafc; margin-bottom: 0.4rem;">
-                                Q${idx + 1}. ${this.escapeHtml(q.question)}
-                            </div>
-                            
-                            <div style="font-size: 0.72rem; line-height: 1.4;">
-                                <div style="display:flex; justify-content:space-between; margin-bottom: 0.2rem; font-weight: 600;">
-                                    <span style="color: ${isCorrect ? '#34d399' : '#f87171'};">
-                                        ${isCorrect ? '✅' : '❌'} Votre choix : ${myAnswer}
-                                    </span>
-                                    ${!isCorrect ? `<span style="color: #34d399;">Correction : ${q.correct}</span>` : ''}
+                    if (showDetailedAnswers) {
+                        html += `
+                            <div class="test-question-card" style="background: rgba(255,255,255,0.03); border: 1px solid ${isCorrect ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; border-radius: 6px; padding: 0.65rem;">
+                                <div style="font-size:0.78rem; font-weight:700; color:#f8fafc; margin-bottom: 0.4rem;">
+                                    Q${idx + 1}. ${this.escapeHtml(q.question)}
                                 </div>
-                                <div style="color: var(--text-muted); font-size: 0.7rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.25rem; margin-top: 0.25rem;">
-                                    <strong>Explication:</strong> ${this.escapeHtml(q.explanation)}
+                                
+                                <div style="font-size: 0.72rem; line-height: 1.4;">
+                                    <div style="display:flex; justify-content:space-between; margin-bottom: 0.2rem; font-weight: 600;">
+                                        <span style="color: ${isCorrect ? '#34d399' : '#f87171'};">
+                                            ${isCorrect ? '✅' : '❌'} Votre choix : ${myAnswer}
+                                        </span>
+                                        ${!isCorrect ? `<span style="color: #34d399;">Correction : ${q.correct}</span>` : ''}
+                                    </div>
+                                    <div style="color: var(--text-muted); font-size: 0.7rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.25rem; margin-top: 0.25rem;">
+                                        <strong>Explication:</strong> ${this.escapeHtml(q.explanation)}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        html += `
+                            <div class="test-question-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; padding: 0.65rem;">
+                                <div style="font-size:0.78rem; font-weight:700; color:#f8fafc; margin-bottom: 0.4rem;">
+                                    Q${idx + 1}. ${this.escapeHtml(q.question)}
+                                </div>
+                                <div style="font-size: 0.72rem; color: var(--accent-sky); font-weight: 600;">
+                                    <span>Votre réponse enregistrée : <strong>Option ${myAnswer}</strong></span>
+                                </div>
+                            </div>
+                        `;
+                    }
                 });
 
                 html += `</div>`;
                 resultsSection.innerHTML = html;
             } else {
                 resultsSection.innerHTML = `
-                    <div style="text-align:center; padding:1.5rem; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.15); border-radius:6px; color:#34d399; font-size:0.8rem; font-weight:700; margin-top:1rem;">
+                    <div style="text-align:center; padding:1.5rem; background:rgba(30,41,59,0.6); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:#34d399; font-size:0.8rem; font-weight:700; margin-top:1rem;">
                         🚀 Test terminé ! Vos réponses ont été envoyées. <br>
-                        <span style="font-size:0.72rem; color:var(--text-muted); font-weight:normal; display:inline-block; margin-top:0.4rem;">En attente de la fin des votes par le formateur pour afficher votre score et les corrections détaillées.</span>
+                        <span style="font-size:0.72rem; color:#cbd5e1; font-weight:normal; display:inline-block; margin-top:0.4rem;">En attente de la fin des votes par le formateur pour afficher votre score et les corrections détaillées.</span>
                     </div>
                 `;
             }
