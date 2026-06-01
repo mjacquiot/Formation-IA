@@ -121,3 +121,7 @@ ON public.votes FOR INSERT WITH CHECK (true);
 -- Les stagiaires anonymes peuvent corriger leur vote si la session le permet
 CREATE POLICY "Tout le monde peut modifier son vote" 
 ON public.votes FOR UPDATE USING (true);
+
+-- Tout le monde peut supprimer des votes (requis pour réinitialiser et relancer les quiz/exercices)
+CREATE POLICY "Tout le monde peut supprimer des votes" 
+ON public.votes FOR DELETE USING (true);
