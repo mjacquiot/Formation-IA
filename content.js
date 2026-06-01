@@ -238,6 +238,107 @@ const THEMES = [
                 ]
             },
             {
+                title: "Souveraineté vs Cloud : Alternatives & Coûts",
+                type: "collectivite-couts",
+                intro: "Pour déployer l'IA, une collectivité fait face à un arbitrage stratégique : investir dans sa propre infrastructure locale sécurisée, ou s'abonner aux services cloud des géants de la Tech.",
+                scenarios: [
+                    {
+                        id: "low",
+                        label: "1. Expérimentation (Faible)",
+                        users: 15,
+                        desc: "Usage restreint à un petit groupe d'agents testeurs (ex. Services techniques ou DSI) pour évaluer les usages.",
+                        local: {
+                            invest: "15 000 €",
+                            fixed: "3 000 € / an",
+                            tco3y: "24 000 €",
+                            userCost: "533 € / salarié / an",
+                            breakdown: "Achat Serveur GPU : 15 000 € | Électricité & Climatisation : ~500 €/an | Maintenance IT & Mises à jour : ~2 500 €/an",
+                            userCostDesc: "Investissement matériel initial lourd amorti sur seulement 15 testeurs, d'où un coût unitaire très élevé."
+                        },
+                        cloud: {
+                            invest: "0 €",
+                            fixed: "3 600 € / an",
+                            tco3y: "10 800 €",
+                            userCost: "240 € / salarié / an",
+                            breakdown: "Licences Pro (Gemini/ChatGPT Plus) : 15 x 240 €/an | Installation de départ : 0 € | Formation : 0 €",
+                            userCostDesc: "Formule flexible, idéale pour démarrer des tests immédiats sans immobilisation de budget d'investissement."
+                        }
+                    },
+                    {
+                        id: "medium",
+                        label: "2. Transition (Moyen)",
+                        users: 60,
+                        desc: "Déploiement progressif dans plusieurs services (Secrétariat, Compta, Communication) pour des tâches quotidiennes.",
+                        local: {
+                            invest: "15 000 €",
+                            fixed: "4 000 € / an",
+                            tco3y: "27 000 €",
+                            userCost: "150 € / salarié / an",
+                            breakdown: "Achat Serveur GPU : 15 000 € | Électricité & Climatisation : ~800 €/an | Support technique & Audits : ~3 200 €/an",
+                            userCostDesc: "Le serveur commence à être rentabilisé en étant partagé. Le coût par agent devient inférieur aux licences Cloud."
+                        },
+                        cloud: {
+                            invest: "1 500 €",
+                            fixed: "10 200 € / an",
+                            tco3y: "32 100 €",
+                            userCost: "178 € / salarié / an",
+                            breakdown: "30 Licences Pro : 7 200 €/an | Consommation API widgets intranet : ~3 000 €/an | Formation & Setup initial : 1 500 €",
+                            userCostDesc: "Facturation hybride pour limiter les coûts. Nécessite une surveillance des appels d'API (tokens) pour éviter les dérives."
+                        }
+                    },
+                    {
+                        id: "high",
+                        label: "3. Intégration (Fort)",
+                        users: 150,
+                        desc: "Usage généralisé à l'ensemble de la collectivité, intégré en profondeur dans les outils de travail quotidiens.",
+                        local: {
+                            invest: "30 000 €",
+                            fixed: "8 000 € / an",
+                            tco3y: "54 000 €",
+                            userCost: "120 € / salarié / an",
+                            breakdown: "2 Serveurs GPU redondés : 30 000 € | Électricité & Climatisation : ~2 000 €/an | Administration système IT : ~6 000 €/an",
+                            userCostDesc: "Excellent retour sur investissement. L'infrastructure est mutualisée à grande échelle, divisant par deux le coût par agent."
+                        },
+                        cloud: {
+                            invest: "3 000 €",
+                            fixed: "27 000 € / an",
+                            tco3y: "84 000 €",
+                            userCost: "187 € / salarié / an",
+                            breakdown: "Licences Entreprise : 150 x 180 €/an (remise volume) | Audit conformité RGPD & DPO : 2 000 € | Formation : 1 000 €",
+                            userCostDesc: "Coût cumulé sur 3 ans très élevé. Une dépense de fonctionnement (OpEx) pure qui pèse de plus en plus sur les budgets."
+                        }
+                    }
+                ],
+                localSpecs: {
+                    title: "🖥️ Option A : IA Locale (Serveur Interne)",
+                    subtitle: "Hébergement physique sans connexion Internet",
+                    pros: [
+                        "<strong>Souveraineté totale (RGPD) :</strong> Zéro fuite de données, aucune dépendance juridique ou géopolitique (Cloud Act).",
+                        "<strong>Ancrage documentaire (Avantage) :</strong> Possibilité d'injecter tous les documents internes et confidentiels sans aucun risque.",
+                        "<strong>Pas d'accès Internet (Avantage sécurité) :</strong> Confinement absolu qui évite les cyberattaques et l'extraction de données."
+                    ],
+                    cons: [
+                        "<strong>Pas d'accès Internet (Inconvénient usage) :</strong> Incapable de faire des recherches en ligne en temps réel ou de mettre à jour ses connaissances.",
+                        "<strong>Système à la traîne (Inconvénient performance) :</strong> Modèles open-source locaux (ex. Llama 3, Mistral) rapidement obsolètes face à la puissance des géants de l'IA.",
+                        "<strong>Maintenance lourde :</strong> Nécessite des compétences d'administration système en interne et une gestion de la climatisation des serveurs."
+                    ]
+                },
+                cloudSpecs: {
+                    title: "☁️ Option B : IA Cloud (Géants - Gemini, ChatGPT, Claude)",
+                    subtitle: "Abonnements SaaS et APIs de pointe",
+                    pros: [
+                        "<strong>À la pointe tout le temps (Avantage) :</strong> Accès instantané aux modèles d'IA les plus intelligents et mis à jour en continu.",
+                        "<strong>Accès Internet (Avantage) :</strong> Recherche d'informations sur le web en temps réel (ex. derniers décrets officiels).",
+                        "<strong>Coût initial nul (Avantage) :</strong> Aucun investissement dans des serveurs physiques coûteux."
+                    ],
+                    cons: [
+                        "<strong>RGPD & Cloud Act (Inconvénient) :</strong> Risque d'accès par les autorités étrangères (Cloud Act US) et conformité RGPD très difficile à garantir sans anonymisation.",
+                        "<strong>AI Act (Inconvénient) :</strong> Obligation de surveiller la conformité européenne des prestataires tiers.",
+                        "<strong>Évolution rapide :</strong> Instabilité des tarifs, des APIs et des conditions d'utilisation qui évoluent tous les six mois."
+                    ]
+                }
+            },
+            {
                 title: "Charte Municipale & Outil d'Anonymisation Libre",
                 type: "anonymizer-tool",
                 desc: "<strong>Charte Municipale d'usage de l'IA (Art. 4) :</strong> Les agents publics sont autorisés à utiliser des LLM externes soumis au Cloud Act uniquement si les données d'usagers ont été préalablement anonymisées. <br>Utilisez un outil libre d'anonymisation ou de pseudonymisation s'exécutant en local (comme le module ci-dessous) pour nettoyer vos textes avant de les envoyer.",
@@ -502,6 +603,35 @@ const THEMES = [
                     "<strong>Sécurisation du code :</strong> Antigravity teste le code qu'il produit en boucle sur des consoles locales. Il s'assure que l'application ne contient aucune faille de sécurité.",
                     "<strong>Outil d'inclusion :</strong> Il permet à un agent administratif sans aucune notion de programmation de concevoir des petits logiciels fonctionnels sur-mesure pour son service."
                 ]
+            },
+            {
+                title: "Sécurité & Confinement : Les Risques de l'Agentique",
+                type: "agentic-warning",
+                intro: "Contrairement à un simple Chat passif, un Agent IA est actif : il dispose d'outils lui permettant de lire, écrire, exécuter des scripts et installer des programmes directement sur le système d'exploitation.",
+                risks: [
+                    {
+                        title: "💻 Prise de contrôle du PC",
+                        desc: "L'agent accède directement au terminal et au disque dur. Il agit avec les mêmes privilèges que l'utilisateur qui l'a lancé, pouvant exécuter des commandes système réelles."
+                    },
+                    {
+                        title: "🌀 Erreur ou Hallucination fatale",
+                        desc: "Une commande mal interprétée ou une hallucination sémantique de l'agent peut entraîner la suppression accidentelle de bases de données, de fichiers système ou de documents de travail."
+                    },
+                    {
+                        title: "📡 Injection de prompt indirecte",
+                        desc: "Si l'agent lit un courriel ou un document externe piégé par un hacker, il peut être manipulé pour exécuter des scripts malveillants, voler des données ou installer un rançongiciel."
+                    }
+                ],
+                solutions: [
+                    {
+                        title: "🖥️ Recommandation : Cloisonnement en Machine Virtuelle (VM)",
+                        desc: "Pour écarter tout risque, il est <strong>impératif de n'exécuter un agent IA autonome que dans un environnement isolé</strong> : une Machine Virtuelle (ex. VirtualBox) ou un conteneur sécurisé (sandbox). En cas de bug ou d'attaque, seul l'environnement virtuel est affecté, le PC hôte reste intact."
+                    },
+                    {
+                        title: "🔒 Validation Humaine (Human-in-the-Loop)",
+                        desc: "Ne jamais utiliser de mode '100% autonome' pour des tâches système. L'agent doit obligatoirement s'arrêter et solliciter votre validation manuelle (comme le système de validation d'Antigravity) avant chaque commande d'écriture ou d'exécution de script."
+                    }
+                ]
             }
         ]
     },
@@ -600,5 +730,183 @@ const THEMES = [
                 modelAnswer: "[MOI] : Je suis agent administratif en charge du service de l'état civil municipal.\n\n[AGENT] : Agis en tant qu'expert juridique de l'état civil des Français à l'étranger.\n\n[INFORMATION] : Conçois un brouillon de réponse par mail destiné à l'administré [NOM_1] (contact: [EMAIL_1]) qui souhaite obtenir l'acte de naissance de son fils né hors de France.\n\n[RESSOURCES] : Base-toi uniquement sur les articles 47 et 48 du Code Civil français.\n\n[EXIGENCE] : Rédige une réponse claire de 3 paragraphes maximum. Explique de manière neutre et polie la procédure et les pièces justificatives à fournir. Précise que la demande doit être adressée directement au Service central d'état civil de Nantes (ministère des Affaires étrangères)."
             }
         ]
+    },
+    {
+        id: "exercices-ateliers",
+        category: "prompt",
+        title: "12. Exercices & Ateliers",
+        icon: "🎯",
+        desc: "Une banque complète de plus de 60 exercices pratiques et théoriques, individuels et collectifs, sur PC ou sur papier.",
+        slides: [
+            {
+                title: "Le Catalogue des Ateliers & Exercices",
+                type: "exercises-dashboard",
+                intro: "Sélectionnez, filtrez et préparez vos ateliers de formation. Ce module interactif regroupe l'ensemble des exercices pratiques sur PC ou sur papier avec leurs corrections détaillées."
+            }
+        ]
     }
 ];
+
+// Base de données des questions interactives (Sondages & Quiz) associées à chaque thème
+const INTERACTIVE_QUESTIONS = [
+    {
+        themeId: "histoire-ia",
+        id: "q1",
+        type: "quiz",
+        question: "En quelle année Alan Turing a-t-il proposé son fameux Test d'Imitation pour tester l'intelligence d'une machine ?",
+        options: {
+            A: "1950 (Publication de 'Computing Machinery and Intelligence')",
+            B: "1956 (Séminaire de Dartmouth)",
+            C: "1974 (Début du premier hiver de l'IA)",
+            D: "1997 (Deep Blue bat Kasparov aux échecs)"
+        },
+        correct: "A",
+        explanation: "Alan Turing a publié son article fondateur en 1950, posant la question philosophique et logique du test d'imitation."
+    },
+    {
+        themeId: "technique-llm",
+        id: "q2",
+        type: "quiz",
+        question: "Comment l'IA comprend-elle le sens des mots et leurs relations ?",
+        options: {
+            A: "Elle applique des dictionnaires de synonymes codés par des linguistes.",
+            B: "Elle projette les mots sous forme de vecteurs géométriques (Embeddings) où les termes de sens proche sont géographiquement regroupés.",
+            C: "Elle effectue une recherche en temps réel sur Wikipédia pour chaque mot.",
+            D: "Elle ne s'intéresse qu'à l'ordre alphabétique des lettres."
+        },
+        correct: "B",
+        explanation: "Les embeddings sémantiques permettent à l'IA d'effectuer des calculs mathématiques de proximité sur les mots (ex: Maire - Homme + Femme = Mairesse)."
+    },
+    {
+        themeId: "prompt-homme",
+        id: "q3",
+        type: "quiz",
+        question: "Dans le parallèle des contextes, par quoi remplace-t-on le contexte sensoriel (les yeux, les oreilles, l'urgence de la pièce) chez l'IA ?",
+        options: {
+            A: "Par de la puissance de calcul brute sur des puces graphiques (GPU).",
+            B: "Par la description textuelle méticuleuse de la situation dans le prompt utilisateur.",
+            C: "Par l'installation d'une webcam connectée aux serveurs d'IA.",
+            D: "Par les consignes système pré-configurées (System Prompt)."
+        },
+        correct: "B",
+        explanation: "L'IA est enfermée dans un serveur aveugle. Le prompt utilisateur est son unique pont sensoriel avec la réalité de votre problème."
+    },
+    {
+        themeId: "methode-maire",
+        id: "q4",
+        type: "quiz",
+        question: "Dans la méthode M.A.I.R.E. de rédaction d'invites, à quoi correspond la lettre R ?",
+        options: {
+            A: "Le Rôle assigné à l'IA (le persona expert).",
+            B: "Les Règles de sécurité et de conformité RGPD.",
+            C: "Les Ressources fournies comme ancrage de données (textes, règlements, chiffres bruts).",
+            D: "Le Résultat attendu (format du livrable, ton, longueur)."
+        },
+        correct: "C",
+        explanation: "Les Ressources sont les données d'ancrage que vous fournissez pour empêcher l'IA d'halluciner et lui donner la matière brute à travailler."
+    },
+    {
+        themeId: "securite-reglementation",
+        id: "q5",
+        type: "quiz",
+        question: "Quel règlement européen adopté en 2024 classe les applications d'IA selon leur niveau de risque (Inacceptable, Haut, Limité, Minimal) ?",
+        options: {
+            A: "Le Cloud Act américain",
+            B: "Le RGPD (Règlement Général sur la Protection des Données)",
+            C: "L'AI Act (Règlement sur l'Intelligence Artificielle)",
+            D: "La Charte nationale de déontologie des agents territoriaux"
+        },
+        correct: "C",
+        explanation: "L'AI Act européen régule spécifiquement les déploiements d'IA en fonction de leurs risques démocratiques et discriminatoires."
+    },
+    {
+        themeId: "hallucinations-ia",
+        id: "q6",
+        type: "quiz",
+        question: "Pourquoi les IA génératives (LLM) souffrent-elles 'd'hallucinations sémantiques' (invention de faits) ?",
+        options: {
+            A: "C'est une surchauffe passagère de leurs puces Nvidia.",
+            B: "Ce sont des modèles statistiques probabilistes entraînés à prédire le mot suivant le plus fluide, pas à vérifier des faits réels.",
+            C: "Elles ont été programmées délibérément pour mentir aux usagers.",
+            D: "Elles manquent de mémoire vive (RAM) au moment du calcul."
+        },
+        correct: "B",
+        explanation: "L'IA cherche la fluidité de parole et la probabilité d'association des mots. Si l'information est rare, elle comble le vide de façon plausible."
+    },
+    {
+        themeId: "guerre-ia",
+        id: "q7",
+        type: "sondage",
+        question: "À votre avis, quel est le principal frein pour le déploiement d'une IA locale souveraine sur serveur interne dans votre mairie ?",
+        options: {
+            A: "Le coût élevé d'investissement initial de matériel GPU.",
+            B: "La complexité technique d'administration système en interne.",
+            C: "L'absence d'accès internet qui limite les recherches en direct.",
+            D: "L'obsolescence rapide des modèles locaux face aux géants américains."
+        },
+        correct: null,
+        explanation: "C'est un sondage d'opinion : chaque réponse correspond à une contrainte réelle d'arbitrage pour les services de la commune."
+    },
+    {
+        themeId: "exercices-metiers",
+        id: "q8",
+        type: "quiz",
+        question: "Que devez-vous obligatoirement faire avant d'envoyer un signalement d'usager à un LLM hébergé sur le Cloud américain ?",
+        options: {
+            A: "Demander une autorisation d'écriture écrite à votre chef de service.",
+            B: "Anonymiser ou pseudonymiser en local (noms, emails, téléphones) les données nominatives.",
+            C: "Rédiger le prompt uniquement en anglais pour ne pas irriter le système.",
+            D: "Ne saisir que les signalements survenant après 17 heures."
+        },
+        correct: "B",
+        explanation: "L'article 4 de la Charte Municipale impose le recours à un anonymiseur local pour éviter de violer le RGPD et le Cloud Act."
+    },
+    {
+        themeId: "agentique-territorial",
+        id: "q9",
+        type: "quiz",
+        question: "Quelle est la principale différence opérationnelle entre un chatbot d'IA classique et un 'Agent Autonome' ?",
+        options: {
+            A: "L'agent autonome est capable de formuler ses propres pensées et de déclencher des outils tiers (lecture, écriture, commandes) en boucle fermée.",
+            B: "L'agent autonome est plus poli et utilise moins de mots familiers.",
+            C: "L'agent autonome s'exécute uniquement sur des téléphones.",
+            D: "Le chatbot classique est plus intelligent."
+        },
+        correct: "A",
+        explanation: "L'agent applique une boucle de raisonnement active (ReAct) pour planifier, exécuter et ajuster ses actions en fonction des résultats d'outils tiers."
+    },
+    {
+        themeId: "tuto-technique",
+        id: "q10",
+        type: "quiz",
+        question: "Lors du paramétrage d'un projet Supabase pour une mairie, pourquoi est-il impératif de choisir la région 'Europe (Frankfurt)' ?",
+        options: {
+            A: "Pour accélérer le temps de chargement du site internet de 5 secondes.",
+            B: "Pour garantir la conformité au RGPD en conservant les données des usagers sur le territoire européen (hors Cloud Act).",
+            C: "Car les serveurs situés aux États-Unis sont payants contrairement aux serveurs européens.",
+            D: "Pour éviter de devoir écrire des politiques de sécurité RLS."
+        },
+        correct: "B",
+        explanation: "Le stockage en Europe garantit le respect du RGPD et évite le transfert extraterritorial des données citoyennes sous la juridiction du Cloud Act."
+    },
+    {
+        themeId: "eval-stage-bilan",
+        id: "q11",
+        type: "sondage",
+        question: "À l'issue de ce parcours de formation, comment évaluez-vous votre niveau de confiance pour intégrer l'IA dans votre travail territorial ?",
+        options: {
+            A: "Prêt ! Je maîtrise la méthode M.A.I.R.E, la sécurité des données et l'anonymisation.",
+            B: "Intéressé, mais je souhaite faire d'autres tests encadrés par ma DSI.",
+            C: "Prudent, les enjeux juridiques et la sécurité agentique me font hésiter.",
+            D: "Non convaincu, je préfère conserver mes méthodes de travail traditionnelles."
+        },
+        correct: null,
+        explanation: "Ce sondage de fin de formation permet de mesurer l'acceptabilité technologique chez les agents formés."
+    }
+];
+
+// Export logic for Node environment if applicable
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { THEMES, INTERACTIVE_QUESTIONS };
+}
+

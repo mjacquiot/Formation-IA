@@ -48,6 +48,17 @@
                     <!-- Injected by JS: 10 Theme Cards -->
                 </div>
 
+                <div class="live-session-home-card" id="live-session-home-card" style="display: none;">
+                    <div class="live-qr-container">
+                        <img id="live-session-qr" src="" alt="Scan QR Code pour participer">
+                        <div class="live-qr-desc">
+                            <h4>Session de Groupe Active 🎯</h4>
+                            <p>Scannez ce QR Code avec votre smartphone ou accédez à l'adresse ci-dessous pour rejoindre la session de vote et d'exercices en temps réel.</p>
+                            <a id="live-session-url" href="#" target="_blank"></a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="quick-start-info">
                     <div class="info-badge">💡 Astuce</div>
                     <p>Utilisez la barre latérale à gauche ou cliquez sur un thème ci-dessus pour commencer votre lecture dynamique.</p>
@@ -78,8 +89,74 @@
         </main>
     </div>
 
+    <!-- Interface d'Authentification Administrateur (Formateur) -->
+    <div id="admin-login-overlay" class="auth-overlay" style="display: none;">
+        <div class="auth-card">
+            <h3>Console Formateur Sécurisée 🔐</h3>
+            <p>Entrez le mot de passe administrateur pour démarrer le pilotage interactif de la session.</p>
+            <input type="password" id="admin-password-input" placeholder="Mot de passe...">
+            <div id="admin-login-error" class="error-text"></div>
+            <div class="auth-buttons">
+                <button id="btn-admin-login" class="btn btn-primary">Se connecter</button>
+                <button id="btn-admin-cancel" class="btn btn-secondary">Mode Public (Lecture seule)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interface de Saisie de Prénom (Stagiaire) -->
+    <div id="stagiaire-login-overlay" class="auth-overlay" style="display: none;">
+        <div class="auth-card">
+            <h3>Rejoindre la Session Interactive 👋</h3>
+            <p>Saisissez votre prénom pour participer aux sondages, quiz et ateliers en direct.</p>
+            <input type="text" id="stagiaire-name-input" placeholder="Votre prénom...">
+            <div id="stagiaire-login-error" class="error-text"></div>
+            <button id="btn-stagiaire-login" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Se connecter</button>
+        </div>
+    </div>
+
+    <!-- Panneau de Contrôle & de Vote Interactif Flottant -->
+    <button id="btn-floating-poll" class="btn-floating-poll" style="display: none;" title="Ouvrir le panneau interactif">📊</button>
+
+    <div id="interactivity-panel" class="interactivity-panel">
+        <div class="panel-header">
+            <h3 id="panel-title">Sondage & Quiz Interactif</h3>
+            <button id="btn-close-panel" class="btn-close-panel">✕</button>
+        </div>
+        <div class="panel-body">
+            <!-- Section Question / Réponses -->
+            <div id="panel-question-section"></div>
+
+            <!-- Section Réponses Stagiaire (Formulaires boutons) -->
+            <div id="panel-vote-form-section" style="display: none;">
+                <div class="vote-options-grid" id="vote-options-grid">
+                    <!-- Injected by JS: A, B, C, D buttons -->
+                </div>
+            </div>
+
+            <!-- Section Actions Formateur (Clôturer, Révéler) -->
+            <div id="panel-actions-section" class="panel-actions-section" style="display: none;">
+                <button id="btn-panel-toggle-results" class="btn btn-secondary">Masquer les votes</button>
+                <button id="btn-panel-stop" class="btn btn-primary">Clôturer les votes</button>
+            </div>
+
+            <!-- Section Graphique des Résultats -->
+            <div id="panel-results-section" class="panel-results-section" style="display: none;">
+                <!-- Injected by JS: CSS bar chart -->
+            </div>
+
+            <!-- Section Participants / Présences -->
+            <div id="panel-voters-section" class="panel-voters-section">
+                <h4>Émargement en temps réel (<span id="voters-count">0</span>) :</h4>
+                <div id="voters-names-list" class="voters-names-list"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="content.js"></script>
+    <script src="exercises.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
+
