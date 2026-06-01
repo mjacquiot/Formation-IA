@@ -1865,7 +1865,16 @@ class TrainingApp {
         const liveCard = document.getElementById('live-session-home-card');
         if (liveCard) {
             liveCard.style.display = 'block';
-            const joinUrl = window.location.origin + window.location.pathname + '?role=stagiaire';
+            
+            let baseUrl = window.location.origin + window.location.pathname;
+            if (baseUrl.startsWith('file:') || baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1')) {
+                baseUrl = 'https://mjacquiot.github.io/Formation-IA/';
+            }
+            if (!baseUrl.endsWith('/') && !baseUrl.endsWith('.html')) {
+                baseUrl += '/';
+            }
+            const joinUrl = baseUrl + '?role=stagiaire';
+            
             document.getElementById('live-session-url').href = joinUrl;
             document.getElementById('live-session-url').innerText = joinUrl;
             document.getElementById('live-session-qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(joinUrl);
