@@ -1074,106 +1074,122 @@ class TrainingApp {
                 </div>
             `;
         } else if (slide.type === 'exercises-dashboard') {
-            html += `
-                <p style="margin-bottom:1rem;">${slide.intro}</p>
-                
-                <div class="ex-dashboard-wrapper">
-                    <!-- Left Sidebar: Filters & Interactive Tools -->
-                    <aside class="ex-dashboard-sidebar">
-                        <div class="ex-filter-panel">
-                            <h4>🔍 Filtres de recherche</h4>
-                            
-                            <div class="filter-group">
-                                <label>Support de formation :</label>
-                                <div class="filter-buttons" id="filter-support">
-                                    <button class="btn-filter active" data-val="all">Tous</button>
-                                    <button class="btn-filter" data-val="pc">🖥️ Sur PC</button>
-                                    <button class="btn-filter" data-val="papier">📝 Sur Papier</button>
-                                </div>
-                            </div>
-
-                            <div class="filter-group">
-                                <label>Format de travail :</label>
-                                <div class="filter-buttons" id="filter-format">
-                                    <button class="btn-filter active" data-val="all">Tous</button>
-                                    <button class="btn-filter" data-val="individuel">👤 Individuel</button>
-                                    <button class="btn-filter" data-val="groupe">👥 En Groupe</button>
-                                </div>
-                            </div>
-
-                            <div class="filter-group">
-                                <label>Objectif d'apprentissage :</label>
-                                <div class="filter-buttons" id="filter-type">
-                                    <button class="btn-filter active" data-val="all">Tous</button>
-                                    <button class="btn-filter" data-val="pratique">🛠️ Pratique</button>
-                                    <button class="btn-filter" data-val="efficacite">⚡ Efficacité</button>
-                                    <button class="btn-filter" data-val="fun">🎲 Fun / Jeu</button>
-                                </div>
-                            </div>
+            if (this.role === 'stagiaire' || this.role === 'public') {
+                html += `
+                    <div class="ex-waiting-wrapper" style="text-align: center; padding: 4rem 2rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-lg); margin-top: 1.5rem;">
+                        <div style="font-size: 3.5rem; margin-bottom: 1.5rem; animation: pulse 2s infinite;">🎯</div>
+                        <h3 style="font-size: 1.5rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.75rem;">Atelier de Groupe en Direct</h3>
+                        <p style="font-size: 0.95rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 1.5rem auto; line-height: 1.6;">
+                            Le formateur va lancer un exercice sur votre écran. Tenez-vous prêt à participer et à proposer vos solutions !
+                        </p>
+                        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.04); padding: 0.5rem 1rem; border-radius: 100px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem; color: var(--accent-sky);">
+                            <span style="display:inline-block; width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; animation: blink 1.5s infinite;"></span>
+                            En attente du lancement par le formateur...
                         </div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <p style="margin-bottom:1rem;">${slide.intro}</p>
+                    
+                    <div class="ex-dashboard-wrapper">
+                        <!-- Left Sidebar: Filters & Interactive Tools -->
+                        <aside class="ex-dashboard-sidebar">
+                            <div class="ex-filter-panel">
+                                <h4>🔍 Filtres de recherche</h4>
+                                
+                                <div class="filter-group">
+                                    <label>Support de formation :</label>
+                                    <div class="filter-buttons" id="filter-support">
+                                        <button class="btn-filter active" data-val="all">Tous</button>
+                                        <button class="btn-filter" data-val="pc">🖥️ Sur PC</button>
+                                        <button class="btn-filter" data-val="papier">📝 Sur Papier</button>
+                                    </div>
+                                </div>
 
-                        <!-- Tool 1: Calculateur d'Efficacité -->
-                        <div class="interactive-tool-box">
-                            <h4>⚡ Calculateur d'Efficacité</h4>
-                            <p class="tool-desc">Simulez le gain de temps et d'argent d'une équipe territoriale utilisant l'IA.</p>
-                            <div class="tool-form">
-                                <div class="form-row">
-                                    <label>Tâche humaine (heures) :</label>
-                                    <input type="number" id="calc-human-time" value="4" min="0.1" step="0.1">
+                                <div class="filter-group">
+                                    <label>Format de travail :</label>
+                                    <div class="filter-buttons" id="filter-format">
+                                        <button class="btn-filter active" data-val="all">Tous</button>
+                                        <button class="btn-filter" data-val="individuel">👤 Individuel</button>
+                                        <button class="btn-filter" data-val="groupe">👥 En Groupe</button>
+                                    </div>
                                 </div>
-                                <div class="form-row">
-                                    <label>Tâche IA + relecture (h) :</label>
-                                    <input type="number" id="calc-ia-time" value="0.5" min="0.1" step="0.1">
-                                </div>
-                                <div class="form-row">
-                                    <label>Taux horaire moyen (€/h) :</label>
-                                    <input type="number" id="calc-rate" value="25" min="1">
-                                </div>
-                                <div class="form-row">
-                                    <label>Nombre d'agents :</label>
-                                    <input type="number" id="calc-agents" value="10" min="1">
-                                </div>
-                                <button class="btn btn-primary" id="btn-calc-run" style="width:100%; justify-content:center; margin-top:0.5rem;">Calculer le Gain</button>
-                            </div>
-                            <div class="tool-results" id="calc-results" style="display:none;">
-                                <div class="result-item">Temps gagné : <strong id="res-hours">0 h</strong> / tâche</div>
-                                <div class="result-item">Économie financière : <strong id="res-money" style="color:var(--accent-green)">0 €</strong></div>
-                                <div class="result-item">Productivité : <strong id="res-pct" style="color:var(--accent-blue)">0%</strong></div>
-                            </div>
-                        </div>
 
-                        <!-- Tool 2: Simulateur de Téléphone Arabe -->
-                        <div class="interactive-tool-box">
-                            <h4>🎲 Simulateur de Téléphone Arabe</h4>
-                            <p class="tool-desc">Illustrez la perte sémantique humaine vs la fidélité de l'IA lors des transmissions.</p>
-                            <div class="tool-form">
-                                <textarea id="sim-input-text" placeholder="Entrez une consigne complexe (ex: dates, horaires, budgets)..." style="width:100%; height:60px; font-size:0.8rem; padding:0.5rem; border-radius:4px; border:1px solid var(--border-color); outline:none; resize:none;"></textarea>
-                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
-                                    <button class="btn btn-secondary" id="btn-sim-human" style="font-size:0.75rem; justify-content:center;">Simuler Humain</button>
-                                    <button class="btn btn-primary" id="btn-sim-ia" style="font-size:0.75rem; justify-content:center;">Simuler IA</button>
+                                <div class="filter-group">
+                                    <label>Objectif d'apprentissage :</label>
+                                    <div class="filter-buttons" id="filter-type">
+                                        <button class="btn-filter active" data-val="all">Tous</button>
+                                        <button class="btn-filter" data-val="pratique">🛠️ Pratique</button>
+                                        <button class="btn-filter" data-val="efficacite">⚡ Efficacité</button>
+                                        <button class="btn-filter" data-val="fun">🎲 Fun / Jeu</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="tool-results" id="sim-results" style="display:none;">
-                                <strong>Message final après 5 transmissions :</strong>
-                                <p id="sim-output-text" style="font-size:0.8rem; font-style:italic; margin-top:0.25rem; line-height:1.4; padding:0.5rem; background:white; border-radius:4px; border:1px solid var(--border-color);"></p>
-                                <span id="sim-fidelity-badge" style="font-size:0.7rem; font-weight:800; padding:0.15rem 0.4rem; border-radius:4px; margin-top:0.25rem; display:inline-block;"></span>
+
+                            <!-- Tool 1: Calculateur d'Efficacité -->
+                            <div class="interactive-tool-box">
+                                <h4>⚡ Calculateur d'Efficacité</h4>
+                                <p class="tool-desc">Simulez le gain de temps et d'argent d'une équipe territoriale utilisant l'IA.</p>
+                                <div class="tool-form">
+                                    <div class="form-row">
+                                        <label>Tâche humaine (heures) :</label>
+                                        <input type="number" id="calc-human-time" value="4" min="0.1" step="0.1">
+                                    </div>
+                                    <div class="form-row">
+                                        <label>Tâche IA + relecture (h) :</label>
+                                        <input type="number" id="calc-ia-time" value="0.5" min="0.1" step="0.1">
+                                    </div>
+                                    <div class="form-row">
+                                        <label>Taux horaire moyen (€/h) :</label>
+                                        <input type="number" id="calc-rate" value="25" min="1">
+                                    </div>
+                                    <div class="form-row">
+                                        <label>Nombre d'agents :</label>
+                                        <input type="number" id="calc-agents" value="10" min="1">
+                                    </div>
+                                    <button class="btn btn-primary" id="btn-calc-run" style="width:100%; justify-content:center; margin-top:0.5rem;">Calculer le Gain</button>
+                                </div>
+                                <div class="tool-results" id="calc-results" style="display:none;">
+                                    <div class="result-item">Temps gagné : <strong id="res-hours">0 h</strong> / tâche</div>
+                                    <div class="result-item">Économie financière : <strong id="res-money" style="color:var(--accent-green)">0 €</strong></div>
+                                    <div class="result-item">Productivité : <strong id="res-pct" style="color:var(--accent-blue)">0%</strong></div>
+                                </div>
                             </div>
-                        </div>
-                    </aside>
 
-                    <!-- Right Column: Catalog of Exercises -->
-                    <main class="ex-dashboard-content">
-                        <div class="ex-search-bar-row">
-                            <input type="text" id="ex-search-input" placeholder="🔍 Rechercher un exercice par mot-clé (ex: RGPD, DGS, cantine)...">
-                            <span class="ex-counter-badge" id="ex-counter-text">60 exercices</span>
-                        </div>
+                            <!-- Tool 2: Simulateur de Téléphone Arabe -->
+                            <div class="interactive-tool-box">
+                                <h4>🎲 Simulateur de Téléphone Arabe</h4>
+                                <p class="tool-desc">Illustrez la perte sémantique humaine vs la fidélité de l'IA lors des transmissions.</p>
+                                <div class="tool-form">
+                                    <textarea id="sim-input-text" placeholder="Entrez une consigne complexe (ex: dates, horaires, budgets)..." style="width:100%; height:60px; font-size:0.8rem; padding:0.5rem; border-radius:4px; border:1px solid var(--border-color); outline:none; resize:none;"></textarea>
+                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-top:0.5rem;">
+                                        <button class="btn btn-secondary" id="btn-sim-human" style="font-size:0.75rem; justify-content:center;">Simuler Humain</button>
+                                        <button class="btn btn-primary" id="btn-sim-ia" style="font-size:0.75rem; justify-content:center;">Simuler IA</button>
+                                    </div>
+                                </div>
+                                <div class="tool-results" id="sim-results" style="display:none;">
+                                    <strong>Message final après 5 transmissions :</strong>
+                                    <p id="sim-output-text" style="font-size:0.8rem; font-style:italic; margin-top:0.25rem; line-height:1.4; padding:0.5rem; background:white; border-radius:4px; border:1px solid var(--border-color);"></p>
+                                    <span id="sim-fidelity-badge" style="font-size:0.7rem; font-weight:800; padding:0.15rem 0.4rem; border-radius:4px; margin-top:0.25rem; display:inline-block;"></span>
+                                </div>
+                            </div>
+                        </aside>
 
-                        <div class="ex-cards-catalog" id="ex-cards-catalog-list">
-                            <!-- Injected by Javascript -->
-                        </div>
-                    </main>
-                </div>
-            `;
+                        <!-- Right Column: Catalog of Exercises -->
+                        <main class="ex-dashboard-content">
+                            <div class="ex-search-bar-row">
+                                <input type="text" id="ex-search-input" placeholder="🔍 Rechercher un exercice par mot-clé (ex: RGPD, DGS, cantine)...">
+                                <span class="ex-counter-badge" id="ex-counter-text">60 exercices</span>
+                            </div>
+
+                            <div class="ex-cards-catalog" id="ex-cards-catalog-list">
+                                <!-- Injected by Javascript -->
+                            </div>
+                        </main>
+                    </div>
+                `;
+            }
         } else if (slide.type === 'architecture-diagram') {
             html += `
                 <p style="margin-bottom:1.5rem;">${slide.desc}</p>
@@ -1396,6 +1412,9 @@ class TrainingApp {
 
         // Post-render bindings
         if (slide.type === 'exercises-dashboard') {
+            if (this.role === 'stagiaire' || this.role === 'public') {
+                return;
+            }
             const catalogList = this.slideContainer.querySelector('#ex-cards-catalog-list');
             const searchInput = this.slideContainer.querySelector('#ex-search-input');
             const counterText = this.slideContainer.querySelector('#ex-counter-text');
@@ -2195,8 +2214,14 @@ class TrainingApp {
             actionsSection.style.display = 'flex';
             const btnToggle = document.getElementById('btn-panel-toggle-results');
             btnToggle.style.display = 'block';
-            btnToggle.innerText = this.revealState === 'hidden' ? "📊 Dévoiler les scores" : (this.revealState === 'votes' ? "🟢 Révéler les corrections" : "🔒 Masquer les scores");
-            btnToggle.onclick = () => this.cycleRevealState(this.activePoll);
+            btnToggle.innerText = this.revealState === 'hidden' ? "📊 Dévoiler les scores" : (this.revealState === 'votes' ? "🟢 Révéler les corrections" : "🛑 Fermer le test");
+            btnToggle.onclick = () => {
+                if (this.revealState === 'answer') {
+                    this.stopPoll();
+                } else {
+                    this.cycleRevealState(this.activePoll);
+                }
+            };
             
             const btnStop = document.getElementById('btn-panel-stop');
             btnStop.style.display = 'none';
@@ -2220,7 +2245,16 @@ class TrainingApp {
             `;
             
             actionsSection.style.display = 'flex';
-            document.getElementById('btn-panel-toggle-results').style.display = 'none';
+            const btnToggle = document.getElementById('btn-panel-toggle-results');
+            btnToggle.style.display = 'block';
+            btnToggle.innerText = this.sessionState.show_results ? "🔒 Masquer la correction" : "🟢 Révéler la correction";
+            btnToggle.onclick = async () => {
+                const nextShow = !this.sessionState.show_results;
+                await this.supabase.from('sessions').update({ show_results: nextShow }).eq('id', 1);
+                this.sessionState.show_results = nextShow;
+                this.refreshFormateurPanel();
+            };
+            
             const btnStop = document.getElementById('btn-panel-stop');
             btnStop.style.display = 'block';
             btnStop.innerText = "Clôturer l'exercice";
@@ -2274,8 +2308,14 @@ class TrainingApp {
             btnStop.style.display = 'none';
             
             btnToggle.style.display = 'block';
-            btnToggle.innerText = this.revealState === 'hidden' ? "📊 Dévoiler les votes" : (this.revealState === 'votes' ? "🟢 Révéler la bonne réponse" : "🔒 Masquer les résultats");
-            btnToggle.onclick = () => this.cycleRevealState(poll);
+            btnToggle.innerText = this.revealState === 'hidden' ? "📊 Dévoiler les votes" : (this.revealState === 'votes' ? "🟢 Révéler la bonne réponse" : "🛑 Fermer le quiz");
+            btnToggle.onclick = () => {
+                if (this.revealState === 'answer') {
+                    this.stopPoll();
+                } else {
+                    this.cycleRevealState(poll);
+                }
+            };
 
             resultsSection.style.display = 'block';
             await this.loadPollResults(poll);
@@ -2428,15 +2468,33 @@ class TrainingApp {
 
         const resultsSection = document.getElementById('panel-results-section');
 
+        let correctionHtml = '';
+        if (this.sessionState.show_results) {
+            correctionHtml = `
+                <div class="ex-solution-box" style="margin-bottom: 1.5rem; text-align: left;">
+                    <div class="solution-pane-inner" style="background: rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.15); padding: 1rem; border-radius: 8px;">
+                        <h5 style="color:#34d399; font-weight:800; font-size:0.88rem; margin:0 0 0.5rem 0; text-transform:uppercase; letter-spacing:0.5px;">💡 Solution proposée / Prompt type :</h5>
+                        <pre style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); padding:0.75rem; border-radius:4px; font-family:monospace; font-size:0.8rem; white-space:pre-wrap; color:#34d399; line-height:1.5; margin-bottom:1rem;">${this.activeExercise.solution}</pre>
+                        
+                        <h5 style="color:var(--accent-sky); font-weight:800; font-size:0.88rem; margin:0 0 0.5rem 0; text-transform:uppercase; letter-spacing:0.5px;">🧠 Intérêt & Cheminement pédagogique :</h5>
+                        <p style="font-size:0.85rem; line-height:1.5; color:#cbd5e1; margin:0;">${this.activeExercise.pedagogy}</p>
+                        <p style="font-size:0.8rem; line-height:1.45; color:var(--text-muted); margin-top:0.5rem; border-top:1px solid rgba(255,255,255,0.08); padding-top:0.5rem;"><strong>Raisonnement :</strong> ${this.activeExercise.reasoning}</p>
+                    </div>
+                </div>
+            `;
+        }
+
         if (this.activeExercise.support === 'pc') {
             if (submissions.length === 0) {
                 resultsSection.innerHTML = `
+                    ${correctionHtml}
                     <div style="text-align:center; padding:2rem; color:var(--text-muted); font-style:italic; font-size:0.82rem;">
                         En attente des soumissions des stagiaires (Prompts)...
                     </div>
                 `;
             } else {
                 resultsSection.innerHTML = `
+                    ${correctionHtml}
                     <h4 style="font-size:0.8rem; margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted);">Propositions des stagiaires :</h4>
                     <div class="submissions-grid" style="display:flex; flex-direction:column; gap:0.65rem; max-height:260px; overflow-y:auto;">
                         ${submissions.map(sub => `
@@ -2454,6 +2512,7 @@ class TrainingApp {
         } else {
             const completedCount = submissions.length;
             resultsSection.innerHTML = `
+                ${correctionHtml}
                 <div style="text-align:center; padding:1.5rem; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.15); border-radius:6px; margin-top:1rem;">
                     <div style="font-size:1.5rem; margin-bottom:0.5rem;">📝👥 Papier</div>
                     <p style="font-size:0.8rem; line-height:1.4; color:var(--text-body); margin:0;">
@@ -2677,9 +2736,32 @@ class TrainingApp {
         const pollId = `ex-${ex.id}`;
         const { data: mySub } = await this.supabase.from('votes').select('*').eq('session_id', 1).eq('poll_id', pollId).eq('prenom', this.prenom).maybeSingle();
 
+        let correctionHtml = '';
+        if (showResults) {
+            correctionHtml = `
+                <div class="ex-solution-box" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; text-align: left;">
+                    <div class="solution-pane-inner" style="background: rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.15); padding: 0.75rem; border-radius: 6px;">
+                        <h5 style="color:#34d399; font-weight:800; font-size:0.85rem; margin:0 0 0.4rem 0; text-transform:uppercase; letter-spacing:0.5px;">💡 Solution proposée / Prompt type :</h5>
+                        <pre style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); padding:0.75rem; border-radius:4px; font-family:monospace; font-size:0.78rem; white-space:pre-wrap; color:#34d399; line-height:1.5; margin-bottom:0.75rem;">${ex.solution}</pre>
+                        
+                        <h5 style="color:var(--accent-sky); font-weight:800; font-size:0.85rem; margin:0 0 0.4rem 0; text-transform:uppercase; letter-spacing:0.5px;">🧠 Intérêt & Cheminement pédagogique :</h5>
+                        <p style="font-size:0.8rem; line-height:1.45; color:#cbd5e1; margin:0;">${ex.pedagogy}</p>
+                        <p style="font-size:0.76rem; line-height:1.4; color:var(--text-muted); margin-top:0.4rem; border-top:1px solid rgba(255,255,255,0.08); padding-top:0.4rem;"><strong>Raisonnement :</strong> ${ex.reasoning}</p>
+                    </div>
+                </div>
+            `;
+        }
+
         if (!mySub) {
             resultsSection.style.display = 'block';
-            if (ex.support === 'pc') {
+            if (showResults) {
+                resultsSection.innerHTML = `
+                    <div style="text-align:center; padding:1rem; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; font-size:0.8rem; font-weight:700; border-radius:6px; margin-bottom:0.75rem;">
+                        🔒 L'exercice est clos (Le temps de réponse est écoulé).
+                    </div>
+                    ${correctionHtml}
+                `;
+            } else if (ex.support === 'pc') {
                 resultsSection.innerHTML = `
                     <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.5rem;">
                         <label style="font-size:0.75rem; font-weight:700; color:var(--text-muted);">Saisissez votre proposition (Prompt ou texte) :</label>
@@ -2726,16 +2808,17 @@ class TrainingApp {
         } else {
             resultsSection.style.display = 'block';
             resultsSection.innerHTML = `
-                <div style="text-align:center; padding:1rem; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.15); border-radius:6px; color:#14532d; font-size:0.8rem; font-weight:700;">
+                <div style="text-align:center; padding:1rem; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.15); border-radius:6px; color:#34d399; font-size:0.8rem; font-weight:700; margin-bottom: 0.75rem;">
                     🎯 Votre participation a bien été enregistrée ! <br>
                     <span style="font-size:0.72rem; color:var(--text-muted); font-weight:normal; display:inline-block; margin-top:0.25rem;">Attente de la correction par le formateur.</span>
                 </div>
                 ${ex.support === 'pc' ? `
-                    <div style="margin-top:0.75rem;">
+                    <div style="margin-top:0.75rem; text-align: left;">
                         <label style="font-size:0.7rem; font-weight:700; color:var(--text-muted);">Votre réponse soumise :</label>
-                        <pre style="background:var(--bg-main); border:1px solid var(--border-color); padding:0.5rem; border-radius:4px; font-family:monospace; font-size:0.74rem; white-space:pre-wrap; color:var(--text-body); margin:0; max-height: 80px; overflow-y:auto;">${this.escapeHtml(mySub.reponse)}</pre>
+                        <pre style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.1); padding:0.5rem; border-radius:4px; font-family:monospace; font-size:0.74rem; white-space:pre-wrap; color:#f8fafc; margin:0; max-height: 80px; overflow-y:auto;">${this.escapeHtml(mySub.reponse)}</pre>
                     </div>
                 ` : ''}
+                ${correctionHtml}
             `;
         }
     }

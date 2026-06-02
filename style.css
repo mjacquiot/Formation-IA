@@ -84,17 +84,25 @@ body {
 .sidebar-header .logo {
     font-family: 'Outfit', sans-serif;
     font-weight: 800;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     color: #ffffff;
     cursor: pointer;
     letter-spacing: -0.5px;
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.5rem;
+}
+
+.sidebar-header .logo img.logo-img-header {
+    height: 32px;
+    max-width: 60px;
+    object-fit: contain;
+    background: transparent;
 }
 
 .sidebar-header .logo span {
     color: var(--accent-sky);
+    margin-left: 0.25rem;
 }
 
 .sidebar-header .subtitle {
