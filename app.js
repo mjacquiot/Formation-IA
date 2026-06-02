@@ -1999,6 +1999,8 @@ class TrainingApp {
         this.renderSidebar();
         this.themesGrid.innerHTML = '';
         this.renderHomeDashboard();
+        this.subscribeToSession();
+        this.listenToPresenceAndVotes();
     }
 
     async syncSessionState() {
@@ -2126,6 +2128,8 @@ class TrainingApp {
                     this.showStagiaireTestPanel(testObj, this.revealState);
                 } else if (this.role === 'formateur') {
                     this.refreshFormateurPanel();
+                } else if (this.role === 'public') {
+                    this.showPublicTestPanel(testObj, this.revealState);
                 }
             } else {
                 const poll = INTERACTIVE_QUESTIONS.find(q => q.id === activePollId);
@@ -2135,6 +2139,8 @@ class TrainingApp {
                         this.showStagiairePollPanel(poll, this.revealState);
                     } else if (this.role === 'formateur') {
                         this.refreshFormateurPanel();
+                    } else if (this.role === 'public') {
+                        this.showPublicPollPanel(poll, this.revealState);
                     }
                 }
             }
@@ -2146,6 +2152,8 @@ class TrainingApp {
                     this.showStagiaireExercisePanel(ex, data.show_results);
                 } else if (this.role === 'formateur') {
                     this.refreshFormateurPanel();
+                } else if (this.role === 'public') {
+                    this.showPublicExercisePanel(ex, data.show_results);
                 }
             }
         } else {
@@ -2191,8 +2199,7 @@ class TrainingApp {
             btnToggle.onclick = () => this.cycleRevealState(this.activePoll);
             
             const btnStop = document.getElementById('btn-panel-stop');
-            btnStop.innerText = "Clôturer le Test";
-            btnStop.onclick = () => this.stopPoll();
+            btnStop.style.display = 'none';
 
             resultsSection.style.display = 'block';
             await this.loadTestResults(this.activePoll);
@@ -2214,8 +2221,10 @@ class TrainingApp {
             
             actionsSection.style.display = 'flex';
             document.getElementById('btn-panel-toggle-results').style.display = 'none';
-            document.getElementById('btn-panel-stop').innerText = "Clôturer l'exercice";
-            document.getElementById('btn-panel-stop').onclick = () => this.stopActiveExercise();
+            const btnStop = document.getElementById('btn-panel-stop');
+            btnStop.style.display = 'block';
+            btnStop.innerText = "Clôturer l'exercice";
+            btnStop.onclick = () => this.stopActiveExercise();
 
             resultsSection.style.display = 'block';
             await this.loadExerciseSubmissions();
@@ -2262,12 +2271,11 @@ class TrainingApp {
             const btnToggle = document.getElementById('btn-panel-toggle-results');
             const btnStop = document.getElementById('btn-panel-stop');
             
+            btnStop.style.display = 'none';
+            
             btnToggle.style.display = 'block';
             btnToggle.innerText = this.revealState === 'hidden' ? "📊 Dévoiler les votes" : (this.revealState === 'votes' ? "🟢 Révéler la bonne réponse" : "🔒 Masquer les résultats");
             btnToggle.onclick = () => this.cycleRevealState(poll);
-            
-            btnStop.innerText = "Clôturer le Quiz";
-            btnStop.onclick = () => this.stopPoll();
 
             resultsSection.style.display = 'block';
             await this.loadPollResults(poll);
@@ -2536,8 +2544,9 @@ class TrainingApp {
         
         // Charger mon vote
         const { data: myVote } = await this.supabase.from('votes').select('*').eq('session_id', 1).eq('poll_id', poll.id).eq('prenom', this.prenom).maybeSingle();
+        const hasEnded = (revealState === 'answer');
 
-        if (!myVote) {
+        if (!myVote && !hasEnded) {
             voteFormSection.style.display = 'block';
             resultsSection.style.display = 'none';
             
@@ -2574,23 +2583,33 @@ class TrainingApp {
                 votesList.forEach(v => { if (counts[v.reponse] !== undefined) counts[v.reponse]++; });
                 
                 const total = votesList.length || 1;
-                const myChoice = myVote.reponse;
+                const myChoice = myVote ? myVote.reponse : null;
                 const revealAnswer = revealState === 'answer';
                 
                 let scoreHtml = '';
                 if (poll.type === 'quiz') {
                     if (revealAnswer) {
-                        const isCorrect = myChoice === poll.correct;
-                        scoreHtml = isCorrect ? `
-                            <div class="score-banner correct" style="background:#f0fdf4; border:1px solid #bbf7d0; color:#14532d; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">🎉 Bravo, c'est correct ! (Réponse : ${myChoice})</div>
-                        ` : `
-                            <div class="score-banner incorrect" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">❌ Incorrect... La bonne réponse était ${poll.correct} (Votre réponse : ${myChoice})</div>
-                        `;
+                        if (myVote) {
+                            const isCorrect = myChoice === poll.correct;
+                            scoreHtml = isCorrect ? `
+                                <div class="score-banner correct" style="background:#f0fdf4; border:1px solid #bbf7d0; color:#14532d; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">🎉 Bravo, c'est correct ! (Réponse : ${myChoice})</div>
+                            ` : `
+                                <div class="score-banner incorrect" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">❌ Incorrect... La bonne réponse était ${poll.correct} (Votre réponse : ${myChoice})</div>
+                            `;
+                        } else {
+                            scoreHtml = `
+                                <div class="score-banner incorrect" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">🔒 Le quiz est terminé (Vous n'avez pas voté). La bonne réponse était ${poll.correct}</div>
+                            `;
+                        }
                     } else {
                         scoreHtml = `<div class="score-banner general" style="background:rgba(30,41,59,0.6); border:1px solid rgba(255,255,255,0.15); padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">Votre vote a été enregistré : Option ${myChoice}</div>`;
                     }
                 } else {
-                    scoreHtml = `<div class="score-banner general" style="background:rgba(30,41,59,0.6); border:1px solid rgba(255,255,255,0.15); padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">Votre vote a été pris en compte : ${myChoice}</div>`;
+                    if (myVote) {
+                        scoreHtml = `<div class="score-banner general" style="background:rgba(30,41,59,0.6); border:1px solid rgba(255,255,255,0.15); padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">Votre vote a été pris en compte : ${myChoice}</div>`;
+                    } else {
+                        scoreHtml = `<div class="score-banner general" style="background:rgba(30,41,59,0.6); border:1px solid rgba(255,255,255,0.15); padding:0.5rem 0.75rem; border-radius:4px; font-size:0.78rem; font-weight:700; margin-bottom:0.75rem;">Le vote est clôturé (Vous n'avez pas voté).</div>`;
+                    }
                 }
 
                 resultsSection.innerHTML = `
@@ -2736,6 +2755,13 @@ class TrainingApp {
         }
         
         this.sessionState.show_results = false;
+        
+        this.activePoll = {
+            id: testId,
+            type: 'test-complet',
+            title: `Test Général (Thèmes 1 à ${maxThemeIdx + 1})`,
+            questions: testQuestions
+        };
         
         await this.supabase.from('sessions').update({
             active_poll_id: testId,
@@ -2887,7 +2913,9 @@ class TrainingApp {
         const showResults = (revealState === 'votes' || revealState === 'answer');
         const showDetailedAnswers = (revealState === 'answer');
 
-        if (!isCompleted) {
+        const hasEnded = (revealState === 'answer');
+
+        if (!isCompleted && !hasEnded) {
             let html = `
                 <div style="margin-bottom: 0.75rem; font-size: 0.78rem; font-weight: 700; color: var(--accent-sky); display:flex; justify-content:space-between; align-items:center;">
                     <span>Progression :</span>
@@ -2956,11 +2984,20 @@ class TrainingApp {
                     if (v.is_correct) score++;
                 });
 
-                let scoreBannerHtml = `
-                    <div class="score-banner" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); color:#34d399; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.85rem; text-align:center; margin-bottom:1rem;">
-                        🎉 Test terminé ! Votre score : ${score} / ${totalCount} réponses correctes
-                    </div>
-                `;
+                let scoreBannerHtml = '';
+                if (isCompleted) {
+                    scoreBannerHtml = `
+                        <div class="score-banner" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); color:#34d399; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.85rem; text-align:center; margin-bottom:1rem;">
+                            🎉 Test terminé ! Votre score : ${score} / ${totalCount} réponses correctes
+                        </div>
+                    `;
+                } else {
+                    scoreBannerHtml = `
+                        <div class="score-banner" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.85rem; text-align:center; margin-bottom:1rem;">
+                            🔒 Le test est clos. Vous avez répondu à ${answeredCount} / ${totalCount} questions. Votre score : ${score} / ${totalCount} réponses correctes.
+                        </div>
+                    `;
+                }
 
                 let html = `
                     ${scoreBannerHtml}
@@ -2981,7 +3018,7 @@ class TrainingApp {
                                 <div style="font-size: 0.72rem; line-height: 1.4;">
                                     <div style="display:flex; justify-content:space-between; margin-bottom: 0.2rem; font-weight: 600;">
                                         <span style="color: ${isCorrect ? '#34d399' : '#f87171'};">
-                                            ${isCorrect ? '✅' : '❌'} Votre choix : ${myAnswer}
+                                            ${myAnswer ? `${isCorrect ? '✅' : '❌'} Votre choix : ${myAnswer}` : '❌ Pas de réponse'}
                                         </span>
                                         ${!isCorrect ? `<span style="color: #34d399;">Correction : ${q.correct}</span>` : ''}
                                     </div>
@@ -3015,6 +3052,106 @@ class TrainingApp {
                     </div>
                 `;
             }
+        }
+    }
+
+    async showPublicPollPanel(poll, revealState) {
+        const panel = document.getElementById('interactivity-panel');
+        if (panel) panel.classList.add('open');
+
+        const panelTitle = document.getElementById('panel-title');
+        if (panelTitle) panelTitle.innerText = poll.type === 'quiz' ? "Quiz de Validation 🎯" : "Sondage d'Opinion 📊";
+
+        const qSection = document.getElementById('panel-question-section');
+        const theme = THEMES.find(t => t.id === poll.themeId);
+        const categoryTitle = theme ? theme.title : '';
+        if (qSection) {
+            qSection.innerHTML = `
+                <div class="poll-question-wrapper">
+                    <p class="poll-category">${categoryTitle}</p>
+                    <h4 style="margin: 0.5rem 0; font-size:0.95rem; line-height: 1.45;">${poll.question}</h4>
+                    <div class="poll-options-preview" style="margin-top: 0.75rem;">
+                        ${Object.entries(poll.options).map(([key, val]) => `
+                            <div class="poll-preview-option" style="font-size:0.78rem; margin-bottom:0.35rem; color:var(--text-body);">
+                                <strong style="color:var(--accent-blue)">${key} :</strong> ${val}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        const voteFormSection = document.getElementById('panel-vote-form-section');
+        if (voteFormSection) voteFormSection.style.display = 'none';
+
+        const resultsSection = document.getElementById('panel-results-section');
+        if (resultsSection) {
+            resultsSection.style.display = 'block';
+            await this.loadPollResults(poll);
+        }
+    }
+
+    async showPublicTestPanel(testObj, revealState) {
+        const panel = document.getElementById('interactivity-panel');
+        if (panel) panel.classList.add('open');
+
+        const panelTitle = document.getElementById('panel-title');
+        if (panelTitle) panelTitle.innerText = testObj.title;
+
+        const qSection = document.getElementById('panel-question-section');
+        if (qSection) {
+            qSection.innerHTML = `
+                <div class="poll-question-wrapper">
+                    <p class="poll-category">Test Composite 📝</p>
+                    <h4 style="margin: 0.5rem 0; font-size:0.95rem; line-height: 1.45;">Questions du test (${testObj.questions.length})</h4>
+                    <div style="max-height: 150px; overflow-y: auto; background: var(--bg-main); padding: 0.65rem; border-radius: 6px; font-size: 0.75rem; border: 1px solid var(--border-color); margin-top: 0.5rem;">
+                        ${testObj.questions.map((q, idx) => `
+                            <div style="margin-bottom: 0.5rem; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <strong>Q${idx + 1}.</strong> ${this.escapeHtml(q.question)}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        const voteFormSection = document.getElementById('panel-vote-form-section');
+        if (voteFormSection) voteFormSection.style.display = 'none';
+
+        const resultsSection = document.getElementById('panel-results-section');
+        if (resultsSection) {
+            resultsSection.style.display = 'block';
+            await this.loadTestResults(testObj);
+        }
+    }
+
+    async showPublicExercisePanel(ex, showResults) {
+        const panel = document.getElementById('interactivity-panel');
+        if (panel) panel.classList.add('open');
+
+        const panelTitle = document.getElementById('panel-title');
+        if (panelTitle) panelTitle.innerText = `Atelier : ${ex.title}`;
+
+        const qSection = document.getElementById('panel-question-section');
+        if (qSection) {
+            qSection.innerHTML = `
+                <div class="poll-question-wrapper">
+                    <p class="poll-category">Thème 12 • Exercice ${ex.support === 'pc' ? '🖥️ PC' : '📝 Papier'}</p>
+                    <h4 style="margin: 0.4rem 0; font-size:0.95rem;">${ex.title}</h4>
+                    <p style="font-size: 0.78rem; font-style:italic; line-height: 1.45; border-top:1px solid #e2e8f0; padding-top:0.5rem; margin-top:0.5rem; color:var(--text-body);">
+                        ${ex.instructions.replace(/\n/g, '<br>')}
+                    </p>
+                </div>
+            `;
+        }
+
+        const voteFormSection = document.getElementById('panel-vote-form-section');
+        if (voteFormSection) voteFormSection.style.display = 'none';
+
+        const resultsSection = document.getElementById('panel-results-section');
+        if (resultsSection) {
+            resultsSection.style.display = 'block';
+            await this.loadExerciseSubmissions();
         }
     }
 }
