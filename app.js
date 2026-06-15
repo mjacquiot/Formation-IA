@@ -1055,7 +1055,7 @@ class TrainingApp {
             
             let baseUrl = window.location.origin + window.location.pathname;
             if (baseUrl.startsWith('file:') || baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1')) {
-                baseUrl = 'https://mjacquiot.github.io/Formation-IA/';
+                baseUrl = 'https://lecontrole.fr/';
             }
             if (!baseUrl.endsWith('/') && !baseUrl.endsWith('.html')) {
                 baseUrl += '/';
@@ -1178,6 +1178,7 @@ class TrainingApp {
 
         // S'abonner aux changements de sessions du formateur
         this.subscribeToSession();
+        this.listenToPresenceAndVotes();
     }
 
     setupPublicMode() {
@@ -1199,10 +1200,16 @@ class TrainingApp {
         const showResults = data ? data.show_results : false;
         this.sessionState.show_results = showResults;
 
+        let activePollIdVal = null;
+        if (this.activePoll) {
+            const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
+            activePollIdVal = `${this.activePoll.id}${suffix}`;
+        }
+
         await this.supabase.from('sessions').update({
             active_theme_id: activeThemeId,
             active_slide_index: this.currentSlideIndex,
-            active_poll_id: this.activePoll ? this.activePoll.id : null,
+            active_poll_id: activePollIdVal,
             active_exercise_id: this.activeExercise ? this.activeExercise.id : null,
             show_results: this.activePoll || this.activeExercise ? showResults : false
         }).eq('id', 1);
@@ -1436,18 +1443,33 @@ class TrainingApp {
         if (!this.supabase || this.role !== 'formateur') return;
         
         let targetPollId = null;
+        let pollIdForQuery = null;
         if (this.activePoll) {
             targetPollId = this.activePoll.id;
             const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
             targetPollId = `${targetPollId}${suffix}:zoom:${prenom}`;
+            pollIdForQuery = this.activePoll.id;
         } else if (this.activeExercise) {
             targetPollId = `exercise-zoom:${prenom}`;
+            pollIdForQuery = `ex-${this.activeExercise.id}`;
         }
         
         if (targetPollId) {
+            // Mise à jour en base de données pour les stagiaires
             await this.supabase.from('sessions').update({
                 active_poll_id: targetPollId
             }).eq('id', 1);
+
+            // Récupérer et afficher la réponse localement sur l'écran du formateur
+            const { data: vote } = await this.supabase.from('votes')
+                .select('reponse')
+                .eq('session_id', 1)
+                .eq('poll_id', pollIdForQuery)
+                .eq('prenom', prenom)
+                .maybeSingle();
+            if (vote) {
+                this.showZoomOverlay(prenom, vote.reponse);
+            }
         }
     }
 
@@ -1466,6 +1488,9 @@ class TrainingApp {
         await this.supabase.from('sessions').update({
             active_poll_id: targetPollId
         }).eq('id', 1);
+
+        // Masquer localement sur l'écran du formateur
+        this.hideZoomOverlay();
     }
 
     showZoomOverlay(prenom, responseText) {
@@ -1535,8 +1560,13 @@ class TrainingApp {
             const btnToggle = document.getElementById('btn-panel-toggle-results');
             btnToggle.style.display = 'block';
             
-            const isRevealed = (this.revealState === 'votes' || this.revealState === 'answer');
-            btnToggle.innerText = isRevealed ? "👁️ Masquer les réponses" : "👁️ Afficher les réponses";
+            if (this.revealState === 'hidden') {
+                btnToggle.innerText = "👁️ Afficher les réponses";
+            } else if (this.revealState === 'votes') {
+                btnToggle.innerText = "🔒 Figer & Publier les réponses";
+            } else {
+                btnToggle.innerText = "🙈 Masquer les réponses";
+            }
             btnToggle.onclick = () => this.toggleRevealState(this.activePoll);
             
             const btnStop = document.getElementById('btn-panel-stop');
@@ -1569,8 +1599,13 @@ class TrainingApp {
             const btnToggle = document.getElementById('btn-panel-toggle-results');
             btnToggle.style.display = 'block';
             
-            const isRevealed = (this.revealState === 'votes' || this.revealState === 'answer');
-            btnToggle.innerText = isRevealed ? "👁️ Masquer les réponses" : "👁️ Afficher les réponses";
+            if (this.revealState === 'hidden') {
+                btnToggle.innerText = "👁️ Afficher les votes";
+            } else if (this.revealState === 'votes') {
+                btnToggle.innerText = "🎯 Révéler les corrections";
+            } else {
+                btnToggle.innerText = "🙈 Masquer les résultats";
+            }
             btnToggle.onclick = () => this.toggleRevealState(this.activePoll);
             
             const btnStop = document.getElementById('btn-panel-stop');
@@ -1661,8 +1696,17 @@ class TrainingApp {
             const btnStop = document.getElementById('btn-panel-stop');
             
             btnToggle.style.display = 'block';
-            const isRevealed = (this.revealState === 'votes' || this.revealState === 'answer');
-            btnToggle.innerText = isRevealed ? "👁️ Masquer les réponses" : "👁️ Afficher les réponses";
+            if (poll.type === 'quiz') {
+                if (this.revealState === 'hidden') {
+                    btnToggle.innerText = "👁️ Afficher les votes";
+                } else if (this.revealState === 'votes') {
+                    btnToggle.innerText = "🎯 Révéler la bonne réponse";
+                } else {
+                    btnToggle.innerText = "🙈 Masquer les résultats";
+                }
+            } else {
+                btnToggle.innerText = (this.revealState === 'votes') ? "🙈 Masquer les résultats" : "👁️ Afficher les votes";
+            }
             btnToggle.onclick = () => this.toggleRevealState(poll);
 
             btnStop.style.display = 'block';
@@ -1680,12 +1724,27 @@ class TrainingApp {
         let nextPollIdWithSuffix = poll.id;
         let nextShowResults = false;
         
-        if (this.revealState === 'hidden') {
-            nextPollIdWithSuffix = poll.type === 'test-libre' ? `${poll.id}:votes` : `${poll.id}:answer`;
-            nextShowResults = true;
+        if (poll.type === 'quiz' || poll.type === 'test-complet' || poll.type === 'test-libre') {
+            // Cycle à 3 états pour les quiz et tests : hidden -> votes -> answer -> hidden
+            if (this.revealState === 'hidden') {
+                nextPollIdWithSuffix = `${poll.id}:votes`;
+                nextShowResults = true;
+            } else if (this.revealState === 'votes') {
+                nextPollIdWithSuffix = `${poll.id}:answer`;
+                nextShowResults = true;
+            } else {
+                nextPollIdWithSuffix = poll.id;
+                nextShowResults = false;
+            }
         } else {
-            nextPollIdWithSuffix = poll.id;
-            nextShowResults = false;
+            // Cycle à 2 états pour les sondages simples : hidden -> votes -> hidden
+            if (this.revealState === 'hidden') {
+                nextPollIdWithSuffix = `${poll.id}:votes`;
+                nextShowResults = true;
+            } else {
+                nextPollIdWithSuffix = poll.id;
+                nextShowResults = false;
+            }
         }
         
         await this.supabase.from('sessions').update({
@@ -1907,13 +1966,45 @@ class TrainingApp {
         this.votesSubscription = this.supabase.channel('votes-channel')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'votes' }, () => {
             if (this.activePoll) {
-                if (this.activePoll.type === 'test-complet') {
-                    this.loadTestResults(this.activePoll);
+                if (this.role === 'formateur') {
+                    if (this.activePoll.type === 'test-complet') {
+                        this.loadTestResults(this.activePoll);
+                    } else if (this.activePoll.type === 'test-libre') {
+                        this.loadFreeTestResults(this.activePoll);
+                    } else {
+                        this.loadPollResults(this.activePoll);
+                    }
                 } else {
-                    this.loadPollResults(this.activePoll);
+                    // Pour les stagiaires et visiteurs publics
+                    const isRevealed = (this.revealState === 'votes' || this.revealState === 'answer');
+                    if (isRevealed) {
+                        if (this.activePoll.type === 'test-complet') {
+                            if (this.role === 'stagiaire') {
+                                this.showStagiaireTestPanel(this.activePoll, this.revealState);
+                            } else {
+                                this.showPublicTestPanel(this.activePoll, this.revealState);
+                            }
+                        } else if (this.activePoll.type === 'test-libre') {
+                            if (this.role === 'stagiaire') {
+                                this.showStagiaireFreeTestPanel(this.activePoll, this.revealState);
+                            } else {
+                                this.showPublicFreeTestPanel(this.activePoll, this.revealState);
+                            }
+                        } else {
+                            if (this.role === 'stagiaire') {
+                                this.showStagiairePollPanel(this.activePoll, this.revealState);
+                            } else {
+                                this.showPublicPollPanel(this.activePoll, this.revealState);
+                            }
+                        }
+                    }
                 }
             } else if (this.activeExercise) {
-                this.loadExerciseSubmissions();
+                if (this.role === 'formateur') {
+                    this.loadExerciseSubmissions();
+                } else if (this.role === 'public') {
+                    this.showPublicExercisePanel(this.activeExercise, this.sessionState.show_results);
+                }
             }
         })
         .subscribe();
