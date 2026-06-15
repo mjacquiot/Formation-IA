@@ -1385,9 +1385,97 @@ class TrainingApp {
         } else if (slide.type === 'dsi-decision-tree') {
             html += `
                 <p style="margin-bottom:1.5rem;">${slide.intro}</p>
-                <div class="dsi-tree-container">
-                    <div id="dsi-tree-content">
-                        <!-- Dynamic Node Rendered by JS -->
+                <div class="dsi-tree-static">
+                    <!-- Level 1 -->
+                    <div class="dsi-level-card dsi-card-level-1">
+                        <div class="dsi-card-left">
+                            <h4 class="dsi-level-title">🔒 Niveau 1 : Blocage Total</h4>
+                            <div class="dsi-badge-group">
+                                <span class="dsi-badge dsi-badge-exp">🎓 Expertise : Débutant</span>
+                                <span class="dsi-badge dsi-badge-prod">⚡ Productivité : 0% (Aucun gain)</span>
+                                <span class="dsi-badge dsi-badge-ifse">💰 IFSE : Statu quo</span>
+                            </div>
+                        </div>
+                        <div class="dsi-card-right">
+                            <div class="dsi-card-situation">
+                                <strong>Situation DSI :</strong> Le poste de travail est bridé (installation d'applications interdite) et l'accès internet aux LLM grand public (ChatGPT, Gemini) est bloqué.
+                            </div>
+                            <div class="dsi-card-action">
+                                <strong>💡 Démarche à suivre :</strong> Sensibiliser la direction de la collectivité. Proposer la <strong>Charte d'usage de l'IA (Thème 5)</strong> et demander à la DSI le déploiement d'outils publics d'État comme <strong>Albert (IA Souveraine de la DINUM)</strong>.
+                            </div>
+                            <div class="dsi-card-tools">
+                                ⚙️ <strong>Outils associés :</strong> Formation de base requise • Sensibilisation à la sécurité et réglementation
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Level 2 -->
+                    <div class="dsi-level-card dsi-card-level-2">
+                        <div class="dsi-card-left">
+                            <h4 class="dsi-level-title">🌐 Niveau 2 : Accès Web Régulé</h4>
+                            <div class="dsi-badge-group">
+                                <span class="dsi-badge dsi-badge-exp">🎓 Expertise : Praticien Averti</span>
+                                <span class="dsi-badge dsi-badge-prod">⚡ Productivité : +15% à 20%</span>
+                                <span class="dsi-badge dsi-badge-ifse">💰 IFSE : Objectifs collectifs</span>
+                            </div>
+                        </div>
+                        <div class="dsi-card-right">
+                            <div class="dsi-card-situation">
+                                <strong>Situation DSI :</strong> Ordinateur bridé en local (pas d'installation de logiciels), mais l'accès web aux interfaces de dialogue (Gemini, ChatGPT) est débloqué par la DSI.
+                            </div>
+                            <div class="dsi-card-action">
+                                <strong>💡 Démarche à suivre :</strong> Utiliser l'IA uniquement sur données publiques ou fictives. Pour analyser des dossiers réels, utiliser obligatoirement une **extension Chrome de pseudonymisation** (approuvée par la DSI) ou des modules de nettoyage en ligne locaux.
+                            </div>
+                            <div class="dsi-card-tools">
+                                ⚙️ <strong>Outils associés :</strong> Extensions de navigateur de nettoyage de texte • Formulaire d'anonymisation locale JS
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Level 3 -->
+                    <div class="dsi-level-card dsi-card-level-3">
+                        <div class="dsi-card-left">
+                            <h4 class="dsi-level-title">📜 Niveau 3 : Poste Ouvert & Pionnier</h4>
+                            <div class="dsi-badge-group">
+                                <span class="dsi-badge dsi-badge-exp">🎓 Expertise : Référent IA</span>
+                                <span class="dsi-badge dsi-badge-prod">⚡ Productivité : +30% à 40%</span>
+                                <span class="dsi-badge dsi-badge-ifse">💰 IFSE : Valorisation (NBI)</span>
+                            </div>
+                        </div>
+                        <div class="dsi-card-right">
+                            <div class="dsi-card-situation">
+                                <strong>Situation DSI :</strong> Poste débridé (droits d'installation), DSI ouverte, mais absence de cadre réglementaire (pas de charte IA ni de directive officielle).
+                            </div>
+                            <div class="dsi-card-action">
+                                <strong>💡 Démarche à suivre :</strong> Faire valider la **Charte IA** en conseil municipal pour officialiser les usages. Utiliser des **applications de pseudonymisation locales autonomes** (ex. scripts Electron/Python locaux) et des modèles open-source locaux (LM Studio / Mistral local) pour un confinement total des données.
+                            </div>
+                            <div class="dsi-card-tools">
+                                ⚙️ <strong>Outils associés :</strong> Applications desktop d'anonymisation • IA hors ligne locale (Llama/Mistral)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Level 4 -->
+                    <div class="dsi-level-card dsi-card-level-4">
+                        <div class="dsi-card-left">
+                            <h4 class="dsi-level-title">🚀 Niveau 4 : L'Agent Territorial Parfait</h4>
+                            <div class="dsi-badge-group">
+                                <span class="dsi-badge dsi-badge-exp">🎓 Expertise : Concepteur</span>
+                                <span class="dsi-badge dsi-badge-prod">⚡ Productivité : >50% (Rendement max)</span>
+                                <span class="dsi-badge dsi-badge-ifse">💰 IFSE : Majoration & Primes de projet</span>
+                            </div>
+                        </div>
+                        <div class="dsi-card-right">
+                            <div class="dsi-card-situation">
+                                <strong>Situation DSI :</strong> DSI collaborative et ouverte. Utilisation d'un cadre cloud souverain (SecNumCloud) avec clés d'API bridées budgétairement et de la formation avancée pour l'agent.
+                            </div>
+                            <div class="dsi-card-action">
+                                <strong>💡 Démarche à suivre :</strong> Mettre en œuvre **l'architecture des 3 Dossiers** (Bruts ➔ Pseudonymisation automatique locale ➔ Serveur SecNumCloud + API Gemini ➔ Dé-pseudonymisation ➔ Restitués) pour automatiser en temps réel les flux d'usagers en sécurité totale.
+                            </div>
+                            <div class="dsi-card-tools">
+                                ⚙️ <strong>Outils associés :</strong> Logiciel local à 3 dossiers connecté à des agents autonomes • Proxy d'API avec limiteur de coût
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1533,81 +1621,6 @@ class TrainingApp {
         this.slideContainer.innerHTML = html;
 
         // Post-render bindings
-        if (slide.type === 'dsi-decision-tree') {
-            const treeContent = this.slideContainer.querySelector('#dsi-tree-content');
-            
-            const nodes = {
-                start: {
-                    question: "💻 Étape 1 : Votre ordinateur est-il bridé par le DSI (installation d'applications interdite) ?",
-                    yes: 'node_locked_net',
-                    no: 'node_charte'
-                },
-                node_locked_net: {
-                    question: "🌐 Étape 2 : L'accès internet aux LLM (ChatGPT, Gemini, etc.) est-il bloqué dans votre collectivité ?",
-                    yes: 'result_dsi_action',
-                    no: 'result_public_llm'
-                },
-                node_charte: {
-                    question: "📜 Étape 2 : Existe-t-il une charte d'usage de l'IA ou des directives claires au sein de votre collectivité ?",
-                    yes: 'result_optimal',
-                    no: 'result_pioneer'
-                },
-                result_dsi_action: {
-                    isResult: true,
-                    title: "🚪 Option A : Lancer une démarche de débridage réglementé",
-                    desc: "<strong>Situation :</strong> Poste et accès internet totalement bridés.<br><br><strong>Action requise :</strong> Vous devez entamer une démarche officielle avec votre direction et le DSI. Présentez la Charte IA (Thème 5) comme garantie de sécurité et demandez l'accès à des LLMs souverains (ex. l'outil d'État <em>Albert</em>) ou un débridage partiel pour motif professionnel.",
-                    action: "Proposer l'adoption de la Charte IA en bureau municipal."
-                },
-                result_public_llm: {
-                    isResult: true,
-                    title: "🔒 Option B : Accès LLM grand public avec pseudonymisation",
-                    desc: "<strong>Situation :</strong> Logiciels bloqués mais accès web aux LLM autorisé.<br><br><strong>Action requise :</strong> Vous pouvez utiliser les versions web de Gemini, ChatGPT ou Claude. Néanmoins, il est <strong>strictement interdit</strong> d'y copier des données d'usagers réelles. Vous devez utiliser systématiquement le module d'anonymisation locale avant chaque prompt.",
-                    action: "Anonymisation manuelle stricte sur données publiques ou fictives."
-                },
-                result_optimal: {
-                    isResult: true,
-                    title: "🚀 Option C : Déploiement optimal et collaboratif",
-                    desc: "<strong>Situation :</strong> Poste libre et directives claires existantes.<br><br><strong>Action requise :</strong> Vous êtes dans le cadre idéal. Appliquez les directives de la charte. Vous pouvez utiliser des API souveraines et configurer des outils locaux sécurisés en liaison avec votre DSI.",
-                    action: "Participer aux groupes de travail IA internes."
-                },
-                result_pioneer: {
-                    isResult: true,
-                    title: "💡 Option D : Devenir le pionnier et proposer un cadre",
-                    desc: "<strong>Situation :</strong> Poste libre mais vide réglementaire.<br><br><strong>Action requise :</strong> Profitez de votre liberté technique pour tester des modèles locaux (ex. Mistral local) ou des prompts structurés. Parallèlement, proposez le modèle de charte de la collectivité pour poser les jalons de la sécurité avant généralisation.",
-                    action: "Proposer le modèle de charte IA à sa direction."
-                }
-            };
-            
-            const renderNode = (nodeId) => {
-                const node = nodes[nodeId];
-                if (node.isResult) {
-                    treeContent.innerHTML = `
-                        <div class="dsi-tree-result">
-                            <h4>${node.title}</h4>
-                            <p>${node.desc}</p>
-                            <div style="background:rgba(255,255,255,0.05); padding:0.6rem; border-radius:4px; font-size:0.78rem; font-weight:700; border-left:3px solid var(--accent-green);">
-                                🎯 Objectif Prioritaire : ${node.action}
-                            </div>
-                        </div>
-                        <button class="dsi-tree-reset-btn" id="btn-tree-reset">🔄 Recommencer le test</button>
-                    `;
-                    treeContent.querySelector('#btn-tree-reset').onclick = () => renderNode('start');
-                } else {
-                    treeContent.innerHTML = `
-                        <div class="dsi-tree-question">${node.question}</div>
-                        <div class="dsi-tree-buttons">
-                            <button class="dsi-tree-btn dsi-tree-btn-yes" id="btn-tree-yes">✔️ Oui</button>
-                            <button class="dsi-tree-btn dsi-tree-btn-no" id="btn-tree-no">❌ Non</button>
-                        </div>
-                    `;
-                    treeContent.querySelector('#btn-tree-yes').onclick = () => renderNode(node.yes);
-                    treeContent.querySelector('#btn-tree-no').onclick = () => renderNode(node.no);
-                }
-            };
-            
-            renderNode('start');
-        }
-
         if (slide.type === 'dsi-agent-ultime') {
             const btnSimulate = this.slideContainer.querySelector('#btn-simulate-pipeline');
             const colRaw = this.slideContainer.querySelector('#col-folder-raw');
