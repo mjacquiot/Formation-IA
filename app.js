@@ -19,6 +19,7 @@ class TrainingApp {
         this.sessionSubscription = null;
         this.presenceInterval = null;
         this.sessionState = { show_results: false };
+        this.revealState = 'hidden';
 
         this.detectRole();
         this.initSupabase();
@@ -1132,10 +1133,10 @@ class TrainingApp {
             };
         }
 
-        // Nettoyage périodique des absences (stagiaires déconnectés depuis 30s)
+        // Nettoyage périodique des absences (stagiaires déconnectés depuis 5 minutes pour éviter les déconnexions en arrière-plan)
         const cleanOldPresences = async () => {
             if (!this.supabase) return;
-            const cutoff = new Date(Date.now() - 30 * 1000).toISOString();
+            const cutoff = new Date(Date.now() - 300 * 1000).toISOString();
             await this.supabase.from('presences').delete().lt('last_seen_at', cutoff);
         };
         cleanOldPresences();
@@ -1143,9 +1144,10 @@ class TrainingApp {
 
         this.selectSlide = ((originalSelectSlide) => {
             return (themeIdx, slideIdx) => {
-                // Clear active states on slide change
+                // Clear active states and reset reveal state on slide change
                 this.activePoll = null;
                 this.activeExercise = null;
+                this.revealState = 'hidden';
                 
                 // Fermer le panneau sur changement de slide
                 const panel = document.getElementById('interactivity-panel');
@@ -1175,6 +1177,13 @@ class TrainingApp {
         // Lancer les battements de coeur de présence (toutes les 10s)
         this.updateHeartbeat();
         this.presenceInterval = setInterval(() => this.updateHeartbeat(), 10000);
+
+        // Mettre à jour immédiatement la présence dès que l'onglet redevient actif/visible
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                this.updateHeartbeat();
+            }
+        });
 
         // S'abonner aux changements de sessions du formateur
         this.subscribeToSession();
@@ -1761,6 +1770,7 @@ class TrainingApp {
     async startPoll(poll) {
         if (!this.supabase || this.role !== 'formateur') return;
         this.activePoll = poll;
+        this.revealState = 'hidden';
         this.sessionState.show_results = false;
         
         await this.supabase.from('votes').delete().eq('session_id', 1).eq('poll_id', poll.id);
@@ -1777,6 +1787,7 @@ class TrainingApp {
     async stopPoll() {
         if (!this.supabase || this.role !== 'formateur') return;
         this.activePoll = null;
+        this.revealState = 'hidden';
         
         await this.supabase.from('sessions').update({
             active_poll_id: null,
@@ -1789,6 +1800,7 @@ class TrainingApp {
     async stopActiveExercise() {
         if (!this.supabase || this.role !== 'formateur') return;
         this.activeExercise = null;
+        this.revealState = 'hidden';
         
         await this.supabase.from('sessions').update({
             active_exercise_id: null,
@@ -1943,6 +1955,7 @@ class TrainingApp {
         if (!this.supabase || this.role !== 'formateur') return;
         this.activeExercise = ex;
         this.activePoll = null;
+        this.revealState = 'hidden';
         
         const pollId = `ex-${ex.id}`;
         await this.supabase.from('votes').delete().eq('session_id', 1).eq('poll_id', pollId);
@@ -2318,6 +2331,7 @@ class TrainingApp {
         }
         
         this.sessionState.show_results = false;
+        this.revealState = 'hidden';
         
         this.activePoll = {
             id: testId,
@@ -2696,6 +2710,7 @@ class TrainingApp {
         await this.supabase.from('votes').delete().eq('session_id', 1).eq('poll_id', testId);
         
         this.sessionState.show_results = false;
+        this.revealState = 'hidden';
         
         this.activePoll = {
             id: testId,
