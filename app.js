@@ -480,7 +480,7 @@ class TrainingApp {
         if (typeof getSlideHTML === 'function') {
             html += getSlideHTML.call(this, slide, theme);
         } else {
-            html += <p style='color:var(--accent-red)'>Erreur : Module de rendu des slides non chargÃ©.</p>\;
+            html += `<p style='color:var(--accent-red)'>Erreur : Module de rendu des slides non chargé.</p>`;
         }
 
         if (this.role === 'formateur') {
