@@ -3724,9 +3724,453 @@ body {
     line-height: 1.4;
 }
 
+/* ==========================================
+   ZOOM RESPONSE OVERLAY (PREMIUM MODAL)
+   ========================================== */
+.zoom-response-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(8, 15, 30, 0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
+.zoom-response-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
 
+.zoom-overlay-content {
+    background: linear-gradient(135deg, rgba(20, 30, 55, 0.95) 0%, rgba(10, 15, 30, 0.98) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(14, 165, 233, 0.15);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 2.5rem;
+    transform: scale(0.95);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 
+.zoom-response-overlay.visible .zoom-overlay-content {
+    transform: scale(1);
+}
 
+.zoom-overlay-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    border-style: solid;
+}
+
+.zoom-overlay-close:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+
+.zoom-overlay-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1rem;
+}
+
+.zoom-overlay-avatar {
+    font-size: 2rem;
+}
+
+.zoom-overlay-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    color: #ffffff;
+    font-weight: 700;
+    margin: 0;
+}
+
+.zoom-overlay-name {
+    color: var(--accent-sky);
+}
+
+.zoom-overlay-body {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 0.5rem;
+}
+
+.zoom-overlay-text {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    white-space: pre-wrap;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 0;
+}
+
+.trainee-card-clickable {
+    transition: all 0.2s ease-in-out;
+}
+
+.trainee-card-clickable:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-sky) !important;
+    background: rgba(14, 165, 233, 0.06) !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+}
+
+/* --- Moravec's Paradox Slide --- */
+.moravec-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+}
+.moravec-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+.moravec-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+.moravec-card.card-machine {
+    border-top: 4px solid var(--accent-purple);
+}
+.moravec-card.card-human {
+    border-top: 4px solid var(--accent-green);
+}
+.moravec-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text-title);
+}
+.moravec-card-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+.moravec-list {
+    list-style: none;
+    padding: 0;
+}
+.moravec-list li {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin-bottom: 0.6rem;
+    color: var(--text-body);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+.moravec-list .bullet {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* --- Automation Bias Slide --- */
+.bias-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+}
+.bias-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+.bias-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+.bias-card.bias-concept {
+    border-top: 4px solid var(--accent-gold);
+}
+.bias-card.bias-responsibility {
+    border-top: 4px solid var(--accent-red);
+}
+.bias-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text-title);
+}
+.bias-card p {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-body);
+}
+
+/* --- Amara's Law Slide --- */
+.amara-quote-block {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.04) 0%, rgba(139, 92, 246, 0.04) 100%);
+    border-left: 4px solid var(--accent-gold);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+}
+.amara-quote-block blockquote {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--text-title);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+.amara-quote-block cite {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.amara-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+.amara-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+.amara-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+.amara-card.amara-short {
+    border-top: 4px solid var(--accent-blue);
+}
+.amara-card.amara-long {
+    border-top: 4px solid var(--accent-purple);
+}
+.amara-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text-title);
+}
+.amara-card p {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-body);
+}
+
+/* Responsiveness for new grids */
+@media (max-width: 768px) {
+    .moravec-container, .bias-grid, .amara-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Formateur connected trainees management dashboard --- */
+.trainee-manage-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.trainee-manage-badge:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+.btn-kick-trainee {
+    background: transparent;
+    border: none;
+    color: var(--accent-red);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0 4px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.btn-kick-trainee:hover {
+    color: #f87171;
+    transform: scale(1.2);
+}
+
+/* --- Mobile Responsiveness and Adaptation for Trainees (Version 3.4) --- */
+@media (max-width: 768px) {
+    /* Global Layout Shift to Vertical */
+    #app-layout {
+        flex-direction: column !important;
+        overflow-y: auto !important;
+    }
+    
+    /* sidebar width fluid on mobile (if visible) */
+    .sidebar {
+        width: 100% !important;
+        min-width: 100% !important;
+        height: auto !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    
+    .main-content {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    .content-screen {
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    /* Presentation adjustments */
+    .slide-container {
+        padding: 1rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .slide {
+        padding: 1.25rem !important;
+        min-height: auto !important;
+        border-radius: var(--radius-md) !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .slide h2 {
+        font-size: 1.45rem !important;
+        margin-bottom: 1rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    
+    .slide-content {
+        font-size: 0.9rem !important;
+        line-height: 1.5 !important;
+    }
+    
+    .slide-navigation {
+        padding: 1rem !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+        position: relative !important;
+    }
+    
+    .slide-progress-bar {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* Trainee view specifically */
+    body.role-stagiaire #presentation-screen {
+        padding: 1rem !important;
+        min-height: 100vh !important;
+        justify-content: flex-start !important;
+    }
+
+    /* Stack grid layouts on mobile */
+    .maire-grid,
+    .tuto-architecture,
+    .moravec-container,
+    .bias-grid,
+    .amara-grid,
+    .alliance-grid,
+    .satellite-pros-cons,
+    .charte-columns,
+    .comparison-cards-container {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    .hard-chip-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+    }
+    
+    .hard-chip-info {
+        width: 100% !important;
+    }
+    
+    /* Interactive forms on mobile */
+    .vote-options-grid {
+        gap: 0.5rem !important;
+    }
+    
+    .btn-vote-option {
+        padding: 0.65rem 0.85rem !important;
+        font-size: 0.78rem !important;
+    }
+
+    /* Tabs selectors wrap */
+    .scenarios-selector-tabs {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .scenario-tab-btn {
+        width: 100% !important;
+        text-align: center !important;
+    }
+}
 
 

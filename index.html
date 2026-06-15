@@ -62,6 +62,20 @@
                             <a id="live-session-url" href="#" target="_blank"></a>
                         </div>
                     </div>
+                    
+                    <!-- Dashboard formateur d'accueil -->
+                    <div id="formateur-dashboard-container" style="display: none; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem; margin-top: 1.5rem; width: 100%;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
+                            <h4 style="font-family:'Outfit',sans-serif; font-size:1.15rem; color:#f8fafc; margin: 0;">👥 Émargement & Gestion des Participants</h4>
+                            <button id="btn-home-reset-session" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; font-weight:700; height: auto; min-height: unset; line-height: 1.2;">Réinitialiser la session entière ⚠️</button>
+                        </div>
+                        <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.4;">
+                            Visualisez la liste des stagiaires connectés. Cliquez sur la croix (<span style="color:var(--accent-red); font-weight:bold;">✕</span>) à côté d'un prénom pour supprimer et déconnecter cet utilisateur.
+                        </p>
+                        <div id="formateur-trainees-grid" style="display:flex; flex-wrap:wrap; gap:0.6rem; min-height:40px; width: 100%;">
+                            <div style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Aucun participant connecté pour le moment.</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="quick-start-info">
@@ -153,7 +167,6 @@
             <div id="panel-voters-section" class="panel-voters-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                     <h4 style="margin: 0;">Émargement en temps réel (<span id="voters-count">0</span>) :</h4>
-                    <button id="btn-reset-session" class="btn btn-danger" style="display: none; padding: 4px 10px; font-size: 0.72rem; height: auto; min-height: unset; line-height: 1.2; border-radius: 4px;">Réinitialiser la session</button>
                 </div>
                 <div id="voters-names-list" class="voters-names-list"></div>
             </div>
@@ -164,6 +177,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="content.js"></script>
     <script src="exercises.js"></script>
+    <script src="slide_renderer.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

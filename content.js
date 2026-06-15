@@ -57,6 +57,32 @@ const THEMES = [
                     { label: "ChatGPT", value: 2, color: "var(--accent-sky)" }
                 ],
                 implication: "<strong>Implication pour les collectivités :</strong> Jamais une transition technologique n'a été si rapide. Les agents publics et les usagers se sont emparés de ces outils de façon autonome, obligeant les administrations à adapter leurs politiques de sécurité et d'efficacité à toute vitesse."
+            },
+            {
+                title: "Le Paradoxe de Moravec",
+                type: "moravec-paradox",
+                intro: "Formulé par Hans Moravec dans les années 1980, ce paradoxe décrit une réalité contre-intuitive de l'IA : ce qui est le plus difficile pour un humain est facile pour la machine, et inversement.",
+                cardLeft: {
+                    title: "🤖 Facile pour la machine / Difficile pour l'humain",
+                    desc: "Les tâches logiques, mathématiques et algorithmiques formelles qui demandent des années d'études à un humain.",
+                    items: [
+                        "Calculs mathématiques hyper-complexes en millisecondes",
+                        "Programmation informatique et génération de code",
+                        "Traduction instantanée de contrats ou rapports financiers de 100 pages",
+                        "Mémorisation et recherche dans des millions de documents textuels"
+                    ]
+                },
+                cardRight: {
+                    title: "👩‍💼 Facile pour l'humain / Difficile pour la machine",
+                    desc: "Les tâches d'interaction physique, de perception et de relations sociales innées chez l'humain dès le plus jeune âge.",
+                    items: [
+                        "Saisir un objet fragile dans un environnement désordonné",
+                        "Marcher de manière fluide dans une rue bondée ou un hall d'accueil",
+                        "Faire preuve de bon sens et s'adapter à une situation imprévue",
+                        "Ressentir de l'empathie face à un citoyen ou un usager en détresse"
+                    ]
+                },
+                pedagogy: "<strong>Intérêt pédagogique :</strong> Très rassurant pour les agents territoriaux ! L'IA ne remplacera pas leur rôle d'accueil physique, de gestion des cas sociaux complexes et de décision humaine.<br>➔ <strong>L'IA gère la paperasse, l'humain gère la relation.</strong>"
             }
         ]
     },
@@ -236,6 +262,20 @@ const THEMES = [
                     { level: "Risque Limité (Transparence)", color: "var(--accent-sky)", example: "Chatbots d'accueil des usagers sur le site internet de la mairie (obligation de mentionner clairement 'Contenu généré par IA')." },
                     { level: "Risque Minimal (Libre)", color: "var(--accent-green)", example: "Filtres anti-spam de la messagerie des agents municipaux, outils de correction d'orthographe." }
                 ]
+            },
+            {
+                title: "Le Biais d'Automatisation & Responsabilité",
+                type: "automation-bias",
+                intro: "Le biais d'automatisation est un piège psychologique majeur dans lequel les agents publics risquent de tomber en utilisant des outils d'IA.",
+                biasConcept: {
+                    title: "🤖 Le Biais d'Automatisation",
+                    desc: "La tendance humaine à faire une confiance excessive et aveugle aux suggestions fournies par des systèmes automatisés (comme les textes générés par une IA), même lorsqu'elles sont grossièrement erronées ou inappropriées. Face à un écrit propre et fluide, notre esprit critique baisse sa garde."
+                },
+                responsibility: {
+                    title: "✍️ La Responsabilité de Signature",
+                    desc: "Si un agent envoie un courrier officiel erroné, diffamatoire ou illégal rédigé par une IA, **c'est la responsabilité de la collectivité et de l'agent** qui est légalement engagée, pas celle de l'éditeur d'IA (ex: OpenAI, Google) qui décline toute responsabilité contractuelle."
+                },
+                pedagogy: "<strong>Intérêt pédagogique :</strong> Sensibiliser à la relecture critique. Un courrier officiel engage la signature publique de l'administration. <strong>La validation humaine (Dernier Mot) est obligatoire et non négociable.</strong>"
             },
             {
                 title: "Souveraineté vs Cloud : Alternatives & Coûts",
@@ -710,6 +750,22 @@ const THEMES = [
         desc: "L'arbre décisionnel d'accès aux LLM, la matrice de valorisation IFSE et le fonctionnement de l'Agent Territorial Parfait.",
         slides: [
             {
+                title: "La Loi d'Amara & Tempo de l'IA",
+                type: "amara-law",
+                quote: "« Nous avons tendance à surestimer les effets d'une technologie à court terme et à les sous-estimer à long terme. »",
+                author: "Roy Amara (Futuriste)",
+                intro: "Comprendre le tempo d'adoption de l'IA est crucial pour planifier les investissements et éviter deux erreurs stratégiques : la panique court-termiste et l'inaction long-termiste.",
+                shortTerm: {
+                    title: "💥 Le Court Terme (1 à 2 ans) : Surestimation",
+                    desc: "La tendance à vouloir tout réformer en 6 mois, à paniquer face aux bouleversements annoncés, puis à être déçu par les premières limites ou hallucinations de l'IA. C'est la phase de déception où l'on pense que 'le soufflé retombe'."
+                },
+                longTerm: {
+                    title: "📈 Le Long Terme (5 à 10 ans) : Sous-estimation",
+                    desc: "L'IA s'intègre discrètement mais profondément dans nos outils. Les bases posées (charte, sécurité, formation) portent leurs fruits et modifient de manière irréversible le fonctionnement de toute l'administration territoriale."
+                },
+                pedagogy: "<strong>Implication pour la DSI et les Cadres :</strong> Il est inutile d'essayer de tout bouleverser en 6 mois. En revanche, <strong>il est capital de poser les bases saines (charte, règles de sécurité) dès maintenant</strong>, car l'impact cumulé sur 5 à 10 ans sera colossal."
+            },
+            {
                 title: "L'Arbre Décisionnel des Droits & DSI",
                 type: "dsi-decision-tree",
                 desc: "Pour savoir où vous vous situez dans votre collectivité et quelles démarches entreprendre, suivez cet arbre décisionnel interactif.",
@@ -943,6 +999,20 @@ const INTERACTIVE_QUESTIONS = [
         },
         correct: null,
         explanation: "Ce sondage de fin de formation permet de mesurer l'acceptabilité technologique chez les agents formés."
+    },
+    {
+        themeId: "exercices-ateliers",
+        id: "q_ateliers",
+        type: "quiz",
+        question: "Quel est l'intérêt principal de s'exercer en équipe (ateliers collectifs) sur des cas d'usage réels de sa collectivité ?",
+        options: {
+            A: "Rédiger des prompts plus rapidement en divisant le travail entre collègues.",
+            B: "Confronter les approches de prompt, repérer collectivement les risques de fuite de données et valider ensemble le contrôle humain.",
+            C: "Installer plus de logiciels non autorisés sur les postes de travail.",
+            D: "Éviter d'avoir à relire les documents générés par l'IA."
+        },
+        correct: "B",
+        explanation: "Les ateliers collectifs permettent d'échanger sur les meilleures formulations de prompts et de standardiser des pratiques sécurisées (RGPD, contrôle humain) partagées au sein du service."
     }
 ];
 
