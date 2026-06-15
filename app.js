@@ -47,7 +47,6 @@ class TrainingApp {
         this.btnNext = document.getElementById('nav-next');
         this.progressFill = document.getElementById('progress-fill');
         this.slideIndicator = document.getElementById('slide-indicator');
-        this.btnSidebarAdminLogin = document.getElementById('btn-sidebar-admin-login');
     }
 
     initEvents() {
@@ -85,23 +84,6 @@ class TrainingApp {
                 goHome();
             }
         });
-
-        if (this.btnSidebarAdminLogin) {
-            this.btnSidebarAdminLogin.addEventListener('click', async () => {
-                if (this.role === 'formateur') {
-                    if (confirm("Voulez-vous vous déconnecter du mode Formateur ?")) {
-                        if (this.supabase) {
-                            await this.supabase.auth.signOut();
-                        }
-                        this.role = 'public';
-                        window.location.href = window.location.pathname; // Reload without query params
-                    }
-                } else {
-                    document.getElementById('admin-login-overlay').style.display = 'flex';
-                    this.bindAdminLoginEvents();
-                }
-            });
-        }
     }
 
     showScreen(screenName) {
@@ -979,22 +961,8 @@ class TrainingApp {
             };
         }
 
-        let session = null;
-        try {
-            const sessionRes = await this.supabase.auth.getSession();
-            session = sessionRes.data.session;
-        } catch (err) {
-            console.error("Erreur lors de la récupération de la session Supabase:", err);
-        }
-
-        // Si l'utilisateur a une session active d'administrateur, on force le rôle formateur
-        if (session && session.user && session.user.email === 'admin@admin.fr') {
-            this.role = 'formateur';
-            document.body.classList.remove('role-public', 'role-stagiaire');
-            document.body.classList.add('role-formateur');
-        }
-
         if (this.role === 'formateur') {
+            const { data: { session } } = await this.supabase.auth.getSession();
             if (!session) {
                 document.getElementById('admin-login-overlay').style.display = 'flex';
                 this.bindAdminLoginEvents();
@@ -1031,12 +999,8 @@ class TrainingApp {
             if (error) {
                 errorDiv.innerText = 'Mot de passe incorrect.';
             } else {
-                this.role = 'formateur';
-                document.body.classList.remove('role-public', 'role-stagiaire');
-                document.body.classList.add('role-formateur');
                 document.getElementById('admin-login-overlay').style.display = 'none';
                 this.setupFormateurMode();
-                this.renderHomeDashboard();
             }
         };
 
@@ -1193,12 +1157,6 @@ class TrainingApp {
             };
         })(this.selectSlide);
 
-        const btnSidebarLogin = document.getElementById('btn-sidebar-admin-login');
-        if (btnSidebarLogin) {
-            btnSidebarLogin.innerText = "🚪 Se déconnecter (Formateur)";
-            btnSidebarLogin.style.display = 'inline-block';
-        }
-
         this.syncSessionState();
         this.listenToPresenceAndVotes();
     }
@@ -1220,9 +1178,6 @@ class TrainingApp {
 
         // S'abonner aux changements de sessions du formateur
         this.subscribeToSession();
-
-        const btnSidebarLogin = document.getElementById('btn-sidebar-admin-login');
-        if (btnSidebarLogin) btnSidebarLogin.style.display = 'none';
     }
 
     setupPublicMode() {
@@ -1232,12 +1187,6 @@ class TrainingApp {
         this.renderHomeDashboard();
         this.subscribeToSession();
         this.listenToPresenceAndVotes();
-
-        const btnSidebarLogin = document.getElementById('btn-sidebar-admin-login');
-        if (btnSidebarLogin) {
-            btnSidebarLogin.innerText = "🔐 Accès Formateur";
-            btnSidebarLogin.style.display = 'inline-block';
-        }
     }
 
     async syncSessionState() {

@@ -1303,6 +1303,27 @@ body {
     background: var(--border-color);
 }
 
+.btn-danger {
+    background: #ef4444;
+    color: white;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+.formateur-dashboard {
+    background: rgba(30, 41, 59, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 /* --- SLIDE VIEW NAVIGATION FOOTER --- */
 .slide-navigation {
     display: flex;
