@@ -1382,6 +1382,125 @@ class TrainingApp {
                     `}
                 </div>
             `;
+        } else if (slide.type === 'dsi-decision-tree') {
+            html += `
+                <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                <div class="dsi-tree-container">
+                    <div id="dsi-tree-content">
+                        <!-- Dynamic Node Rendered by JS -->
+                    </div>
+                </div>
+            `;
+        } else if (slide.type === 'dsi-ifse-matrix') {
+            html += `
+                <p style="margin-bottom:1.25rem;">${slide.intro}</p>
+                <div class="ifse-matrix-container">
+                    <div class="ifse-card">
+                        <div>
+                            <span class="ifse-card-level ifse-level-1">Niveau 1 : Débutant</span>
+                            <h3 class="ifse-card-title">Utilisateur Occasionnel</h3>
+                            <p class="ifse-card-desc">L'agent utilise ponctuellement les LLM en ligne pour de la correction orthographique, des idées de courriels simples ou de la recherche de base.</p>
+                        </div>
+                        <div>
+                            <div class="ifse-card-metric">⚡ Gain de temps : <strong>~10%</strong></div>
+                            <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Faible (données publiques uniquement)</strong></div>
+                            <div class="ifse-card-impact">💼 IFSE : Sensibilisation générale / Statu quo</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ifse-card">
+                        <div>
+                            <span class="ifse-card-level ifse-level-2">Niveau 2 : Intermédiaire</span>
+                            <h3 class="ifse-card-title">Praticien Averti</h3>
+                            <p class="ifse-card-desc">L'agent maîtrise la méthode M.A.I.R.E et applique systématiquement l'anonymisation locale manuelle pour traiter des dossiers non confidentiels.</p>
+                        </div>
+                        <div>
+                            <div class="ifse-card-metric">⚡ Gain de temps : <strong>~25%</strong></div>
+                            <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Moyenne (vigilance manuelle constante)</strong></div>
+                            <div class="ifse-card-impact">💼 IFSE : Valorisation entretien annuel (objectifs collectifs)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ifse-card">
+                        <div>
+                            <span class="ifse-card-level ifse-level-3">Niveau 3 : Avancé</span>
+                            <h3 class="ifse-card-title">Référent IA de Direction</h3>
+                            <p class="ifse-card-desc">L'agent est le garant de la conformité du service, aide ses collègues à formuler des requêtes sûres et audite les usages.</p>
+                        </div>
+                        <div>
+                            <div class="ifse-card-metric">⚡ Gain de temps : <strong>~40%</strong></div>
+                            <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Forte (garant des règles du service)</strong></div>
+                            <div class="ifse-card-impact">💼 IFSE : Revalorisation indemnitaire ou attribution NBI</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ifse-card">
+                        <div>
+                            <span class="ifse-card-level ifse-level-4">Niveau 4 : Expert</span>
+                            <h3 class="ifse-card-title">Concepteur Agentique</h3>
+                            <p class="ifse-card-desc">L'agent sait mettre en place et configurer le pipeline local des 3 dossiers, optimiser l'API souveraine et surveiller la consommation budgétaire.</p>
+                        </div>
+                        <div>
+                            <div class="ifse-card-metric">⚡ Gain de temps : <strong>>50%</strong></div>
+                            <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Très Forte (paramétrage des flux et API)</strong></div>
+                            <div class="ifse-card-impact">💼 IFSE : Majoration significative / Prime de projet temporaire</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (slide.type === 'dsi-agent-ultime') {
+            html += `
+                <p style="margin-bottom:1rem;">${slide.intro}</p>
+                
+                <div class="pipeline-wrapper">
+                    <!-- Column 1: Folder 1 Raw -->
+                    <div class="pipeline-col" id="col-folder-raw">
+                        <div class="pipeline-col-header">
+                            <span class="pipeline-col-num">1</span>
+                            📁 Dossier 1 : Fichiers Bruts
+                        </div>
+                        <p class="pipeline-file-desc">L'agent glisse ses documents de travail contenant des données réelles et sensibles (courriels, fiches usagers).</p>
+                        <div class="pipeline-files-list" id="list-raw-files">
+                            <div class="pipeline-file-item">📄 signalement_dufour.txt</div>
+                            <div class="pipeline-file-item">📄 demande_aide_sociale.pdf</div>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="btn-simulate-pipeline" style="width:100%; justify-content:center; margin-top:auto;">🚀 Lancer la Pseudonymisation</button>
+                    </div>
+                    
+                    <!-- Column 2: Folder 2 Pseudo -->
+                    <div class="pipeline-col" id="col-folder-pseudo">
+                        <div class="pipeline-col-header">
+                            <span class="pipeline-col-num">2</span>
+                            📁 Dossier 2 : Pseudonymisé
+                        </div>
+                        <p class="pipeline-file-desc">Les données nominatives sont converties en balises (ex: [NOM_1]). Une clé de cryptage locale est stockée sur le PC. <strong>Contrôle humain manuel requis ici !</strong></p>
+                        <div class="pipeline-files-list" id="list-pseudo-files">
+                            <div style="font-size:0.74rem; color:var(--text-muted); text-align:center; padding:1.25rem; font-style:italic;">Dossier vide</div>
+                        </div>
+                        <div class="pipeline-step-action" style="display:none;" id="action-pseudo-sent">
+                            🔒 Envoyé via API bridée
+                        </div>
+                    </div>
+                    
+                    <!-- Column 3: Folder 3 Restored -->
+                    <div class="pipeline-col" id="col-folder-restored">
+                        <div class="pipeline-col-header">
+                            <span class="pipeline-col-num">3</span>
+                            📁 Dossier 3 : Restitué
+                        </div>
+                        <p class="pipeline-file-desc">Le résultat généré par l'IA est ré-associé automatiquement aux données d'identité originales via la clé locale du PC.</p>
+                        <div class="pipeline-files-list" id="list-restored-files">
+                            <div style="font-size:0.74rem; color:var(--text-muted); text-align:center; padding:1.25rem; font-style:italic;">Dossier vide</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Center/Bottom: Cloud server bubble -->
+                    <div class="pipeline-cloud-bubble">
+                        <h4>🌩️ Serveur SecNumCloud (Orchestrateur) ➔ API Gemini (Bridage budgétaire)</h4>
+                        <p>L'agent d'IA s'exécute dans un conteneur cloud souverain et interroge Gemini par API avec un jeton sécurisé. L'IA ne voit et ne traite <strong>QUE</strong> les fichiers du dossier 2 (anonymes), garantissant le respect du RGPD et l'immunité face au Cloud Act.</p>
+                    </div>
+                </div>
+            `;
         }
 
         if (this.role === 'formateur') {
@@ -1399,6 +1518,9 @@ class TrainingApp {
                     <button class="btn btn-sm btn-control-test" id="btn-slide-launch-test">
                         📝 Lancer un Test Général (Thèmes 1 à ${this.currentThemeIndex + 1})
                     </button>
+                    <button class="btn btn-sm btn-control-free" id="btn-slide-launch-free-test">
+                        ✏️ Lancer un Test Libre
+                    </button>
                 </div>
             `;
         }
@@ -1409,6 +1531,131 @@ class TrainingApp {
         `;
 
         this.slideContainer.innerHTML = html;
+
+        // Post-render bindings
+        if (slide.type === 'dsi-decision-tree') {
+            const treeContent = this.slideContainer.querySelector('#dsi-tree-content');
+            
+            const nodes = {
+                start: {
+                    question: "💻 Étape 1 : Votre ordinateur est-il bridé par le DSI (installation d'applications interdite) ?",
+                    yes: 'node_locked_net',
+                    no: 'node_charte'
+                },
+                node_locked_net: {
+                    question: "🌐 Étape 2 : L'accès internet aux LLM (ChatGPT, Gemini, etc.) est-il bloqué dans votre collectivité ?",
+                    yes: 'result_dsi_action',
+                    no: 'result_public_llm'
+                },
+                node_charte: {
+                    question: "📜 Étape 2 : Existe-t-il une charte d'usage de l'IA ou des directives claires au sein de votre collectivité ?",
+                    yes: 'result_optimal',
+                    no: 'result_pioneer'
+                },
+                result_dsi_action: {
+                    isResult: true,
+                    title: "🚪 Option A : Lancer une démarche de débridage réglementé",
+                    desc: "<strong>Situation :</strong> Poste et accès internet totalement bridés.<br><br><strong>Action requise :</strong> Vous devez entamer une démarche officielle avec votre direction et le DSI. Présentez la Charte IA (Thème 5) comme garantie de sécurité et demandez l'accès à des LLMs souverains (ex. l'outil d'État <em>Albert</em>) ou un débridage partiel pour motif professionnel.",
+                    action: "Proposer l'adoption de la Charte IA en bureau municipal."
+                },
+                result_public_llm: {
+                    isResult: true,
+                    title: "🔒 Option B : Accès LLM grand public avec pseudonymisation",
+                    desc: "<strong>Situation :</strong> Logiciels bloqués mais accès web aux LLM autorisé.<br><br><strong>Action requise :</strong> Vous pouvez utiliser les versions web de Gemini, ChatGPT ou Claude. Néanmoins, il est <strong>strictement interdit</strong> d'y copier des données d'usagers réelles. Vous devez utiliser systématiquement le module d'anonymisation locale avant chaque prompt.",
+                    action: "Anonymisation manuelle stricte sur données publiques ou fictives."
+                },
+                result_optimal: {
+                    isResult: true,
+                    title: "🚀 Option C : Déploiement optimal et collaboratif",
+                    desc: "<strong>Situation :</strong> Poste libre et directives claires existantes.<br><br><strong>Action requise :</strong> Vous êtes dans le cadre idéal. Appliquez les directives de la charte. Vous pouvez utiliser des API souveraines et configurer des outils locaux sécurisés en liaison avec votre DSI.",
+                    action: "Participer aux groupes de travail IA internes."
+                },
+                result_pioneer: {
+                    isResult: true,
+                    title: "💡 Option D : Devenir le pionnier et proposer un cadre",
+                    desc: "<strong>Situation :</strong> Poste libre mais vide réglementaire.<br><br><strong>Action requise :</strong> Profitez de votre liberté technique pour tester des modèles locaux (ex. Mistral local) ou des prompts structurés. Parallèlement, proposez le modèle de charte de la collectivité pour poser les jalons de la sécurité avant généralisation.",
+                    action: "Proposer le modèle de charte IA à sa direction."
+                }
+            };
+            
+            const renderNode = (nodeId) => {
+                const node = nodes[nodeId];
+                if (node.isResult) {
+                    treeContent.innerHTML = `
+                        <div class="dsi-tree-result">
+                            <h4>${node.title}</h4>
+                            <p>${node.desc}</p>
+                            <div style="background:rgba(255,255,255,0.05); padding:0.6rem; border-radius:4px; font-size:0.78rem; font-weight:700; border-left:3px solid var(--accent-green);">
+                                🎯 Objectif Prioritaire : ${node.action}
+                            </div>
+                        </div>
+                        <button class="dsi-tree-reset-btn" id="btn-tree-reset">🔄 Recommencer le test</button>
+                    `;
+                    treeContent.querySelector('#btn-tree-reset').onclick = () => renderNode('start');
+                } else {
+                    treeContent.innerHTML = `
+                        <div class="dsi-tree-question">${node.question}</div>
+                        <div class="dsi-tree-buttons">
+                            <button class="dsi-tree-btn dsi-tree-btn-yes" id="btn-tree-yes">✔️ Oui</button>
+                            <button class="dsi-tree-btn dsi-tree-btn-no" id="btn-tree-no">❌ Non</button>
+                        </div>
+                    `;
+                    treeContent.querySelector('#btn-tree-yes').onclick = () => renderNode(node.yes);
+                    treeContent.querySelector('#btn-tree-no').onclick = () => renderNode(node.no);
+                }
+            };
+            
+            renderNode('start');
+        }
+
+        if (slide.type === 'dsi-agent-ultime') {
+            const btnSimulate = this.slideContainer.querySelector('#btn-simulate-pipeline');
+            const colRaw = this.slideContainer.querySelector('#col-folder-raw');
+            const colPseudo = this.slideContainer.querySelector('#col-folder-pseudo');
+            const colRestored = this.slideContainer.querySelector('#col-folder-restored');
+            
+            const listRaw = this.slideContainer.querySelector('#list-raw-files');
+            const listPseudo = this.slideContainer.querySelector('#list-pseudo-files');
+            const listRestored = this.slideContainer.querySelector('#list-restored-files');
+            const actionSent = this.slideContainer.querySelector('#action-pseudo-sent');
+            
+            btnSimulate.onclick = () => {
+                btnSimulate.disabled = true;
+                btnSimulate.innerText = "Traitement en cours...";
+                
+                // Step 1: Pseudonymize raw files
+                setTimeout(() => {
+                    colRaw.classList.remove('active');
+                    colPseudo.classList.add('active');
+                    listPseudo.innerHTML = `
+                        <div class="pipeline-file-item" style="color:var(--accent-sky); font-weight:700;">📄 signalement_[NOM_1].txt</div>
+                        <div class="pipeline-file-item" style="color:var(--accent-sky); font-weight:700;">📄 demande_aide_[NOM_2].pdf</div>
+                    `;
+                    actionSent.style.display = 'block';
+                    
+                    // Step 2: Send to Cloud API
+                    setTimeout(() => {
+                        actionSent.innerText = "⚡ Traitement IA Gemini...";
+                        actionSent.style.background = 'rgba(14, 165, 233, 0.1)';
+                        actionSent.style.color = 'var(--accent-sky)';
+                        actionSent.style.borderColor = 'rgba(14, 165, 233, 0.3)';
+                        
+                        // Step 3: De-pseudonymize and restore
+                        setTimeout(() => {
+                            colPseudo.classList.remove('active');
+                            colRestored.classList.add('active');
+                            listRestored.innerHTML = `
+                                <div class="pipeline-file-item" style="color:#34d399; font-weight:700; border-color:#34d399;">📄 réponse_officielle_dufour.txt</div>
+                                <div class="pipeline-file-item" style="color:#34d399; font-weight:700; border-color:#34d399;">📄 projet_decision_aide.pdf</div>
+                            `;
+                            btnSimulate.innerText = "✔️ Simulation terminée !";
+                        }, 1800);
+                        
+                    }, 1500);
+                    
+                }, 1200);
+            };
+        }
 
         // Post-render bindings
         if (slide.type === 'exercises-dashboard') {
@@ -1748,6 +1995,14 @@ class TrainingApp {
             if (btnSlideTest) {
                 btnSlideTest.onclick = () => {
                     this.startGeneralTest(this.currentThemeIndex);
+                    document.getElementById('interactivity-panel').classList.add('open');
+                };
+            }
+            
+            const btnSlideFree = this.slideContainer.querySelector('#btn-slide-launch-free-test');
+            if (btnSlideFree) {
+                btnSlideFree.onclick = () => {
+                    this.startFreeTest();
                     document.getElementById('interactivity-panel').classList.add('open');
                 };
             }
@@ -2150,6 +2405,21 @@ class TrainingApp {
                 } else if (this.role === 'public') {
                     this.showPublicTestPanel(testObj, this.revealState);
                 }
+            } else if (activePollId.startsWith('test-libre-')) {
+                const testObj = {
+                    id: activePollId,
+                    type: 'test-libre',
+                    title: `Atelier libre / Échanges improvisés ✏️`,
+                    question: `Saisissez votre réponse, note ou proposition ci-dessous :`
+                };
+                this.activePoll = testObj;
+                if (this.role === 'stagiaire') {
+                    this.showStagiaireFreeTestPanel(testObj, this.revealState);
+                } else if (this.role === 'formateur') {
+                    this.refreshFormateurPanel();
+                } else if (this.role === 'public') {
+                    this.showPublicFreeTestPanel(testObj, this.revealState);
+                }
             } else {
                 const poll = INTERACTIVE_QUESTIONS.find(q => q.id === activePollId);
                 if (poll) {
@@ -2194,6 +2464,38 @@ class TrainingApp {
         const voteFormSection = document.getElementById('panel-vote-form-section');
 
         voteFormSection.style.display = 'none';
+
+        if (this.activePoll && this.activePoll.type === 'test-libre') {
+            panelTitle.innerText = this.activePoll.title;
+            qSection.innerHTML = `
+                <div class="poll-question-wrapper">
+                    <p class="poll-category">Test Libre Actif ✏️</p>
+                    <h4 style="margin: 0.5rem 0; font-size:1.05rem;">Atelier / Échanges improvisés</h4>
+                    <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.45; margin-top:0.4rem;">
+                        Les stagiaires écrivent librement leurs réponses ou remarques. Leurs réponses s'affichent ci-dessous en temps réel.
+                    </p>
+                </div>
+            `;
+            
+            actionsSection.style.display = 'flex';
+            const btnToggle = document.getElementById('btn-panel-toggle-results');
+            btnToggle.style.display = 'block';
+            btnToggle.innerText = this.revealState === 'hidden' ? "📊 Dévoiler les réponses" : "🛑 Clôturer le test";
+            btnToggle.onclick = () => {
+                if (this.revealState === 'votes') {
+                    this.stopPoll();
+                } else {
+                    this.cycleRevealState(this.activePoll);
+                }
+            };
+            
+            const btnStop = document.getElementById('btn-panel-stop');
+            btnStop.style.display = 'none';
+
+            resultsSection.style.display = 'block';
+            await this.loadFreeTestResults(this.activePoll);
+            return;
+        }
 
         if (this.activePoll && this.activePoll.type === 'test-complet') {
             panelTitle.innerText = this.activePoll.title;
@@ -3205,6 +3507,222 @@ class TrainingApp {
         if (resultsSection) {
             resultsSection.style.display = 'block';
             await this.loadTestResults(testObj);
+        }
+    }
+
+    async startFreeTest() {
+        if (!this.supabase || this.role !== 'formateur') return;
+        const theme = THEMES[this.currentThemeIndex];
+        const testId = 'test-libre-' + theme.id;
+        
+        await this.supabase.from('votes').delete().eq('session_id', 1).eq('poll_id', testId);
+        
+        this.sessionState.show_results = false;
+        
+        this.activePoll = {
+            id: testId,
+            type: 'test-libre',
+            title: `Atelier libre / Échanges improvisés ✏️`,
+            question: `Proposez vos réponses ou remarques par écrit suite aux échanges en cours.`
+        };
+        
+        await this.supabase.from('sessions').update({
+            active_poll_id: testId,
+            show_results: false,
+            active_exercise_id: null
+        }).eq('id', 1);
+
+        this.refreshFormateurPanel();
+    }
+
+    async loadFreeTestResults(testObj) {
+        if (!this.supabase) return;
+        const { data: votes } = await this.supabase.from('votes').select('*').eq('session_id', 1).eq('poll_id', testObj.id);
+        const votesList = votes || [];
+        
+        const votersCountSpan = document.getElementById('voters-count');
+        const votersListDiv = document.getElementById('voters-names-list');
+        
+        if (votersCountSpan) votersCountSpan.innerText = `${votesList.length}`;
+        
+        const showResults = (this.revealState === 'votes' || this.revealState === 'answer');
+        
+        if (votersListDiv) {
+            if (votesList.length === 0) {
+                votersListDiv.innerHTML = `<div style="text-align:center; padding:1rem; color:var(--text-muted); font-style:italic;">En attente des réponses des stagiaires...</div>`;
+            } else {
+                votersListDiv.innerHTML = votesList.map(v => {
+                    return `
+                        <div class="free-test-response-card" style="background:rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.5rem; text-align:left;">
+                            <div style="font-weight:700; color:var(--accent-sky); font-size:0.8rem; margin-bottom:0.25rem; display:flex; justify-content:space-between;">
+                                <span>👤 ${this.escapeHtml(v.prenom)}</span>
+                                <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">${new Date(v.created_at).toLocaleTimeString('fr-FR')}</span>
+                            </div>
+                            <div style="font-size:0.82rem; line-height:1.4; color:#f8fafc; white-space:pre-wrap;">${this.escapeHtml(v.reponse)}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+    }
+
+    async showStagiaireFreeTestPanel(testObj, revealState) {
+        const panel = document.getElementById('interactivity-panel');
+        if (panel) panel.classList.add('open');
+
+        const panelTitle = document.getElementById('panel-title');
+        if (panelTitle) panelTitle.innerText = testObj.title;
+
+        const qSection = document.getElementById('panel-question-section');
+        if (qSection) {
+            qSection.innerHTML = `
+                <div class="poll-question-wrapper">
+                    <p class="poll-category">Test Libre ✏️</p>
+                    <h4 style="margin: 0.3rem 0; font-size:0.95rem; line-height:1.4;">${testObj.question}</h4>
+                </div>
+            `;
+        }
+
+        const voteFormSection = document.getElementById('panel-vote-form-section');
+        const resultsSection = document.getElementById('panel-results-section');
+        
+        if (voteFormSection) voteFormSection.style.display = 'none';
+        if (!resultsSection) return;
+        resultsSection.style.display = 'block';
+
+        const { data: myVote } = await this.supabase.from('votes').select('*').eq('session_id', 1).eq('poll_id', testObj.id).eq('prenom', this.prenom).maybeSingle();
+        const hasEnded = (revealState === 'answer');
+        const showAllResults = (revealState === 'votes' || revealState === 'answer');
+
+        if (!myVote && !hasEnded) {
+            resultsSection.innerHTML = `
+                <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:left;">
+                    <textarea id="free-test-response-input" placeholder="Saisissez votre réponse ici..." style="width:100%; min-height:120px; background:rgba(30,41,59,0.5); border:1px solid var(--border-color); border-radius:6px; color:white; padding:0.75rem; font-family:inherit; font-size:0.85rem; outline:none; resize:vertical;"></textarea>
+                    <button class="btn btn-primary" id="btn-submit-free-test" style="justify-content:center; width:100%;">🚀 Soumettre ma réponse</button>
+                </div>
+            `;
+            
+            const btnSubmit = resultsSection.querySelector('#btn-submit-free-test');
+            const textarea = resultsSection.querySelector('#free-test-response-input');
+            btnSubmit.onclick = async () => {
+                const responseText = textarea.value.trim();
+                if (!responseText) return;
+                
+                await this.supabase.from('votes').insert({
+                    session_id: 1,
+                    poll_id: testObj.id,
+                    prenom: this.prenom,
+                    reponse: responseText,
+                    is_correct: null
+                });
+                
+                this.showStagiaireFreeTestPanel(testObj, revealState);
+            };
+        } else {
+            let html = '';
+            if (myVote) {
+                html += `
+                    <div class="score-banner correct" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); color:#34d399; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.8rem; text-align:left; margin-bottom:1rem; line-height:1.45;">
+                        <strong>Votre réponse a été enregistrée :</strong><br>
+                        <p style="margin: 0.4rem 0 0 0; font-weight:normal; font-size:0.82rem; white-space:pre-wrap; color:#f8fafc;">${this.escapeHtml(myVote.reponse)}</p>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="score-banner incorrect" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.8rem; text-align:center; margin-bottom:1rem;">
+                        🔒 Le test libre est clos (Vous n'avez pas répondu).
+                    </div>
+                `;
+            }
+
+            if (showAllResults) {
+                const { data: allVotes } = await this.supabase.from('votes').select('*').eq('session_id', 1).eq('poll_id', testObj.id);
+                const votesList = allVotes || [];
+                
+                html += `
+                    <h5 style="text-align:left; font-size:0.82rem; font-weight:700; margin-bottom:0.5rem; color:#f8fafc;">Réponses des participants :</h5>
+                    <div class="free-test-responses-container" style="max-height: 250px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem; padding-right:4px;">
+                `;
+                
+                if (votesList.length === 0) {
+                    html += `<p style="text-align:center; color:var(--text-muted); font-size:0.78rem; font-style:italic;">Aucune réponse pour le moment...</p>`;
+                } else {
+                    votesList.forEach(v => {
+                        html += `
+                            <div class="free-test-response-card" style="background:rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.6rem 0.75rem; text-align:left;">
+                                <span style="font-weight:700; color:var(--accent-sky); font-size:0.76rem; display:block; margin-bottom:0.2rem;">👤 ${this.escapeHtml(v.prenom)}</span>
+                                <p style="font-size:0.78rem; color:#f8fafc; line-height:1.4; margin:0; white-space:pre-wrap;">${this.escapeHtml(v.reponse)}</p>
+                            </div>
+                        `;
+                    });
+                }
+                html += `</div>`;
+            } else {
+                html += `
+                    <div style="text-align:center; padding:1.5rem; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.1); border-radius:6px; color:var(--text-muted); font-size:0.8rem; font-style:italic;">
+                        🕒 En attente de la publication des réponses des autres stagiaires par le formateur.
+                    </div>
+                `;
+            }
+            resultsSection.innerHTML = html;
+        }
+    }
+
+    async showPublicFreeTestPanel(testObj, revealState) {
+        const panel = document.getElementById('interactivity-panel');
+        if (panel) panel.classList.add('open');
+
+        const panelTitle = document.getElementById('panel-title');
+        if (panelTitle) panelTitle.innerText = testObj.title;
+
+        const qSection = document.getElementById('panel-question-section');
+        if (qSection) {
+            qSection.innerHTML = `
+                <div class="poll-question-wrapper">
+                    <p class="poll-category">Test Libre (Visiteur) ✏️</p>
+                    <h4 style="margin: 0.3rem 0; font-size:0.95rem; line-height:1.4;">${testObj.question}</h4>
+                </div>
+            `;
+        }
+
+        const voteFormSection = document.getElementById('panel-vote-form-section');
+        const resultsSection = document.getElementById('panel-results-section');
+        
+        if (voteFormSection) voteFormSection.style.display = 'none';
+        if (!resultsSection) return;
+        resultsSection.style.display = 'block';
+
+        const showAllResults = (revealState === 'votes' || revealState === 'answer');
+
+        if (showAllResults) {
+            const { data: allVotes } = await this.supabase.from('votes').select('*').eq('session_id', 1).eq('poll_id', testObj.id);
+            const votesList = allVotes || [];
+            
+            let html = `
+                <h5 style="text-align:left; font-size:0.82rem; font-weight:700; margin-bottom:0.5rem; color:#f8fafc;">Réponses des participants :</h5>
+                <div class="free-test-responses-container" style="max-height: 250px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem; padding-right:4px;">
+            `;
+            
+            if (votesList.length === 0) {
+                html += `<p style="text-align:center; color:var(--text-muted); font-size:0.78rem; font-style:italic;">Aucune réponse pour le moment...</p>`;
+            } else {
+                votesList.forEach(v => {
+                    html += `
+                        <div class="free-test-response-card" style="background:rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.6rem 0.75rem; text-align:left;">
+                            <span style="font-weight:700; color:var(--accent-sky); font-size:0.76rem; display:block; margin-bottom:0.2rem;">👤 ${this.escapeHtml(v.prenom)}</span>
+                            <p style="font-size:0.78rem; color:#f8fafc; line-height:1.4; margin:0; white-space:pre-wrap;">${this.escapeHtml(v.reponse)}</p>
+                        </div>
+                    `;
+                });
+            }
+            html += `</div>`;
+            resultsSection.innerHTML = html;
+        } else {
+            resultsSection.innerHTML = `
+                <div style="text-align:center; padding:1.5rem; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.1); border-radius:6px; color:var(--text-muted); font-size:0.8rem; font-style:italic;">
+                    🕒 Le test libre est en cours. Les réponses s'afficheront ici une fois publiées par le formateur.
+                </div>
+            `;
         }
     }
 

@@ -703,9 +703,36 @@ const THEMES = [
         ]
     },
     {
+        id: "guide-dsi-ultime",
+        category: "reg",
+        title: "11. Stratégie & Déploiement",
+        icon: "🧭",
+        desc: "L'arbre décisionnel d'accès aux LLM, la matrice de valorisation IFSE et le fonctionnement de l'Agent Territorial Parfait.",
+        slides: [
+            {
+                title: "L'Arbre Décisionnel des Droits & DSI",
+                type: "dsi-decision-tree",
+                desc: "Pour savoir où vous vous situez dans votre collectivité et quelles démarches entreprendre, suivez cet arbre décisionnel interactif.",
+                intro: "Cliquez sur les choix ci-dessous pour identifier les actions réglementaires et organisationnelles adaptées à votre situation administrative."
+            },
+            {
+                title: "La Matrice IFSE & Productivité",
+                type: "dsi-ifse-matrix",
+                desc: "L'utilisation professionnelle de l'IA doit être valorisée à la hauteur des gains de productivité et de la responsabilité réglementaire (RGPD/sécurité) portée par l'agent.",
+                intro: "Ce tableau de correspondance croise le niveau de compétence, le gain de temps moyen estimé et l'impact potentiel sur le régime indemnitaire (IFSE) ou la NBI."
+            },
+            {
+                title: "Le Pipeline de l'Agent Parfait (Les 3 Dossiers)",
+                type: "dsi-agent-ultime",
+                desc: "La solution technique ultime pour allier la puissance sémantique de Gemini, l'hébergement souverain en Europe et la conformité RGPD absolue.",
+                intro: "Voici comment fonctionne le système de pseudonymisation locale par dossier, avec boucle agentique sécurisée sur serveur SecNumCloud."
+            }
+        ]
+    },
+    {
         id: "eval-stage-bilan",
         category: "prompt",
-        title: "11. Évaluation Stage",
+        title: "12. Évaluation Stage",
         icon: "📝",
         desc: "Mise en situation d'évaluation initiale (début de stage) et finale (fin de stage) à faire sur papier.",
         slides: [
@@ -734,7 +761,7 @@ const THEMES = [
     {
         id: "exercices-ateliers",
         category: "prompt",
-        title: "12. Exercices & Ateliers",
+        title: "13. Exercices & Ateliers",
         icon: "🎯",
         desc: "Une banque complète de plus de 60 exercices pratiques et théoriques, individuels et collectifs, sur PC ou sur papier.",
         slides: [
@@ -888,6 +915,20 @@ const INTERACTIVE_QUESTIONS = [
         },
         correct: "B",
         explanation: "Le stockage en Europe garantit le respect du RGPD et évite le transfert extraterritorial des données citoyennes sous la juridiction du Cloud Act."
+    },
+    {
+        themeId: "guide-dsi-ultime",
+        id: "q_dsi",
+        type: "quiz",
+        question: "Dans le pipeline de l'Agent Parfait, pourquoi la pseudonymisation et la dé-pseudonymisation s'effectuent-elles exclusivement sur le PC local de l'agent ?",
+        options: {
+            A: "Pour s'assurer qu'aucune donnée identifiante (RGPD) ou confidentielle ne quitte le réseau local ou ne soit envoyée vers un cloud non souverain.",
+            B: "Parce que les serveurs SecNumCloud ne disposent pas d'assez d'espace de stockage temporaire.",
+            C: "Afin de réduire la consommation d'électricité des serveurs Gemini de Google.",
+            D: "Pour obliger l'agent à superviser manuellement la reconstruction grammaticale."
+        },
+        correct: "A",
+        explanation: "La pseudonymisation et la dé-pseudonymisation locales garantissent le respect du RGPD et du Cloud Act, car aucun élément d'identité réel ne sort sur le réseau."
     },
     {
         themeId: "eval-stage-bilan",
