@@ -253,6 +253,55 @@ const THEMES = [
                 ]
             },
             {
+                title: "Les 5 Principes Clés du RGPD (Métier)",
+                type: "rgpd-principles",
+                intro: "Pour un agent territorial, manipuler des données d'identité (noms, prénoms) exige de respecter 5 obligations fondamentales. Ce cadre juridique strict explique <strong>pourquoi il est interdit de copier ces informations dans un LLM externe</strong> (ex. ChatGPT) ou d'y charger un PV de conseil municipal non anonymisé.",
+                principles: [
+                    {
+                        num: "1",
+                        title: "Le principe de finalité (Le 'Pourquoi')",
+                        desc: "Vous ne devez pas utiliser ces noms et prénoms pour n'importe quoi. Ils doivent être collectés et manipulés pour un objectif précis, légitime et nécessaire à l'exercice de votre mission (par exemple : gérer un dossier d'usager, établir un acte d'état civil, envoyer une convocation).",
+                        prohibition: "Interdiction absolue : Vous ne devez jamais utiliser ces données à des fins personnelles, politiques, ou pour une mission qui n'est pas la vôtre."
+                    },
+                    {
+                        num: "2",
+                        title: "Le secret professionnel & la confidentialité",
+                        desc: "En tant qu'agent public, vous êtes soumis à une obligation de discrétion professionnelle. Dans le cadre du RGPD, cela se traduit par :",
+                        bulletPoints: [
+                            "<strong>Le besoin d'en connaître</strong> : Vous ne devez partager ces identités qu'avec les collègues ou services qui en ont strictement besoin pour travailler.",
+                            "<strong>Le verrouillage des accès</strong> : Ne laissez jamais votre session informatique ouverte sans surveillance et ne partagez pas vos identifiants."
+                        ]
+                    },
+                    {
+                        num: "3",
+                        title: "La sécurité des données (Bon sens)",
+                        desc: "La manipulation de listes de noms et prénoms (souvent sur Excel ou dans des logiciels métiers) exige une hygiène informatique stricte :",
+                        bulletPoints: [
+                            "<strong>Pas de stockage sauvage</strong> : Ne copiez pas ces fichiers sur une clé USB personnelle ou sur le bureau d'un ordinateur non sécurisé.",
+                            "<strong>Attention aux envois de mails</strong> : Si vous devez envoyer un mail à un groupe d'usagers, utilisez obligatoirement la copie cachée (<strong>Cci</strong>) pour éviter que chaque usager ne voie le nom et le prénom des autres."
+                        ]
+                    },
+                    {
+                        num: "4",
+                        title: "La durée de conservation limitée",
+                        desc: "Les prénoms et noms ne peuvent pas être conservés indéfiniment dans vos outils de travail quotidiens. Une fois que le dossier de l'usager est traité et que les délais légaux sont expirés, ces données doivent être :",
+                        bulletPoints: [
+                            "Soit supprimées.",
+                            "Soit archivées selon les règles propres aux Archives publiques (tri, versement ou élimination réglementée)."
+                        ]
+                    },
+                    {
+                        num: "5",
+                        title: "Le respect des droits des usagers",
+                        desc: "Les citoyens ont des droits sur leurs données (droit d'accès, de rectification, d'opposition dans certains cas). Si un usager vous contacte pour modifier son nom mal orthographié ou pour savoir quelles données votre service détient sur lui, votre administration a l'obligation de lui répondre dans un <strong>délai d'un mois</strong>."
+                    }
+                ],
+                dpoReflex: {
+                    title: "💡 Votre meilleur réflexe : le DPO",
+                    desc: "Chaque administration, collectivité ou ministère a l'obligation de nommer un <strong>DPO (Data Protection Officer)</strong> ou Délégué à la Protection des Données. Si vous avez un doute sur un transfert de fichier, un formulaire de collecte ou une demande d'un usager, c'est cette personne qu'il faut contacter. Elle est là pour vous guider et sécuriser vos pratiques."
+                }
+            },
+            {
                 title: "L'AI Act : La Pyramide des Risques",
                 type: "risk-pyramid",
                 desc: "Adopté en 2024, le règlement européen sur l'IA (AI Act) classe les applications selon leur niveau de danger pour les citoyens. Voici la pyramide appliquée aux collectivités :",

@@ -426,6 +426,40 @@ function getSlideHTML(slide, theme) {
                         </tbody>
                     </table>
                 `;
+            } else if (slide.type === 'rgpd-principles') {
+                html += `
+                    <p style="margin-bottom:1.25rem; font-size:0.92rem; line-height:1.5; color:var(--text-body);">${slide.intro}</p>
+                    <div class="rgpd-container">
+                        <div class="rgpd-grid">
+                            ${slide.principles.map(p => `
+                                <div class="rgpd-card rgpd-card-${p.num}">
+                                    <div>
+                                        <h3>
+                                            <span class="num-badge">${p.num}</span>
+                                            <span>${p.title}</span>
+                                        </h3>
+                                        <div class="rgpd-card-desc">${p.desc}</div>
+                                        ${p.bulletPoints ? `
+                                            <ul class="rgpd-card-bullets">
+                                                ${p.bulletPoints.map(bp => `<li>${bp}</li>`).join('')}
+                                            </ul>
+                                        ` : ''}
+                                    </div>
+                                    ${p.prohibition ? `
+                                        <div class="rgpd-card-prohibition">${p.prohibition}</div>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="rgpd-dpo-card">
+                            <div class="rgpd-dpo-icon">🛡️</div>
+                            <div class="rgpd-dpo-content">
+                                <h4>${slide.dpoReflex.title}</h4>
+                                <p>${slide.dpoReflex.desc}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
             } else if (slide.type === 'risk-pyramid') {
                 html += `
                     <p>${slide.desc}</p>

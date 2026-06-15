@@ -4074,6 +4074,131 @@ body {
     transform: scale(1.2);
 }
 
+/* --- RGPD Principles Slide --- */
+.rgpd-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+}
+.rgpd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+.rgpd-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.rgpd-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+.rgpd-card h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--text-title);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.rgpd-card h3 .num-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.rgpd-card-desc {
+    font-size: 0.82rem;
+    color: var(--text-body);
+    line-height: 1.45;
+    margin-bottom: 0.5rem;
+}
+.rgpd-card-bullets {
+    margin: 0.25rem 0 0 1.25rem;
+    padding: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.rgpd-card-bullets li {
+    margin-bottom: 0.35rem;
+    line-height: 1.4;
+}
+.rgpd-card-prohibition {
+    margin-top: auto;
+    padding: 0.5rem;
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px dashed rgba(239, 68, 68, 0.2);
+    border-radius: 4px;
+    font-size: 0.76rem;
+    color: #f87171;
+    font-weight: 500;
+    line-height: 1.35;
+}
+.rgpd-dpo-card {
+    background: rgba(234, 179, 8, 0.03);
+    border: 1px solid rgba(234, 179, 8, 0.15);
+    border-left: 4px solid var(--accent-gold);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+.rgpd-dpo-card:hover {
+    background: rgba(234, 179, 8, 0.05);
+    border-color: rgba(234, 179, 8, 0.3);
+}
+.rgpd-dpo-icon {
+    font-size: 2.2rem;
+    flex-shrink: 0;
+}
+.rgpd-dpo-content h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: var(--text-title);
+}
+.rgpd-dpo-content p {
+    font-size: 0.82rem;
+    color: var(--text-body);
+    line-height: 1.45;
+    margin: 0;
+}
+
+/* Card Specific color themes */
+.rgpd-card-1 { border-left: 4px solid var(--accent-blue); }
+.rgpd-card-1 h3 .num-badge { background: rgba(14, 165, 233, 0.15); color: var(--accent-sky); }
+
+.rgpd-card-2 { border-left: 4px solid var(--accent-purple); }
+.rgpd-card-2 h3 .num-badge { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+
+.rgpd-card-3 { border-left: 4px solid var(--accent-sky); }
+.rgpd-card-3 h3 .num-badge { background: rgba(56, 189, 248, 0.15); color: var(--accent-sky); }
+
+.rgpd-card-4 { border-left: 4px solid var(--accent-red); }
+.rgpd-card-4 h3 .num-badge { background: rgba(239, 68, 68, 0.15); color: var(--accent-red); }
+
+.rgpd-card-5 { border-left: 4px solid var(--accent-green); }
+.rgpd-card-5 h3 .num-badge { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+
 /* --- Mobile Responsiveness and Adaptation for Trainees (Version 3.4) --- */
 @media (max-width: 768px) {
     /* Global Layout Shift to Vertical */
@@ -4157,9 +4282,16 @@ body {
     .alliance-grid,
     .satellite-pros-cons,
     .charte-columns,
+    .rgpd-grid,
     .comparison-cards-container {
         grid-template-columns: 1fr !important;
         gap: 1rem !important;
+    }
+    
+    .rgpd-dpo-card {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
     }
     
     .hard-chip-row {
