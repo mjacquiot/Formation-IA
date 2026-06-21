@@ -590,6 +590,78 @@ function getSlideHTML(slide, theme) {
                         </div>
                     </div>
                 `;
+            } else if (slide.type === 'model-arbitrage') {
+                html += `
+                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    
+                    <div class="poles-grid">
+                        ${slide.poles.map(p => `
+                            <div class="pole-card" style="border-left: 4px solid ${p.accent};">
+                                <h4>${p.name}</h4>
+                                <p class="pole-card-desc">${p.desc}</p>
+                                <div class="pole-card-examples"><strong>Exemples :</strong> ${p.examples}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <h3 style="margin-top:2.25rem; margin-bottom:0.75rem; color:var(--text-title); font-size:1.15rem; font-family:'Outfit',sans-serif; display: flex; align-items: center; gap: 0.5rem;">
+                        ⚖️ Les Stratégies Décisionnelles Territoriales
+                    </h3>
+                    <p style="margin-bottom:1.25rem;">${slide.strategyIntro}</p>
+
+                    <div class="strategies-container">
+                        ${slide.strategies.map(s => `
+                            <div class="strategy-card">
+                                <h4>${s.title}</h4>
+                                <p class="strategy-desc">${s.desc}</p>
+                                <div class="strategy-scores">
+                                    <div class="score-row">
+                                        <span class="score-label">Intel.</span>
+                                        <div class="score-track"><div class="score-fill fill-intel" style="width: ${s.radar.intel}%;"></div></div>
+                                        <span class="score-val">${s.radar.intel}%</span>
+                                    </div>
+                                    <div class="score-row">
+                                        <span class="score-label">Anon.</span>
+                                        <div class="score-track"><div class="score-fill fill-anon" style="width: ${s.radar.anon}%;"></div></div>
+                                        <span class="score-val">${s.radar.anon}%</span>
+                                    </div>
+                                    <div class="score-row">
+                                        <span class="score-label">Vitesse</span>
+                                        <div class="score-track"><div class="score-fill fill-speed" style="width: ${s.radar.speed}%;"></div></div>
+                                        <span class="score-val">${s.radar.speed}%</span>
+                                    </div>
+                                    <div class="score-row">
+                                        <span class="score-label">Coût</span>
+                                        <div class="score-track"><div class="score-fill fill-cost" style="width: ${s.radar.cost}%;"></div></div>
+                                        <span class="score-val">${s.radar.cost}%</span>
+                                    </div>
+                                </div>
+                                <div class="strategy-verdict">${s.verdict}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="monitoring-section-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem;">
+                            <div style="flex:1; min-width:280px;">
+                                <h4>${slide.monitoring.title}</h4>
+                                <p style="margin: 0.5rem 0 0 0; font-size:0.88rem; line-height:1.45; color:var(--text-body);">${slide.monitoring.desc}</p>
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:0.6rem; align-items:stretch;">
+                                <a href="${slide.monitoring.url}" target="_blank" class="btn btn-primary btn-monitoring-link" style="text-decoration:none; display:inline-flex; justify-content:center; align-items:center; gap:0.5rem; text-align:center; padding: 10px 20px;">
+                                    ${slide.monitoring.linkText}
+                                </a>
+                                <button class="btn btn-secondary btn-open-poll-from-slide" data-poll-id="${slide.pollLink.pollId}" style="display:inline-flex; justify-content:center; align-items:center; gap:0.5rem; white-space:nowrap; padding: 10px 20px; font-weight:700;">
+                                    ${slide.pollLink.text}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-purple);">
+                        ${slide.pedagogy}
+                    </div>
+                `;
             } else if (slide.type === 'exercise-list') {
                 html += `<div class="exercises-container">`;
                 slide.exercises.forEach((ex, idx) => {

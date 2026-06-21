@@ -579,6 +579,69 @@ const THEMES = [
                     "<strong>Tempêtes solaires :</strong> Les radiations cosmiques peuvent corrompre les données ou griller les circuits des puces sensibles.",
                     "<strong>Temps de latence :</strong> Les données doivent monter et descendre par ondes radio ou liaisons laser, ralentissant les réponses immédiates."
                 ]
+            },
+            {
+                title: "L'Équation du Choix : Arbitrer entre les 4 Pôles",
+                type: "model-arbitrage",
+                intro: "Pour une collectivité territoriale, le choix d'un modèle d'IA n'est pas neutre. Il s'agit d'un arbitrage stratégique complexe entre quatre pôles interdépendants :",
+                poles: [
+                    {
+                        name: "🧠 Intelligence",
+                        desc: "Capacité de raisonnement logique, d'analyse sémantique fine et d'adaptation aux cas métiers complexes.",
+                        accent: "var(--accent-purple)",
+                        examples: "Claude 3.5 Sonnet, GPT-4o, Gemini 1.5 Pro"
+                    },
+                    {
+                        name: "🛡️ Anonymat / Sécurité",
+                        desc: "Respect strict du RGPD, souveraineté européenne et étanchéité face aux lois extraterritoriales (Cloud Act).",
+                        accent: "var(--accent-red)",
+                        examples: "Mistral AI, Modèles open-source locaux (Llama 3, Qwen) sur serveurs internes"
+                    },
+                    {
+                        name: "⚡ Vitesse (Latence)",
+                        desc: "Rapidité de génération des réponses pour maintenir la productivité et fluidifier l'usage quotidien.",
+                        accent: "var(--accent-sky)",
+                        examples: "Modèles Flash / Mini, puces dédiées LPU (Groq)"
+                    },
+                    {
+                        name: "💶 Prix / Coût",
+                        desc: "Maîtrise du budget (facturation au million de tokens API ou investissement en serveurs physiques GPU).",
+                        accent: "var(--accent-gold)",
+                        examples: "Modèles open-source, API low-cost (GPT-4o mini, Gemini 1.5 Flash)"
+                    }
+                ],
+                strategyIntro: "Trois configurations majeures s'offrent aux administrations territoriales pour arbitrer ces pôles :",
+                strategies: [
+                    {
+                        title: "1. Le Souverain Local 🖥️",
+                        desc: "Modèle Open-Source (Mistral, Llama) hébergé sur serveurs physiques internes ou cloud souverain SecNumCloud.",
+                        verdict: "Anonymat maximal 🛡️ | Coût d'installation lourd | Intelligence & Vitesse moyennes",
+                        radar: { intel: 60, anon: 100, speed: 65, cost: 40 }
+                    },
+                    {
+                        title: "2. L'Hybride Sécurisé (Optimal) 🔑",
+                        desc: "Modèle Cloud puissant combiné avec un outil d'anonymisation locale s'exécutant sur le poste de l'agent avant envoi.",
+                        verdict: "Intelligence maximale 🧠 | Sécurité RGPD garantie | Coûts maîtrisés (API)",
+                        radar: { intel: 95, anon: 90, speed: 85, cost: 75 }
+                    },
+                    {
+                        title: "3. Le Cloud Public Direct (⚠️ Risqué)",
+                        desc: "Saisie brute d'informations professionnelles dans des outils américains (ChatGPT, Gemini public) sans filtrage.",
+                        verdict: "Vitesse & Prix imbattables ⚡ | ❌ Non conforme RGPD (Interdit pour données nominatives)",
+                        radar: { intel: 90, anon: 10, speed: 95, cost: 95 }
+                    }
+                ],
+                monitoring: {
+                    title: "📈 Un paysage en constante évolution",
+                    desc: "Le marché de l'IA change chaque semaine. Un modèle qui était le plus rapide ou le moins cher le mois dernier peut être dépassé aujourd'hui. Pour vous tenir informé et guider les choix de votre collectivité, visitez le comparateur de référence indépendant :",
+                    linkText: "Analyser sur ArtificialAnalysis.ai 🚀",
+                    url: "https://artificialanalysis.ai/"
+                },
+                pollLink: {
+                    text: "📊 Participer au Sondage d'Arbitrage",
+                    pollId: "q7"
+                },
+                pedagogy: "<strong>Le Conseil du Formateur :</strong> Pour une collectivité, la <strong>stratégie hybride</strong> (Option 2) représente souvent le meilleur compromis à court terme. Elle permet d'utiliser le meilleur de l'intelligence artificielle tout en protégeant les données des usagers via l'anonymisation préalable locale."
             }
         ]
     },

@@ -880,6 +880,26 @@ class TrainingApp {
                 };
             }
         }
+        
+        // Bind poll opening from slides
+        const btnOpenPoll = this.slideContainer.querySelector('.btn-open-poll-from-slide');
+        if (btnOpenPoll) {
+            btnOpenPoll.onclick = () => {
+                const pollId = btnOpenPoll.dataset.pollId;
+                const poll = INTERACTIVE_QUESTIONS.find(q => q.id === pollId);
+                if (poll) {
+                    if (this.role === 'formateur') {
+                        this.startPoll(poll);
+                    } else if (this.role === 'stagiaire') {
+                        this.showStagiairePollPanel(poll, this.revealState);
+                    } else {
+                        this.showPublicPollPanel(poll, this.revealState);
+                    }
+                    const panel = document.getElementById('interactivity-panel');
+                    if (panel) panel.classList.add('open');
+                }
+            };
+        }
 
         // Always bind copy buttons if they exist
         this.bindCopyButtons();
