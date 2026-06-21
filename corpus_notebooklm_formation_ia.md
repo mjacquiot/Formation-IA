@@ -670,6 +670,39 @@ L'IA n'est pas immatérielle. Elle repose sur des fonderies de puces silicium ul
 
 ---
 
+### Diapositive : Calcul du Coût GPU : L'Équation VRAM
+
+- **Type d'affichage :** `datacenter-cost`
+
+Pour héberger une IA souveraine en local, la collectivité doit acquérir des cartes graphiques (GPU). Voici l'équation de dimensionnement de la mémoire vidéo (VRAM) et l'évaluation budgétaire associée.
+
+**Équation de dimensionnement VRAM :**
+$$\text{VRAM Totale Recommandée (Go)} = \left( \frac{\text{Taille du Modèle (en B)} \times \text{Bits de quantification}}{8} \right) + \left( \text{Nb Salariés actifs simultanés} \times \text{Contexte (en k)} \times 0,5 \right)$$
+
+*Note budgétaire :* L'investissement matériel moyen est estimé à **450 € HT par Go de VRAM** pour des puces de calcul professionnelles.
+
+**Exemples de configurations et coûts :**
+
+1. **Mairie Standard (Modèle compact : Mistral 7B)**
+   - Modèle : **Mistral 7B** (7 milliards de paramètres), quantifié en **4 bits**.
+   - Usage : **10 agents actifs simultanés**, avec un contexte de **8k tokens**.
+   - Calcul : Poids du modèle ($\frac{7 \times 4}{8} = 3,5\text{ Go}$) + KV Cache ($10 \times 8 \times 0,5 = 40\text{ Go}$) = **43,5 Go de VRAM**.
+   - Investissement estimé : $43,5\text{ Go} \times 450\text{ €} = \mathbf{19\ 575\text{ € HT}}$ (ex: 1 carte Nvidia RTX A6000 Ada de 48 Go).
+
+2. **DSI Intermédiaire (Modèle équilibré : Mistral NeMo 12B)**
+   - Modèle : **Mistral NeMo 12B** (12 milliards de paramètres), quantifié en **8 bits**.
+   - Usage : **15 agents actifs simultanés**, avec un contexte de **8k tokens**.
+   - Calcul : Poids du modèle ($\frac{12 \times 8}{8} = 12\text{ Go}$) + KV Cache ($15 \times 8 \times 0,5 = 60\text{ Go}$) = **72 Go de VRAM**.
+   - Investissement estimé : $72\text{ Go} \times 450\text{ €} = \mathbf{32\ 400\text{ € HT}}$ (ex: 3 cartes Nvidia L40S de 48 Go).
+
+3. **Métropole Expert (Modèle puissant : Llama 3 70B)**
+   - Modèle : **Llama 3 70B** (70 milliards de paramètres), quantifié en **4 bits**.
+   - Usage : **5 agents actifs simultanés** (DSI/Juristes), avec un contexte de **16k tokens**.
+   - Calcul : Poids du modèle ($\frac{70 \times 4}{8} = 35\text{ Go}$) + KV Cache ($5 \times 16 \times 0,5 = 40\text{ Go}$) = **75 Go de VRAM**.
+   - Investissement estimé : $75\text{ Go} \times 450\text{ €} = \mathbf{33\ 750\text{ € HT}}$ (ex: 2 cartes Nvidia RTX 6000 Ada).
+
+---
+
 ### Diapositive : Datacenters Spatiaux (L'IA en Orbite)
 
 - **Type d'affichage :** `satellite-datacenter`

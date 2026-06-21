@@ -408,7 +408,7 @@ const THEMES = [
                     ],
                     cons: [
                         "<strong>Pas d'accès Internet (Inconvénient usage) :</strong> Incapable de faire des recherches en ligne en temps réel ou de mettre à jour ses connaissances.",
-                        "<strong>Système à la traîne (Inconvénient performance) :</strong> Modèles open-source locaux (ex. Llama 3, Mistral) rapidement obsolètes face à la puissance des géants de l'IA.",
+                        "<strong>Système à la traîne (Inconvénient performance) :</strong> Modèles open-source locaux rapidement obsolètes face à la puissance d'évolution des géants du Cloud.",
                         "<strong>Maintenance lourde :</strong> Nécessite des compétences d'administration système en interne et une gestion de la climatisation des serveurs."
                     ]
                 },
@@ -566,6 +566,60 @@ const THEMES = [
                 fact: "<strong>Le saviez-vous ?</strong> Une seule requête complexe sur un modèle d'IA générative consomme environ 10 fois plus d'électricité qu'une simple recherche sur Google. C'est un défi écologique majeur pour la neutralité carbone des territoires."
             },
             {
+                title: "Calcul du Coût GPU : L'Équation VRAM",
+                type: "datacenter-cost",
+                desc: "Pour héberger une IA souveraine en local, la collectivité doit acquérir des cartes graphiques (GPU). Voici l'équation universelle pour calculer la mémoire vidéo (VRAM) nécessaire et l'investissement requis.",
+                formula: "$$\\text{VRAM Totale Recommandée (Go)} = \\left( \\frac{\\text{Taille du Modèle (en B)} \\times \\text{Bits de quantification}}{8} \\right) + \\left( \\text{Nb Salariés actifs simultanés} \\times \\text{Contexte (en k)} \\times 0,5 \\right)$$",
+                costPerGb: 450,
+                variables: [
+                    { name: "Taille du Modèle (en B)", desc: "Nombre de paramètres du modèle en milliards (ex. 7B, 12B, 70B)." },
+                    { name: "Bits de quantification", desc: "Précision de compression des poids (4 ou 8 bits sont standards pour le local)." },
+                    { name: "Nb Salariés simultanés", desc: "Le nombre maximum d'agents municipaux interrogeant l'IA au même instant." },
+                    { name: "Contexte (en k)", desc: "Taille de l'historique et des documents envoyés (ex. 8k ou 32k tokens)." }
+                ],
+                examples: [
+                    {
+                        title: "1. Mairie Standard (Mistral 7B)",
+                        modelName: "Mistral 7B",
+                        params: 7,
+                        quant: 4,
+                        users: 10,
+                        context: 8,
+                        calcWeights: "7B × 4 bits / 8 = 3.5 Go",
+                        calcCache: "10 agents × 8k × 0.5 = 40 Go",
+                        totalVram: 43.5,
+                        totalCost: 19575,
+                        hardware: "1 carte Nvidia RTX A6000 Ada (48 Go VRAM)"
+                    },
+                    {
+                        title: "2. DSI Intermédiaire (Mistral NeMo 12B)",
+                        modelName: "Mistral NeMo 12B",
+                        params: 12,
+                        quant: 8,
+                        users: 15,
+                        context: 8,
+                        calcWeights: "12B × 8 bits / 8 = 12 Go",
+                        calcCache: "15 agents × 8k × 0.5 = 60 Go",
+                        totalVram: 72,
+                        totalCost: 32400,
+                        hardware: "3 cartes Nvidia L40S ou 2 cartes RTX 6000 Ada"
+                    },
+                    {
+                        title: "3. Métropole Expert (Llama 3 70B)",
+                        modelName: "Llama 3 70B",
+                        params: 70,
+                        quant: 4,
+                        users: 5,
+                        context: 16,
+                        calcWeights: "70B × 4 bits / 8 = 35 Go",
+                        calcCache: "5 agents × 16k × 0.5 = 40 Go",
+                        totalVram: 75,
+                        totalCost: 33750,
+                        hardware: "2 cartes Nvidia RTX 6000 Ada (48 Go × 2 = 96 Go VRAM)"
+                    }
+                ]
+            },
+            {
                 title: "Datacenters Spatiaux (L'IA en Orbite)",
                 type: "satellite-datacenter",
                 desc: "Face à la saturation énergétique et aux restrictions foncières terrestres, des consortiums spatiaux développent des serveurs d'IA en orbite terrestre basse (LEO).",
@@ -589,32 +643,32 @@ const THEMES = [
                         name: "🧠 Intelligence",
                         desc: "Capacité de raisonnement logique, d'analyse sémantique fine et d'adaptation aux cas métiers complexes.",
                         accent: "var(--accent-purple)",
-                        examples: "Claude 3.5 Sonnet, GPT-4o, Gemini 1.5 Pro"
+                        examples: "Grands modèles Cloud propriétaires de pointe (versions Pro / Ultra)"
                     },
                     {
                         name: "🛡️ Anonymat / Sécurité",
                         desc: "Respect strict du RGPD, souveraineté européenne et étanchéité face aux lois extraterritoriales (Cloud Act).",
                         accent: "var(--accent-red)",
-                        examples: "Mistral AI, Modèles open-source locaux (Llama 3, Qwen) sur serveurs internes"
+                        examples: "Modèles open-source (ouverts) hébergés sur serveurs internes ou Cloud souverain"
                     },
                     {
                         name: "⚡ Vitesse (Latence)",
                         desc: "Rapidité de génération des réponses pour maintenir la productivité et fluidifier l'usage quotidien.",
                         accent: "var(--accent-sky)",
-                        examples: "Modèles Flash / Mini, puces dédiées LPU (Groq)"
+                        examples: "Modèles allégés et optimisés (versions Flash / Mini), puces dédiées à l'inférence rapide"
                     },
                     {
                         name: "💶 Prix / Coût",
                         desc: "Maîtrise du budget (facturation au million de tokens API ou investissement en serveurs physiques GPU).",
                         accent: "var(--accent-gold)",
-                        examples: "Modèles open-source, API low-cost (GPT-4o mini, Gemini 1.5 Flash)"
+                        examples: "Modèles open-source compacts, API Cloud légères d'entrée de gamme"
                     }
                 ],
                 strategyIntro: "Trois configurations majeures s'offrent aux administrations territoriales pour arbitrer ces pôles :",
                 strategies: [
                     {
                         title: "1. Le Souverain Local 🖥️",
-                        desc: "Modèle Open-Source (Mistral, Llama) hébergé sur serveurs physiques internes ou cloud souverain SecNumCloud.",
+                        desc: "Modèle Open-Source (libre de droits) hébergé sur serveurs physiques internes ou cloud souverain SecNumCloud.",
                         verdict: "Anonymat maximal 🛡️ | Coût d'installation lourd | Intelligence & Vitesse moyennes",
                         radar: { intel: 60, anon: 100, speed: 65, cost: 40 }
                     },
@@ -626,7 +680,7 @@ const THEMES = [
                     },
                     {
                         title: "3. Le Cloud Public Direct (⚠️ Risqué)",
-                        desc: "Saisie brute d'informations professionnelles dans des outils américains (ChatGPT, Gemini public) sans filtrage.",
+                        desc: "Saisie brute d'informations professionnelles dans des assistants Cloud grand public sans contrat de confidentialité.",
                         verdict: "Vitesse & Prix imbattables ⚡ | ❌ Non conforme RGPD (Interdit pour données nominatives)",
                         radar: { intel: 90, anon: 10, speed: 95, cost: 95 }
                     }

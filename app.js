@@ -513,7 +513,42 @@ class TrainingApp {
 
         this.slideContainer.innerHTML = html;
 
+        // Auto-render LaTeX math formulas if KaTeX is loaded
+        if (window.renderMathInElement) {
+            window.renderMathInElement(this.slideContainer, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\[', display: true}
+                ],
+                throwOnError : false
+            });
+        }
+
         // Post-render bindings
+        if (slide.type === 'datacenter-cost') {
+            const tabs = this.slideContainer.querySelectorAll('.datacenter-tab-btn');
+            const panes = this.slideContainer.querySelectorAll('.datacenter-tab-pane');
+            tabs.forEach(tab => {
+                tab.onclick = () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panes.forEach(p => {
+                        p.classList.remove('active');
+                        p.style.display = 'none';
+                    });
+                    
+                    tab.classList.add('active');
+                    const idx = tab.getAttribute('data-idx');
+                    const pane = this.slideContainer.querySelector(`#datacenter-pane-${idx}`);
+                    if (pane) {
+                        pane.classList.add('active');
+                        pane.style.display = 'block';
+                    }
+                };
+            });
+        }
+
         if (slide.type === 'dsi-agent-ultime') {
             const btnSimulate = this.slideContainer.querySelector('#btn-simulate-pipeline');
             const colRaw = this.slideContainer.querySelector('#col-folder-raw');

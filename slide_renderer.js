@@ -590,6 +590,90 @@ function getSlideHTML(slide, theme) {
                         </div>
                     </div>
                 `;
+            } else if (slide.type === 'datacenter-cost') {
+                html += `
+                    <p style="margin-bottom:1.25rem; font-size:0.95rem; line-height:1.5;">${slide.desc}</p>
+                    
+                    <div class="math-formula-card">
+                        <div class="math-formula-header">🧮 L'Équation Globale de la VRAM</div>
+                        <div class="math-formula-body" style="font-family: inherit;">
+                            ${slide.formula}
+                        </div>
+                        <div class="math-formula-footer">
+                            Estimation du coût d'achat matériel : <strong>${slide.costPerGb} € HT par Go de VRAM</strong> (GPU niveau entreprise).
+                        </div>
+                    </div>
+
+                    <div class="datacenter-variables-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        ${slide.variables.map(v => `
+                            <div class="variable-item" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s;">
+                                <strong style="color: var(--accent-purple); font-family: 'Outfit', sans-serif;">${v.name}</strong>
+                                <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: var(--text-muted); line-height:1.4;">${v.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <h3 style="margin-top:2rem; margin-bottom:0.75rem; color:var(--text-title); font-size:1.1rem; font-family:'Outfit',sans-serif; display: flex; align-items: center; gap: 0.5rem;">
+                        📊 Exemples de Configurations & Coûts Estimés
+                    </h3>
+                    <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1rem;">Sélectionnez une option pour étudier différents scénarios de déploiement local :</p>
+
+                    <div class="datacenter-tabs-container">
+                        <div class="datacenter-tabs-header" style="display: flex; gap: 0.5rem; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                            ${slide.examples.map((ex, idx) => `
+                                <button class="datacenter-tab-btn ${idx === 0 ? 'active' : ''}" data-idx="${idx}">
+                                    ${ex.title}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div class="datacenter-tabs-content">
+                            ${slide.examples.map((ex, idx) => `
+                                <div class="datacenter-tab-pane ${idx === 0 ? 'active' : ''}" id="datacenter-pane-${idx}" style="display: ${idx === 0 ? 'block' : 'none'};">
+                                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 1.25rem;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+                                            <h4 style="margin:0; font-family:'Outfit',sans-serif; color:var(--text-title); font-size:1.05rem;">
+                                                ⚙️ Fiche Technique : <span style="color:var(--accent-purple);">${ex.modelName}</span>
+                                            </h4>
+                                            <span style="background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); color:#c084fc; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:700;">
+                                                Quantification ${ex.quant} bits
+                                            </span>
+                                        </div>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="font-size:0.82rem; line-height:1.5;">
+                                                <strong>Paramètres de calcul :</strong>
+                                                <ul style="margin: 0.25rem 0 0 0; padding-left: 1.25rem; color:var(--text-body);">
+                                                    <li>Taille du modèle : <strong>${ex.params}B</strong> (Milliards)</li>
+                                                    <li>Agents actifs simultanés : <strong>${ex.users}</strong></li>
+                                                    <li>Fenêtre de contexte : <strong>${ex.context}k tokens</strong></li>
+                                                </ul>
+                                            </div>
+                                            <div style="font-size:0.82rem; line-height:1.5;">
+                                                <strong>Détail du besoin VRAM :</strong>
+                                                <ul style="margin: 0.25rem 0 0 0; padding-left: 1.25rem; color:var(--text-body);">
+                                                    <li>Poids du modèle : <code>${ex.calcWeights}</code></li>
+                                                    <li>Mémoire de travail (KV Cache) : <code>${ex.calcCache}</code></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap:wrap; gap:1rem;">
+                                            <div>
+                                                <div style="font-size:0.75rem; color:var(--text-muted);">VRAM RECOMMANDÉE</div>
+                                                <div style="font-size:1.5rem; font-weight:800; color:var(--accent-purple); font-family:'Outfit',sans-serif;">${ex.totalVram} Go</div>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:0.75rem; color:var(--text-muted); text-align:right;">INVESTISSEMENT ESTIMÉ (GPU)</div>
+                                                <div style="font-size:1.5rem; font-weight:800; color:#10b981; font-family:'Outfit',sans-serif; text-align:right;">${ex.totalCost.toLocaleString('fr-FR')} € HT</div>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 1rem; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-radius: 6px; padding: 0.6rem 0.85rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; color: #a7f3d0;">
+                                            <span>💡</span> <span><strong>Matériel recommandé :</strong> ${ex.hardware}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
             } else if (slide.type === 'model-arbitrage') {
                 html += `
                     <p style="margin-bottom:1.5rem;">${slide.intro}</p>
