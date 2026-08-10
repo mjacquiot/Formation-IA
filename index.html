@@ -71,7 +71,10 @@
                     <div id="formateur-dashboard-container" class="formateur-dashboard" style="display: none;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
                             <h4 style="font-family:'Outfit',sans-serif; font-size:1.15rem; color:#f8fafc; margin: 0;">👥 Émargement & Gestion des Participants</h4>
-                            <button id="btn-home-reset-session" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; font-weight:700; height: auto; min-height: unset; line-height: 1.2;">Réinitialiser la session entière ⚠️</button>
+                            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                                <button id="btn-home-reset-session" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; font-weight:700; height: auto; min-height: unset; line-height: 1.2;">Réinitialiser les votes ⚠️</button>
+                                <button id="btn-home-close-session" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; font-weight:700; height: auto; min-height: unset; line-height: 1.2; background: linear-gradient(135deg, #8b5cf6, #6d28d9); border:none;">🔒 Clôturer la Session du Jour</button>
+                            </div>
                         </div>
                         <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.4;">
                             Visualisez la liste des stagiaires connectés. Cliquez sur la croix (<span style="color:var(--accent-red); font-weight:bold;">✕</span>) à côté d'un prénom pour supprimer et déconnecter cet utilisateur.
@@ -132,6 +135,7 @@
             <h3>Rejoindre la Session Interactive 👋</h3>
             <p>Saisissez votre prénom pour participer aux sondages, quiz et ateliers en direct.</p>
             <input type="text" id="stagiaire-name-input" placeholder="Votre prénom...">
+            <input type="text" id="stagiaire-pin-input" placeholder="Code PIN à 4 chiffres (ex: 7492)..." style="margin-top: 0.5rem; display: none;">
             <div id="stagiaire-login-error" class="error-text"></div>
             <button id="btn-stagiaire-login" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Se connecter</button>
         </div>
@@ -183,6 +187,9 @@
     <script src="exercises.js"></script>
     <script src="slide_renderer.js"></script>
     <script src="app.js"></script>
+    <script src="app_slides.js"></script>
+    <script src="app_supabase.js"></script>
+    <script src="app_interactivity.js"></script>
 </body>
 </html>
 

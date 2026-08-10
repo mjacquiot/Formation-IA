@@ -4,65 +4,72 @@
 function getSlideHTML(slide, theme) {
     let html = '';
             if (slide.type === 'moravec-paradox') {
+                const cardLeft = slide.cardLeft || {
+                    title: slide.hardForHuman ? slide.hardForHuman.title : "Difficile pour l'Homme",
+                    desc: slide.hardForHuman ? slide.hardForHuman.desc : "",
+                    items: slide.hardForHuman ? [slide.hardForHuman.result] : []
+                };
+                const cardRight = slide.cardRight || {
+                    title: slide.easyForHuman ? slide.easyForHuman.title : "Facile pour l'Homme",
+                    desc: slide.easyForHuman ? slide.easyForHuman.desc : "",
+                    items: slide.easyForHuman ? [slide.easyForHuman.result] : []
+                };
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || slide.intro || ''}</p>
                     <div class="moravec-container">
                         <div class="moravec-card card-machine">
-                            <h3>${slide.cardLeft.title}</h3>
-                            <p class="moravec-card-desc">${slide.cardLeft.desc}</p>
+                            <h3>${cardLeft.title}</h3>
+                            <p class="moravec-card-desc">${cardLeft.desc}</p>
                             <ul class="moravec-list">
-                                ${slide.cardLeft.items.map(item => `<li><span class="bullet">🤖</span> <span>${item}</span></li>`).join('')}
+                                ${(cardLeft.items || []).map(item => `<li><span class="bullet">🤖</span> <span>${item}</span></li>`).join('')}
                             </ul>
                         </div>
                         <div class="moravec-card card-human">
-                            <h3>${slide.cardRight.title}</h3>
-                            <p class="moravec-card-desc">${slide.cardRight.desc}</p>
+                            <h3>${cardRight.title}</h3>
+                            <p class="moravec-card-desc">${cardRight.desc}</p>
                             <ul class="moravec-list">
-                                ${slide.cardRight.items.map(item => `<li><span class="bullet">👩‍💼</span> <span>${item}</span></li>`).join('')}
+                                ${(cardRight.items || []).map(item => `<li><span class="bullet">👩‍💼</span> <span>${item}</span></li>`).join('')}
                             </ul>
                         </div>
                     </div>
-                    <div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-blue);">
-                        ${slide.pedagogy}
-                    </div>
+                    ${slide.pedagogy ? `<div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-blue);">${slide.pedagogy || ''}</div>` : (slide.conclusion ? `<div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-blue);">${slide.conclusion || ''}</div>` : '')}
                 `;
             } else if (slide.type === 'automation-bias') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.intro || ''}</p>
                     <div class="bias-grid">
                         <div class="bias-card bias-concept">
-                            <h3>${slide.biasConcept.title}</h3>
-                            <p>${slide.biasConcept.desc}</p>
+                            <h3>${(slide.biasConcept && slide.biasConcept.title) || ''}</h3>
+                            <p>${(slide.biasConcept && slide.biasConcept.desc) || ''}</p>
                         </div>
                         <div class="bias-card bias-responsibility">
-                            <h3>${slide.responsibility.title}</h3>
-                            <p>${slide.responsibility.desc}</p>
+                            <h3>${(slide.responsibility && slide.responsibility.title) || ''}</h3>
+                            <p>${(slide.responsibility && slide.responsibility.desc) || ''}</p>
                         </div>
                     </div>
                     <div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-red); background: rgba(239, 68, 68, 0.02);">
-                        ${slide.pedagogy}
+                        ${slide.pedagogy || ''}
                     </div>
                 `;
             } else if (slide.type === 'amara-law') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || slide.intro || ''}</p>
+                    ${slide.quote ? `
                     <div class="amara-quote-block">
-                        <blockquote>${slide.quote}</blockquote>
-                        <cite>— ${slide.author}</cite>
-                    </div>
+                        <blockquote>${slide.quote || ''}</blockquote>
+                        ${slide.author ? `<cite>— ${slide.author || ''}</cite>` : ''}
+                    </div>` : ''}
                     <div class="amara-grid">
                         <div class="amara-card amara-short">
-                            <h3>${slide.shortTerm.title}</h3>
-                            <p>${slide.shortTerm.desc}</p>
+                            <h3>${(slide.shortTerm && slide.shortTerm.title) || ''}</h3>
+                            <p>${(slide.shortTerm && slide.shortTerm.desc) || ''}</p>
                         </div>
                         <div class="amara-card amara-long">
-                            <h3>${slide.longTerm.title}</h3>
-                            <p>${slide.longTerm.desc}</p>
+                            <h3>${(slide.longTerm && slide.longTerm.title) || ''}</h3>
+                            <p>${(slide.longTerm && slide.longTerm.desc) || ''}</p>
                         </div>
                     </div>
-                    <div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-gold);">
-                        ${slide.pedagogy}
-                    </div>
+                    ${slide.pedagogy ? `<div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-gold);">${slide.pedagogy || ''}</div>` : ''}
                 `;
             } else if (slide.type === 'timeline') {
                 html += `<div class="timeline-vertical">`;
@@ -83,7 +90,7 @@ function getSlideHTML(slide, theme) {
                 html += `</div>`;
             } else if (slide.type === 'collectivite-couts') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.intro || ''}</p>
                     
                     <div class="scenarios-selector-container">
                         <div class="scenarios-selector-title">Niveau d'engagement de la collectivité :</div>
@@ -107,8 +114,8 @@ function getSlideHTML(slide, theme) {
                     <div class="comparison-cards-container">
                         <!-- Option A -->
                         <div class="comp-card" style="border-top: 4px solid var(--accent-blue)">
-                            <h3>${slide.localSpecs.title}</h3>
-                            <div class="comp-card-sub">${slide.localSpecs.subtitle}</div>
+                            <h3>${(slide.localSpecs && slide.localSpecs.title) || ''}</h3>
+                            <div class="comp-card-sub">${(slide.localSpecs && slide.localSpecs.subtitle) || ''}</div>
                             
                             <div class="costs-grid-container">
                                 <h4 class="costs-section-title">📊 Plan de financement (Sur 3 ans)</h4>
@@ -157,8 +164,8 @@ function getSlideHTML(slide, theme) {
     
                         <!-- Option B -->
                         <div class="comp-card" style="border-top: 4px solid var(--accent-purple)">
-                            <h3>${slide.cloudSpecs.title}</h3>
-                            <div class="comp-card-sub">${slide.cloudSpecs.subtitle}</div>
+                            <h3>${(slide.cloudSpecs && slide.cloudSpecs.title) || ''}</h3>
+                            <div class="comp-card-sub">${(slide.cloudSpecs && slide.cloudSpecs.subtitle) || ''}</div>
                             
                             <div class="costs-grid-container">
                                 <h4 class="costs-section-title">📊 Plan de financement (Sur 3 ans)</h4>
@@ -208,52 +215,58 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'comparison-cards') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.intro || ''}</p>
                     <div class="comparison-cards-container">
                         <div class="comp-card" style="border-top: 4px solid var(--accent-blue)">
-                            <h3>${slide.cardLeft.title}</h3>
-                            <div class="comp-card-sub">${slide.cardLeft.subtitle}</div>
-                            <p class="comp-card-desc">${slide.cardLeft.desc}</p>
-                            <div class="comp-card-formula">${slide.cardLeft.formula}</div>
-                            <div class="comp-card-pro"><strong>Avantage :</strong> ${slide.cardLeft.advantage}</div>
-                            <div class="comp-card-con"><strong>Inconvénient :</strong> ${slide.cardLeft.drawback}</div>
+                            <h3>${(slide.cardLeft && slide.cardLeft.title) || ''}</h3>
+                            <div class="comp-card-sub">${(slide.cardLeft && slide.cardLeft.subtitle) || ''}</div>
+                            <p class="comp-card-desc">${(slide.cardLeft && slide.cardLeft.desc) || ''}</p>
+                            <div class="comp-card-formula">${(slide.cardLeft && slide.cardLeft.formula) || ''}</div>
+                            <div class="comp-card-pro"><strong>Avantage :</strong> ${(slide.cardLeft && slide.cardLeft.advantage) || ''}</div>
+                            <div class="comp-card-con"><strong>Inconvénient :</strong> ${(slide.cardLeft && slide.cardLeft.drawback) || ''}</div>
                         </div>
                         <div class="comp-card" style="border-top: 4px solid var(--accent-purple)">
-                            <h3>${slide.cardRight.title}</h3>
-                            <div class="comp-card-sub">${slide.cardRight.subtitle}</div>
-                            <p class="comp-card-desc">${slide.cardRight.desc}</p>
-                            <div class="comp-card-formula">${slide.cardRight.formula}</div>
-                            <div class="comp-card-pro"><strong>Avantage :</strong> ${slide.cardRight.advantage}</div>
-                            <div class="comp-card-con"><strong>Inconvénient :</strong> ${slide.cardRight.drawback}</div>
+                            <h3>${(slide.cardRight && slide.cardRight.title) || ''}</h3>
+                            <div class="comp-card-sub">${(slide.cardRight && slide.cardRight.subtitle) || ''}</div>
+                            <p class="comp-card-desc">${(slide.cardRight && slide.cardRight.desc) || ''}</p>
+                            <div class="comp-card-formula">${(slide.cardRight && slide.cardRight.formula) || ''}</div>
+                            <div class="comp-card-pro"><strong>Avantage :</strong> ${(slide.cardRight && slide.cardRight.advantage) || ''}</div>
+                            <div class="comp-card-con"><strong>Inconvénient :</strong> ${(slide.cardRight && slide.cardRight.drawback) || ''}</div>
                         </div>
                     </div>
                 `;
             } else if (slide.type === 'bar-chart') {
                 html += `
-                    <p>${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="bar-chart-container">
                 `;
-                slide.data.forEach(item => {
-                    const widthPercent = (item.value / 900) * 100;
+                (slide.data || []).forEach(item => {
+                    const widthPercent = item.percent !== undefined ? item.percent : (item.value ? (item.value / 900) * 100 : 50);
+                    const displayVal = item.time || (item.value ? `${item.value} mois` : '');
                     html += `
                         <div class="bar-chart-row">
-                            <div class="bar-chart-label">${item.label}</div>
+                            <div class="bar-chart-label">${item.label || ''}</div>
                             <div class="bar-chart-track">
-                                <div class="bar-chart-bar" style="width: ${widthPercent}%; background: ${item.color};"></div>
+                                <div class="bar-chart-bar" style="width: ${widthPercent}%; background: ${item.color || 'var(--accent-blue)'};"></div>
                             </div>
-                            <div class="bar-chart-value-label">${item.value} mois</div>
+                            <div class="bar-chart-value-label">${displayVal}</div>
                         </div>
                     `;
                 });
-                html += `
-                    </div>
-                    <div class="maire-example-box" style="border-left-color: var(--accent-sky)">
-                        ${slide.implication}
-                    </div>
-                `;
+                const noteText = slide.conclusion || slide.implication || '';
+                if (noteText) {
+                    html += `
+                        </div>
+                        <div class="maire-example-box" style="border-left-color: var(--accent-sky); margin-top:1.5rem;">
+                            ${noteText}
+                        </div>
+                    `;
+                } else {
+                    html += `</div>`;
+                }
             } else if (slide.type === 'schema-steps') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.intro || ''}</p>
                     <div class="schema-steps-container">
                 `;
                 slide.steps.forEach(step => {
@@ -273,15 +286,15 @@ function getSlideHTML(slide, theme) {
                 html += `
                     </div>
                     <div class="maire-example-box" style="border-left-color: var(--accent-red); margin-top:1.5rem;">
-                        ${slide.warning}
+                        ${slide.warning || ''}
                     </div>
                 `;
             } else if (slide.type === 'semantic-map') {
                 html += `
-                    <p>${slide.desc}</p>
+                    <p>${slide.desc || ''}</p>
                     <div class="semantic-map-container">
-                        <div class="semantic-axis-x">${slide.grid.xLabel}</div>
-                        <div class="semantic-axis-y">${slide.grid.yLabel}</div>
+                        <div class="semantic-axis-x">${(slide.grid && slide.grid.xLabel) || ''}</div>
+                        <div class="semantic-axis-y">${(slide.grid && slide.grid.yLabel) || ''}</div>
                 `;
                 slide.grid.points.forEach(pt => {
                     html += `
@@ -293,15 +306,15 @@ function getSlideHTML(slide, theme) {
                 html += `
                     </div>
                     <div class="maire-example-box">
-                        ${slide.mathExplanation}
+                        ${slide.mathExplanation || ''}
                     </div>
                 `;
             } else if (slide.type === 'probability-cascade') {
                 html += `
-                    <p>${slide.desc}</p>
+                    <p>${slide.desc || ''}</p>
                     <div class="maire-example-box" style="margin-bottom:1.5rem;">
                         <strong>Phrase en cours de génération :</strong><br>
-                        <span style="font-family:monospace; color:var(--accent-blue); font-size:1.05rem;">"${slide.inputPhrase}"</span>
+                        <span style="font-family:monospace; color:var(--accent-blue); font-size:1.05rem;">"${slide.inputPhrase || ''}"</span>
                     </div>
                     <div class="cascade-container">
                 `;
@@ -319,7 +332,7 @@ function getSlideHTML(slide, theme) {
                 });
                 html += `
                     </div>
-                    <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.5;">${slide.explanation}</p>
+                    <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.5;">${slide.explanation || ''}</p>
                 `;
             } else if (slide.type === 'analogy') {
                 html += `
@@ -329,11 +342,11 @@ function getSlideHTML(slide, theme) {
                             <div class="analogy-content">
                                 <div class="analogy-block creator">
                                     <h4>Contexte Créateur</h4>
-                                    <p><strong>${slide.humanCreator.title} :</strong> ${slide.humanCreator.desc}</p>
+                                    <p><strong>${(slide.humanCreator && slide.humanCreator.title) || ''} :</strong> ${(slide.humanCreator && slide.humanCreator.desc) || ''}</p>
                                 </div>
                                 <div class="analogy-block situation">
                                     <h4>Contexte de Situation</h4>
-                                    <p><strong>${slide.humanSituation.title} :</strong> ${slide.humanSituation.desc}</p>
+                                    <p><strong>${(slide.humanSituation && slide.humanSituation.title) || ''} :</strong> ${(slide.humanSituation && slide.humanSituation.desc) || ''}</p>
                                 </div>
                             </div>
                         </div>
@@ -342,11 +355,11 @@ function getSlideHTML(slide, theme) {
                             <div class="analogy-content">
                                 <div class="analogy-block creator">
                                     <h4>Contexte Créateur</h4>
-                                    <p><strong>${slide.iaCreator.title} :</strong> ${slide.iaCreator.desc}</p>
+                                    <p><strong>${(slide.iaCreator && slide.iaCreator.title) || ''} :</strong> ${(slide.iaCreator && slide.iaCreator.desc) || ''}</p>
                                 </div>
                                 <div class="analogy-block situation">
                                     <h4>Contexte de Situation</h4>
-                                    <p><strong>${slide.iaSituation.title} :</strong> ${slide.iaSituation.desc}</p>
+                                    <p><strong>${(slide.iaSituation && slide.iaSituation.title) || ''} :</strong> ${(slide.iaSituation && slide.iaSituation.desc) || ''}</p>
                                 </div>
                             </div>
                         </div>
@@ -354,7 +367,7 @@ function getSlideHTML(slide, theme) {
                     <div class="analogy-conclusion">
                         <div class="analogy-conclusion-icon">💡</div>
                         <div>
-                            <p>${slide.conclusion}</p>
+                            <p>${slide.conclusion || ''}</p>
                         </div>
                     </div>
                 `;
@@ -375,12 +388,12 @@ function getSlideHTML(slide, theme) {
                     </div>
                     <div class="maire-example-box">
                         <h4>📝 Exemple de Prompt M.A.I.R.E :</h4>
-                        <p>${slide.example}</p>
+                        <p>${slide.example || ''}</p>
                     </div>
                 `;
             } else if (slide.type === 'color-coded-prompt') {
                 html += `
-                    <p style="margin-bottom:1rem;">${slide.promptTitle} :</p>
+                    <p style="margin-bottom:1rem;">${slide.promptTitle || ''} :</p>
                     <div class="coded-prompt-container">
                 `;
                 slide.parts.forEach(part => {
@@ -396,7 +409,7 @@ function getSlideHTML(slide, theme) {
                 html += `</div>`;
             } else if (slide.type === 'gabarit') {
                 html += `
-                    <p style="margin-bottom:1rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1rem;">${slide.desc || ''}</p>
                     <div class="gabarit-box">
                         <div class="gabarit-header">
                             <span>Gabarit de prompt M.A.I.R.E.</span>
@@ -404,11 +417,11 @@ function getSlideHTML(slide, theme) {
                         </div>
                         <pre class="gabarit-pre"><code>${this.escapeHtml(slide.template)}</code></pre>
                     </div>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.75rem;">${slide.tips}</p>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.75rem;">${slide.tips || ''}</p>
                 `;
             } else if (slide.type === 'conflict-table') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <table class="comparison-table">
                         <thead>
                             <tr>
@@ -428,7 +441,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'rgpd-principles') {
                 html += `
-                    <p style="margin-bottom:1.25rem; font-size:0.92rem; line-height:1.5; color:var(--text-body);">${slide.intro}</p>
+                    <p style="margin-bottom:1.25rem; font-size:0.92rem; line-height:1.5; color:var(--text-body);">${slide.intro || ''}</p>
                     <div class="rgpd-container">
                         <div class="rgpd-grid">
                             ${slide.principles.map(p => `
@@ -454,15 +467,15 @@ function getSlideHTML(slide, theme) {
                         <div class="rgpd-dpo-card">
                             <div class="rgpd-dpo-icon">🛡️</div>
                             <div class="rgpd-dpo-content">
-                                <h4>${slide.dpoReflex.title}</h4>
-                                <p>${slide.dpoReflex.desc}</p>
+                                <h4>${(slide.dpoReflex && slide.dpoReflex.title) || ''}</h4>
+                                <p>${(slide.dpoReflex && slide.dpoReflex.desc) || ''}</p>
                             </div>
                         </div>
                     </div>
                 `;
             } else if (slide.type === 'risk-pyramid') {
                 html += `
-                    <p>${slide.desc}</p>
+                    <p>${slide.desc || ''}</p>
                     <div class="pyramid-container">
                 `;
                 slide.tiers.forEach((tier, idx) => {
@@ -480,7 +493,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'charte-checklist') {
                 html += `
-                    <p>${slide.desc}</p>
+                    <p>${slide.desc || ''}</p>
                     <div class="charte-columns">
                         <div class="charte-pane charte-pane-dos">
                             <h4>✅ À faire (Recommandations)</h4>
@@ -498,7 +511,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'hallucination') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="hallucination-diagram">
                         <div class="temp-bar-container">
                             <div class="temp-label-row">
@@ -506,23 +519,51 @@ function getSlideHTML(slide, theme) {
                                 <span style="color:var(--accent-red)">Créatif / Libre (1.0)</span>
                             </div>
                             <div class="temp-bar">
-                                <div class="temp-indicator" style="left: ${slide.temperature}%;"></div>
+                                <div class="temp-indicator" style="left: ${slide.temperature || ''}%;"></div>
                             </div>
                             <p style="font-size:0.75rem; text-align:center; margin-top:0.25rem; font-weight:700; color:var(--text-muted)">
                                 Curseur recommandé pour l'administration : Température basse (~0.1 - 0.2)
                             </p>
                         </div>
-                        <div class="temp-meanings">
-                            <div class="temp-meaning-box" style="border-left:4px solid var(--accent-blue)">
-                                <h4>🔬 Température basse</h4>
-                                <p>L'IA choisit les mots les plus probables. Réponses fiables, répétitives, idéales pour l'analyse de textes officiels.</p>
-                            </div>
-                            <div class="temp-meaning-box" style="border-left:4px solid var(--accent-red)">
-                                <h4>🎨 Température élevée</h4>
-                                <p>L'IA choisit des mots plus rares. Réponses originales et imaginatives, sujettes aux hallucinations.</p>
+                    </div>
+
+                    <!-- Hallucination & Bias Interactive Detector Widget -->
+                    <div class="interactive-widget-box" style="margin-top:1.5rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1.25rem;">
+                        <h4 style="margin:0 0 0.75rem 0; font-family:'Outfit',sans-serif; color:var(--accent-gold); font-size:1.1rem; display:flex; align-items:center; gap:0.5rem;">
+                            🛡️ Détecteur & Surligneur d'Hallucinations et de Biais (Interactif)
+                        </h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+                            Choisissez un scénario administratif ci-dessous ou saisissez votre propre texte pour analyser en direct les zones d'hallucinations juridiques et de biais discriminatoires.
+                        </p>
+                        
+                        <div class="scenario-buttons-row" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+                            ${(slide.scenarios || []).map((sc, idx) => `
+                                <button class="btn btn-secondary btn-sc-select ${idx === 0 ? 'active' : ''}" data-idx="${idx}" style="font-size:0.82rem; padding:6px 12px;">
+                                    ${sc.title}
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        <div style="margin-bottom:1rem;">
+                            <textarea id="hallu-input-text" rows="4" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:0.75rem; color:#f8fafc; font-family:inherit; font-size:0.88rem; line-height:1.5; resize:vertical;" placeholder="Collez ou tapez votre texte ici..."></textarea>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+                            <button class="btn btn-primary" id="btn-analyze-hallu" style="font-weight:700; font-size:0.88rem; padding:8px 18px;">
+                                🔍 Analyser le texte
+                            </button>
+                            <div style="display:flex; gap:0.75rem; font-size:0.78rem;">
+                                <span><strong style="color:#f87171;">● Rouge :</strong> Hallucination</span>
+                                <span><strong style="color:#fb923c;">● Orange :</strong> Biais / Incohérence</span>
+                                <span><strong style="color:#38bdf8;">● Bleu :</strong> Flou sans source</span>
                             </div>
                         </div>
+
+                        <div id="hallu-output-results" style="background:rgba(0,0,0,0.3); border:1px dashed rgba(255,255,255,0.15); border-radius:8px; padding:1rem; font-size:0.9rem; line-height:1.7; min-height:80px;">
+                            <span style="color:var(--text-muted); font-style:italic;">Cliquez sur 'Analyser le texte' pour voir le surlignage interactif...</span>
+                        </div>
                     </div>
+
                     <div class="maire-example-box" style="margin-top:1.5rem; border-left-color:var(--accent-green)">
                         <h4>💡 Bonnes pratiques anti-hallucination :</h4>
                         <ul style="margin-left: 1.5rem; font-size: 0.88rem; line-height: 1.6; margin-top: 0.5rem;">
@@ -532,7 +573,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'alliance-map') {
                 html += `
-                    <p>${slide.desc}</p>
+                    <p>${slide.desc || ''}</p>
                     <div class="alliance-grid">
                 `;
                 slide.alliances.forEach(al => {
@@ -547,7 +588,7 @@ function getSlideHTML(slide, theme) {
                 html += `</div>`;
             } else if (slide.type === 'hardware-comparison') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="hardware-container">
                 `;
                 slide.chips.forEach((chip, idx) => {
@@ -568,182 +609,240 @@ function getSlideHTML(slide, theme) {
                 html += `
                     </div>
                     <div class="maire-example-box" style="margin-top:1.5rem;">
-                        ${slide.fact}
+                        ${slide.fact || ''}
+                    </div>
+                `;
+            } else if (slide.type === 'eco-calculator') {
+                html += `
+                    <p style="margin-bottom:1.25rem; font-size:0.95rem; line-height:1.5;">${slide.desc || ''}</p>
+                    <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.5rem;">${slide.intro || ''}</p>
+
+                    <div class="eco-sandbox-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                        <!-- Left Panel: Controls -->
+                        <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1.25rem;">
+                            <h4 style="margin:0 0 1rem 0; font-family:'Outfit',sans-serif; color:var(--accent-green); font-size:1.05rem; display:flex; align-items:center; gap:0.5rem;">
+                                ⚙️ Paramètres de la Collectivité
+                            </h4>
+                            
+                            <div style="margin-bottom:1.25rem;">
+                                <label style="display:flex; justify-justify:space-between; font-size:0.85rem; font-weight:700; margin-bottom:0.4rem; color:var(--text-title);">
+                                    <span>Nombre d'agents utilisateurs :</span>
+                                    <span id="eco-val-agents" style="color:var(--accent-sky); font-family:monospace; font-size:0.95rem;">50 agents</span>
+                                </label>
+                                <input type="range" id="eco-slider-agents" min="5" max="500" step="5" value="50" style="width:100%; accent-color:var(--accent-sky);">
+                            </div>
+
+                            <div style="margin-bottom:1.25rem;">
+                                <label style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700; margin-bottom:0.4rem; color:var(--text-title);">
+                                    <span>Requêtes quotidiennes par agent :</span>
+                                    <span id="eco-val-reqs" style="color:var(--accent-purple); font-family:monospace; font-size:0.95rem;">15 req/jour</span>
+                                </label>
+                                <input type="range" id="eco-slider-reqs" min="1" max="100" step="1" value="15" style="width:100%; accent-color:var(--accent-purple);">
+                            </div>
+
+                            <div style="margin-bottom:1rem;">
+                                <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:0.5rem; color:var(--text-title);">
+                                    Choix de l'Architecture IA :
+                                </label>
+                                <div style="display:flex; gap:0.5rem;">
+                                    <button class="btn btn-secondary eco-model-toggle active" data-model="frugal" style="flex:1; font-size:0.8rem; padding:8px;">
+                                        🌱 Modèle Frugal / TPU
+                                    </button>
+                                    <button class="btn btn-secondary eco-model-toggle" data-model="heavy" style="flex:1; font-size:0.8rem; padding:8px;">
+                                        ⚡ Méga-Modèle Cloud
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Dynamic Results -->
+                        <div style="background:rgba(16,185,129,0.03); border:1px solid rgba(16,185,129,0.2); border-radius:12px; padding:1.25rem;">
+                            <h4 style="margin:0 0 1rem 0; font-family:'Outfit',sans-serif; color:#34d399; font-size:1.05rem; display:flex; align-items:center; gap:0.5rem;">
+                                📊 Bilan Écologique Annuel Estimé
+                            </h4>
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:0.85rem; border-radius:8px; text-align:center;">
+                                    <div style="font-size:2rem; margin-bottom:0.25rem;">💧</div>
+                                    <div style="font-size:1.3rem; font-weight:800; color:#38bdf8; font-family:'Outfit',sans-serif;" id="eco-out-water">1 350 L</div>
+                                    <div style="font-size:0.75rem; color:var(--text-muted);" id="eco-out-bottles">~2 700 bouteilles de 50cl</div>
+                                    <div style="font-size:0.7rem; color:var(--text-muted); margin-top:0.2rem;">Refroidissement Datacenters</div>
+                                </div>
+                                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:0.85rem; border-radius:8px; text-align:center;">
+                                    <div style="font-size:2rem; margin-bottom:0.25rem;">🚗</div>
+                                    <div style="font-size:1.3rem; font-weight:800; color:#f43f5e; font-family:'Outfit',sans-serif;" id="eco-out-co2">48.5 kg CO₂</div>
+                                    <div style="font-size:0.75rem; color:var(--text-muted);" id="eco-out-km">~370 km en voiture élec.</div>
+                                    <div style="font-size:0.7rem; color:var(--text-muted); margin-top:0.2rem;">Émissions Équivalentes</div>
+                                </div>
+                            </div>
+
+                            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:0.85rem; border-radius:8px; text-align:center;">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <span style="font-size:0.85rem; color:var(--text-title); font-weight:700;">⚡ Électricité consommée :</span>
+                                    <span style="font-size:1.1rem; font-weight:800; color:var(--accent-gold); font-family:monospace;" id="eco-out-kwh">324.0 kWh</span>
+                                </div>
+                                <div style="font-size:0.76rem; color:var(--text-muted); text-align:right; margin-top:0.2rem;" id="eco-out-charges">
+                                    Soit ~27 000 recharges de smartphone
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === 'vram-calculator') {
+                html += `
+                    <p style="margin-bottom:1.25rem; font-size:0.95rem; line-height:1.5;">${slide.desc || ''}</p>
+
+                    <div class="vram-sandbox-container" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1.25rem;">
+                        <h4 style="margin:0 0 1rem 0; font-family:'Outfit',sans-serif; color:var(--accent-purple); font-size:1.1rem; display:flex; align-items:center; gap:0.5rem;">
+                            🧮 Simulateur Matériel & VRAM (Temps Réel)
+                        </h4>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:1.25rem;">
+                            <!-- Column 1: Model & Quantization -->
+                            <div>
+                                <div style="margin-bottom:1rem;">
+                                    <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:0.4rem; color:var(--text-title);">
+                                        1. Taille du Modèle (Paramètres en B) :
+                                    </label>
+                                    <select id="vram-select-model" style="width:100%; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:8px 12px; color:#f8fafc; font-size:0.88rem;">
+                                        <option value="8">Mistral / Llama 3.1 (8B - Petit & Frugal)</option>
+                                        <option value="12" selected>Mistral NeMo (12B - Intermédiaire)</option>
+                                        <option value="14">Qwen 2.5 (14B - Polyvalent)</option>
+                                        <option value="32">Qwen 2.5 (32B - Avancé)</option>
+                                        <option value="70">Llama 3.3 / Qwen 2.5 (70B - Expert)</option>
+                                        <option value="405">Llama 3.1 (405B - Géant Mégalopole)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:0.4rem; color:var(--text-title);">
+                                        2. Précision / Quantification :
+                                    </label>
+                                    <select id="vram-select-quant" style="width:100%; background:rgba(15,23,42,0.9); border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:8px 12px; color:#f8fafc; font-size:0.88rem;">
+                                        <option value="4" selected>4-bit INT4 (Standard Local compact)</option>
+                                        <option value="8">8-bit INT8 (Haute fidélité)</option>
+                                        <option value="16">16-bit FP16 (Précision native non compressée)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Column 2: Context & Concurrency -->
+                            <div>
+                                <div style="margin-bottom:1rem;">
+                                    <label style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700; margin-bottom:0.4rem; color:var(--text-title);">
+                                        <span>3. Fenêtre de Contexte par session :</span>
+                                        <span id="vram-val-context" style="color:var(--accent-sky); font-family:monospace;">8k tokens</span>
+                                    </label>
+                                    <input type="range" id="vram-slider-context" min="4" max="128" step="4" value="8" style="width:100%; accent-color:var(--accent-sky);">
+                                </div>
+
+                                <div>
+                                    <label style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700; margin-bottom:0.4rem; color:var(--text-title);">
+                                        <span>4. Agents actifs simultanés :</span>
+                                        <span id="vram-val-users" style="color:var(--accent-gold); font-family:monospace;">15 agents</span>
+                                    </label>
+                                    <input type="range" id="vram-slider-users" min="1" max="100" step="1" value="15" style="width:100%; accent-color:var(--accent-gold);">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Dashboard -->
+                        <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:1.25rem;">
+                            <div style="display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:1rem; align-items:center;">
+                                <div>
+                                    <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Poids Modèle + Cache KV</div>
+                                    <div style="font-size:1.8rem; font-weight:800; color:var(--accent-purple); font-family:'Outfit',sans-serif;" id="vram-out-total">66.0 Go VRAM</div>
+                                    <div style="font-size:0.72rem; color:var(--text-muted);" id="vram-out-breakdown">Poids: 6 Go | Cache: 60 Go</div>
+                                </div>
+
+                                <div>
+                                    <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Investissement GPU Estimé</div>
+                                    <div style="font-size:1.8rem; font-weight:800; color:#10b981; font-family:'Outfit',sans-serif;" id="vram-out-cost">29 700 € HT</div>
+                                    <div style="font-size:0.72rem; color:var(--text-muted);">Basé sur ~450€ / Go VRAM Pro</div>
+                                </div>
+
+                                <div style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.25); border-radius:8px; padding:0.75rem;">
+                                    <div style="font-size:0.75rem; color:#c084fc; font-weight:800; text-transform:uppercase; margin-bottom:0.2rem;">🖥️ Configuration Matérielle Déduite</div>
+                                    <div style="font-size:0.85rem; font-weight:700; color:#f8fafc;" id="vram-out-hardware">2x Nvidia RTX 6000 Ada (96 Go VRAM)</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 `;
             } else if (slide.type === 'satellite-datacenter') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="satellite-visual" style="font-size: 3.5rem; text-align:center; margin-bottom: 1.5rem;">🛰️☁️🌌</div>
-                    <div class="satellite-pros-cons">
-                        <div class="sat-pane sat-pane-pros">
-                            <h4>👍 Avantages théoriques</h4>
-                            <ul class="sat-list">
-                                ${slide.pros.map(p => `<li class="sat-list-item">${p}</li>`).join('')}
-                            </ul>
-                        </div>
-                        <div class="sat-pane sat-pane-cons">
-                            <h4>👎 Limites et contraintes</h4>
-                            <ul class="sat-list">
-                                ${slide.cons.map(c => `<li class="sat-list-item">${c}</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
                 `;
-            } else if (slide.type === 'datacenter-cost') {
-                html += `
-                    <p style="margin-bottom:1.25rem; font-size:0.95rem; line-height:1.5;">${slide.desc}</p>
-                    
-                    <div class="math-formula-card">
-                        <div class="math-formula-header">🧮 L'Équation Globale de la VRAM</div>
-                        <div class="math-formula-body" style="font-family: inherit;">
-                            ${slide.formula}
-                        </div>
-                        <div class="math-formula-footer">
-                            Estimation du coût d'achat matériel : <strong>${slide.costPerGb} € HT par Go de VRAM</strong> (GPU niveau entreprise).
-                        </div>
-                    </div>
-
-                    <div class="datacenter-variables-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                        ${slide.variables.map(v => `
-                            <div class="variable-item" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s;">
-                                <strong style="color: var(--accent-purple); font-family: 'Outfit', sans-serif;">${v.name}</strong>
-                                <p style="margin: 0.25rem 0 0 0; font-size: 0.8rem; color: var(--text-muted); line-height:1.4;">${v.desc}</p>
+                if (slide.pros && slide.cons) {
+                    html += `
+                        <div class="satellite-pros-cons">
+                            <div class="sat-pane sat-pane-pros">
+                                <h4>👍 Avantages théoriques</h4>
+                                <ul class="sat-list">
+                                    ${(slide.pros || []).map(p => `<li class="sat-list-item">${p}</li>`).join('')}
+                                </ul>
                             </div>
-                        `).join('')}
-                    </div>
-
-                    <h3 style="margin-top:2rem; margin-bottom:0.75rem; color:var(--text-title); font-size:1.1rem; font-family:'Outfit',sans-serif; display: flex; align-items: center; gap: 0.5rem;">
-                        📊 Exemples de Configurations & Coûts Estimés
-                    </h3>
-                    <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1rem;">Sélectionnez une option pour étudier différents scénarios de déploiement local :</p>
-
-                    <div class="datacenter-tabs-container">
-                        <div class="datacenter-tabs-header" style="display: flex; gap: 0.5rem; border-bottom: 2px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem;">
-                            ${slide.examples.map((ex, idx) => `
-                                <button class="datacenter-tab-btn ${idx === 0 ? 'active' : ''}" data-idx="${idx}">
-                                    ${ex.title}
-                                </button>
-                            `).join('')}
+                            <div class="sat-pane sat-pane-cons">
+                                <h4>👎 Limites et contraintes</h4>
+                                <ul class="sat-list">
+                                    ${(slide.cons || []).map(c => `<li class="sat-list-item">${c}</li>`).join('')}
+                                </ul>
+                            </div>
                         </div>
-                        <div class="datacenter-tabs-content">
-                            ${slide.examples.map((ex, idx) => `
-                                <div class="datacenter-tab-pane ${idx === 0 ? 'active' : ''}" id="datacenter-pane-${idx}" style="display: ${idx === 0 ? 'block' : 'none'};">
-                                    <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 1.25rem;">
-                                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
-                                            <h4 style="margin:0; font-family:'Outfit',sans-serif; color:var(--text-title); font-size:1.05rem;">
-                                                ⚙️ Fiche Technique : <span style="color:var(--accent-purple);">${ex.modelName}</span>
-                                            </h4>
-                                            <span style="background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); color:#c084fc; padding:2px 8px; border-radius:4px; font-size:0.75rem; font-weight:700;">
-                                                Quantification ${ex.quant} bits
-                                            </span>
-                                        </div>
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                                            <div style="font-size:0.82rem; line-height:1.5;">
-                                                <strong>Paramètres de calcul :</strong>
-                                                <ul style="margin: 0.25rem 0 0 0; padding-left: 1.25rem; color:var(--text-body);">
-                                                    <li>Taille du modèle : <strong>${ex.params}B</strong> (Milliards)</li>
-                                                    <li>Agents actifs simultanés : <strong>${ex.users}</strong></li>
-                                                    <li>Fenêtre de contexte : <strong>${ex.context}k tokens</strong></li>
-                                                </ul>
-                                            </div>
-                                            <div style="font-size:0.82rem; line-height:1.5;">
-                                                <strong>Détail du besoin VRAM :</strong>
-                                                <ul style="margin: 0.25rem 0 0 0; padding-left: 1.25rem; color:var(--text-body);">
-                                                    <li>Poids du modèle : <code>${ex.calcWeights}</code></li>
-                                                    <li>Mémoire de travail (KV Cache) : <code>${ex.calcCache}</code></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap:wrap; gap:1rem;">
-                                            <div>
-                                                <div style="font-size:0.75rem; color:var(--text-muted);">VRAM RECOMMANDÉE</div>
-                                                <div style="font-size:1.5rem; font-weight:800; color:var(--accent-purple); font-family:'Outfit',sans-serif;">${ex.totalVram} Go</div>
-                                            </div>
-                                            <div>
-                                                <div style="font-size:0.75rem; color:var(--text-muted); text-align:right;">INVESTISSEMENT ESTIMÉ (GPU)</div>
-                                                <div style="font-size:1.5rem; font-weight:800; color:#10b981; font-family:'Outfit',sans-serif; text-align:right;">${ex.totalCost.toLocaleString('fr-FR')} € HT</div>
-                                            </div>
-                                        </div>
-                                        <div style="margin-top: 1rem; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-radius: 6px; padding: 0.6rem 0.85rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; color: #a7f3d0;">
-                                            <span>💡</span> <span><strong>Matériel recommandé :</strong> ${ex.hardware}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
+                    `;
+                } else if (slide.details) {
+                    html += `
+                        <div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-sky);">
+                            ${slide.details || ''}
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             } else if (slide.type === 'model-arbitrage') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
-                    
-                    <div class="poles-grid">
-                        ${slide.poles.map(p => `
-                            <div class="pole-card" style="border-left: 4px solid ${p.accent};">
-                                <h4>${p.name}</h4>
-                                <p class="pole-card-desc">${p.desc}</p>
-                                <div class="pole-card-examples"><strong>Exemples :</strong> ${p.examples}</div>
-                            </div>
-                        `).join('')}
-                    </div>
+                    <p style="margin-bottom:1.25rem; font-size:0.95rem; line-height:1.5;">${slide.intro || ''}</p>
 
-                    <h3 style="margin-top:2.25rem; margin-bottom:0.75rem; color:var(--text-title); font-size:1.15rem; font-family:'Outfit',sans-serif; display: flex; align-items: center; gap: 0.5rem;">
-                        ⚖️ Les Stratégies Décisionnelles Territoriales
-                    </h3>
-                    <p style="margin-bottom:1.25rem;">${slide.strategyIntro}</p>
-
-                    <div class="strategies-container">
-                        ${slide.strategies.map(s => `
-                            <div class="strategy-card">
-                                <h4>${s.title}</h4>
-                                <p class="strategy-desc">${s.desc}</p>
-                                <div class="strategy-scores">
-                                    <div class="score-row">
-                                        <span class="score-label">Intel.</span>
-                                        <div class="score-track"><div class="score-fill fill-intel" style="width: ${s.radar.intel}%;"></div></div>
-                                        <span class="score-val">${s.radar.intel}%</span>
-                                    </div>
-                                    <div class="score-row">
-                                        <span class="score-label">Anon.</span>
-                                        <div class="score-track"><div class="score-fill fill-anon" style="width: ${s.radar.anon}%;"></div></div>
-                                        <span class="score-val">${s.radar.anon}%</span>
-                                    </div>
-                                    <div class="score-row">
-                                        <span class="score-label">Vitesse</span>
-                                        <div class="score-track"><div class="score-fill fill-speed" style="width: ${s.radar.speed}%;"></div></div>
-                                        <span class="score-val">${s.radar.speed}%</span>
-                                    </div>
-                                    <div class="score-row">
-                                        <span class="score-label">Coût</span>
-                                        <div class="score-track"><div class="score-fill fill-cost" style="width: ${s.radar.cost}%;"></div></div>
-                                        <span class="score-val">${s.radar.cost}%</span>
-                                    </div>
-                                </div>
-                                <div class="strategy-verdict">${s.verdict}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <div class="monitoring-section-card">
-                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1.5rem;">
-                            <div style="flex:1; min-width:280px;">
-                                <h4>${slide.monitoring.title}</h4>
-                                <p style="margin: 0.5rem 0 0 0; font-size:0.88rem; line-height:1.45; color:var(--text-body);">${slide.monitoring.desc}</p>
-                            </div>
-                            <div style="display:flex; flex-direction:column; gap:0.6rem; align-items:stretch;">
-                                <a href="${slide.monitoring.url}" target="_blank" class="btn btn-primary btn-monitoring-link" style="text-decoration:none; display:inline-flex; justify-content:center; align-items:center; gap:0.5rem; text-align:center; padding: 10px 20px;">
-                                    ${slide.monitoring.linkText}
-                                </a>
-                                <button class="btn btn-secondary btn-open-poll-from-slide" data-poll-id="${slide.pollLink.pollId}" style="display:inline-flex; justify-content:center; align-items:center; gap:0.5rem; white-space:nowrap; padding: 10px 20px; font-weight:700;">
-                                    ${slide.pollLink.text}
+                    <!-- Interactive Use-case Filters -->
+                    <div style="margin-bottom:1.5rem;">
+                        <div style="font-size:0.85rem; font-weight:700; color:var(--text-title); margin-bottom:0.5rem;">
+                            🎯 Filtrer par Besoin Métier Territorial :
+                        </div>
+                        <div class="arbitrage-usecase-filters" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            ${(slide.useCases || []).map((uc, idx) => `
+                                <button class="btn btn-secondary btn-arb-uc ${idx === 0 ? 'active' : ''}" data-uc="${uc.id}" style="font-size:0.82rem; padding:6px 12px;">
+                                    ${uc.label}
                                 </button>
-                            </div>
+                            `).join('')}
                         </div>
                     </div>
 
-                    <div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-purple);">
-                        ${slide.pedagogy}
+                    <!-- Recent Models Interactive Matrix -->
+                    <div class="models-matrix-grid" id="models-matrix-cards" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:1rem;">
+                        ${(slide.models || []).map(m => `
+                            <div class="model-mat-card" data-model="${m.name}" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1rem; transition:all 0.2s;">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
+                                    <h4 style="margin:0; font-family:'Outfit',sans-serif; color:var(--text-title); font-size:0.95rem;">${m.name}</h4>
+                                    <span style="font-size:0.72rem; padding:2px 6px; border-radius:4px; font-weight:700; ${m.provider.includes('🇫🇷') ? 'background:rgba(14,165,233,0.15); color:var(--accent-sky); border:1px solid rgba(14,165,233,0.3);' : 'background:rgba(255,255,255,0.05); color:var(--text-muted);'}">
+                                        ${m.provider}
+                                    </span>
+                                </div>
+                                
+                                <div style="display:flex; gap:0.4rem; margin-bottom:0.75rem; flex-wrap:wrap;">
+                                    <span style="font-size:0.7rem; background:rgba(255,255,255,0.04); padding:2px 6px; border-radius:4px; color:var(--text-muted);">${m.type}</span>
+                                    <span style="font-size:0.7rem; background:rgba(168,85,247,0.1); padding:2px 6px; border-radius:4px; color:#c084fc; font-weight:700;">${m.speed}</span>
+                                </div>
+
+                                <div style="font-size:0.8rem; line-height:1.45; margin-bottom:0.75rem; color:var(--text-body);">
+                                    <div><strong>Coût API :</strong> $${m.costInput.toFixed(2)} / $${m.costOutput.toFixed(2)} par 1M tokens</div>
+                                    <div><strong>Raisonnement :</strong> ${m.scoreReasoning}/100</div>
+                                    <div style="color:var(--accent-green); font-size:0.76rem; margin-top:0.2rem;"><strong>RGPD / Souveraineté :</strong> ${m.rgpd}</div>
+                                </div>
+
+                                <div style="border-top:1px solid rgba(255,255,255,0.06); padding-top:0.5rem; font-size:0.76rem; color:var(--accent-sky);">
+                                    💡 <strong>Idéal pour :</strong> ${m.bestFor}
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 `;
             } else if (slide.type === 'exercise-list') {
@@ -774,10 +873,10 @@ function getSlideHTML(slide, theme) {
                 html += `</div>`;
             } else if (slide.type === 'agentic-comparison') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="agentic-flow-container">
                         <div class="flow-block">
-                            <h4>${slide.chatWorkflow.title}</h4>
+                            <h4>${(slide.chatWorkflow && slide.chatWorkflow.title) || ''}</h4>
                             ${slide.chatWorkflow.steps.map((s, idx) => `
                                 <div class="flow-step-item">
                                     <span style="color:var(--accent-blue); font-weight:800;">${s.role} :</span> ${s.text}
@@ -786,7 +885,7 @@ function getSlideHTML(slide, theme) {
                             `).join('')}
                         </div>
                         <div class="flow-block" style="border-color:var(--accent-green)">
-                            <h4>${slide.agenticWorkflow.title}</h4>
+                            <h4>${(slide.agenticWorkflow && slide.agenticWorkflow.title) || ''}</h4>
                             ${slide.agenticWorkflow.steps.map((s, idx) => `
                                 <div class="flow-step-item" style="border-color:var(--accent-green); background:#f0fdf4;">
                                     <span style="color:var(--accent-green); font-weight:800;">${s.role} :</span> ${s.text}
@@ -798,7 +897,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'agentic-loop') {
                 html += `
-                    <p>${slide.desc}</p>
+                    <p>${slide.desc || ''}</p>
                     <div class="agentic-loop-grid">
                 `;
                 slide.phases.forEach(ph => {
@@ -810,9 +909,95 @@ function getSlideHTML(slide, theme) {
                     `;
                 });
                 html += `</div>`;
+            } else if (slide.type === 'multimodal-demo') {
+                html += `
+                    <p style="margin-bottom:1.25rem; font-size:0.95rem; line-height:1.5;">${slide.desc || ''}</p>
+                    
+                    <div class="multimodal-demo-container" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1.25rem;">
+                        <h4 style="margin:0 0 1rem 0; font-family:'Outfit',sans-serif; color:var(--accent-sky); font-size:1.1rem; display:flex; align-items:center; gap:0.5rem;">
+                            📷🎙️ Démonstrateur Multimodal (Vision, OCR & Audio)
+                        </h4>
+
+                        <div class="multimodal-tabs-row" style="display:flex; gap:0.5rem; margin-bottom:1.25rem; flex-wrap:wrap;">
+                            ${(slide.cases || []).map((cs, idx) => `
+                                <button class="btn btn-secondary btn-mm-tab ${idx === 0 ? 'active' : ''}" data-idx="${idx}" style="font-size:0.85rem; padding:8px 14px;">
+                                    ${cs.icon} ${cs.title.split(':')[0]}
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        ${(slide.cases || []).map((cs, idx) => `
+                            <div class="mm-case-pane ${idx === 0 ? 'active' : ''}" id="mm-pane-${idx}" style="display: ${idx === 0 ? 'block' : 'none'};">
+                                <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:1.25rem;">
+                                    <h4 style="margin:0 0 0.5rem 0; font-family:'Outfit',sans-serif; color:var(--text-title); font-size:1.05rem; display:flex; align-items:center; gap:0.5rem;">
+                                        <span>${cs.icon}</span> <span>${cs.title}</span>
+                                    </h4>
+                                    
+                                    <div style="font-size:0.88rem; color:var(--text-body); margin-bottom:0.75rem;">
+                                        <strong>Mise en situation :</strong> ${cs.scenario}
+                                    </div>
+                                    <div style="font-size:0.88rem; color:var(--accent-sky); margin-bottom:1.25rem; background:rgba(14,165,233,0.08); border-left:3px solid var(--accent-sky); padding:8px 12px; border-radius:4px;">
+                                        <strong>⚡ Traitement par l'IA :</strong> ${cs.iaAction}
+                                    </div>
+
+                                    <!-- Interactive Simulation Box -->
+                                    <div style="background:rgba(0,0,0,0.4); border:1px dashed rgba(255,255,255,0.15); border-radius:8px; padding:1rem;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:0.5rem;">
+                                            <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">
+                                                Simulateur de flux entrant :
+                                            </span>
+                                            <button class="btn btn-primary btn-run-mm-sim" data-idx="${idx}" style="font-size:0.82rem; padding:6px 14px;">
+                                                🚀 Simuler l'analyse de l'Agent IA
+                                            </button>
+                                        </div>
+
+                                        <div id="mm-sim-results-${idx}" style="font-size:0.85rem; line-height:1.6; color:#f8fafc;">
+                                            ${idx === 0 ? `
+                                                <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:1rem;">
+                                                    <div style="background:rgba(255,255,255,0.05); padding:0.75rem; border-radius:6px; font-family:monospace; font-size:0.78rem; color:var(--text-muted);">
+                                                        ${cs.demoData.inputDoc}<br><br>
+                                                        [Document Numérisé]<br>
+                                                        "Monsieur le Maire, je vous écris concernant ma demande d'aide pour l'isolation..."
+                                                    </div>
+                                                    <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); padding:0.75rem; border-radius:6px;">
+                                                        <strong style="color:#34d399; font-size:0.8rem;">Extraction JSON Structurée :</strong>
+                                                        <pre style="margin:0.4rem 0 0 0; font-family:monospace; font-size:0.76rem; color:#a7f3d0; white-space:pre-wrap;">${JSON.stringify(cs.demoData.extractedFields, null, 2)}</pre>
+                                                    </div>
+                                                </div>
+                                            ` : idx === 1 ? `
+                                                <div style="display:grid; grid-template-columns:1fr 1.5fr; gap:1rem;">
+                                                    <div style="background:rgba(255,255,255,0.05); padding:0.75rem; border-radius:6px; text-align:center;">
+                                                        <div style="font-size:2.5rem; margin-bottom:0.4rem;">📷🗑️</div>
+                                                        <div style="font-size:0.78rem; color:var(--text-muted);">${cs.demoData.photoName}</div>
+                                                    </div>
+                                                    <div style="background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.2); padding:0.75rem; border-radius:6px; font-size:0.8rem; line-height:1.5;">
+                                                        <div><strong style="color:var(--accent-sky);">Détection Objet :</strong> ${cs.demoData.detectedObject} (Confiance: ${cs.demoData.confidenceScore})</div>
+                                                        <div style="margin-top:0.3rem;"><strong>Routage Automatique :</strong> ${cs.demoData.dispatchService}</div>
+                                                        <div style="margin-top:0.3rem; color:var(--accent-gold);"><strong>Urgence :</strong> ${cs.demoData.priorityLevel}</div>
+                                                    </div>
+                                                </div>
+                                            ` : `
+                                                <div style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.2); padding:0.85rem; border-radius:6px; font-size:0.8rem; line-height:1.5;">
+                                                    <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color:#c084fc; font-weight:700;">
+                                                        <span>${cs.demoData.audioFile}</span>
+                                                        <span>Synthèse Whisper v3</span>
+                                                    </div>
+                                                    <div style="font-style:italic; color:var(--text-muted); margin-bottom:0.5rem; background:rgba(0,0,0,0.3); padding:0.5rem; border-radius:4px;">
+                                                        ${cs.demoData.transcriptionSample}
+                                                    </div>
+                                                    <div style="color:#34d399; font-weight:700;">✔️ ${cs.demoData.summaryGenerated}</div>
+                                                </div>
+                                            `}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
             } else if (slide.type === 'antigravity-details') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="satellite-visual" style="font-size: 3.5rem; text-align:center; margin-bottom: 1.5rem;">🤖💻🛡️</div>
                     <div class="maire-example-box" style="border-left-color:var(--accent-green);">
                         <h4>💡 Pourquoi Antigravity est unique pour le secteur public :</h4>
@@ -823,7 +1008,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'agentic-warning') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.intro || ''}</p>
                     <div class="agentic-warning-container">
                         <div class="warning-block-risks">
                             <h4>⚠️ Les Menaces pour le Système (Prise de contrôle)</h4>
@@ -851,7 +1036,7 @@ function getSlideHTML(slide, theme) {
                     </div>
                 `;
             } else if (slide.type === 'exercises-dashboard') {
-                if (this.role === 'stagiaire' || this.role === 'public') {
+                if (this.role === 'stagiaire') {
                     html += `
                         <div class="ex-waiting-wrapper" style="text-align: center; padding: 4rem 2rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-lg); margin-top: 1.5rem;">
                             <div style="font-size: 3.5rem; margin-bottom: 1.5rem; animation: pulse 2s infinite;">🎯</div>
@@ -867,7 +1052,7 @@ function getSlideHTML(slide, theme) {
                     `;
                 } else {
                     html += `
-                        <p style="margin-bottom:1rem;">${slide.intro}</p>
+                        <p style="margin-bottom:1rem;">${slide.intro || ''}</p>
                         
                         <div class="ex-dashboard-wrapper">
                             <!-- Left Sidebar: Filters & Interactive Tools -->
@@ -969,28 +1154,29 @@ function getSlideHTML(slide, theme) {
                 }
             } else if (slide.type === 'architecture-diagram') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="tuto-architecture">
                         <div class="tuto-arch-box" style="border-color: var(--accent-blue)">
-                            <h5>${slide.frontend.title}</h5>
-                            <p>${slide.frontend.desc}</p>
+                            <h5>${(slide.frontend && slide.frontend.title) || ''}</h5>
+                            <p>${(slide.frontend && slide.frontend.desc) || ''}</p>
                         </div>
                         <div class="tuto-flow-arrow">⇄</div>
                         <div class="tuto-arch-box" style="border-color: var(--accent-green)">
-                            <h5>${slide.backend.title}</h5>
-                            <p>${slide.backend.desc}</p>
+                            <h5>${(slide.backend && slide.backend.title) || ''}</h5>
+                            <p>${(slide.backend && slide.backend.desc) || ''}</p>
                         </div>
                     </div>
+                    ${slide.security ? `
                     <div class="maire-example-box" style="border-left-color: var(--accent-purple); margin-top:1.5rem;">
-                        ${slide.security}
-                    </div>
+                        ${slide.security || ''}
+                    </div>` : ''}
                 `;
             } else if (slide.type === 'tuto-step') {
                 html += `
                     <div class="schema-step-item" style="border-color:var(--accent-blue)">
-                        <div class="schema-step-bubble">${slide.stepNum}</div>
+                        <div class="schema-step-bubble">${slide.stepNum || ''}</div>
                         <div class="schema-step-details">
-                            <h4>Objectif : ${slide.goal}</h4>
+                            <h4>Objectif : ${slide.goal || ''}</h4>
                             <ol style="margin-left:1.25rem; font-size:0.88rem; line-height:1.6; margin-top:0.5rem;">
                                 ${slide.steps.map(s => `<li>${s}</li>`).join('')}
                             </ol>
@@ -1011,7 +1197,7 @@ function getSlideHTML(slide, theme) {
                 }
             } else if (slide.type === 'bridge-schema') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="tuto-architecture" style="margin-top: 2rem;">
                         ${slide.elements.map((el, idx) => `
                             <div class="tuto-arch-box" style="border-color: ${idx === 0 ? 'var(--accent-blue)' : idx === 1 ? 'var(--accent-purple)' : 'var(--accent-green)'}">
@@ -1024,7 +1210,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'token-sandbox') {
                 html += `
-                    <p style="margin-bottom:1.25rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.25rem;">${slide.desc || ''}</p>
                     <div style="background:var(--bg-main); border: 1px solid var(--border-color); padding: 1.5rem; border-radius:var(--radius-md); margin-bottom: 1.5rem;">
                         <h4 style="margin-bottom:0.75rem; color:var(--text-title); font-size: 0.95rem;">✍️ Zone d'expérimentation en temps réel :</h4>
                         <textarea id="sandbox-input" placeholder="Tapez ici le nom de votre commune ou un sigle (ex: PLU, CCAS, M. le Maire)..." style="width:100%; height:80px; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size:0.9rem; resize:vertical; outline:none; margin-bottom:1rem;"></textarea>
@@ -1056,12 +1242,12 @@ function getSlideHTML(slide, theme) {
                         </div>
                     </div>
                     <div class="maire-example-box" style="border-left-color:var(--accent-gold);">
-                        ${slide.explanation}
+                        ${slide.explanation || ''}
                     </div>
                 `;
             } else if (slide.type === 'anonymizer-tool') {
                 html += `
-                    <p style="margin-bottom:1.25rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.25rem;">${slide.desc || ''}</p>
                     <div style="background:var(--bg-main); border: 1px solid var(--border-color); padding: 1.5rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
                         <h4 style="margin-bottom:0.75rem; color:var(--text-title); font-size: 0.95rem;">📋 Collez le texte brut à anonymiser :</h4>
                         <textarea id="anonymizer-input" placeholder="Collez ici le mail de l'usager, compte-rendu ou document administratif (ex: Jean Dupont, j.dupont@mail.fr, 06 12 34 56 78)..." style="width:100%; height:100px; padding:0.75rem; border:1px solid var(--border-color); border-radius:var(--radius-sm); font-size:0.9rem; resize:vertical; outline:none; margin-bottom:1rem;"></textarea>
@@ -1078,7 +1264,7 @@ function getSlideHTML(slide, theme) {
                         </div>
                     </div>
                     <div class="maire-example-box" style="border-left-color:var(--accent-red)">
-                        ${slide.explanation}
+                        ${slide.explanation || ''}
                     </div>
                 `;
             } else if (slide.type === 'charte-text') {
@@ -1092,7 +1278,7 @@ function getSlideHTML(slide, theme) {
                         
                         <div class="charte-decree-body">
                             <div class="charte-decree-section-title">Préambule</div>
-                            <p>${slide.preamble}</p>
+                            <p>${slide.preamble || ''}</p>
                             
                             ${slide.articles.map(art => `
                                 <div class="charte-decree-article">
@@ -1120,12 +1306,39 @@ function getSlideHTML(slide, theme) {
             } else if (slide.type === 'eval-stage') {
                 const showCorrection = this.role !== 'public';
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.desc}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
+                `;
+                if (slide.questions && slide.questions.length > 0) {
+                    html += `<div class="eval-questions-grid" style="display:flex; flex-direction:column; gap:1.25rem;">`;
+                    slide.questions.forEach((qItem, qIdx) => {
+                        html += `
+                            <div style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1.25rem;">
+                                <h4 style="margin:0 0 0.75rem 0; font-family:'Outfit',sans-serif; color:var(--text-title); font-size:0.95rem;">
+                                    ${qItem.q}
+                                </h4>
+                                <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:0.75rem;">
+                                    ${(qItem.choices || []).map((ch, cIdx) => `
+                                        <div style="font-size:0.85rem; padding:6px 12px; border-radius:6px; background:${showCorrection && cIdx === qItem.correct ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.04)'}; border:1px solid ${showCorrection && cIdx === qItem.correct ? 'rgba(16,185,129,0.4)' : 'rgba(255,255,255,0.08)'}; color:${showCorrection && cIdx === qItem.correct ? '#34d399' : 'var(--text-body)'};">
+                                            ${ch} ${showCorrection && cIdx === qItem.correct ? '✔️ (Réponse Correcte)' : ''}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                ${showCorrection && qItem.exp ? `
+                                    <div style="font-size:0.8rem; color:var(--accent-sky); background:rgba(14,165,233,0.08); padding:8px 12px; border-radius:6px;">
+                                        💡 <strong>Explication :</strong> ${qItem.exp}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                } else if (slide.scenario) {
+                    html += `
                     <div style="background:var(--bg-main); border: 1px solid var(--border-color); padding: 1.5rem; border-radius:var(--radius-md); margin-bottom: 1.5rem;">
                         <h3 style="font-family:'Outfit',sans-serif; font-size:1.15rem; margin-bottom:1rem; color:var(--text-title); display:flex; align-items:center; gap:0.5rem;">📝 Fiche d'Évaluation Individuelle (À faire sur papier)</h3>
                         <div style="background:white; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem;">
                             <strong>Mise en situation de l'évaluation :</strong><br>
-                            <em>${slide.scenario}</em>
+                            <em>${slide.scenario || ''}</em>
                         </div>
                         
                         ${showCorrection ? `
@@ -1138,19 +1351,21 @@ function getSlideHTML(slide, theme) {
                                 <div style="background:#f0fdf4; border:1px solid #dcfce7; padding:1rem; border-radius:6px; font-size:0.82rem; line-height:1.5; color:#14532d;">
                                     <strong style="color:#166534; font-size:0.9rem;">✅ Choses à faire (DOs) :</strong>
                                     <ul style="margin-left:1.25rem; margin-top:0.4rem; padding:0;">
-                                        ${slide.dos.map(doItem => `<li style="margin-bottom:0.4rem;">${doItem}</li>`).join('')}
+                                        ${(slide.dos || []).map(doItem => `<li style="margin-bottom:0.4rem;">${doItem}</li>`).join('')}
                                     </ul>
                                 </div>
                                 <div style="background:#fef2f2; border:1px solid #fee2e2; padding:1rem; border-radius:6px; font-size:0.82rem; line-height:1.5; color:#991b1b;">
                                     <strong style="color:#b91c1c; font-size:0.9rem;">❌ Choses à ne pas faire (DONTs) :</strong>
                                     <ul style="margin-left:1.25rem; margin-top:0.4rem; padding:0;">
-                                        ${slide.donts.map(dontItem => `<li style="margin-bottom:0.4rem;">${dontItem}</li>`).join('')}
+                                        ${(slide.donts || []).map(dontItem => `<li style="margin-bottom:0.4rem;">${dontItem}</li>`).join('')}
                                     </ul>
                                 </div>
                             </div>
                             
+                            ${slide.modelAnswer ? `
                             <h5 style="font-weight:700; font-size:0.88rem; color:var(--text-title); margin-bottom:0.4rem;">Exemple de Prompt Parfait attendu (Méthode M.A.I.R.E. anonymisée) :</h5>
-                            <pre style="background:var(--bg-main); border:1px solid var(--border-color); padding:1rem; border-radius:6px; font-family:monospace; font-size:0.82rem; white-space:pre-wrap; color:#1e293b; line-height:1.5;">${slide.modelAnswer}</pre>
+                            <pre style="background:var(--bg-main); border:1px solid var(--border-color); padding:1rem; border-radius:6px; font-family:monospace; font-size:0.82rem; white-space:pre-wrap; color:#1e293b; line-height:1.5;">${slide.modelAnswer || ''}</pre>
+                            ` : ''}
                         </div>
                         ` : `
                         <div style="text-align:center; padding: 1.5rem; color: var(--text-muted);">
@@ -1158,10 +1373,11 @@ function getSlideHTML(slide, theme) {
                         </div>
                         `}
                     </div>
-                `;
+                    `;
+                }
             } else if (slide.type === 'dsi-decision-tree') {
                 html += `
-                    <p style="margin-bottom:1.5rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.5rem;">${slide.intro || ''}</p>
                     <div class="dsi-tree-static">
                         <!-- Level 1 -->
                         <div class="dsi-level-card dsi-card-level-1">
@@ -1258,7 +1474,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'dsi-ifse-matrix') {
                 html += `
-                    <p style="margin-bottom:1.25rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1.25rem;">${slide.intro || ''}</p>
                     <div class="ifse-matrix-container">
                         <div class="ifse-card">
                             <div>
@@ -1315,7 +1531,7 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'dsi-agent-ultime') {
                 html += `
-                    <p style="margin-bottom:1rem;">${slide.intro}</p>
+                    <p style="margin-bottom:1rem;">${slide.intro || ''}</p>
                     
                     <div class="pipeline-wrapper">
                         <!-- Column 1: Folder 1 Raw -->
@@ -1338,7 +1554,7 @@ function getSlideHTML(slide, theme) {
                                 <span class="pipeline-col-num">2</span>
                                 📁 Dossier 2 : Pseudonymisé
                             </div>
-                            <p class="pipeline-file-desc">Les données nominatives sont converties en balises (ex: [NOM_1]). Une clé de cryptage locale est stockée sur le PC. <strong>Contrôle humain manuel requis ici !</strong></p>
+                            <p class="pipeline-file-desc">Les données nominatives réelles (ex: Maxime JACQUIOT) sont converties en identités fictives plausibles (ex: Henri DUPONT) via un dictionnaire JSON de substitution. <strong>Conserve la qualité linguistique du LLM !</strong></p>
                             <div class="pipeline-files-list" id="list-pseudo-files">
                                 <div style="font-size:0.74rem; color:var(--text-muted); text-align:center; padding:1.25rem; font-style:italic;">Dossier vide</div>
                             </div>
@@ -1363,6 +1579,150 @@ function getSlideHTML(slide, theme) {
                         <div class="pipeline-cloud-bubble">
                             <h4>🌩️ Serveur SecNumCloud (Orchestrateur) ➔ API Gemini (Bridage budgétaire)</h4>
                             <p>L'agent d'IA s'exécute dans un conteneur cloud souverain et interroge Gemini par API avec un jeton sécurisé. L'IA ne voit et ne traite <strong>QUE</strong> les fichiers du dossier 2 (anonymes), garantissant le respect du RGPD et l'immunité face au Cloud Act.</p>
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === 'pipeline-secnumcloud') {
+                html += `
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
+                    
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom:1.5rem;">
+                        <div style="background:var(--bg-main); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md);">
+                            <h4 style="font-family:'Outfit',sans-serif; color:var(--accent-blue); font-size:1rem; margin-bottom:0.75rem;">
+                                ${(slide.agentView && slide.agentView.title) || ''}
+                            </h4>
+                            <p style="font-size:0.88rem; line-height:1.6; color:var(--text-body);">
+                                ${(slide.agentView && slide.agentView.desc) || ''}
+                            </p>
+                            <div style="margin-top:1rem; background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.2); padding:0.88rem; border-radius:6px; font-size:0.82rem; color:var(--text-title);">
+                                ✨ <strong>Bénéfice Agent :</strong> Aucun tri de fichier à faire soi-même. 0 risque d'amende CNIL ou de fuite RGPD.
+                            </div>
+                        </div>
+
+                        <div style="background:var(--bg-main); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md);">
+                            <h4 style="font-family:'Outfit',sans-serif; color:var(--accent-purple); font-size:1rem; margin-bottom:0.75rem;">
+                                ${(slide.dsiView && slide.dsiView.title) || ''}
+                            </h4>
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.75rem;">
+                                Déroulé de l'isolation VM et du routage anonymisé :
+                            </p>
+                            <button class="btn btn-primary btn-sm" id="btn-demo-secnumcloud-flow" style="width:100%; justify-content:center;">
+                                🚀 Lancer la Simulation du Flux (5 Étapes)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Flow Diagram Grid -->
+                    <div class="secnumcloud-flow-grid" style="display:grid; grid-template-columns: repeat(5, 1fr); gap:0.75rem; margin-top:1rem;">
+                        ${((slide.dsiView && slide.dsiView.steps) || []).map((st, idx) => `
+                            <div class="secnum-step-card" id="secnum-step-${idx+1}" style="background:white; border:1px solid var(--border-color); padding:0.88rem; border-radius:8px; transition:all 0.3s ease;">
+                                <div style="font-size:0.75rem; font-weight:800; color:var(--accent-purple); margin-bottom:0.25rem;">${st.step}</div>
+                                <h5 style="font-size:0.85rem; font-weight:700; margin-bottom:0.4rem; color:var(--text-title);">${st.label}</h5>
+                                <p style="font-size:0.75rem; color:var(--text-muted); line-height:1.4; margin:0;">${st.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (slide.type === 'pipeline-cost-calculator') {
+                html += `
+                    <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
+                    
+                    <div style="display:grid; grid-template-columns: 1fr 1.2fr; gap:1.5rem; background:var(--bg-main); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+                        <!-- Left controls -->
+                        <div>
+                            <h4 style="font-family:'Outfit',sans-serif; font-size:1.05rem; margin-bottom:1.25rem; color:var(--text-title);">⚙️ Paramètres de la Collectivité</h4>
+                            
+                            <div style="margin-bottom:1.25rem;">
+                                <label style="font-size:0.85rem; font-weight:700; color:var(--text-title); display:flex; justify-content:space-between;">
+                                    <span>👥 Nombre d'Agents Utilisateurs :</span>
+                                    <span id="pipeline-cost-agents-val" style="color:var(--accent-purple); font-weight:800;">50 Agents</span>
+                                </label>
+                                <input type="range" id="pipeline-cost-agents-range" min="5" max="1000" step="5" value="50" style="width:100%; margin-top:0.5rem;">
+                            </div>
+
+                            <div style="margin-bottom:1.25rem;">
+                                <label style="font-size:0.85rem; font-weight:700; color:var(--text-title); display:flex; justify-content:space-between;">
+                                    <span>⚡ Prompts / Jour Moyens par Agent :</span>
+                                    <span id="pipeline-cost-req-val" style="color:var(--accent-blue); font-weight:800;">15 Requêtes / jour</span>
+                                </label>
+                                <input type="range" id="pipeline-cost-req-range" min="1" max="50" step="1" value="15" style="width:100%; margin-top:0.5rem;">
+                            </div>
+
+                            <div style="margin-bottom:1rem;">
+                                <label style="font-size:0.85rem; font-weight:700; color:var(--text-title); display:block; margin-bottom:0.4rem;">
+                                    🌩️ Instance SecNumCloud & Modèle Mistral :
+                                </label>
+                                <select id="pipeline-cost-cluster-select" class="form-select" style="width:100%; padding:0.5rem; font-size:0.85rem; border-radius:6px; background:white;">
+                                    <option value="large" selected>🏆 Cluster L (Recommandé) : Mistral Large 2 123B (1 500€/mois - 2x H100 GPU)</option>
+                                    <option value="med">Cluster M : Mistral Small 3 24B (600€/mois - 1x A100 GPU)</option>
+                                    <option value="small">Cluster S : Mistral NeMo 12B (200€/mois - 1x RTX 6000 Ada)</option>
+                                </select>
+                                <div id="cluster-desc-banner" style="margin-top:0.5rem; font-size:0.78rem; color:var(--text-muted); background:rgba(99,102,241,0.06); border:1px solid rgba(99,102,241,0.2); padding:0.6rem; border-radius:6px;">
+                                    💡 <strong>Cluster L Recommandé :</strong> Embarque <strong>Mistral Large 2 (123 Milliards de paramètres)</strong> sur un cluster dédié 2x H100 (160GB VRAM). Garantit une puissance maximale pour analyser des dossiers municipaux volumineux et exécuter la pseudonymisation sans aucune hallucination.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right results -->
+                        <div style="background:white; border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-sm); display:flex; flex-direction:column; justify-content:space-between;">
+                            <h4 style="font-family:'Outfit',sans-serif; font-size:1.05rem; margin-bottom:1rem; color:var(--text-title);">📊 Budget & Amortissement Prévisionnel (TCO)</h4>
+                            
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.75rem; margin-bottom:1rem;">
+                                <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:0.75rem; border-radius:6px;">
+                                    <span style="font-size:0.75rem; color:var(--text-muted); display:block;">Hébergement SecNumCloud / an :</span>
+                                    <strong id="res-cost-secnum-year" style="font-size:1rem; color:#1e293b;">18 000 € HT</strong>
+                                </div>
+                                <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:0.75rem; border-radius:6px;">
+                                    <span style="font-size:0.75rem; color:var(--text-muted); display:block;">API LLM Externe (Tokens) / an :</span>
+                                    <strong id="res-cost-tokens-year" style="font-size:1rem; color:#1e293b;">1 620 € HT</strong>
+                                </div>
+                            </div>
+
+                            <div style="background:linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.1)); border:1px solid rgba(99,102,241,0.3); padding:1rem; border-radius:8px; margin-bottom:1rem; text-align:center;">
+                                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-purple); text-transform:uppercase; letter-spacing:0.5px;">Coût Global Amorti</div>
+                                <div id="res-cost-per-agent" style="font-size:1.75rem; font-weight:800; color:#4f46e5; margin:0.2rem 0;">32.70 €</div>
+                                <div style="font-size:0.78rem; color:var(--text-muted);">HT / Agent / Mois</div>
+                            </div>
+
+                            <div style="font-size:0.78rem; color:var(--text-muted); line-height:1.4; background:#f1f5f9; padding:0.6rem; border-radius:6px;">
+                                💡 <strong>Comparatif Cloud Direct :</strong> Un abonnement ChatGPT Plus grand public non sécurisé coûte 22 € HT/mois/agent. Cette architecture souveraine 100% RGPD est <strong>plus rentable dès 30 agents</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quotas & Crédits par Métier / Catégorie -->
+                    <div style="background:white; border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md);">
+                        <h4 style="font-family:'Outfit',sans-serif; font-size:1rem; color:var(--text-title); margin-bottom:0.75rem; display:flex; align-items:center; gap:0.5rem;">
+                            💳 Allocation des Crédits & Quotas par Catégorie Métier
+                        </h4>
+                        <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem;">
+                            Pour optimiser le budget sans restreindre les utilisateurs clés, la DSI peut attribuer des quotas de requêtes quotidiens différenciés selon le rôle de l'agent :
+                        </p>
+                        
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem;">
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-top:4px solid var(--accent-sky); padding:1rem; border-radius:8px;">
+                                <div style="font-size:0.75rem; font-weight:800; color:var(--accent-sky); text-transform:uppercase;">Catégorie C (Terrain)</div>
+                                <div style="font-size:1.2rem; font-weight:800; color:var(--text-title); margin:0.3rem 0;">10 Requêtes / jour</div>
+                                <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.4; margin:0;">
+                                    Dictée vocale rapide, signalements d'incidents voirie, synthèses de fiches d'intervention.
+                                </p>
+                            </div>
+
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-top:4px solid var(--accent-blue); padding:1rem; border-radius:8px;">
+                                <div style="font-size:0.75rem; font-weight:800; color:var(--accent-blue); text-transform:uppercase;">Catégorie B (Rédacteurs)</div>
+                                <div style="font-size:1.2rem; font-weight:800; color:var(--text-title); margin:0.3rem 0;">35 Requêtes / jour</div>
+                                <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.4; margin:0;">
+                                    Rédaction de courriers aux usagers, procès-verbaux de réunion, synthèse de dossiers sociaux.
+                                </p>
+                            </div>
+
+                            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-top:4px solid var(--accent-purple); padding:1rem; border-radius:8px;">
+                                <div style="font-size:0.75rem; font-weight:800; color:var(--accent-purple); text-transform:uppercase;">Catégorie A / DSI (Conception)</div>
+                                <div style="font-size:1.2rem; font-weight:800; color:var(--text-title); margin:0.3rem 0;">100 Requêtes / jour</div>
+                                <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.4; margin:0;">
+                                    Rédaction de délibérations municipales, analyse de marchés publics, audit juridique complexe.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 `;

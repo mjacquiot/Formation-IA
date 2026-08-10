@@ -1,88 +1,77 @@
-/**
- * Formation IA Territoriale - Corpus de Cours Détaillé (30 Slides + Évaluation)
- * Fiches théoriques complètes, schémas HTML et exemples d'administration
- */
+// ==========================================
+// CORPUS DE FORMATION IA TERRITORIALE (CONTENT.JS)
+// ==========================================
 
 const THEMES = [
     {
         id: "histoire-ia",
-        category: "hist",
+        category: "histoire",
         title: "1. L'Histoire de l'IA",
-        icon: "⏳",
-        desc: "Les grandes étapes de l'IA d'Alan Turing à nos jours, avec des comparatifs historiques et des graphiques d'adoption.",
+        icon: "📜",
+        desc: "Comprendre les origines de l'IA, de la théorie d'Alan Turing aux réseaux de neurones modernes.",
         slides: [
             {
                 title: "L'Arbre de l'IA (Symbolique vs Numérique)",
                 type: "comparison-cards",
-                intro: "L'histoire de l'IA est marquée par l'affrontement de deux visions philosophiques et techniques : l'IA Symbolique (basée sur la logique) et l'IA Numérique (basée sur l'apprentissage par les données).",
+                intro: "L'histoire de l'intelligence artificielle est séparée en deux grandes écoles de pensée qui se sont affrontées pendant 50 ans avant de fusionner aujourd'hui.",
                 cardLeft: {
-                    title: "🤖 L'IA Symbolique (1950 - 1990)",
-                    subtitle: "Approche descendante (Top-Down)",
-                    desc: "Les ingénieurs codent manuellement toutes les règles logiques de l'intelligence. L'ordinateur applique des arbres de décisions stricts.",
-                    formula: "SI (Revenu < X) ET (Enfants >= Y) ALORS Aide = OUI",
-                    advantage: "Explicabilité totale : on sait exactement pourquoi la machine prend une décision.",
-                    drawback: "Impossible de coder toutes les exceptions du monde réel. S'effondre face à l'ambiguïté."
+                    title: "🧠 IA Symbolique (1950 - 1990)",
+                    subtitle: "L'approche par la Logique et les Règles",
+                    desc: "On programmait à la main toutes les règles logiques (ex: 'SI le feu est rouge ET que la voiture avance ALORS c'est une infraction'). Les ingénieurs écrivaient des milliers de lignes de conditions 'SI / ALORS'.",
+                    formula: "Règles Humaines + Données ➔ Réponses",
+                    advantage: "100% explicable et prévisible. Pas de risque d'erreur au hasard.",
+                    drawback: "Incapable de gérer la complexité du monde réel, les exceptions, le langage naturel ou la vision."
                 },
                 cardRight: {
-                    title: "🧠 L'IA Numérique (1990 - Présent)",
-                    subtitle: "Approche ascendante (Bottom-Up)",
-                    desc: "On ne donne aucune règle logique à la machine. On lui injecte des millions d'exemples de données, et elle ajuste ses poids statistiques pour apprendre seule.",
-                    formula: "Entrée [Données] ➔ Réseau de Neurones ➔ Prédiction",
-                    advantage: "Excellente pour reconnaître des motifs complexes (images, voix, textes flous).",
-                    drawback: "Effet 'boîte noire' : très difficile de justifier précisément la formule mathématique interne."
+                    title: "⚡ IA Numérique / Connexionniste (2010 - Présent)",
+                    subtitle: "L'apprentissage par l'Exemple (Machine Learning)",
+                    desc: "On ne donne plus de règles à la machine. On lui injecte des milliards d'exemples (textes, photos) et le réseau de neurones ajuste lui-même ses poids mathématiques pour apprendre seul.",
+                    formula: "Données + Réponses Attendues ➔ Détection des Règles",
+                    advantage: "Compréhension du langage humain, reconnaissance d'images et créativité inédite.",
+                    drawback: "Effet 'Boîte Noire'. Difficile de savoir exactement pourquoi le réseau a pris telle décision."
                 }
             },
             {
-                title: "La Frise Chronologique des 6 Tournants",
+                title: "Frise Chronologique (1950 - 2022)",
                 type: "timeline",
+                desc: "Découvrez les 5 grandes étapes de la révolution de l'intelligence artificielle.",
                 events: [
-                    { year: "1950", title: "Alan Turing & Le Test d'Imitation", desc: "Turing publie 'Computing Machinery and Intelligence' et pose la question : 'Les machines peuvent-elles penser ?' Il théorise que l'intelligence réside dans le traitement logique de l'information." },
-                    { year: "1956", title: "Le Séminaire de Dartmouth", desc: "John McCarthy, Marvin Minsky, Claude Shannon et d'autres se réunissent durant un été. Ils créent officiellement le terme d'Intelligence Artificielle et prédisent avec un optimisme fou que l'IA sera résolue en quelques années." },
-                    { year: "1974 - 1990", title: "Les Hivers de l'IA", desc: "Face aux échecs répétés des traducteurs automatiques et à l'incapacité des machines à comprendre le sens commun, les gouvernements coupent les budgets de recherche. C'est l'époque de la traversée du désert." },
-                    { year: "1997", title: "Deep Blue bat Kasparov", desc: "Le supercalculateur d'IBM bat le champion du monde d'échecs. C'est le triomphe de la recherche de force brute statistique et de la puissance de calcul sur l'intuition humaine." },
-                    { year: "2017", title: "L'Invention du Transformer", desc: "Google publie l'article 'Attention Is All You Need'. Il introduit le mécanisme d'attention permettant d'analyser le contexte global d'une phrase d'un coup, posant les bases des LLM modernes." },
-                    { year: "2022", title: "L'Explosion de ChatGPT", desc: "OpenAI met en ligne une interface de dialogue gratuite. L'IA générative devient un outil de productivité grand public mondial en moins d'une semaine." }
+                    { year: "1950", title: "Test d'Imitation de Turing", desc: "Alan Turing pose la question fondamentale : 'Les machines peuvent-elles penser ?' et invente son test d'imitation." },
+                    { year: "1956", title: "Séminaire de Dartmouth", desc: "Naissance officielle de l'expression 'Intelligence Artificielle' lors de la conférence réunissant McCarthy, Minsky et Shannon." },
+                    { year: "1974 - 1990", title: "Les Hivers de l'IA", desc: "Coupure des budgets de recherche suite à l'incapacité des machines à comprendre le sens commun." },
+                    { year: "1997", title: "Deep Blue bat Kasparov", desc: "Le supercalculateur d'IBM bat le champion du monde d'échecs grâce à la puissance de calcul." },
+                    { year: "2017", title: "L'Architecture Transformer", desc: "Google publie 'Attention Is All You Need', posant les fondations des LLM modernes comme ChatGPT." },
+                    { year: "2022", title: "Révolution ChatGPT", desc: "L'IA générative devient un outil grand public accessible à tous en quelques clics." }
                 ]
             },
             {
-                title: "La Vitesse d'Adoption (Le choc de 2022)",
+                title: "La Vitesse d'Adoption Mondiale",
                 type: "bar-chart",
-                desc: "Ce qui rend la révolution de l'IA générative inédite, ce n'est pas seulement la technologie, c'est la **vitesse phénoménale** à laquelle la société l'a adoptée. Ce graphique compare le nombre de mois requis pour atteindre **100 millions d'utilisateurs actifs** :",
+                desc: "Comparaison du temps nécessaire pour atteindre 100 millions d'utilisateurs actifs à travers le monde :",
                 data: [
-                    { label: "Téléphone fixe", value: 900, color: "var(--accent-blue)" },
-                    { label: "Téléphone portable", value: 192, color: "var(--text-muted)" },
-                    { label: "Netflix", value: 120, color: "var(--text-muted)" },
-                    { label: "Facebook", value: 54, color: "var(--text-muted)" },
-                    { label: "Instagram", value: 30, color: "var(--text-muted)" },
-                    { label: "ChatGPT", value: 2, color: "var(--accent-sky)" }
+                    { label: "Téléphone Fixe", time: "75 Ans", percent: 100, color: "var(--accent-blue)" },
+                    { label: "Internet", time: "7 Ans", percent: 60, color: "var(--accent-purple)" },
+                    { label: "Facebook", time: "4.5 Ans", percent: 45, color: "var(--accent-sky)" },
+                    { label: "Instagram", time: "2.5 Ans", percent: 30, color: "var(--accent-gold)" },
+                    { label: "ChatGPT (IA)", time: "2 Mois", percent: 10, color: "var(--accent-green)" }
                 ],
-                implication: "<strong>Implication pour les collectivités :</strong> Jamais une transition technologique n'a été si rapide. Les agents publics et les usagers se sont emparés de ces outils de façon autonome, obligeant les administrations à adapter leurs politiques de sécurité et d'efficacité à toute vitesse."
+                conclusion: "ChatGPT est la technologie ayant connu la croissance la plus rapide de l'histoire de l'humanité. Cette vitesse impose une acculturation urgente pour tous les agents publics."
             },
             {
                 title: "Le Paradoxe de Moravec",
                 type: "moravec-paradox",
-                intro: "Formulé par Hans Moravec dans les années 1980, ce paradoxe décrit une réalité contre-intuitive de l'IA : ce qui est le plus difficile pour un humain est facile pour la machine, et inversement.",
-                cardLeft: {
-                    title: "🤖 Facile pour la machine / Difficile pour l'humain",
-                    desc: "Les tâches logiques, mathématiques et algorithmiques formelles qui demandent des années d'études à un humain.",
-                    items: [
-                        "Calculs mathématiques hyper-complexes en millisecondes",
-                        "Programmation informatique et génération de code",
-                        "Traduction instantanée de contrats ou rapports financiers de 100 pages",
-                        "Mémorisation et recherche dans des millions de documents textuels"
-                    ]
+                desc: "Formulé par Hans Moravec dans les années 1980, ce paradoxe scientifique explique pourquoi l'IA nous surprend là où on ne l'attendait pas :",
+                hardForHuman: {
+                    title: "Difficile pour l'Homme",
+                    desc: "Calculer la racine carrée de 849 302, mémoriser le Code Général des Collectivités Territoriales par cœur, analyser 10 000 lignes de comptabilité en 1 seconde.",
+                    result: "⚡ Très Facile pour l'IA"
                 },
-                cardRight: {
-                    title: "👩‍💼 Facile pour l'humain / Difficile pour la machine",
-                    desc: "Les tâches d'interaction physique, de perception et de relations sociales innées chez l'humain dès le plus jeune âge.",
-                    items: [
-                        "Saisir un objet fragile dans un environnement désordonné",
-                        "Marcher de manière fluide dans une rue bondée ou un hall d'accueil",
-                        "Faire preuve de bon sens et s'adapter à une situation imprévue",
-                        "Ressentir de l'empathie face à un citoyen ou un usager en détresse"
-                    ]
+                easyForHuman: {
+                    title: "Facile pour l'Homme",
+                    desc: "Reconnaître un visage dans une foule, faire preuve d'empathie face à un administré en détresse, lacer ses chaussures, sentir une ambiance dans une salle de réunion.",
+                    result: "🤖 Ultra-Difficile pour l'IA"
                 },
-                pedagogy: "<strong>Intérêt pédagogique :</strong> Très rassurant pour les agents territoriaux ! L'IA ne remplacera pas leur rôle d'accueil physique, de gestion des cas sociaux complexes et de décision humaine.<br>➔ <strong>L'IA gère la paperasse, l'humain gère la relation.</strong>"
+                conclusion: "L'IA ne remplace pas l'humain : elle excelle là où nous sommes lents (calcul, mémoire), et échoue là où nous sommes naturellement doués (empathie, bon sens, présence physique)."
             }
         ]
     },
@@ -133,9 +122,90 @@ const THEMES = [
         ]
     },
     {
+        id: "hallucinations-ia",
+        category: "reg",
+        title: "3. Les Hallucinations & L'Ancrage",
+        icon: "🌀",
+        desc: "Analyser scientifiquement pourquoi l'IA invente des faits et apprendre les techniques d'ancrage.",
+        slides: [
+            {
+                title: "Pourquoi l'IA ment-elle avec aplomb ?",
+                type: "comparison-cards",
+                intro: "Une hallucination n'est pas un bug technique temporaire. C'est une conséquence directe de la nature mathématique des LLMs, conçus pour générer du texte fluide, pas pour vérifier la réalité historique.",
+                cardLeft: {
+                    title: "🔍 Comment travaille un Moteur de Recherche",
+                    subtitle: "Indexation de Base de Données",
+                    desc: "Il parcourt internet pour trouver des pages réelles correspondant à vos mots clés. Il renvoie vers des liens existants.",
+                    formula: "Requête ➔ Recherche dans l'index ➔ Liens véridiques",
+                    advantage: "Pas d'invention. Les sources sont réelles et vérifiables directement.",
+                    drawback: "Incapable de rédiger une synthèse sur-mesure ou d'adapter le ton."
+                },
+                cardRight: {
+                    title: "🔮 Comment travaille un LLM (ChatGPT/Claude)",
+                    subtitle: "Réseau Génératif Probabiliste",
+                    desc: "Il n'interroge pas de base de données. Il écrit mot après mot en évaluant ce qui paraît statistiquement correct et fluide selon ses milliards de paramètres.",
+                    formula: "Prompt ➔ Calcul de probabilités ➔ Texte généré",
+                    advantage: "Capacité d'analyse, de synthèse et d'adaptation du ton infinie.",
+                    drawback: "Si l'information est rare ou absente de sa mémoire de calcul, il comblera le vide en inventant des détails plausibles."
+                }
+            },
+            {
+                title: "Le Curseur de Température & Détecteur d'Hallucinations",
+                type: "hallucination",
+                desc: "La température contrôle l'audace statistique du modèle. Testez ci-dessous la détection d'hallucinations juridiques et de biais sur des exemples réels de l'administration.",
+                temperature: 20,
+                tips: [
+                    "<strong>Température 0.1 à 0.3 (Factuel) :</strong> Recommandé pour l'administration. L'IA reste ultra-prudente et choisit toujours les termes les plus standardisés.",
+                    "<strong>Température 0.7 à 1.0 (Créatif) :</strong> Recommandé pour le brainstorming ou les slogans de communication. Le modèle peut inventer des faits."
+                ],
+                scenarios: [
+                    {
+                        id: "sc-cgct",
+                        title: "📜 Faux Décret & Date Fictive",
+                        text: "Conformément au décret n°2025-9999 du 32 décembre 2024 modifiant l'article L.2121-888 du CGCT, le Maire d'une commune de moins de 500 habitants peut annuler sans délibération toutes les décisions d'urbanisme votées depuis 10 ans.",
+                        highlights: [
+                            { match: "décret n°2025-9999", type: "red", label: "Hallucination", desc: "Le numéro de décret 2025-9999 est fictif et n'existe dans aucun Journal Officiel." },
+                            { match: "32 décembre 2024", type: "red", label: "Date Impossible", desc: "Le 32 décembre n'existe pas dans le calendrier !" },
+                            { match: "article L.2121-888", type: "red", label: "Fausse référence", desc: "L'article L.2121-888 du CGCT est une invention complète du LLM." },
+                            { match: "annuler sans délibération toutes les décisions", type: "orange", label: "Incohérence Juridique", desc: "Un maire ne peut pas annuler rétroactivement 10 ans de décisions d'urbanisme sans délibération." }
+                        ]
+                    },
+                    {
+                        id: "sc-bias",
+                        title: "👥 Biais de Genre & Recrutement",
+                        text: "Pour le poste d'agent d'accueil du public, la candidate de 52 ans sera parfaite pour apporter de la douceur et du thé aux administrés. Pour le poste d'ingénieur DSI, il faut privilégier un jeune homme passionné d'informatique capable de faire des heures supplémentaires.",
+                        highlights: [
+                            { match: "douceur et du thé aux administrés", type: "orange", label: "Stéréotype de Genre", desc: "Réduire les compétences d'accueil d'une femme à 'apporter du thé' est un biais de genre discriminant." },
+                            { match: "privilégier un jeune homme", type: "red", label: "Discrimination Illégale", desc: "Spécifier le genre et le jeune âge pour un poste technique viole le Code du Travail et l'AI Act." }
+                        ]
+                    },
+                    {
+                        id: "sc-vague",
+                        title: "🔵 Affirmations Vagues sans Source",
+                        text: "La plupart des collectivités territoriales ont réduit leur budget de 40% l'année dernière. Il est prouvé que l'IA résout 99% des litiges d'usagers instantanément.",
+                        highlights: [
+                            { match: "réduit leur budget de 40%", type: "blue", label: "Chiffre non étayé", desc: "Statistique spectaculaire inventée sans aucune citation d'étude ou de rapport de la Cour des Comptes." },
+                            { match: "résout 99% des litiges", type: "blue", label: "Affirmation Vague", desc: "Affirmation fantaisiste sans preuve ni méthodologie de mesure." }
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "L'Arme Absolue : L'Ancrage (R.A.G.)",
+                type: "bridge-schema",
+                desc: "Pour éradiquer les hallucinations dans votre travail administratif, utilisez la technique de l'**Ancrage** (RAG - Retrieval Augmented Generation). Cela consiste à interdire à l'IA d'utiliser sa mémoire générale.",
+                elements: [
+                    { title: "📥 1. L'Entrée brute", desc: "Vous posez votre question juridique ou technique (ex. 'Puis-je accorder un congé spécial à cet agent ?')." },
+                    { title: "🔒 2. L'Ancrage (Ressource)", desc: "Vous copiez-collez l'intégralité du règlement intérieur de votre mairie ou le texte de loi du CGCT." },
+                    { title: "🛡️ 3. La Consigne de Verrouillage", desc: "Vous terminez le prompt par : 'Réponds exclusivement en t'appuyant sur le règlement ci-dessus. Si la réponse n'y figure pas, réponds : Je ne sais pas'." }
+                ]
+            }
+        ]
+    },
+    {
         id: "prompt-homme",
         category: "prompt",
-        title: "3. Prompt vs Homme",
+        title: "4. Prompt vs Homme",
         icon: "🧠",
         desc: "L'analogie narrative complète pour comprendre l'absence de sens inné chez l'IA et l'exigence de contexte.",
         slides: [
@@ -196,7 +266,7 @@ const THEMES = [
     {
         id: "methode-maire",
         category: "prompt",
-        title: "4. La Méthode M.A.I.R.E.",
+        title: "5. La Méthode M.A.I.R.E.",
         icon: "📋",
         desc: "La méthodologie de structuration des invites professionnelles pour le secteur public.",
         slides: [
@@ -228,7 +298,15 @@ const THEMES = [
                 title: "Gabarit Prêt à Remplir (Copier-Coller)",
                 type: "gabarit",
                 desc: "Voici un modèle universel que vous pouvez copier et conserver. Remplissez simplement les crochets avant de soumettre votre demande à l'IA.",
-                template: "[MOI] : Je suis [votre poste/rôle] au sein de la collectivité [nom/type de collectivité].\n\n[AGENT] : Agis en tant que [expert/rôle attribué à l'IA] spécialisé en [domaine précis].\n\n[INFORMATION] : Ta tâche consiste à [décrire précisément le travail, le document à rédiger ou le problème à analyser].\n\n[RESSOURCES] : Pour ce faire, base-toi uniquement sur les données suivantes : [coller vos textes, chiffres, extraits de règlements ou lois]. Ne fais pas de suppositions en dehors de ces informations.\n\n[EXIGENCE] : Le livrable doit être rédigé sous forme de [format attendu : mail, tableau, note de synthèse]. Le ton doit être [professionnel, technique, neutre] et la longueur maximale de [nombre de mots/paragraphes].",
+                template: `[MOI] : Je suis [votre poste/rôle] au sein de la collectivité [nom/type de collectivité].
+
+[AGENT] : Agis en tant que [expert/rôle attribué à l'IA] spécialisé en [domaine précis].
+
+[INFORMATION] : Ta tâche consiste à [décrire précisément le travail, le document à rédiger ou le problème à analyser].
+
+[RESSOURCES] : Pour ce faire, base-toi uniquement sur les données suivantes : [coller vos textes, chiffres, extraits de règlements ou lois]. Ne fais pas de suppositions en dehors de ces informations.
+
+[EXIGENCE] : Le livrable doit être rédigé sous forme de [format attendu : mail, tableau, note de synthèse]. Le ton doit être [professionnel, technique, neutre] et la longueur maximale de [nombre de mots/paragraphes].`,
                 tips: "<strong>💡 Conseil de pro :</strong> Si vos ressources sont très longues (ex: un rapport PDF de 50 pages), n'hésitez pas à utiliser des outils dotés d'une grande fenêtre de contexte (comme Claude ou Gemini) pour y glisser le fichier entier."
             }
         ]
@@ -236,7 +314,7 @@ const THEMES = [
     {
         id: "securite-reglementation",
         category: "reg",
-        title: "5. Sécurité & Réglementation",
+        title: "6. Sécurité & Réglementation",
         icon: "🛡️",
         desc: "La protection des données dans le secteur public : concilier RGPD, souveraineté et conformité de l'AI Act.",
         slides: [
@@ -268,7 +346,7 @@ const THEMES = [
                         title: "Le secret professionnel & la confidentialité",
                         desc: "En tant qu'agent public, vous êtes soumis à une obligation de discrétion professionnelle. Dans le cadre du RGPD, cela se traduit par :",
                         bulletPoints: [
-                            "<strong>Le besoin d'en connaître</strong> : Vous ne devez partager ces identités qu'avec les collègues ou services qui en ont strictement besoin pour travailler.",
+                            "<strong>Le besoin d'en connaître</strong> : Vous ne devez partager ces identités qu'avec les collègues ou services qui en ont strictly besoin pour travailler.",
                             "<strong>Le verrouillage des accès</strong> : Ne laissez jamais votre session informatique ouverte sans surveillance et ne partagez pas vos identifiants."
                         ]
                     },
@@ -440,7 +518,7 @@ const THEMES = [
                 articles: [
                     {
                         num: "1",
-                        title: "Usages Autorisés et Règle d'Or du \"Contrôle Humain\"",
+                        title: 'Usages Autorisés et Règle d\'Or du "Contrôle Humain"',
                         points: [
                             "<strong>Aide à la productivité</strong> : Les agents sont autorisés à utiliser l'IA pour la rédaction de brouillons, la correction orthographique, la structuration de comptes-rendus non confidentiels, la synthèse de longs articles publics ou l'aide au remue-méninges (brainstorming).",
                             "<strong>Décision Administrative</strong> : L'IA ne doit en aucun cas prendre de décision unilatérale ou automatique concernant un usager (permis de construire, octroi d'aide sociale, etc.). <strong>La validation humaine (Dernier Mot)</strong> reste le principe fondamental de responsabilité publique. L'agent est l'unique auteur légal et responsable des écrits qu'il signe."
@@ -449,7 +527,7 @@ const THEMES = [
                     {
                         num: "2",
                         title: "Interdictions de Saisie et Protection des Données (RGPD)",
-                        intro: "Il est strictement interdit de copier-coller dans une invite de saisie (prompt) d'une IA publique :",
+                        intro: "Il est strictly interdit de copier-coller dans une invite de saisie (prompt) d'une IA publique :",
                         points: [
                             "Toute information permettant d'identifier directement ou indirectement un citoyen ou un agent (noms, prénoms, courriels, numéros de téléphone, numéros de sécurité sociale).",
                             "Toute information sensible protégée par le secret professionnel ou médical.",
@@ -466,7 +544,7 @@ const THEMES = [
                     },
                     {
                         num: "4",
-                        title: "Recours Obligatoire à un Module Libre d'Anonymisation ou de Pseudonymisation",
+                        title: 'Recours Obligatoire à un Module Libre d\'Anonymisation ou de Pseudonymisation',
                         intro: "Pour toutes les situations de travail où l'utilisation d'un LLM soumis au Cloud Act est indispensable pour analyser un dossier :",
                         points: [
                             "<strong>Filtrage Préalable</strong> : L'agent public a l'obligation légale de passer son texte dans un <strong>module libre d'anonymisation ou de pseudonymisation</strong> s'exécutant localement avant toute soumission à l'IA.",
@@ -482,56 +560,6 @@ const THEMES = [
                             "Privilégier la technique d'<strong>Ancrage</strong> en insérant lui-même la documentation officielle de travail comme ressource dans le prompt pour empêcher l'IA d'inventer des faits."
                         ]
                     }
-                ]
-            }
-        ]
-    },
-    {
-        id: "hallucinations-ia",
-        category: "reg",
-        title: "6. Les Hallucinations",
-        icon: "🌀",
-        desc: "Analyser scientifiquement pourquoi l'IA invente des faits et apprendre les techniques d'ancrage.",
-        slides: [
-            {
-                title: "Pourquoi l'IA ment-elle avec aplomb ?",
-                type: "comparison-cards",
-                intro: "Une hallucination n'est pas un bug technique temporaire. C'est une conséquence directe de la nature mathématique des LLMs, conçus pour générer du texte fluide, pas pour vérifier la réalité historique.",
-                cardLeft: {
-                    title: "🔍 Comment travaille un Moteur de Recherche",
-                    subtitle: "Indexation de Base de Données",
-                    desc: "Il parcourt internet pour trouver des pages réelles correspondant à vos mots clés. Il renvoie vers des liens existants.",
-                    formula: "Requête ➔ Recherche dans l'index ➔ Liens véridiques",
-                    advantage: "Pas d'invention. Les sources sont réelles et vérifiables directement.",
-                    drawback: "Incapable de rédiger une synthèse sur-mesure ou d'adapter le ton."
-                },
-                cardRight: {
-                    title: "🔮 Comment travaille un LLM (ChatGPT/Claude)",
-                    subtitle: "Réseau Génératif Probabiliste",
-                    desc: "Il n'interroge pas de base de données. Il écrit mot après mot en évaluant ce qui paraît statistiquement correct et fluide selon ses milliards de paramètres.",
-                    formula: "Prompt ➔ Calcul de probabilités ➔ Texte généré",
-                    advantage: "Capacité d'analyse, de synthèse et d'adaptation du ton infinie.",
-                    drawback: "Si l'information est rare ou absente de sa mémoire de calcul, il comblera le vide en inventant des détails plausibles."
-                }
-            },
-            {
-                title: "Le Curseur de Température",
-                type: "hallucination",
-                desc: "La température est le paramètre qui contrôle l'audace statistique du modèle. Plus elle est élevée, plus l'IA prend des risques d'association de mots originaux, augmentant le risque d'hallucinations.",
-                temperature: 20,
-                tips: [
-                    "<strong>Température 0.1 à 0.3 (Factuel) :</strong> Recommandé pour l'administration. L'IA reste ultra-prudente et choisit toujours les termes les plus standardisés. Idéal pour résumer un décret ou analyser des chiffres.",
-                    "<strong>Température 0.7 à 1.0 (Créatif) :</strong> Recommandé pour le brainstorming ou la rédaction de slogans de communication touristique. Le modèle s'autorise des détours sémantiques poétiques mais peut inventer des faits."
-                ]
-            },
-            {
-                title: "L'Arme Absolue : L'Ancrage (R.A.G.)",
-                type: "bridge-schema",
-                desc: "Pour éradiquer les hallucinations dans votre travail administratif, utilisez la technique de l'**Ancrage** (RAG - Retrieval Augmented Generation). Cela consiste à interdire à l'IA d'utiliser sa mémoire générale.",
-                elements: [
-                    { title: "📥 1. L'Entrée brute", desc: "Vous posez votre question juridique ou technique (ex. 'Puis-je accorder un congé spécial à cet agent ?')." },
-                    { title: "🔒 2. L'Ancrage (Ressource)", desc: "Vous copiez-collez l'intégralité du règlement intérieur de votre mairie ou le texte de loi du CGCT." },
-                    { title: "🛡️ 3. La Consigne de Verrouillage", desc: "Vous terminez le prompt par : 'Réponds exclusivement en t'appuyant sur le règlement ci-dessus. Si la réponse n'y figure pas, réponds : Je ne sais pas'." }
                 ]
             }
         ]
@@ -555,206 +583,68 @@ const THEMES = [
                 ]
             },
             {
-                title: "La Physique de l'IA (Puces & Électricité)",
+                title: "Physique des Puces : GPU vs TPU vs LPU",
                 type: "hardware-comparison",
-                desc: "L'IA n'est pas immatérielle. Elle repose sur des fonderies de puces silicium ultra-précises (TSMC à Taïwan produit 90% des puces avancées) et des parcs de calcul surchargés.",
-                chips: [
+                desc: "Tous les processeurs d'IA ne se valent pas. Selon l'architecture choisie, la vitesse d'exécution et la facture énergétique varient du simple au quadruple :",
+                hardwareTypes: [
                     { type: "GPU (Nvidia)", role: "Processeur graphique de forte consommation pour l'entraînement intensif.", power: "Très énergivore (~700W par carte)" },
                     { type: "TPU (Google)", role: "Puces tenso-vectorielles optimisées pour exécuter les calculs de Gemini.", power: "Consommation modérée" },
                     { type: "LPU (Groq)", role: "Puces ultra-rapides spécialisées dans l'inférence textuelle en temps réel.", power: "Très économe en énergie" }
-                ],
-                fact: "<strong>Le saviez-vous ?</strong> Une seule requête complexe sur un modèle d'IA générative consomme environ 10 fois plus d'électricité qu'une simple recherche sur Google. C'est un défi écologique majeur pour la neutralité carbone des territoires."
-            },
-            {
-                title: "Calcul du Coût GPU : L'Équation VRAM",
-                type: "datacenter-cost",
-                desc: "Pour héberger une IA souveraine en local, la collectivité doit acquérir des cartes graphiques (GPU). Voici l'équation universelle pour calculer la mémoire vidéo (VRAM) nécessaire et l'investissement requis.",
-                formula: "$$\\text{VRAM Totale Recommandée (Go)} = \\left( \\frac{\\text{Taille du Modèle (en B)} \\times \\text{Bits de quantification}}{8} \\right) + \\left( \\text{Nb Salariés actifs simultanés} \\times \\text{Contexte (en k)} \\times 0,5 \\right)$$",
-                costPerGb: 450,
-                variables: [
-                    { name: "Taille du Modèle (en B)", desc: "Nombre de paramètres du modèle en milliards (ex. 7B, 12B, 70B)." },
-                    { name: "Bits de quantification", desc: "Précision de compression des poids (4 ou 8 bits sont standards pour le local)." },
-                    { name: "Nb Salariés simultanés", desc: "Le nombre maximum d'agents municipaux interrogeant l'IA au même instant." },
-                    { name: "Contexte (en k)", desc: "Taille de l'historique et des documents envoyés (ex. 8k ou 32k tokens)." }
-                ],
-                examples: [
-                    {
-                        title: "1. Mairie Standard (Mistral 7B)",
-                        modelName: "Mistral 7B",
-                        params: 7,
-                        quant: 4,
-                        users: 10,
-                        context: 8,
-                        calcWeights: "7B × 4 bits / 8 = 3.5 Go",
-                        calcCache: "10 agents × 8k × 0.5 = 40 Go",
-                        totalVram: 43.5,
-                        totalCost: 19575,
-                        hardware: "1 carte Nvidia RTX A6000 Ada (48 Go VRAM)"
-                    },
-                    {
-                        title: "2. DSI Intermédiaire (Mistral NeMo 12B)",
-                        modelName: "Mistral NeMo 12B",
-                        params: 12,
-                        quant: 8,
-                        users: 15,
-                        context: 8,
-                        calcWeights: "12B × 8 bits / 8 = 12 Go",
-                        calcCache: "15 agents × 8k × 0.5 = 60 Go",
-                        totalVram: 72,
-                        totalCost: 32400,
-                        hardware: "3 cartes Nvidia L40S ou 2 cartes RTX 6000 Ada"
-                    },
-                    {
-                        title: "3. Métropole Expert (Llama 3 70B)",
-                        modelName: "Llama 3 70B",
-                        params: 70,
-                        quant: 4,
-                        users: 5,
-                        context: 16,
-                        calcWeights: "70B × 4 bits / 8 = 35 Go",
-                        calcCache: "5 agents × 16k × 0.5 = 40 Go",
-                        totalVram: 75,
-                        totalCost: 33750,
-                        hardware: "2 cartes Nvidia RTX 6000 Ada (48 Go × 2 = 96 Go VRAM)"
-                    }
                 ]
             },
             {
-                title: "Datacenters Spatiaux (L'IA en Orbite)",
+                title: "Calculateur d'Empreinte Écologique & Eau des Prompts",
+                type: "eco-calculator",
+                desc: "Chaque requête soumise à une IA consomme de l'électricité et de l'eau pour refroidir les Datacenters. Ajustez les paramètres ci-dessous pour calculer l'empreinte environnementale de votre collectivité.",
+                scenarios: [
+                    { id: "frugal", label: "🌱 Modèle Frugal / TPU (Gemini / Mistral 8B)", waterPerReq: 0.05, co2PerReq: 0.15, kwhPerReq: 0.001 },
+                    { id: "heavy", label: "🏭 Méga-Modèle Cloud (GPT-4o / Claude 3.5)", waterPerReq: 0.50, co2PerReq: 1.20, kwhPerReq: 0.008 }
+                ]
+            },
+            {
+                title: "Simulateur Interactif VRAM & Choix du Matériel GPU",
+                type: "vram-calculator",
+                desc: "Pour exécuter un modèle d'IA localement dans votre mairie (sans envoyer de données sur Internet), vous devez calculer la mémoire vidéo (VRAM) nécessaire sur vos serveurs.",
+                models: [
+                    { label: "8B Paramètres (ex: Llama 3 / Mistral 8B)", baseParams: 8 },
+                    { label: "14B Paramètres (ex: Qwen 2.5 14B)", baseParams: 14 },
+                    { label: "32B Paramètres (ex: DeepSeek R1 32B)", baseParams: 32 },
+                    { label: "70B Paramètres (ex: Llama 3.3 70B)", baseParams: 70 },
+                    { label: "405B Paramètres (ex: Llama 3 405B)", baseParams: 405 }
+                ],
+                quantizations: [
+                    { label: "4-bit (Quantifié Frugal)", bytesPerParam: 0.65 },
+                    { label: "8-bit (Précision Moyenne)", bytesPerParam: 1.10 },
+                    { label: "16-bit (Précision FP16 Totale)", bytesPerParam: 2.00 }
+                ]
+            },
+            {
+                title: "Les Datacenters Spatiaux & Nucléaires",
                 type: "satellite-datacenter",
-                desc: "Face à la saturation énergétique et aux restrictions foncières terrestres, des consortiums spatiaux développent des serveurs d'IA en orbite terrestre basse (LEO).",
-                pros: [
-                    "<strong>Refroidissement naturel :</strong> Le vide de l'espace profond évite l'utilisation de millions de litres d'eau potable terrestres.",
-                    "<strong>Énergie gratuite :</strong> Les panneaux solaires des satellites captent une énergie solaire constante sans atmosphère pour la filtrer.",
-                    "<strong>Souveraineté juridique :</strong> Situés dans l'espace international, ils échappent aux réglementations nationales terrestres (comme l'AI Act)."
-                ],
-                cons: [
-                    "<strong>Maintenance impossible :</strong> Si un disque dur grille à 500 km d'altitude, on ne peut pas le remplacer manuellement.",
-                    "<strong>Tempêtes solaires :</strong> Les radiations cosmiques peuvent corrompre les données ou griller les circuits des puces sensibles.",
-                    "<strong>Temps de latence :</strong> Les données doivent monter et descendre par ondes radio ou liaisons laser, ralentissant les réponses immédiates."
-                ]
+                desc: "Face à l'explosion de la consommation électrique de l'IA, les géants de la Tech réactivent des centrales nucléaires (ex: Three Mile Island pour Microsoft) et projettent de déployer des Datacenters en orbite solaire.",
+                details: "Les datacenters spatiaux bénéficient d'un rayonnement solaire ininterrompu 24h/24 et du froid absolu du vide spatial pour refroidir les puces sans consommer une seule goutte d'eau."
             },
             {
-                title: "L'Équation du Choix : Arbitrer entre les 4 Pôles",
+                title: "Matrice Comparative des Modèles Récents",
                 type: "model-arbitrage",
-                intro: "Pour une collectivité territoriale, le choix d'un modèle d'IA n'est pas neutre. Il s'agit d'un arbitrage stratégique complexe entre quatre pôles interdépendants :",
-                poles: [
-                    {
-                        name: "🧠 Intelligence",
-                        desc: "Capacité de raisonnement logique, d'analyse sémantique fine et d'adaptation aux cas métiers complexes.",
-                        accent: "var(--accent-purple)",
-                        examples: "Grands modèles Cloud propriétaires de pointe (versions Pro / Ultra)"
-                    },
-                    {
-                        name: "🛡️ Anonymat / Sécurité",
-                        desc: "Respect strict du RGPD, souveraineté européenne et étanchéité face aux lois extraterritoriales (Cloud Act).",
-                        accent: "var(--accent-red)",
-                        examples: "Modèles open-source (ouverts) hébergés sur serveurs internes ou Cloud souverain"
-                    },
-                    {
-                        name: "⚡ Vitesse (Latence)",
-                        desc: "Rapidité de génération des réponses pour maintenir la productivité et fluidifier l'usage quotidien.",
-                        accent: "var(--accent-sky)",
-                        examples: "Modèles allégés et optimisés (versions Flash / Mini), puces dédiées à l'inférence rapide"
-                    },
-                    {
-                        name: "💶 Prix / Coût",
-                        desc: "Maîtrise du budget (facturation au million de tokens API ou investissement en serveurs physiques GPU).",
-                        accent: "var(--accent-gold)",
-                        examples: "Modèles open-source compacts, API Cloud légères d'entrée de gamme"
-                    }
+                intro: "Ajustez les cas d'usages administratifs ci-dessous pour filtrer les modèles d'IA les plus performants et conformes au RGPD.",
+                useCases: [
+                    { id: "all", label: "Tous les Cas d'Usages" },
+                    { id: "delib", label: "📑 Synthèse de Délibérations (50p)" },
+                    { id: "mail", label: "✉️ Rédaction de Courriels & Courriers" },
+                    { id: "incident", label: "🚨 Routage d'Incidents de Voirie" },
+                    { id: "dsi", label: "💻 Code & Intranet DSI" }
                 ],
-                strategyIntro: "Trois configurations majeures s'offrent aux administrations territoriales pour arbitrer ces pôles :",
-                strategies: [
-                    {
-                        title: "1. Le Souverain Local 🖥️",
-                        desc: "Modèle Open-Source (libre de droits) hébergé sur serveurs physiques internes ou cloud souverain SecNumCloud.",
-                        verdict: "Anonymat maximal 🛡️ | Coût d'installation lourd | Intelligence & Vitesse moyennes",
-                        radar: { intel: 60, anon: 100, speed: 65, cost: 40 }
-                    },
-                    {
-                        title: "2. L'Hybride Sécurisé (Optimal) 🔑",
-                        desc: "Modèle Cloud puissant combiné avec un outil d'anonymisation locale s'exécutant sur le poste de l'agent avant envoi.",
-                        verdict: "Intelligence maximale 🧠 | Sécurité RGPD garantie | Coûts maîtrisés (API)",
-                        radar: { intel: 95, anon: 90, speed: 85, cost: 75 }
-                    },
-                    {
-                        title: "3. Le Cloud Public Direct (⚠️ Risqué)",
-                        desc: "Saisie brute d'informations professionnelles dans des assistants Cloud grand public sans contrat de confidentialité.",
-                        verdict: "Vitesse & Prix imbattables ⚡ | ❌ Non conforme RGPD (Interdit pour données nominatives)",
-                        radar: { intel: 90, anon: 10, speed: 95, cost: 95 }
-                    }
-                ],
-                monitoring: {
-                    title: "📈 Un paysage en constante évolution",
-                    desc: "Le marché de l'IA change chaque semaine. Un modèle qui était le plus rapide ou le moins cher le mois dernier peut être dépassé aujourd'hui. Pour vous tenir informé et guider les choix de votre collectivité, visitez le comparateur de référence indépendant :",
-                    linkText: "Analyser sur ArtificialAnalysis.ai 🚀",
-                    url: "https://artificialanalysis.ai/"
-                },
-                pollLink: {
-                    text: "📊 Participer au Sondage d'Arbitrage",
-                    pollId: "q7"
-                },
-                pedagogy: "<strong>Le Conseil du Formateur :</strong> Pour une collectivité, la <strong>stratégie hybride</strong> (Option 2) représente souvent le meilleur compromis à court terme. Elle permet d'utiliser le meilleur de l'intelligence artificielle tout en protégeant les données des usagers via l'anonymisation préalable locale."
-            }
-        ]
-    },
-    {
-        id: "exercices-metiers",
-        category: "prompt",
-        title: "8. Exercices Métiers",
-        icon: "🛠️",
-        desc: "Entraînements concrets avec corrections pour les différents services d'une commune.",
-        slides: [
-            {
-                title: "Exercices : Services Techniques & Espaces Verts",
-                type: "exercise-list",
-                categoryFilter: "ST_EV",
-                exercises: [
-                    {
-                        department: "Services Techniques",
-                        level: "débutant",
-                        description: "Vous recevez un mail d'un habitant en colère : <em>'Il y a un énorme trou au milieu de la chaussée devant le 14 avenue Pasteur, ma voiture a failli y laisser un pneu ! Et les branches du saule du voisin dépassent sur le trottoir et obligent les enfants à marcher sur la route. Bougez-vous !'</em>. Créez un prompt pour extraire et catégoriser les incidents.",
-                        solution: "[M] Je suis agent technique municipal.\n[A] Agis en tant qu'assistant de gestion des signalements urbains.\n[I] Analyse le courriel reçu et extrais les incidents.\n[R] Catégorise selon : Adresse de l'incident, Type de problème (Chaussée / Végétation), Niveau d'urgence (Urgent / Normal).\n[E] Fournis un tableau structuré avec ces données, sans commentaires."
-                    },
-                    {
-                        department: "Espaces Verts",
-                        level: "intermédiaire",
-                        description: "Vous devez proposer un plan de végétalisation à faible consommation d'eau pour réaménager le parvis bétonné de la mairie.",
-                        solution: "[M] Je suis responsable des espaces verts d'une mairie du Sud de la France.\n[A] Tu es un paysagiste éco-responsable expert en biodiversité locale et sécheresse.\n[I] Conçois une palette végétale de 5 plantes adaptées.\n[R] Critères requis : besoin d'eau minimal, mellifère, résistant au gel hivernal et à la chaleur estivale.\n[E] Présente les plantes sous forme de fiche avec : nom commun, nom latin, période de floraison et hauteur maximale."
-                    }
-                ]
-            },
-            {
-                title: "Exercices : Secrétariat & Comptabilité",
-                type: "exercise-list",
-                categoryFilter: "SEC_COMPTA",
-                exercises: [
-                    {
-                        department: "Secrétariat / DGA",
-                        level: "débutant",
-                        description: "Vous devez synthétiser ces notes rapides prises en réunion de projet : <em>'Début réunion 14h. Présent : Maire, Adjoint Travaux, DGS. Sujet : Rénovation toiture école. Budget estimé : 80 000€. Subvention État espérée : 30%. Travaux prévus en octobre pendant les vacances. Vote prévu prochain conseil municipal.'</em>",
-                        solution: "[M] Je suis collaborateur de cabinet municipal.\n[A] Agis comme un secrétaire de séance professionnel.\n[I] Rédige une note de synthèse claire à partir de mes notes brutes.\n[R] S'appuyer uniquement sur le texte fourni.\n[E] Structure la note en 4 sections : Objet de la réunion, Participants, Aspect Financier, Calendrier des opérations. Rédige de manière formelle."
-                    },
-                    {
-                        department: "Comptabilité",
-                        level: "intermédiaire",
-                        description: "Comparez ces deux devis pour l'achat de matériel informatique de mairie : Offre 1 (10 ordinateurs fixes à 600€ HT l'unité, garantie 1 an, installation offerte). Offre 2 (10 ordinateurs fixes à 550€ HT l'unité, garantie 3 ans, frais d'installation de 800€ HT).",
-                        solution: "[M] Je suis comptable public au sein d'une collectivité.\n[A] Agis en tant qu'analyste de gestion financière.\n[I] Calcule le coût global TTC (TVA 20%) de chaque offre et compare la valeur de la garantie.\n[R] Applique la TVA de 20% sur l'ensemble des montants HT.\n[E] Rédige une conclusion de 100 mots indiquant quelle offre est la plus avantageuse financièrement à court terme et à long terme."
-                    }
-                ]
-            },
-            {
-                title: "Exercice Expert : Finance & Budget",
-                type: "exercise-list",
-                categoryFilter: "FINANCE",
-                exercises: [
-                    {
-                        department: "Finance / Budget",
-                        level: "expert",
-                        description: "Analysez l'impact d'une hausse prévisionnelle de 5% du coût des fluides (électricité/gaz) sur le budget d'une commune de 5000 habitants sachant que la facture actuelle est de 250 000€ et que le budget total de fonctionnement de la commune est de 3 500 000€.",
-                        solution: "[M] Je suis directeur des services financiers de la commune.\n[A] Agis en tant qu'auditeur budgétaire spécialisé en finances publiques.\n[I] Calcule l'impact de la hausse et propose des mesures.\n[R] Facture fluides = 250k€. Hausse = 5%. Budget global = 3.5M€.\n[E] Calcule : 1) Le surcoût annuel en euros, 2) Le nouveau montant de la facture, 3) Le pourcentage que représente ce surcoût dans le budget global de fonctionnement. Termine en listant 3 mesures réalistes de sobriété énergétique applicables immédiatement en mairie pour compenser cette somme."
-                    }
+                models: [
+                    { name: "Mistral Small 24B", provider: "Mistral AI 🇫🇷", type: "Open-Source / Souverain", params: "24B", speed: "110 t/s", costInput: 0.20, costOutput: 0.60, scoreReasoning: 85, rgpd: "100% Souverain / Local", bestFor: "Courriels, Notes & Intranet municipal" },
+                    { name: "Mistral Large 2", provider: "Mistral AI 🇫🇷", type: "Open-Source / Cloud", params: "123B", speed: "45 t/s", costInput: 2.00, costOutput: 6.00, scoreReasoning: 93, rgpd: "Conforme SecNumCloud", bestFor: "Analyse juridique & Délibérations complexes" },
+                    { name: "Llama 3.3 70B", provider: "Meta 🇺🇸", type: "Open-Source", params: "70B", speed: "65 t/s", costInput: 0.35, costOutput: 0.90, scoreReasoning: 92, rgpd: "Hébergeable en Local", bestFor: "Raisonnement général & Métiers" },
+                    { name: "DeepSeek V3 / R1", provider: "DeepSeek 🇨🇳", type: "Open-Weights", params: "671B (MoE)", speed: "55 t/s", costInput: 0.14, costOutput: 0.55, scoreReasoning: 96, rgpd: "Hébergeable sur serveur privé", bestFor: "Maths, Code DSI & Raisonnement complexe" },
+                    { name: "Qwen 2.5 72B", provider: "Alibaba 🇨🇳", type: "Open-Source", params: "72B", speed: "70 t/s", costInput: 0.30, costOutput: 0.80, scoreReasoning: 91, rgpd: "Hébergeable en Local", bestFor: "Traitement multilingue & Données" },
+                    { name: "GPT-4o", provider: "OpenAI 🇺🇸", type: "Propriétaire Cloud", params: "Inconnu", speed: "80 t/s", costInput: 2.50, costOutput: 10.00, scoreReasoning: 95, rgpd: "Cloud Act (Nécessite anonymisation)", bestFor: "Multimodal (Vision/Voix) & Généraliste" },
+                    { name: "Claude 3.5 Sonnet", provider: "Anthropic 🇺🇸", type: "Propriétaire Cloud", params: "Inconnu", speed: "75 t/s", costInput: 3.00, costOutput: 15.00, scoreReasoning: 97, rgpd: "Cloud Act (Nécessite anonymisation)", bestFor: "Rédaction littéraire & Code haute qualité" },
+                    { name: "Kimi K3 / Moonshot", provider: "Moonshot 🇨🇳", type: "Propriétaire Cloud", params: "Inconnu", speed: "90 t/s", costInput: 0.40, costOutput: 1.20, scoreReasoning: 93, rgpd: "Cloud externe", bestFor: "Ultra-long contexte (Documents 2M tokens)" },
+                    { name: "GLM-4 9B / 130B", provider: "Zhipu AI 🇨🇳", type: "Open / Cloud", params: "9B-130B", speed: "100 t/s", costInput: 0.25, costOutput: 0.70, scoreReasoning: 89, rgpd: "Hébergeable en Local (9B)", bestFor: "Frugalité & Automatisation rapide" }
                 ]
             }
         ]
@@ -762,16 +652,16 @@ const THEMES = [
     {
         id: "agentique-territorial",
         category: "agent",
-        title: "9. L'Agentique",
+        title: "8. L'IA Agentique & Antigravity",
         icon: "🤖",
         desc: "Comprendre pourquoi la boucle agentique dépasse largement l'utilisation passive d'un chat d'intelligence artificielle.",
         slides: [
             {
-                title: "La Révolution des Rôles (Chat vs Agent)",
+                title: "Chatbot vs Agent IA (La boucle d'autonomie)",
                 type: "agentic-comparison",
                 desc: "Le Chat classique est une interaction linéaire. L'Agentique est une boucle d'autonomie où la machine planifie, agit et évalue son propre travail.",
                 chatWorkflow: {
-                    title: "Interaction Classique (Chat)",
+                    title: "💬 Chatbot Passif (Linéaire)",
                     steps: [
                         { role: "Humain", text: "Tape un prompt vague." },
                         { role: "LLM", text: "Calcule et répond d'une seule traite sans tester." },
@@ -779,7 +669,7 @@ const THEMES = [
                     ]
                 },
                 agenticWorkflow: {
-                    title: "Workflow Agentique",
+                    title: "🤖 Agent Autonome (Boucle)",
                     steps: [
                         { role: "Humain", text: "Définit l'objectif global ('Créer un site de signalement public')." },
                         { role: "Agent", text: "Planifie la liste des tâches nécessaires de manière logique." },
@@ -790,7 +680,7 @@ const THEMES = [
                 }
             },
             {
-                title: "Le Cerveau d'un Agent (Plan - Outils - Action)",
+                title: "La Boucle de Raisonnement ReAct",
                 type: "agentic-loop",
                 desc: "Un agent d'IA s'appuie sur une boucle de raisonnement appelée **ReAct** (Reasoning + Acting). Il n'invente pas au hasard : il analyse son action avant de la lancer.",
                 phases: [
@@ -798,6 +688,56 @@ const THEMES = [
                     { step: "2. Action (Action)", desc: "L'IA utilise un outil externe. Elle écrit le code dans un fichier ou effectue une recherche sur internet." },
                     { step: "3. Observation (Observation)", desc: "L'IA analyse le retour de l'outil. 'La console renvoie une erreur de syntaxe à la ligne 12 : point-virgule manquant.'" },
                     { step: "4. Correction (Feedback)", desc: "L'IA ajuste son plan de pensée. 'Je vais corriger la ligne 12 en rajoutant le point-virgule et relancer le test.'" }
+                ]
+            },
+            {
+                title: "L'IA Multimodale : Vision, OCR & Transcription Vocale",
+                type: "multimodal-demo",
+                desc: "Les agents IA modernes ne traitent pas uniquement du texte : ils disposent d'yeux (Vision/OCR) et d'oreilles (Audio Whisper) pour traiter automatiquement tous les flux d'entrées physiques de la collectivité.",
+                cases: [
+                    {
+                        id: "case-ocr",
+                        icon: "📄",
+                        title: "1. OCR Intelligente de Courriers & PDF Scannés",
+                        scenario: "Un usager envoie un courrier manuscrit ou un formulaire PDF numérisé de travers.",
+                        iaAction: "L'IA Vision (VLM) 'lit' le document scanné, extrait les données clés (Nom, Adresse, Objet de la demande, Urgence) et génère un JSON propre pour le logiciel métier.",
+                        demoData: {
+                            inputDoc: "📄 Courrier_Scanné_Mr_Dufour.pdf (3.4 Mo)",
+                            extractedFields: {
+                                "Administré": "Charles DUFOUR",
+                                "Adresse": "14 Rue des Lilas, 75011 Paris",
+                                "Objet": "Demande de subvention d'aide à la rénovation thermique",
+                                "Urgence": "Haute (Échéance 15 mars)",
+                                "Statut": "Numérisé & Pré-rempli automatiquement dans la BDD Mairie"
+                            }
+                        }
+                    },
+                    {
+                        id: "case-vision",
+                        icon: "📸",
+                        title: "2. Analyse d'Images de Voirie (Signalements Citoyens)",
+                        scenario: "Un habitant prend une photo d'un nid-de-poule ou d'un dépôt sauvage via l'application municipale.",
+                        iaAction: "L'IA analyse les pixels de la photo, identifie le type de dégradation ('Dépôt sauvage de gravats'), estime la gravité et catégorise l'intervention pour les services techniques.",
+                        demoData: {
+                            photoName: "📷 Signalement_Photo_8849.jpg",
+                            detectedObject: "Dépôt sauvage encombrants (Gravats + Bois)",
+                            confidenceScore: "98.4%",
+                            dispatchService: "Service Espaces Verts & Propreté Urbaine",
+                            priorityLevel: "Priorité 2 (Enlèvement sous 48h)"
+                        }
+                    },
+                    {
+                        id: "case-audio",
+                        icon: "🎙️",
+                        title: "3. Transcription & Procès-Verbaux de Conseils Municipaux (Whisper)",
+                        scenario: "3 heures d'enregistrement audio d'une séance de conseil municipal à retranscrire.",
+                        iaAction: "Transcription vocale ultra-précise (modèle Whisper), identification des prises de parole et génération automatique de la synthèse structurée par délibération.",
+                        demoData: {
+                            audioFile: "🎙️ Conseil_Municipal_10_Fevrier.mp3 (180 min)",
+                            transcriptionSample: "\"M. le Maire ouvre la séance à 19h02. La délibération n°4 concernant la rénovation de la cantine est adoptée à l'unanimité...\"",
+                            summaryGenerated: "PV Officiel généré en 4 pages avec indexation horodatée des débats"
+                        }
+                    }
                 ]
             },
             {
@@ -844,151 +784,206 @@ const THEMES = [
     {
         id: "tuto-technique",
         category: "agent",
-        title: "10. Tuto : Créer une Application",
+        title: "9. Tuto : Créer une Application",
         icon: "💻",
         desc: "Créer et héberger un site de manière gratuite et sécurisée en conformité avec le RGPD.",
         slides: [
             {
-                title: "L'Architecture Client-Serveur Souveraine",
+                title: "Architecture Client-Serveur Souveraine",
                 type: "architecture-diagram",
-                desc: "Pour créer un logiciel fonctionnel et sécurisé sans budget, nous allons associer deux outils complémentaires. Le code de l'interface est public et gratuit, tandis que les données des usagers sont cryptées et confinées en Europe.",
+                desc: "Pour déployer une application web au sein d'une collectivité sans budget d'infrastructure lourd, l'architecture recommandée sépare l'interface publique de la base de données sécurisée.",
                 frontend: {
-                    title: "🖥️ Front-end (GitHub Pages)",
-                    desc: "Héberge les fichiers HTML, CSS et JavaScript. C'est l'interface visuelle sur laquelle l'usager clique. L'hébergement est statique et entièrement gratuit."
+                    title: "🌐 Interface Utilisateur (Frontend)",
+                    tech: "HTML5 / CSS3 / JavaScript Vanille",
+                    host: "GitHub Pages (Gratuit)",
+                    desc: "Les fichiers statiques du site (pages, styles, scripts) sont hébergés gratuitement et distribués via un réseau CDN mondial rapide."
                 },
                 backend: {
-                    title: "🗄️ Back-end (Supabase)",
-                    desc: "Héberge la base de données relationnelle SQL. Elle stocke les signalements, les comptes usagers et applique les règles de sécurité. Les serveurs sont localisés à Francfort (Europe) pour le RGPD."
-                },
-                security: "<strong>Le Cadenas RLS (Row Level Security) :</strong> La connexion se fait par des appels d'API directs depuis le navigateur du citoyen vers Supabase, sécurisés par des politiques d'accès strictes."
+                    title: "🗄️ Base de Données & Sécurité (Backend)",
+                    tech: "Supabase (PostgreSQL + RLS)",
+                    host: "Serveur Francfort (Europe)",
+                    desc: "Les données des usagers et les réponses aux sondages sont stockées sur un serveur PostgreSQL situé en Allemagne pour respecter 100% le RGPD."
+                }
             },
             {
-                title: "Tuto 1 : Interface Web sur GitHub Pages",
+                title: "Tuto 1 : Hébergement Gratuit sur GitHub Pages",
                 type: "tuto-step",
                 stepNum: "1",
-                goal: "Mettre son premier site en ligne gratuitement",
-                steps: [
-                    "Créez un compte gratuit sur <strong>GitHub.com</strong>.",
-                    "Créez un nouveau dépôt public (Repository) nommé <code>signalement-mairie</code>.",
-                    "Créez un fichier nommé obligatoirement <code>index.html</code> et collez-y le code HTML minimal fourni ci-dessous.",
-                    "Allez dans l'onglet <strong>Settings</strong> (Paramètres) de votre dépôt ➔ menu <strong>Pages</strong> à gauche.",
-                    "Sous 'Build and deployment', sélectionnez la branche <code>main</code> (ou <code>master</code>) et le dossier <code>/root</code>, puis cliquez sur <strong>Save</strong>.",
-                    "Attendez 1 minute : votre site est accessible en HTTPS à l'adresse <code>https://votre-pseudo.github.io/signalement-mairie/</code> !"
-                ],
-                code: "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Signalement Mairie</title>\n    <style>\n        body { font-family: sans-serif; padding: 2rem; background: #f3f6fc; }\n        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }\n    </style>\n</head>\n<body>\n    <div class=\"card\">\n        <h1>Signaler une anomalie dans la commune</h1>\n        <p>Ce portail permet de remonter des dysfonctionnements techniques aux agents municipaux.</p>\n    </div>\n</body>\n</html>"
+                titleStep: "Publier son site en 3 clics sur GitHub Pages",
+                desc: "GitHub Pages permet d'héberger gratuitement n'importe quel site web statique sous une adresse sécurisée HTTPS.",
+                code: `<!-- Structure minimale d'un fichier index.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Application Mairie</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Bienvenue sur le Portail Municipal</h1>
+    <script src="app.js"></script>
+</body>
+</html>`,
+                instructions: [
+                    "Créez un compte gratuit sur <strong>GitHub.com</strong> et créez un nouveau dépôt public (ex: <code>mairie-app</code>).",
+                    "Déposez vos fichiers <code>index.html</code>, <code>style.css</code> et <code>app.js</code> sur le dépôt.",
+                    "Allez dans <em>Settings ➔ Pages</em>, choisissez la branche <code>main</code> et validez. Votre site est en ligne sous l'adresse <code>https://votre-compte.github.io/mairie-app/</code>."
+                ]
             },
             {
-                title: "Tuto 2 : Base Supabase en Europe (RGPD)",
+                title: "Tuto 2 : Base de Données Supabase (Francfort)",
                 type: "tuto-step",
                 stepNum: "2",
-                goal: "Créer une base de données SQL hébergée en Europe",
-                steps: [
-                    "Créez un compte gratuit sur <strong>Supabase.com</strong>.",
-                    "Cliquez sur <strong>New Project</strong>. Choisissez un nom (ex: <code>BDD Mairie</code>) et définissez un mot de passe sécurisé pour la base de données.",
-                    "IMPORTANT : Dans le champ <strong>Region</strong>, sélectionnez impérativement <strong>Europe (Frankfurt)</strong>. Cela garantit que les données des usagers restent protégées par le RGPD et ne traversent pas l'Atlantique.",
-                    "Allez dans l'onglet <strong>Table Editor</strong> (icône de tableau) ➔ cliquez sur <strong>Create a new table</strong>.",
-                    "Nommez la table <code>incidents</code>. Ajoutez les colonnes : <code>adresse</code> (type text), <code>nature</code> (type text), et <code>urgence</code> (type text). Décochez 'Is Nullable' si la colonne est obligatoire.",
-                    "Cliquez sur <strong>Save</strong> pour générer votre base de données SQL en ligne."
-                ],
-                code: "// Exemple de connexion JS à intégrer dans votre index.html\nimport { createClient } from 'https://esm.sh/@supabase/supabase-js@2'\n\nconst supabaseUrl = 'https://votre-id-projet.supabase.co'\nconst supabaseKey = 'votre-cle-publique-api-anon'\nconst supabase = createClient(supabaseUrl, supabaseKey)\n\n// Envoyer un signalement depuis l'interface vers la BDD\nconst { data, error } = await supabase\n  .from('incidents')\n  .insert([\n    { adresse: '12 rue des Fleurs', nature: 'Nid-de-poule', urgence: 'Urgent' }\n  ])"
+                titleStep: "Connecter son application à une base Supabase",
+                desc: "Supabase est l'alternative open-source souveraine à Firebase. Créez votre projet en choisissant le centre de données de <strong>Francfort (EU-Central-1)</strong>.",
+                code: `// Exemple de connexion JS à intégrer dans votre index.html
+const supabaseUrl = 'https://votre-projet.supabase.co';
+const supabaseKey = 'votre-cle-anon-publique';
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+// Enregistrer une réponse d'usager dans la BDD
+async function enregistrerVote(questionId, reponseTexte) {
+    const { data, error } = await supabaseClient
+        .from('votes')
+        .insert([
+            { poll_id: questionId, reponse: reponseTexte }
+        ]);
+}`,
+                instructions: [
+                    "Connectez-vous sur <strong>Supabase.com</strong> et créez un projet en sélectionnant la région <strong>Europe (Francfort)</strong>.",
+                    "Allez dans l'Éditeur SQL (<em>SQL Editor</em>) et exécutez le script d'initialisation des tables <code>sessions</code>, <code>votes</code> et <code>presences</code>.",
+                    "Copiez votre clef API publique (<code>anon key</code>) dans votre code Javascript pour activer le temps réel."
+                ]
             },
             {
-                title: "Tuto 3 : Sécurisation Absolue par RLS",
+                title: "Tuto 3 : Sécuriser la BDD avec Row Level Security (RLS)",
                 type: "tuto-step",
                 stepNum: "3",
-                goal: "Verrouiller les accès en écriture et en lecture",
-                steps: [
-                    "Par défaut, n'importe qui accédant à votre site peut lire ou altérer toute votre base de données Supabase car les clés sont stockées dans le code JavaScript du navigateur.",
-                    "Pour éviter cela, activez le **Row Level Security (RLS)** : allez dans l'onglet <strong>Authentication</strong> ou <strong>Database</strong> ➔ menu <strong>Policies</strong>.",
-                    "Cliquez sur **Enable RLS** à côté de votre table <code>incidents</code>.",
-                    "Créez une nouvelle politique (Policy) d'autorisation d'écriture : autorisez l'action <code>INSERT</code> de manière publique pour que tous les citoyens puissent envoyer un signalement.",
-                    "Créez une seconde politique pour l'action <code>SELECT</code> (lecture) : restreignez-la uniquement aux utilisateurs authentifiés (les agents de la mairie ayant un compte agent)."
-                ],
-                code: "-- Requête SQL de sécurité RLS exécutée par Supabase\n-- 1. Autoriser le dépôt de signalements par tout le monde\nCREATE POLICY \"Dépôt public\" \nON public.incidents \nFOR INSERT \nTO public \nWITH CHECK (true);\n\n-- 2. Restreindre la consultation uniquement aux agents connectés\nCREATE POLICY \"Lecture réservée aux agents\" \nON public.incidents \nFOR SELECT \nTO authenticated \nUSING (true);"
+                titleStep: "Verrouiller les accès avec la sécurité au niveau des lignes (RLS)",
+                desc: "Par défaut, une base de données web est vulnérable aux injections et modifiations non autorisées. La fonctionnalité **Row Level Security (RLS)** de PostgreSQL garantit la protection stricte.",
+                code: `-- Requête SQL de sécurité RLS exécutée par Supabase
+ALTER TABLE votes ENABLE ROW LEVEL SECURITY;
+
+-- Autoriser tout le monde à INSÉRER un vote (Stagiaires / Usagers)
+CREATE POLICY "Insertion publique des votes" ON votes 
+FOR INSERT WITH CHECK (true);
+
+-- Autoriser uniquement les administrateurs connectés à LIRE et SUPPRIMER
+CREATE POLICY "Lecture réservée aux administrateurs" ON votes 
+FOR SELECT USING (auth.role() = 'authenticated');`,
+                instructions: [
+                    "Activez le commutateur <strong>Enable RLS</strong> sur chaque table de votre base de données Supabase.",
+                    "Définissez une politique <code>INSERT</code> autorisant les utilisateurs anonymes à soumettre des données.",
+                    "Restreignez les requêtes <code>SELECT</code> et <code>DELETE</code> aux seuls comptes administrateurs identifiés via <code>auth.role()</code>."
+                ]
             }
         ]
     },
     {
         id: "guide-dsi-ultime",
-        category: "reg",
-        title: "11. Stratégie & Déploiement",
-        icon: "🧭",
-        desc: "L'arbre décisionnel d'accès aux LLM, la matrice de valorisation IFSE et le fonctionnement de l'Agent Territorial Parfait.",
+        category: "dsi",
+        title: "10. Stratégie & Déploiement",
+        icon: "🚀",
+        desc: "Accompagner la gouvernance numérique, valoriser les compétences des agents et structurer la feuille de route DSI.",
         slides: [
             {
-                title: "La Loi d'Amara & Tempo de l'IA",
+                title: "La Loi d'Amara & L'Adoption Territoriale",
                 type: "amara-law",
-                quote: "« Nous avons tendance à surestimer les effets d'une technologie à court terme et à les sous-estimer à long terme. »",
-                author: "Roy Amara (Futuriste)",
-                intro: "Comprendre le tempo d'adoption de l'IA est crucial pour planifier les investissements et éviter deux erreurs stratégiques : la panique court-termiste et l'inaction long-termiste.",
+                desc: "La loi de Roy Amara énonce que nous avons tendance à **surestimer l'effet d'une technologie à court terme** et à **sous-estimer son effet à long terme**.",
                 shortTerm: {
-                    title: "💥 Le Court Terme (1 à 2 ans) : Surestimation",
-                    desc: "La tendance à vouloir tout réformer en 6 mois, à paniquer face aux bouleversements annoncés, puis à être déçu par les premières limites ou hallucinations de l'IA. C'est la phase de déception où l'on pense que 'le soufflé retombe'."
+                    title: "🔴 Court Terme (0 - 18 mois)",
+                    desc: "Superficialité et surestimation. On imagine que l'IA va remplacer les agents dès demain. Déceptions face aux erreurs et hésitations sur le RGPD."
                 },
                 longTerm: {
-                    title: "📈 Le Long Terme (5 à 10 ans) : Sous-estimation",
-                    desc: "L'IA s'intègre discrètement mais profondément dans nos outils. Les bases posées (charte, sécurité, formation) portent leurs fruits et modifient de manière irréversible le fonctionnement de toute l'administration territoriale."
-                },
-                pedagogy: "<strong>Implication pour la DSI et les Cadres :</strong> Il est inutile d'essayer de tout bouleverser en 6 mois. En revanche, <strong>il est capital de poser les bases saines (charte, règles de sécurité) dès maintenant</strong>, car l'impact cumulé sur 5 à 10 ans sera colossal."
+                    title: "🟢 Long Terme (3 - 5 ans)",
+                    desc: "Transformation profonde sous-estimée. L'IA devient une infrastructure invisible intégrée dans tous les logiciels administratifs (GRC, RH, Compta)."
+                }
             },
             {
-                title: "L'Arbre Décisionnel des Droits & DSI",
+                title: "L'Arbre Décisionnel du DSI / Directeur Général",
                 type: "dsi-decision-tree",
-                desc: "Pour savoir où vous vous situez dans votre collectivité et quelles démarches entreprendre, suivez cet arbre décisionnel interactif.",
-                intro: "Cliquez sur les choix ci-dessous pour identifier les actions réglementaires et organisationnelles adaptées à votre situation administrative."
+                desc: "Avant d'autoriser un outil d'IA au sein de la collectivité, appliquez ce filtre décisionnel en 4 étapes :",
+                nodes: [
+                    { step: "1", title: "Nature de la Donnée", desc: "Le texte contient-il des données à caractère personnel (RGPD) ou des secrets administratifs ?" },
+                    { step: "2", title: "Option Anonymisation", desc: "SI OUI ➔ Passage obligatoire dans le module d'anonymisation local avant envoi." },
+                    { step: "3", title: "Choix de l'Hébergement", desc: "SI NON ➔ Préférer un modèle souverain européen (ex: Mistral AI) ou un serveur privé local." },
+                    { step: "4", title: "Validation Humaine", desc: "Validation obligatoire de tout livrable par un agent titulaire avant signature officielle." }
+                ]
             },
             {
-                title: "La Matrice IFSE & Productivité",
+                title: "Matrice de Compétences IA & Valorisation IFSE / NBI",
                 type: "dsi-ifse-matrix",
-                desc: "L'utilisation professionnelle de l'IA doit être valorisée à la hauteur des gains de productivité et de la responsabilité réglementaire (RGPD/sécurité) portée par l'agent.",
-                intro: "Ce tableau de correspondance croise le niveau de compétence, le gain de temps moyen estimé et l'impact potentiel sur le régime indemnitaire (IFSE) ou la NBI."
+                desc: "Pour encourager la montée en compétences des fonctionnaires territoriaux sans créer de blocages RH, intégrez la maîtrise des outils d'IA dans les fiches de poste et la valorisation indemnitaire (IFSE) :",
+                levels: [
+                    { level: "Niveau 1 : Agent Sensibilisé", skills: "Compréhension de la charte IA municipale, utilisation des règles de sécurité RGPD et correction des hallucinations basiques.", ifseBonus: "Validation des compétences numériques de base" },
+                    { level: "Niveau 2 : Agent Praticien (Prompt Master)", skills: "Maîtrise de la méthode M.A.I.R.E., création de prompts de synthèse complexes, anonymisation autonome des dossiers.", ifseBonus: "Revalorisation du coefficient de technicité IFSE" },
+                    { level: "Niveau 3 : Agent Référent / Concevant", skills: "Création d'agents autonomes sur-mesure (ex: via Antigravity), formation des collègues du service, audit des flux de données.", ifseBonus: "Attribution de la NBI (Nouvelle Bonification Indiciaire) Référent Numérique" }
+                ]
             },
             {
-                title: "Le Pipeline de l'Agent Parfait (Les 3 Dossiers)",
-                type: "dsi-agent-ultime",
-                desc: "La solution technique ultime pour allier la puissance sémantique de Gemini, l'hébergement souverain en Europe et la conformité RGPD absolue.",
-                intro: "Voici comment fonctionne le système de pseudonymisation locale par dossier, avec boucle agentique sécurisée sur serveur SecNumCloud."
+                title: "L'Architecture Souveraine \"Zero-Clic\" (SecNumCloud + Proxy Mistral)",
+                type: "pipeline-secnumcloud",
+                desc: "La solution idéale combine l'isolation par Machine Virtuelle (VM), un Proxy Mistral sur serveur SecNumCloud (ANSSI) avec anonymisation RegEx/JSON automatique, et l'appel sécurisé aux modèles Cloud.",
+                agentView: {
+                    title: "👩‍💼 Pour l'Agent Public (Simplicité 100% Automatique)",
+                    desc: "L'agent tape son prompt et glisse ses fichiers/photos directement dans son espace. L'anonymisation, le chiffrement éphémère et les contrôles juridiques (RGPD / Cloud Act) s'exécutent de façon transparente en arrière-plan sans aucun effort manuel."
+                },
+                dsiView: {
+                    title: "💻 Pour le DSI / RSI (Architecture Technique Détaillée)",
+                    steps: [
+                        { step: "1. VM Confinée", label: "Isolation Poste Agent", desc: "L'agent travaille dans une VM étanche (VirtualBox) qui empêche toute fuite de données ou injection de code malveillant vers le réseau physique de la mairie." },
+                        { step: "2. Proxy SecNumCloud", label: "Mistral Souverain (ANSSI)", desc: "Le prompt et les documents sont envoyés à un modèle Mistral hébergé sur serveur certifié SecNumCloud en France (immunité absolue au Cloud Act)." },
+                        { step: "3. Substitution Vraisemblable", label: "Mistral + Dictionnaire JSON", desc: "Plutôt que des balises brutes [NOM_1], Mistral remplace les données réelles (ex: Maxime JACQUIOT) par des identités fictives plausibles (ex: Henri DUPONT) via une base de données de substitution. Le prompt reste 100% naturel pour le LLM tout en préservant le RGPD." },
+                        { step: "4. Appel API Externe", label: "Modèle Cloud Généraliste", desc: "Le prompt nettoyé et anonymisé est envoyé via API sécurisée aux géants (Gemini, Claude, ChatGPT) pour exécuter les calculs complexes." },
+                        { step: "5. Dé-pseudonymisation", label: "Restitution 0-Clic", desc: "Le résultat renvoyé par l'IA externe est ré-associé automatiquement aux vrais noms grâce à la clé JSON stockée en mémoire volatile. L'agent reçoit son document complet." }
+                    ]
+                }
+            },
+            {
+                title: "Calculateur de Coûts & Financement DSI (TCO 3 Ans)",
+                type: "pipeline-cost-calculator",
+                desc: "Estimez le budget annuel global, le dimensionnement des modèles Mistral souverains et la gestion des quotas de crédits par catégorie d'agents (Catégorie A, B, C).",
+                infraTiers: [
+                    { id: "tier-small", name: "Cluster S : Mistral NeMo 12B (200€/mois)", model: "Mistral NeMo 12B", gpu: "1x RTX 6000 Ada (48GB VRAM)", baseServerCostYear: 2400, desc: "Adapté pour petites structures (5-50 agents). Traitement de textes simples." },
+                    { id: "tier-med", name: "Cluster M : Mistral Small 3 24B (600€/mois)", model: "Mistral Small 3 24B", gpu: "1x Nvidia A100 (80GB VRAM)", baseServerCostYear: 7200, desc: "Standard moyen (50-300 agents). Pseudonymisation sémantique rapide." },
+                    { id: "tier-large", name: "Cluster L (Recommandé) : Mistral Large 2 123B (1 500€/mois)", model: "Mistral Large 2 123B", gpu: "Cluster Dedié 2x Nvidia H100 (160GB VRAM)", baseServerCostYear: 18000, desc: "Puissance maximale pour Métropoles/Départements. Précision parfaite sur documents volumineux." }
+                ],
+                roleQuotas: [
+                    { category: "Catégorie C (Agents Techniques & Terrain)", reqPerDay: 10, label: "10 requêtes / jour", usage: "Dictée vocale, signalements voirie, photos encombrants." },
+                    { category: "Catégorie B (Agents Administratifs & Rédacteurs)", reqPerDay: 35, label: "35 requêtes / jour", usage: "Rédaction de courriers, comptes-rendus, synthèses usagers." },
+                    { category: "Catégorie A / DSI (Cadres & Directeurs)", reqPerDay: 100, label: "100 requêtes / jour", usage: "Rédaction de délibérations, marchés publics, audit réglementaire." }
+                ]
             }
         ]
     },
     {
         id: "eval-stage-bilan",
-        category: "prompt",
-        title: "12. Évaluation Stage",
-        icon: "📝",
-        desc: "Mise en situation d'évaluation initiale (début de stage) et finale (fin de stage) à faire sur papier.",
+        category: "eval",
+        title: "11. Évaluation Stage",
+        icon: "🎓",
+        desc: "Mesurer la progression des connaissances théoriques et pratiques acquises durant la formation.",
         slides: [
             {
-                title: "Évaluation Individuelle : Début & Fin de Stage",
+                title: "Test d'Évaluation de Fin de Stage (Corrigé)",
                 type: "eval-stage",
-                desc: "Ce test individuel permet de mesurer et comparer l'évolution des compétences de rédaction de prompts et de conformité aux règles de sécurité chez le stagiaire.",
-                scenario: "Vous êtes agent administratif au service de l'état civil. Un citoyen vous envoie un mail confus (nom de famille : M. Charles Dufour, mail: charles.dufour@example.com, tél: 06 99 88 77 66) demandant comment obtenir un extrait d'acte de naissance pour son fils né à l'étranger. Rédigez un prompt papier pour demander à un LLM de concevoir un brouillon de réponse officiel basé sur les lois consulaires françaises.",
-                dos: [
-                    "Définir clairement son rôle d'agent [M] (ex: 'Je suis secrétaire de mairie en charge de l'état civil')",
-                    "Attribuer un rôle expert à l'IA [A] (ex: 'Tu es un juriste spécialisé en droit civil français')",
-                    "Décrire explicitement la tâche [I] (ex: 'Rédige une note d'information par courriel')",
-                    "Préciser les ressources de loi à utiliser [R] (ex: 'Appuie-toi sur le Code Civil')",
-                    "Exiger un format court, poli et neutre [E] (ex: '3 paragraphes maximum, ton formel')",
-                    "Anonymiser impérativement les données nominatives avant toute saisie : remplacer 'Charles Dufour' par <code>[NOM_1]</code>, le mail par <code>[EMAIL_1]</code>, le numéro par <code>[TELEPHONE_1]</code>"
-                ],
-                donts: [
-                    "Saisir le nom de famille 'Charles Dufour' ou le mail de l'usager brut dans le prompt (Violation majeure du RGPD / Cloud Act !)",
-                    "Donner des instructions floues sans contrainte de format (ex: 'réponds à ce mail')",
-                    "Laisser l'IA agir en autonomie sans validation humaine (l'IA ne doit proposer qu'un brouillon)"
-                ],
-                modelAnswer: "[MOI] : Je suis agent administratif en charge du service de l'état civil municipal.\n\n[AGENT] : Agis en tant qu'expert juridique de l'état civil des Français à l'étranger.\n\n[INFORMATION] : Conçois un brouillon de réponse par mail destiné à l'administré [NOM_1] (contact: [EMAIL_1]) qui souhaite obtenir l'acte de naissance de son fils né hors de France.\n\n[RESSOURCES] : Base-toi uniquement sur les articles 47 et 48 du Code Civil français.\n\n[EXIGENCE] : Rédige une réponse claire de 3 paragraphes maximum. Explique de manière neutre et polie la procédure et les pièces justificatives à fournir. Précise que la demande doit être adressée directement au Service central d'état civil de Nantes (ministère des Affaires étrangères)."
+                desc: "Évaluez votre niveau de maîtrise sur les 10 notions clés de la formation IA Territoriale.",
+                questions: [
+                    { q: "1. Qu'est-ce qu'un Token en IA ?", choices: ["Une pièce de monnaie virtuelle", "Un morceau de mot numérisé", "Un virus informatique"], correct: 1, exp: "Le token est la plus petite unité de texte numérisée par un LLM." },
+                    { q: "2. Quelle loi interdit le transfert de données non anonymisées aux USA ?", choices: ["Le Cloud Act", "La Loi d'Amara", "Le Code Général de la Fonction Publique"], correct: 0, exp: "Le Cloud Act autorise l'accès du gouvernement américain aux serveurs des Big Tech US." },
+                    { q: "3. Que signifie l'acronyme M.A.I.R.E. ?", choices: ["Mairie, Administration, Informatique, Réseau, État", "Moi, Agent, Information, Ressources, Exigence", "Modèle, Algorithme, Interface, Règle, Évaluation"], correct: 1, exp: "M.A.I.R.E. est la méthode universelle de prompt pour la fonction publique." }
+                ]
             }
         ]
     },
     {
         id: "exercices-ateliers",
-        category: "prompt",
-        title: "13. Exercices & Ateliers",
-        icon: "🎯",
-        desc: "Une banque complète de plus de 60 exercices pratiques et théoriques, individuels et collectifs, sur PC ou sur papier.",
+        category: "eval",
+        title: "12. Exercices & Ateliers",
+        icon: "🏋️",
+        desc: "Une banque complète de 60 exercices pratiques et théoriques, individuels et collectifs, sur PC ou sur papier.",
         slides: [
             {
-                title: "Le Catalogue des Ateliers & Exercices",
+                title: "Tableau de Bord des 60 Exercices Pratiques",
                 type: "exercises-dashboard",
                 intro: "Sélectionnez, filtrez et préparez vos ateliers de formation. Ce module interactif regroupe l'ensemble des exercices pratiques sur PC ou sur papier avec leurs corrections détaillées."
             }
@@ -1016,174 +1011,152 @@ const INTERACTIVE_QUESTIONS = [
         themeId: "technique-llm",
         id: "q2",
         type: "quiz",
-        question: "Comment l'IA comprend-elle le sens des mots et leurs relations ?",
+        question: "Pourquoi les sigles administratifs (P.L.U., R.G.P.D., D.G.T.) coûtent-ils plus cher en tokens ?",
         options: {
-            A: "Elle applique des dictionnaires de synonymes codés par des linguistes.",
-            B: "Elle projette les mots sous forme de vecteurs géométriques (Embeddings) où les termes de sens proche sont géographiquement regroupés.",
-            C: "Elle effectue une recherche en temps réel sur Wikipédia pour chaque mot.",
-            D: "Elle ne s'intéresse qu'à l'ordre alphabétique des lettres."
+            A: "Parce que l'IA déteste l'administration",
+            B: "Parce que les mots rares ou scindés par des points forcent le tokenizer à séparer chaque lettre",
+            C: "Parce que la loi européenne l'interdit",
+            D: "Parce qu'ils sont traduits en anglais"
         },
         correct: "B",
-        explanation: "Les embeddings sémantiques permettent à l'IA d'effectuer des calculs mathématiques de proximité sur les mots (ex: Maire - Homme + Femme = Mairesse)."
-    },
-    {
-        themeId: "prompt-homme",
-        id: "q3",
-        type: "quiz",
-        question: "Dans le parallèle des contextes, par quoi remplace-t-on le contexte sensoriel (les yeux, les oreilles, l'urgence de la pièce) chez l'IA ?",
-        options: {
-            A: "Par de la puissance de calcul brute sur des puces graphiques (GPU).",
-            B: "Par la description textuelle méticuleuse de la situation dans le prompt utilisateur.",
-            C: "Par l'installation d'une webcam connectée aux serveurs d'IA.",
-            D: "Par les consignes système pré-configurées (System Prompt)."
-        },
-        correct: "B",
-        explanation: "L'IA est enfermée dans un serveur aveugle. Le prompt utilisateur est son unique pont sensoriel avec la réalité de votre problème."
-    },
-    {
-        themeId: "methode-maire",
-        id: "q4",
-        type: "quiz",
-        question: "Dans la méthode M.A.I.R.E. de rédaction d'invites, à quoi correspond la lettre R ?",
-        options: {
-            A: "Le Rôle assigné à l'IA (le persona expert).",
-            B: "Les Règles de sécurité et de conformité RGPD.",
-            C: "Les Ressources fournies comme ancrage de données (textes, règlements, chiffres bruts).",
-            D: "Le Résultat attendu (format du livrable, ton, longueur)."
-        },
-        correct: "C",
-        explanation: "Les Ressources sont les données d'ancrage que vous fournissez pour empêcher l'IA d'halluciner et lui donner la matière brute à travailler."
-    },
-    {
-        themeId: "securite-reglementation",
-        id: "q5",
-        type: "quiz",
-        question: "Quel règlement européen adopté en 2024 classe les applications d'IA selon leur niveau de risque (Inacceptable, Haut, Limité, Minimal) ?",
-        options: {
-            A: "Le Cloud Act américain",
-            B: "Le RGPD (Règlement Général sur la Protection des Données)",
-            C: "L'AI Act (Règlement sur l'Intelligence Artificielle)",
-            D: "La Charte nationale de déontologie des agents territoriaux"
-        },
-        correct: "C",
-        explanation: "L'AI Act européen régule spécifiquement les déploiements d'IA en fonction de leurs risques démocratiques et discriminatoires."
+        explanation: "Les mots rares et les abréviations avec des points forcés ne sont pas dans le dictionnaire standard et sont hachés lettre par lettre par le tokenizer."
     },
     {
         themeId: "hallucinations-ia",
-        id: "q6",
+        id: "q3",
         type: "quiz",
-        question: "Pourquoi les IA génératives (LLM) souffrent-elles 'd'hallucinations sémantiques' (invention de faits) ?",
+        question: "Quelle est la cause scientifique principale d'une hallucination dans un grand modèle de langage (LLM) ?",
         options: {
-            A: "C'est une surchauffe passagère de leurs puces Nvidia.",
-            B: "Ce sont des modèles statistiques probabilistes entraînés à prédire le mot suivant le plus fluide, pas à vérifier des faits réels.",
-            C: "Elles ont été programmées délibérément pour mentir aux usagers.",
-            D: "Elles manquent de mémoire vive (RAM) au moment du calcul."
+            A: "Un virus informatique dans le serveur",
+            B: "La nature probabiliste du modèle qui prédit le mot suivant le plus fluide sans consulter de base de vérité historique",
+            C: "Une coupure d'électricité temporaire chez l'hébergeur",
+            D: "Une erreur de frappe de l'utilisateur dans son prompt"
         },
         correct: "B",
-        explanation: "L'IA cherche la fluidité de parole et la probabilité d'association des mots. Si l'information est rare, elle comble le vide de façon plausible."
+        explanation: "Un LLM est un réseau probabiliste qui choisit les mots les plus probables pour faire une phrase fluide, sans vérifier les faits réels à moins d'être ancré (RAG)."
+    },
+    {
+        themeId: "prompt-homme",
+        id: "q4",
+        type: "quiz",
+        question: "Pourquoi l'IA est-elle incapable de réagir spontanément à une alarme incendie réelle dans votre mairie ?",
+        options: {
+            A: "Parce qu'elle n'aime pas le bruit des sirènes",
+            B: "Parce qu'elle est aveugle et n'a pas de capteurs biologiques : sans prompt de contexte rédigé par vous, elle ne sait rien de votre situation",
+            C: "Parce qu'elle n'a pas payé son abonnement",
+            D: "Parce qu'elle attend les ordres du Maire"
+        },
+        correct: "B",
+        explanation: "L'IA n'a pas de corps ni de sens biologiques. Sans description textuelle explicite dans le prompt, elle est dans le noir absolu."
+    },
+    {
+        themeId: "methode-maire",
+        id: "q5",
+        type: "quiz",
+        question: "Dans la méthode M.A.I.R.E., à quoi correspond la lettre 'R' ?",
+        options: {
+            A: "Règlementation",
+            B: "Ressources (fournir les textes, délibérations et données exactes pour limiter les hallucinations)",
+            C: "Réponse automatique",
+            D: "Récompense"
+        },
+        correct: "B",
+        explanation: "Le R signifie 'Ressources'. C'est là que l'agent transmet ses documents de travail (ancrage)."
+    },
+    {
+        themeId: "securite-reglementation",
+        id: "q6",
+        type: "quiz",
+        question: "Quel texte de loi américain autorise le gouvernement US à réclamer l'accès aux données hébergées chez des géants Tech US ?",
+        options: {
+            A: "Le RGPD",
+            B: "Le Cloud Act",
+            C: "L'AI Act",
+            D: "Le patriotique Code Général"
+        },
+        correct: "B",
+        explanation: "Le Cloud Act américain permet aux autorités US de réclamer l'accès aux serveurs gérés par des entreprises américaines."
     },
     {
         themeId: "guerre-ia",
         id: "q7",
-        type: "sondage",
-        question: "À votre avis, quel est le principal frein pour le déploiement d'une IA locale souveraine sur serveur interne dans votre mairie ?",
-        options: {
-            A: "Le coût élevé d'investissement initial de matériel GPU.",
-            B: "La complexité technique d'administration système en interne.",
-            C: "L'absence d'accès internet qui limite les recherches en direct.",
-            D: "L'obsolescence rapide des modèles locaux face aux géants américains."
-        },
-        correct: null,
-        explanation: "C'est un sondage d'opinion : chaque réponse correspond à une contrainte réelle d'arbitrage pour les services de la commune."
-    },
-    {
-        themeId: "exercices-metiers",
-        id: "q8",
         type: "quiz",
-        question: "Que devez-vous obligatoirement faire avant d'envoyer un signalement d'usager à un LLM hébergé sur le Cloud américain ?",
+        question: "Pourquoi l'utilisation de processeurs TPU (Google) ou LPU (Groq) est-elle avantageuse face aux GPU Nvidia ?",
         options: {
-            A: "Demander une autorisation d'écriture écrite à votre chef de service.",
-            B: "Anonymiser ou pseudonymiser en local (noms, emails, téléphones) les données nominatives.",
-            C: "Rédiger le prompt uniquement en anglais pour ne pas irriter le système.",
-            D: "Ne saisir que les signalements survenant après 17 heures."
+            A: "Ils sont fabriqués en bois",
+            B: "Ils sont conçus sur-mesure pour le calcul de texte IA, offrant une vitesse supérieure et une empreinte énergétique plus faible",
+            C: "Ils ne nécessitent pas de connexion Internet",
+            D: "Ils sont gratuits pour les collectivités"
         },
         correct: "B",
-        explanation: "L'article 4 de la Charte Municipale impose le recours à un anonymiseur local pour éviter de violer le RGPD et le Cloud Act."
+        explanation: "Les TPU et LPU sont des puces spécialisées qui réduisent la consommation électrique et accélèrent l'inférence des modèles."
     },
     {
         themeId: "agentique-territorial",
-        id: "q9",
+        id: "q8",
         type: "quiz",
-        question: "Quelle est la principale différence opérationnelle entre un chatbot d'IA classique et un 'Agent Autonome' ?",
+        question: "Quelle est la différence fondamentale entre un Chatbot et un Agent IA autonome (ex: Antigravity) ?",
         options: {
-            A: "L'agent autonome est capable de formuler ses propres pensées et de déclencher des outils tiers (lecture, écriture, commandes) en boucle fermée.",
-            B: "L'agent autonome est plus poli et utilise moins de mots familiers.",
-            C: "L'agent autonome s'exécute uniquement sur des téléphones.",
-            D: "Le chatbot classique est plus intelligent."
+            A: "Le Chatbot est payant, l'Agent est gratuit",
+            B: "Le Chatbot réagit de manière linéaire sans tester, tandis que l'Agent exécute une boucle ReAct (Planifie, Agit avec des outils, Observe et Corrige ses bugs)",
+            C: "Le Chatbot parle français, l'Agent parle anglais",
+            D: "L'Agent nécessite un écran tactile"
         },
-        correct: "A",
-        explanation: "L'agent applique une boucle de raisonnement active (ReAct) pour planifier, exécuter et ajuster ses actions en fonction des résultats d'outils tiers."
+        correct: "B",
+        explanation: "Un Agent autonome dispose d'outils et fonctionne en boucle de raisonnement (ReAct) pour tester et corriger son travail."
     },
     {
         themeId: "tuto-technique",
-        id: "q10",
+        id: "q9",
         type: "quiz",
-        question: "Lors du paramétrage d'un projet Supabase pour une mairie, pourquoi est-il impératif de choisir la région 'Europe (Frankfurt)' ?",
+        question: "Dans l'architecture web souveraine présentée, pourquoi la base de données Supabase est-elle choisie en région Francfort ?",
         options: {
-            A: "Pour accélérer le temps de chargement du site internet de 5 secondes.",
-            B: "Pour garantir la conformité au RGPD en conservant les données des usagers sur le territoire européen (hors Cloud Act).",
-            C: "Car les serveurs situés aux États-Unis sont payants contrairement aux serveurs européens.",
-            D: "Pour éviter de devoir écrire des politiques de sécurité RLS."
+            A: "Parce qu'il y fait plus froid l'hiver",
+            B: "Pour garantir la localisation physique des données d'usagers au sein de l'Union Européenne en conformité stricte avec le RGPD",
+            C: "Parce que GitHub l'impose",
+            D: "Pour traduire le site en allemand"
         },
         correct: "B",
-        explanation: "Le stockage en Europe garantit le respect du RGPD et évite le transfert extraterritorial des données citoyennes sous la juridiction du Cloud Act."
+        explanation: "Héberger la BDD en région Europe (Francfort) garantit le respect des règles de souveraineté du RGPD."
     },
     {
         themeId: "guide-dsi-ultime",
-        id: "q_dsi",
+        id: "q10",
         type: "quiz",
-        question: "Dans le pipeline de l'Agent Parfait, pourquoi la pseudonymisation et la dé-pseudonymisation s'effectuent-elles exclusivement sur le PC local de l'agent ?",
+        question: "Que préconise la Loi d'Amara concernant l'adoption des technologies comme l'IA ?",
         options: {
-            A: "Pour s'assurer qu'aucune donnée identifiante (RGPD) ou confidentielle ne quitte le réseau local ou ne soit envoyée vers un cloud non souverain.",
-            B: "Parce que les serveurs SecNumCloud ne disposent pas d'assez d'espace de stockage temporaire.",
-            C: "Afin de réduire la consommation d'électricité des serveurs Gemini de Google.",
-            D: "Pour obliger l'agent à superviser manuellement la reconstruction grammaticale."
+            A: "Il faut interdire l'IA dans tous les services sous 3 mois",
+            B: "Nous surestimons l'effet de l'IA à court terme et sous-estimons son impact de transformation profonde à long terme",
+            C: "L'IA sera remplacée par le papier en 2030",
+            D: "Seuls les DSI doivent utiliser les ordinateurs"
         },
-        correct: "A",
-        explanation: "La pseudonymisation et la dé-pseudonymisation locales garantissent le respect du RGPD et du Cloud Act, car aucun élément d'identité réel ne sort sur le réseau."
+        correct: "B",
+        explanation: "La Loi d'Amara montre que les révolutions technologiques déçoivent d'abord à court terme avant d'impacter massivement à long terme."
     },
     {
         themeId: "eval-stage-bilan",
         id: "q11",
-        type: "sondage",
-        question: "À l'issue de ce parcours de formation, comment évaluez-vous votre niveau de confiance pour intégrer l'IA dans votre travail territorial ?",
+        type: "quiz",
+        question: "Quelle est la règle d'or concernant la responsabilité légale d'un écrit administratif rédigé avec l'aide d'une IA ?",
         options: {
-            A: "Prêt ! Je maîtrise la méthode M.A.I.R.E, la sécurité des données et l'anonymisation.",
-            B: "Intéressé, mais je souhaite faire d'autres tests encadrés par ma DSI.",
-            C: "Prudent, les enjeux juridiques et la sécurité agentique me font hésiter.",
-            D: "Non convaincu, je préfère conserver mes méthodes de travail traditionnelles."
+            A: "C'est l'éditeur de l'IA (OpenAI ou Google) qui est responsable légalement",
+            B: "La validation humaine ('Dernier Mot') est obligatoire : l'agent public titulaire est l'unique responsable légal des actes qu'il signe",
+            C: "Personne n'est responsable s'il y a une erreur",
+            D: "Le maire doit valider chaque courriel individuellement"
         },
-        correct: null,
-        explanation: "Ce sondage de fin de formation permet de mesurer l'acceptabilité technologique chez les agents formés."
+        correct: "B",
+        explanation: "La validation humaine est le principe cardinal de la fonction publique : l'agent conserve la signature et la responsabilité juridique."
     },
     {
         themeId: "exercices-ateliers",
-        id: "q_ateliers",
-        type: "quiz",
-        question: "Quel est l'intérêt principal de s'exercer en équipe (ateliers collectifs) sur des cas d'usage réels de sa collectivité ?",
+        id: "q12",
+        type: "sondage",
+        question: "À la fin de cette formation, quel est votre sentiment concernant l'intégration de l'IA dans votre travail quotidien ?",
         options: {
-            A: "Rédiger des prompts plus rapidement en divisant le travail entre collègues.",
-            B: "Confronter les approches de prompt, repérer collectivement les risques de fuite de données et valider ensemble le contrôle humain.",
-            C: "Installer plus de logiciels non autorisés sur les postes de travail.",
-            D: "Éviter d'avoir à relire les documents générés par l'IA."
-        },
-        correct: "B",
-        explanation: "Les ateliers collectifs permettent d'échanger sur les meilleures formulations de prompts et de standardiser des pratiques sécurisées (RGPD, contrôle humain) partagées au sein du service."
+            A: "🚀 Confiant et prêt à expérimenter avec la méthode M.A.I.R.E. et les règles de sécurité",
+            B: "🧐 Intéressé mais vigilant sur le RGPD et la vérification des hallucinations",
+            C: "🛠️ En attente de la mise à disposition d'outils souverains par ma DSI",
+            D: "🎓 Envie de suivre des ateliers pratiques d'approfondissement"
+        }
     }
 ];
-
-// Export logic for Node environment if applicable
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { THEMES, INTERACTIVE_QUESTIONS };
-}
-
