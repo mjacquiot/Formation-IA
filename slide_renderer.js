@@ -51,6 +51,110 @@ function getSlideHTML(slide, theme) {
                         ${slide.pedagogy || ''}
                     </div>
                 `;
+            } else if (slide.type === 'legal-charter-risks') {
+                const sc = slide.charterComparison || {};
+                html += `
+                    <p style="margin-bottom:1.5rem; font-size:1.05rem; line-height:1.6;">${slide.intro || ''}</p>
+                    
+                    <!-- Comparative Cards: Without vs With Charter -->
+                    <div class="legal-charter-grid">
+                        <div class="legal-card sans-charte">
+                            <h3 class="legal-card-title danger">${(sc.sansCharte && sc.sansCharte.title) || ''}</h3>
+                            <div class="legal-card-subtitle danger">${(sc.sansCharte && sc.sansCharte.subtitle) || ''}</div>
+                            <div class="legal-card-section">${(sc.sansCharte && sc.sansCharte.agent) || ''}</div>
+                            <div class="legal-card-section footer">${(sc.sansCharte && sc.sansCharte.collectivite) || ''}</div>
+                        </div>
+
+                        <div class="legal-card avec-charte">
+                            <h3 class="legal-card-title success">${(sc.avecCharte && sc.avecCharte.title) || ''}</h3>
+                            <div class="legal-card-subtitle success">${(sc.avecCharte && sc.avecCharte.subtitle) || ''}</div>
+                            <div class="legal-card-section">${(sc.avecCharte && sc.avecCharte.agent) || ''}</div>
+                            <div class="legal-card-section footer">${(sc.avecCharte && sc.avecCharte.collectivite) || ''}</div>
+                        </div>
+                    </div>
+
+                    <!-- Risk & Sanction Matrix -->
+                    <h3 class="matrix-section-title">⚖️ Échelle des Risques & Sanctions Juridiques</h3>
+                    <div class="risks-matrix-container">
+                        ${(slide.risksMatrix || []).map(r => `
+                            <div class="risk-matrix-card">
+                                <div class="risk-matrix-col-level">
+                                    <span class="risk-level-tag">${r.level}</span>
+                                    <div class="risk-law-container"><span class="risk-law-badge">${r.law}</span></div>
+                                </div>
+                                <div class="risk-matrix-col-desc">
+                                    <div class="risk-title">${r.title}</div>
+                                    <div class="risk-desc">${r.desc}</div>
+                                </div>
+                                <div class="risk-matrix-col-agent">
+                                    <div class="risk-col-label agent">👤 Sanctions Agent</div>
+                                    <div class="risk-col-text">${r.agentSanction}</div>
+                                </div>
+                                <div class="risk-matrix-col-coll">
+                                    <div class="risk-col-label coll">🏛️ Impact Collectivité</div>
+                                    <div class="risk-col-text">${r.collectiviteSanction}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${slide.pedagogy ? `<div class="maire-example-box" style="margin-top:1.25rem; border-left-color: var(--accent-green); background: rgba(16, 185, 129, 0.03);">${slide.pedagogy}</div>` : ''}
+                `;
+            } else if (slide.type === 'vram-hardware-singularity') {
+                const b = slide.basics || {};
+                const w = slide.whyNot10YearsAgo || {};
+                const s = slide.singularity || {};
+                html += `
+                    <p style="margin-bottom:1.5rem; font-size:1.05rem; line-height:1.6;">${slide.intro || ''}</p>
+                    
+                    <!-- Basics Bar -->
+                    <div style="background: rgba(139, 92, 246, 0.06); border: 1px solid rgba(139, 92, 246, 0.25); border-radius: 12px; padding: 1.1rem; margin-bottom: 1.5rem;">
+                        <h4 style="margin-top:0; color: var(--accent-purple); font-size: 1rem; margin-bottom: 0.75rem;">${b.title || ''}</h4>
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;">
+                            ${(b.items || []).map(item => `
+                                <div style="background: var(--bg-card, rgba(255,255,255,0.04)); padding: 0.65rem 0.85rem; border-radius: 8px; border: 1px solid var(--border-color, rgba(255,255,255,0.08));">
+                                    <div style="font-size:0.78rem; font-weight:700; color: var(--accent-sky);">${item.label}</div>
+                                    <div style="font-size:0.88rem; font-weight:600; color: var(--text-title);">${item.val}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Models & Costs Cards -->
+                    <div class="legal-charter-grid" style="margin-bottom: 1.5rem;">
+                        ${(slide.modelsComparison || []).map((m, idx) => `
+                            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-top: 4px solid ${idx === 0 ? 'var(--accent-blue)' : 'var(--accent-purple)'}; border-radius: 12px; padding: 1.25rem; box-shadow: var(--shadow-sm);">
+                                <h4 style="margin-top:0; font-size:1.05rem; color: var(--text-title); margin-bottom:0.5rem;">${m.title}</h4>
+                                <p style="font-size:0.83rem; color: var(--text-muted); margin-bottom:0.85rem;">${m.desc}</p>
+                                <div style="display:flex; flex-direction:column; gap:0.4rem; font-size:0.85rem; background: rgba(0,0,0,0.03); padding:0.75rem; border-radius:8px; border:1px solid rgba(0,0,0,0.05);">
+                                    <div><strong>💾 Poids du Modèle :</strong> ${m.vramWeights}</div>
+                                    <div><strong>⚡ Mémoire Contexte (1M tokens) :</strong> ${m.vramContext}</div>
+                                    <div style="padding-top:0.4rem; border-top: 1px dashed rgba(0,0,0,0.1); color:${idx === 0 ? 'var(--accent-blue)' : 'var(--accent-purple)'}; font-weight:700;">
+                                        📦 VRAM Totale : ${m.totalVram}
+                                    </div>
+                                    <div style="font-size:0.95rem; font-weight:800; color: var(--accent-gold);">
+                                        💰 Investissement Matériel VRAM : ${m.cost}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Why Not 10 Years Ago -->
+                    <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.25); border-left: 4px solid var(--accent-gold); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                        <h4 style="margin-top:0; color: var(--accent-gold); font-size: 1.05rem; margin-bottom: 0.65rem;">${w.title || ''}</h4>
+                        <ul style="margin:0; padding-left: 1.2rem; font-size: 0.88rem; line-height: 1.6; color: var(--text-body);">
+                            ${(w.bullets || []).map(b => `<li style="margin-bottom:0.4rem;">${b}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <!-- Singularity Box -->
+                    <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(14, 165, 233, 0.08) 100%); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 1.25rem;">
+                        <h4 style="margin-top:0; color: var(--accent-purple); font-size: 1.1rem; margin-bottom: 0.65rem; display:flex; align-items:center; gap:0.5rem;">${s.title || ''}</h4>
+                        <div style="font-size: 0.9rem; line-height: 1.5; margin-bottom: 0.65rem;">${s.bio || ''}</div>
+                        <div style="font-size: 0.9rem; line-height: 1.5; padding-top: 0.65rem; border-top: 1px dashed rgba(139, 92, 246, 0.25);">${s.projection || ''}</div>
+                    </div>
+                `;
             } else if (slide.type === 'amara-law') {
                 html += `
                     <p style="margin-bottom:1.5rem;">${slide.desc || slide.intro || ''}</p>

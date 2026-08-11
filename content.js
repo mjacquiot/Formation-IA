@@ -118,6 +118,50 @@ const THEMES = [
                 type: "token-sandbox",
                 desc: "La tokenisation influence directement la vitesse, le coût et l'empreinte écologique des modèles d'IA. Tapez votre propre texte ci-dessous pour voir comment l'IA le découpe et comparer les architectures de Google et OpenAI.",
                 explanation: "<strong>💡 Comparatif Technique :</strong><br>• <strong>Modèle ChatGPT (OpenAI)</strong> : Utilise un dictionnaire de tokens moins optimisé pour le français (1 mot ≈ 1.35 tokens). Exécute ses calculs sur des GPU standard (Nvidia) très énergivores.<br>• <strong>Modèle Gemini (Google)</strong> : Utilise un tokenizer multilingue très optimisé (1 mot ≈ 1.1 tokens). Exécute ses calculs sur des processeurs TPU (Google) conçus pour l'IA, quatre fois plus sobres en électricité.<br>➔ <strong>Résultat :</strong> Pour les administrations publiques, utiliser un modèle européen ou optimisé comme Gemini permet de réduire les factures d'API et la pollution numérique."
+            },
+            {
+                title: "Le Verrou Technique : VRAM, Coûts & Singularité",
+                type: "vram-hardware-singularity",
+                intro: "Pourquoi l'IA générative n'a-t-elle pas émergé il y a 10 ans ? La réponse réside dans la <strong>physique du matériel</strong> : la quantité de mémoire VRAM, la taille des paramètres et le coût des infrastructures.",
+                basics: {
+                    title: "📐 Les Mathématiques de la Mémoire",
+                    items: [
+                        { label: "1 Go de VRAM", val: "1 000 000 000 d'octets (8 bits par octet)" },
+                        { label: "Poids par Paramètre", val: "2 octets (Précision FP16 / BF16)" },
+                        { label: "Mémoire du Contexte (KV Cache)", val: "~2 Mo par token (attention croisée)" }
+                    ]
+                },
+                modelsComparison: [
+                    {
+                        title: "🌐 Modèle Open Source Géant (ex. Llama 3.1 405B)",
+                        vramWeights: "800 Go VRAM",
+                        vramContext: "+2 To VRAM (pour 1M tokens)",
+                        totalVram: "2,8 Téraoctets",
+                        cost: "280 000 € HT",
+                        desc: "Modèle en accès libre nécessitant un cluster dédié de 35 cartes GPU d'entreprise."
+                    },
+                    {
+                        title: "🔒 Modèle Propriétaire Ultra-Puissant (ex. GPT-4 / Gemini)",
+                        vramWeights: "5 à 10 To VRAM (Architecture MoE)",
+                        vramContext: "+2 To VRAM (pour 1M tokens)",
+                        totalVram: "jusqu'à 12 Téraoctets",
+                        cost: "1 200 000 € HT (1,2 M€)",
+                        desc: "Cluster multi-serveurs interconnectés réservé aux géants de la Tech."
+                    }
+                ],
+                whyNot10YearsAgo: {
+                    title: "⏳ Pourquoi c'était IMPOSSIBLE il y a 10 ans (2014 vs 2024)",
+                    bullets: [
+                        "<strong>Capacité VRAM :</strong> En 2014, les puces graphiques phares (ex: NVIDIA K80) plafonnaient à 12 Go. Il aurait fallu relier des milliers de cartes physiques.",
+                        "<strong>Vitesse de communication inter-processeurs :</strong> En 2014, le bus PCIe 3.0 (~16 Go/s) créait une saturation totale. L'émergence des bus ultra-rapides modernes (<strong>NVLink / TPU Interconnect</strong> à 900 Go/s - 1,8 To/s) permet désormais de fusionner des milliers de puces en un seul super-cerveau unifié.",
+                        "<strong>Architecture Transformer (2017) :</strong> Invention algorithmique permettant de paralléliser simultanément les calculs sur des milliers de cœurs GPU."
+                    ]
+                },
+                singularity: {
+                    title: "🌌 Projection vers la Singularité (AGI / Superintelligence)",
+                    bio: "<strong>🧠 Comparatif Biologique :</strong> Le cerveau humain compte environ <strong>86 milliards de neurones</strong> et <strong>100 000 milliards de connexions synaptiques</strong>.",
+                    projection: "<strong>⚡ Puissance requise pour l'Omniscience :</strong> Pour égaler ou dépasser la connaissance et le raisonnement humain (AGI/ASI), les chercheurs estiment qu'il faudra une infrastructure réunissant entre <strong>100 et 500 Téraoctets de VRAM ultra-rapide</strong>, exécutant <strong>10¹⁸ à 10²⁰ opérations par seconde (Exaflops)</strong>. Une telle puissance nécessite des datacenters alimentés directement par des réacteurs nucléaires SMR."
+                }
             }
         ]
     },
@@ -389,6 +433,52 @@ const THEMES = [
                     { level: "Risque Limité (Transparence)", color: "var(--accent-sky)", example: "Chatbots d'accueil des usagers sur le site internet de la mairie (obligation de mentionner clairement 'Contenu généré par IA')." },
                     { level: "Risque Minimal (Libre)", color: "var(--accent-green)", example: "Filtres anti-spam de la messagerie des agents municipaux, outils de correction d'orthographe." }
                 ]
+            },
+            {
+                title: "Cadre Juridique & Charte IA : Risques & Sanctions",
+                type: "legal-charter-risks",
+                intro: "L'utilisation d'IA générative dans les services publics expose l'agent et la collectivité à des risques juridiques distincts. L'adoption d'une <strong>Charte d'Utilisation IA</strong> transforme le flou juridique en un cadre clair et protecteur.",
+                charterComparison: {
+                    sansCharte: {
+                        title: "❌ SANS Charte d'Utilisation",
+                        subtitle: "Zone de Flou & Vulnérabilité Juridique",
+                        agent: "<strong>Agent Public :</strong> Absence de consignes explicites. En cas de fuite de données ou d'erreur, risque de basculer en <em>faute personnelle</em> sans soutien protecteur de l'administration.",
+                        collectivite: "<strong>Collectivité :</strong> Défaut d'encadrement (*accountability* RGPD). Présomption de négligence devant la CNIL et le Tribunal Administratif."
+                    },
+                    avecCharte: {
+                        title: "✅ AVEC Charte d'Utilisation",
+                        subtitle: "Cadre Sécurisé & Protecteur",
+                        agent: "<strong>Agent Public :</strong> Périmètre clair (outils validés, données interdites). Les erreurs de bonne foi restent couvertes par la <em>protection fonctionnelle</em>.",
+                        collectivite: "<strong>Collectivité :</strong> Conformité RGPD/AI Act démontrée. En cas de violation volontaire par un agent, la faute disciplinaire individuelle est nette et caractérisée."
+                    }
+                },
+                risksMatrix: [
+                    {
+                        level: "🟢 Risque Minimal",
+                        title: "Erreur matérielle / Coquille sans donnée sensible",
+                        desc: "Formulation maladroite ou contresens dans une note interne sans impact tiers.",
+                        agentSanction: "Rappel à l'ordre, cadrage managérial interne.",
+                        collectiviteSanction: "Aucun impact juridique direct.",
+                        law: "Règlement intérieur & Management"
+                    },
+                    {
+                        level: "🟡 Risque Moyen",
+                        title: "Défaut de mention IA / Transparence usager",
+                        desc: "Publication d'une réponse usager par chatbot sans mention d'information IA.",
+                        agentSanction: "Avertissement formel de la hiérarchie.",
+                        collectiviteSanction: "Mise en demeure CNIL / Avertissement AI Act (Art. 50).",
+                        law: "AI Act & CRPA (Code des Relations entre le Public et l'Administration)"
+                    },
+                    {
+                        level: "🔴 Risque Maximal",
+                        title: "Fuite RGPD / Secret professionnel / Acte administratif vicié",
+                        desc: "Injecter des données de santé/NIR dans un LLM Cloud externe US ou valider sans relecture un arrêté vicié.",
+                        agentSanction: "<strong>Sanction disciplinaire grave</strong> (du blâme à la <strong>révocation</strong> - Statut CGFP) + <strong>Poursuites pénales</strong> (Secret pro Art. 226-13 du Code Pénal : 1 an prison, 15k€ amende ; RGPD Art. 226-21).",
+                        collectiviteSanction: "<strong>Amendes lourdes CNIL</strong>, annulation de l'acte au <strong>Tribunal Administratif</strong> (défaut de décision humaine, CRPA L.311-3-1).",
+                        law: "Code Général de la Fonction Publique, Code Pénal, RGPD Art. 83"
+                    }
+                ],
+                pedagogy: "<strong>💡 À retenir :</strong> La Charte d'Utilisation IA n'est pas un frein, c'est le <strong>bouclier juridique</strong> indispensable de l'agent et de l'institution. Elle garantit l'alignement sur la loi et préserve le principe fondamental : <em>la décision finale reste 100% humaine</em>."
             },
             {
                 title: "Le Biais d'Automatisation & Responsabilité",
@@ -968,9 +1058,39 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
                 type: "eval-stage",
                 desc: "Évaluez votre niveau de maîtrise sur les 10 notions clés de la formation IA Territoriale.",
                 questions: [
-                    { q: "1. Qu'est-ce qu'un Token en IA ?", choices: ["Une pièce de monnaie virtuelle", "Un morceau de mot numérisé", "Un virus informatique"], correct: 1, exp: "Le token est la plus petite unité de texte numérisée par un LLM." },
-                    { q: "2. Quelle loi interdit le transfert de données non anonymisées aux USA ?", choices: ["Le Cloud Act", "La Loi d'Amara", "Le Code Général de la Fonction Publique"], correct: 0, exp: "Le Cloud Act autorise l'accès du gouvernement américain aux serveurs des Big Tech US." },
-                    { q: "3. Que signifie l'acronyme M.A.I.R.E. ?", choices: ["Mairie, Administration, Informatique, Réseau, État", "Moi, Agent, Information, Ressources, Exigence", "Modèle, Algorithme, Interface, Règle, Évaluation"], correct: 1, exp: "M.A.I.R.E. est la méthode universelle de prompt pour la fonction publique." }
+                    { 
+                        q: "1. Qu'est-ce qu'un Token en IA ?", 
+                        choices: [
+                            "Une pièce de monnaie virtuelle réservée aux transactions sur le Dark Web", 
+                            "Un morceau de mot, de syllabe ou de symbole numérisé par le modèle", 
+                            "Un script de sécurité installé par le DSI sur l'ordinateur de l'agent", 
+                            "Un composant physique situé à l'intérieur du processeur graphique (GPU)"
+                        ], 
+                        correct: 1, 
+                        exp: "Le token est la plus petite unité de texte numérisée et traitée par un LLM." 
+                    },
+                    { 
+                        q: "2. Quel texte de loi américain autorise l'accès aux données des entreprises US même situées en Europe ?", 
+                        choices: [
+                            "Le Cloud Act américain", 
+                            "Le Règlement Général sur la Protection des Données (RGPD)", 
+                            "La Loi de Roy Amara sur les révolutions technologiques", 
+                            "Le Code de la Route des Autoroutes de l'Information"
+                        ], 
+                        correct: 0, 
+                        exp: "Le Cloud Act permet aux autorités US d'exiger les données gérées par des entreprises américaines, même hébergées sur le sol européen." 
+                    },
+                    { 
+                        q: "3. Dans la méthode M.A.I.R.E. de rédaction de prompt, que garantit l'étape 'R' (Ressources) ?", 
+                        choices: [
+                            "Elle garantit la rédaction automatique du document en format PDF final imprimable", 
+                            "Elle fournit les données et textes officiels de travail pour ancrer l'IA et éliminer les hallucinations", 
+                            "Elle vérifie la vitesse de connexion réseau du serveur avant de lancer le calcul", 
+                            "Elle réserve automatiquement une salle de réunion et des chouquettes pour le conseil municipal"
+                        ], 
+                        correct: 1, 
+                        exp: "Fournir des ressources de travail (ancrage RAG) empêche l'IA d'inventer des faits ou de fausses références juridiques." 
+                    }
                 ]
             }
         ]
@@ -997,166 +1117,166 @@ const INTERACTIVE_QUESTIONS = [
         themeId: "histoire-ia",
         id: "q1",
         type: "quiz",
-        question: "En quelle année Alan Turing a-t-il proposé son fameux Test d'Imitation pour tester l'intelligence d'une machine ?",
+        question: "En 1950, Alan Turing publie son célèbre 'Test d'Imitation'. Quel était le principe fondamental de ce test pour évaluer l'intelligence d'une machine ?",
         options: {
-            A: "1950 (Publication de 'Computing Machinery and Intelligence')",
-            B: "1956 (Séminaire de Dartmouth)",
-            C: "1974 (Début du premier hiver de l'IA)",
-            D: "1997 (Deep Blue bat Kasparov aux échecs)"
+            A: "Vérifier si un supercalculateur peut résoudre un problème de mathématiques complexes plus vite qu'un être humain",
+            B: "Demander à la machine d'obtenir une augmentation de salaire auprès de sa hiérarchie sans trembler",
+            C: "Évaluer si un juge humain dialoguant à aveugle par texte est incapable de distinguer les réponses de la machine de celles d'un humain",
+            D: "Mesurer le temps de réponse d'un processeur pour traduire instantanément un texte administratif en cinq langues"
         },
-        correct: "A",
-        explanation: "Alan Turing a publié son article fondateur en 1950, posant la question philosophique et logique du test d'imitation."
+        correct: "C",
+        explanation: "Le Test de Turing (1950) repose sur le dialogue textuel en aveugle : si l'évaluateur humain ne peut pas distinguer la machine de l'humain, le test est réussi."
     },
     {
         themeId: "technique-llm",
         id: "q2",
         type: "quiz",
-        question: "Pourquoi les sigles administratifs (P.L.U., R.G.P.D., D.G.T.) coûtent-ils plus cher en tokens ?",
+        question: "Pourquoi les sigles et acronymes de l'administration (ex: P.L.U., R.G.P.D., D.G.S.) consomment-ils proportionnellement plus de tokens et coûtent-ils plus cher ?",
         options: {
-            A: "Parce que l'IA déteste l'administration",
-            B: "Parce que les mots rares ou scindés par des points forcent le tokenizer à séparer chaque lettre",
-            C: "Parce que la loi européenne l'interdit",
-            D: "Parce qu'ils sont traduits en anglais"
+            A: "Parce que les termes rares et les lettres séparées par des points ne figurent pas dans le dictionnaire du tokenizer, qui doit les découper lettre par lettre",
+            B: "Parce que la législation européenne AI Act impose une taxe fiscale supplémentaire sur l'usage des sigles publics",
+            C: "Parce que l'IA traduit obligatoirement les abréviations françaises en anglais avant d'exécuter son calcul",
+            D: "Parce que les serveurs d'OpenAI appliquent un tarif de punition chaque fois qu'on utilise du jargon administratif"
         },
-        correct: "B",
-        explanation: "Les mots rares et les abréviations avec des points forcés ne sont pas dans le dictionnaire standard et sont hachés lettre par lettre par le tokenizer."
+        correct: "A",
+        explanation: "Le tokenizer scinde les mots rares et les lettres isolées par des points en multiples tokens individuels, ce qui augmente la consommation de tokens."
     },
     {
         themeId: "hallucinations-ia",
         id: "q3",
         type: "quiz",
-        question: "Quelle est la cause scientifique principale d'une hallucination dans un grand modèle de langage (LLM) ?",
+        question: "Quelle est la cause scientifique première d'une 'hallucination' lorsqu'un LLM génère un texte administratif ou juridique ?",
         options: {
-            A: "Un virus informatique dans le serveur",
-            B: "La nature probabiliste du modèle qui prédit le mot suivant le plus fluide sans consulter de base de vérité historique",
-            C: "Une coupure d'électricité temporaire chez l'hébergeur",
-            D: "Une erreur de frappe de l'utilisateur dans son prompt"
+            A: "Un dysfonctionnement temporaire de la connexion réseau entre le poste de l'agent et le datacenter",
+            B: "Une erreur d'indexation dans la base de données de jurisprudence du Journal Officiel consultée par l'IA",
+            C: "Une surchauffe des cartes graphiques qui pousse le serveur à prendre des initiatives créatives",
+            D: "La nature probabiliste du réseau de neurones, qui prédit la suite de mots la plus fluide sans consulter de base de faits réels"
         },
-        correct: "B",
-        explanation: "Un LLM est un réseau probabiliste qui choisit les mots les plus probables pour faire une phrase fluide, sans vérifier les faits réels à moins d'être ancré (RAG)."
+        correct: "D",
+        explanation: "Un LLM est un moteur de prédiction statistique de mots : il vise la fluidité rédactionnelle et non la vérité factuelle. Sans ancrage (RAG), il comble les manques en inventant."
     },
     {
         themeId: "prompt-homme",
         id: "q4",
         type: "quiz",
-        question: "Pourquoi l'IA est-elle incapable de réagir spontanément à une alarme incendie réelle dans votre mairie ?",
+        question: "Si une alarme incendie retentit dans l'accueil de la mairie, pourquoi l'IA est-elle incapable d'ordonner l'évacuation de son propre chef ?",
         options: {
-            A: "Parce qu'elle n'aime pas le bruit des sirènes",
-            B: "Parce qu'elle est aveugle et n'a pas de capteurs biologiques : sans prompt de contexte rédigé par vous, elle ne sait rien de votre situation",
-            C: "Parce qu'elle n'a pas payé son abonnement",
-            D: "Parce qu'elle attend les ordres du Maire"
+            A: "Parce qu'elle attend systématiquement une délibération votée à l'unanimité en conseil municipal",
+            B: "Parce qu'elle n'a ni corps ni capteurs biologiques : sans prompt textuel décrivant l'urgence, elle reste complètement aveugle au monde réel",
+            C: "Parce que les consignes de sécurité (System Prompt) d'OpenAI lui interdisent de donner des conseils de secourisme",
+            D: "Parce que son algorithme de traitement est limité par le nombre maximal de requêtes autorisées par minute"
         },
         correct: "B",
-        explanation: "L'IA n'a pas de corps ni de sens biologiques. Sans description textuelle explicite dans le prompt, elle est dans le noir absolu."
+        explanation: "L'humain perçoit l'urgence par ses sens. L'IA est enfermée dans un serveur aveugle et dépend entièrement du contexte rédigé dans le prompt."
     },
     {
         themeId: "methode-maire",
         id: "q5",
         type: "quiz",
-        question: "Dans la méthode M.A.I.R.E., à quoi correspond la lettre 'R' ?",
+        question: "Dans la méthodologie M.A.I.R.E. recommandée pour le secteur public, quel est l'objectif clé de la lettre 'R' (Ressources) ?",
         options: {
-            A: "Règlementation",
-            B: "Ressources (fournir les textes, délibérations et données exactes pour limiter les hallucinations)",
-            C: "Réponse automatique",
-            D: "Récompense"
+            A: "Rappel réglementaire : exiger que l'IA cite les articles du Code du Travail à la fin de sa réponse",
+            B: "Ressources : fournir les textes, arrêtés et données exactes de la collectivité pour verrouiller l'IA et éliminer les hallucinations",
+            C: "Rédaction automatique : demander à l'IA de générer le document directement au format PDF imprimable",
+            D: "Pause RTT : autoriser l'agent à aller prendre un café pendant que l'ordinateur travaille à sa place"
         },
         correct: "B",
-        explanation: "Le R signifie 'Ressources'. C'est là que l'agent transmet ses documents de travail (ancrage)."
+        explanation: "Le 'R' de M.A.I.R.E. représente les 'Ressources' (technique d'ancrage RAG). Transmettre la documentation exacte empêche l'IA d'inventer des faits."
     },
     {
         themeId: "securite-reglementation",
         id: "q6",
         type: "quiz",
-        question: "Quel texte de loi américain autorise le gouvernement US à réclamer l'accès aux données hébergées chez des géants Tech US ?",
+        question: "En quoi le 'Cloud Act' américain constitue-t-il un risque majeur de souveraineté pour les collectivités territoriales européennes ?",
         options: {
-            A: "Le RGPD",
-            B: "Le Cloud Act",
-            C: "L'AI Act",
-            D: "Le patriotique Code Général"
+            A: "Il interdit aux éditeurs américains de vendre des abonnements logiciels aux mairies françaises de moins de 10 000 habitants",
+            B: "Il oblige les collectivités à payer une taxe foncière sur les serveurs informatiques situés en Europe",
+            C: "Il permet aux autorités judiciaires US de réclamer l'accès aux données stockées chez les Big Tech US, même sur leurs serveurs situés en Europe",
+            D: "Il impose aux agents publics de rédiger tous leurs courriels administratifs en anglais américain"
         },
-        correct: "B",
-        explanation: "Le Cloud Act américain permet aux autorités US de réclamer l'accès aux serveurs gérés par des entreprises américaines."
+        correct: "C",
+        explanation: "Le Cloud Act extraterritorial permet aux autorités US d'exiger les données détenues par des entreprises américaines, d'où le besoin d'anonymisation ou d'outils souverains."
     },
     {
         themeId: "guerre-ia",
         id: "q7",
         type: "quiz",
-        question: "Pourquoi l'utilisation de processeurs TPU (Google) ou LPU (Groq) est-elle avantageuse face aux GPU Nvidia ?",
+        question: "Pourquoi les géants de la Tech développent-ils des puces sur-mesure (TPU Google, LPU Groq) comme alternatives aux GPU Nvidia ?",
         options: {
-            A: "Ils sont fabriqués en bois",
-            B: "Ils sont conçus sur-mesure pour le calcul de texte IA, offrant une vitesse supérieure et une empreinte énergétique plus faible",
-            C: "Ils ne nécessitent pas de connexion Internet",
-            D: "Ils sont gratuits pour les collectivités"
+            A: "Parce que ces puces spécialisées accélèrent considérablement la vitesse de génération de texte tout en réduisant la facture énergétique",
+            B: "Parce que les GPU Nvidia sont en rupture de stock suite à des commandes massives du Ministère de la Magie",
+            C: "Parce que le règlement européen AI Act va interdire l'usage des cartes graphiques Nvidia sur le sol européen d'ici 2026",
+            D: "Parce que ces puces permettent d'utiliser les intelligences artificielles entièrement sans connexion Internet"
         },
-        correct: "B",
-        explanation: "Les TPU et LPU sont des puces spécialisées qui réduisent la consommation électrique et accélèrent l'inférence des modèles."
+        correct: "A",
+        explanation: "Les TPU et LPU sont des processeurs optimisés spécifiquement pour l'inférence des LLM, offrant une sobriété énergétique et une vitesse de texte supérieures."
     },
     {
         themeId: "agentique-territorial",
         id: "q8",
         type: "quiz",
-        question: "Quelle est la différence fondamentale entre un Chatbot et un Agent IA autonome (ex: Antigravity) ?",
+        question: "Quelle est la différence fondamentale entre un simple Chatbot et un Agent IA autonome (comme Antigravity) ?",
         options: {
-            A: "Le Chatbot est payant, l'Agent est gratuit",
-            B: "Le Chatbot réagit de manière linéaire sans tester, tandis que l'Agent exécute une boucle ReAct (Planifie, Agit avec des outils, Observe et Corrige ses bugs)",
-            C: "Le Chatbot parle français, l'Agent parle anglais",
-            D: "L'Agent nécessite un écran tactile"
+            A: "Le Chatbot fonctionne uniquement sur smartphone alors que l'Agent IA s'installe uniquement sur serveur Linux",
+            B: "Le Chatbot est un outil gratuit alors que l'Agent IA autonome est obligatoirement payant et sous licence privée",
+            C: "Le Chatbot génère du texte de façon linéaire sans tester, tandis que l'Agent s'appuie sur une boucle ReAct pour planifier, exécuter des outils et corriger ses propres erreurs",
+            D: "Le Chatbot a besoin d'une pause déjeuner à midi alors que l'Agent IA se nourrit uniquement d'électricité"
         },
-        correct: "B",
-        explanation: "Un Agent autonome dispose d'outils et fonctionne en boucle de raisonnement (ReAct) pour tester et corriger son travail."
+        correct: "C",
+        explanation: "Un Agent IA autonome dispose d'outils et fonctionne en boucle de raisonnement (Planifier -> Agir -> Observer -> Corriger) pour réaliser des projets complexes."
     },
     {
         themeId: "tuto-technique",
         id: "q9",
         type: "quiz",
-        question: "Dans l'architecture web souveraine présentée, pourquoi la base de données Supabase est-elle choisie en région Francfort ?",
+        question: "Dans une architecture web souveraine pour collectivité, pourquoi héberger sa base de données (ex: Supabase) en région Europe (Francfort) ?",
         options: {
-            A: "Parce qu'il y fait plus froid l'hiver",
-            B: "Pour garantir la localisation physique des données d'usagers au sein de l'Union Européenne en conformité stricte avec le RGPD",
-            C: "Parce que GitHub l'impose",
-            D: "Pour traduire le site en allemand"
+            A: "Parce que les serveurs allemands sont équipés de saucisses et de bières gratuites pour les développeurs",
+            B: "Parce que la vitesse de la fibre optique est physiquement deux fois plus rapide entre Paris et Francfort qu'entre Paris et Lyon",
+            C: "Pour garantir la localisation physique des données au sein de l'UE et assurer la conformité stricte avec le RGPD et le DPO",
+            D: "Parce que GitHub Pages exige obligatoirement une connexion à une base de données allemande pour fonctionner"
         },
-        correct: "B",
-        explanation: "Héberger la BDD en région Europe (Francfort) garantit le respect des règles de souveraineté du RGPD."
+        correct: "C",
+        explanation: "Localiser la BDD en région Europe (Francfort) garantit le respect de la souveraineté et des règles de protection des données du RGPD."
     },
     {
         themeId: "guide-dsi-ultime",
         id: "q10",
         type: "quiz",
-        question: "Que préconise la Loi d'Amara concernant l'adoption des technologies comme l'IA ?",
+        question: "Que préconise la célèbre 'Loi d'Amara' concernant la vision stratégique d'une DSI sur l'adoption de l'IA ?",
         options: {
-            A: "Il faut interdire l'IA dans tous les services sous 3 mois",
-            B: "Nous surestimons l'effet de l'IA à court terme et sous-estimons son impact de transformation profonde à long terme",
-            C: "L'IA sera remplacée par le papier en 2030",
-            D: "Seuls les DSI doivent utiliser les ordinateurs"
+            A: "Elle stipule qu'une collectivité doit remplacer 50% de ses logiciels métiers par des IA génératives dans un délai maximal de 12 mois",
+            B: "Elle rappelle que l'on surestime toujours l'impact d'une technologie à court terme, mais qu'on sous-estime sa transformation profonde à long terme",
+            C: "Elle interdit l'usage des outils d'IA pour la rédaction des documents budgétaires et comptables des mairies",
+            D: "Elle exige que tous les directeurs informatiques portent une cape de super-héros lors des réunions de crise"
         },
         correct: "B",
-        explanation: "La Loi d'Amara montre que les révolutions technologiques déçoivent d'abord à court terme avant d'impacter massivement à long terme."
+        explanation: "La Loi d'Amara explique pourquoi les premières expérimentations déçoivent parfois (surestimation court terme) avant de métamorphoser les organisations (long terme)."
     },
     {
         themeId: "eval-stage-bilan",
         id: "q11",
         type: "quiz",
-        question: "Quelle est la règle d'or concernant la responsabilité légale d'un écrit administratif rédigé avec l'aide d'une IA ?",
+        question: "Quelle est la règle d'or juridique concernant la responsabilité d'un courrier administratif officiel rédigé avec l'aide d'une IA ?",
         options: {
-            A: "C'est l'éditeur de l'IA (OpenAI ou Google) qui est responsable légalement",
-            B: "La validation humaine ('Dernier Mot') est obligatoire : l'agent public titulaire est l'unique responsable légal des actes qu'il signe",
-            C: "Personne n'est responsable s'il y a une erreur",
-            D: "Le maire doit valider chaque courriel individuellement"
+            A: "La responsabilité est partagée à 50/50 entre la mairie et le fournisseur d'accès à Internet",
+            B: "La validation humaine est obligatoire : l'agent public titulaire qui valide et signe le document en conserve la responsabilité juridique exclusive",
+            C: "C'est l'éditeur de l'outil d'IA (OpenAI, Google ou Anthropic) qui est légalement responsable en cas d'erreur dans le texte généré",
+            D: "En cas de litige, c'est le robot serveur du datacenter qui est convoqué à la barre du Tribunal Administratif"
         },
         correct: "B",
-        explanation: "La validation humaine est le principe cardinal de la fonction publique : l'agent conserve la signature et la responsabilité juridique."
+        explanation: "La validation humaine ('Dernier Mot') est non négociable dans la fonction publique : l'agent public signataire est l'unique auteur légalement responsable."
     },
     {
         themeId: "exercices-ateliers",
         id: "q12",
         type: "sondage",
-        question: "À la fin de cette formation, quel est votre sentiment concernant l'intégration de l'IA dans votre travail quotidien ?",
+        question: "À l'issue de cette formation interactive, quelle est votre priorité pour intégrer l'IA dans votre collectivité ?",
         options: {
-            A: "🚀 Confiant et prêt à expérimenter avec la méthode M.A.I.R.E. et les règles de sécurité",
-            B: "🧐 Intéressé mais vigilant sur le RGPD et la vérification des hallucinations",
-            C: "🛠️ En attente de la mise à disposition d'outils souverains par ma DSI",
-            D: "🎓 Envie de suivre des ateliers pratiques d'approfondissement"
+            A: "🚀 Expérimenter la méthode M.A.I.R.E. dès cette semaine pour mes rédactions quotidiennes",
+            B: "🛡️ Proposer la Charte d'Utilisation IA et mettre en place l'anonymisation locale au sein de mon service",
+            C: "💻 Échanger avec ma DSI pour étudier le déploiement d'outils souverains (ex: Albert ou Mistral local)",
+            D: "🎓 Organiser des ateliers pratiques approfondis pour former l'ensemble de mon équipe"
         }
     }
 ];

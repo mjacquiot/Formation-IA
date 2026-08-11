@@ -4575,5 +4575,161 @@ body {
     background: rgba(139, 92, 246, 0.02) !important;
 }
 
+/* -------------------------------------------------------------
+   Styles pour le module Risques Juridiques & Charte IA
+   ------------------------------------------------------------- */
+.legal-charter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+}
 
+.legal-card {
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
+.legal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.legal-card.sans-charte {
+    background: rgba(239, 68, 68, 0.04);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-top: 4px solid var(--accent-red);
+}
+
+.legal-card.avec-charte {
+    background: rgba(16, 185, 129, 0.04);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-top: 4px solid var(--accent-green);
+}
+
+.legal-card-title {
+    margin-top: 0;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legal-card-title.danger { color: #ef4444; }
+.legal-card-title.success { color: #10b981; }
+
+.legal-card-subtitle {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.75rem;
+}
+
+.legal-card-subtitle.danger { color: #ef4444; }
+.legal-card-subtitle.success { color: #10b981; }
+
+.legal-card-section {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.legal-card-section.footer {
+    padding-top: 0.75rem;
+    margin-bottom: 0;
+    border-top: 1px dashed rgba(148, 163, 184, 0.25);
+}
+
+.matrix-section-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-title);
+}
+
+.risks-matrix-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+}
+
+.risk-matrix-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    display: grid;
+    grid-template-columns: 160px 1fr 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s ease;
+}
+
+.risk-matrix-card:hover {
+    border-color: var(--accent-sky);
+}
+
+.risk-level-tag {
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+.risk-law-container {
+    margin-top: 0.35rem;
+}
+
+.risk-law-badge {
+    font-size: 0.75rem;
+    background: rgba(14, 165, 233, 0.1);
+    color: var(--accent-sky);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    display: inline-block;
+    font-weight: 600;
+}
+
+.risk-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-title);
+    margin-bottom: 0.25rem;
+}
+
+.risk-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.risk-col-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.risk-col-label.agent { color: var(--accent-gold); }
+.risk-col-label.coll { color: var(--accent-purple); }
+
+.risk-col-text {
+    font-size: 0.83rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+    .legal-charter-grid {
+        grid-template-columns: 1fr;
+    }
+    .risk-matrix-card {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
