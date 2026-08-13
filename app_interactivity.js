@@ -1720,47 +1720,6 @@ TrainingApp.prototype.showPublicFreeTestPanel = async function(testObj, revealSt
     }
 };
 
-        const voteFormSection = document.getElementById('panel-vote-form-section');
-        const resultsSection = document.getElementById('panel-results-section');
-        
-        if (voteFormSection) voteFormSection.style.display = 'none';
-        if (!resultsSection) return;
-        resultsSection.style.display = 'block';
-
-        const showAllResults = (revealState === 'votes' || revealState === 'answer');
-
-        if (showAllResults) {
-            const { data: allVotes } = await this.supabase.from('votes').select('*').eq('session_id', this.sessionId).eq('poll_id', testObj.id);
-            const votesList = allVotes || [];
-            
-            let html = `
-                <h5 style="text-align:left; font-size:0.82rem; font-weight:700; margin-bottom:0.5rem; color:#f8fafc;">Réponses des participants :</h5>
-                <div class="free-test-responses-container" style="max-height: 250px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem; padding-right:4px;">
-            `;
-            
-            if (votesList.length === 0) {
-                html += `<p style="text-align:center; color:var(--text-muted); font-size:0.78rem; font-style:italic;">Aucune réponse pour le moment...</p>`;
-            } else {
-                votesList.forEach(v => {
-                    html += `
-                        <div class="free-test-response-card" style="background:rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.6rem 0.75rem; text-align:left;">
-                            <span style="font-weight:700; color:var(--accent-sky); font-size:0.76rem; display:block; margin-bottom:0.2rem;">👤 ${this.escapeHtml(v.prenom)}</span>
-                            <p style="font-size:0.78rem; color:#f8fafc; line-height:1.4; margin:0; white-space:pre-wrap;">${this.escapeHtml(v.reponse)}</p>
-                        </div>
-                    `;
-                });
-            }
-            html += `</div>`;
-            resultsSection.innerHTML = html;
-        } else {
-            resultsSection.innerHTML = `
-                <div style="text-align:center; padding:1.5rem; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.1); border-radius:6px; color:var(--text-muted); font-size:0.8rem; font-style:italic;">
-                    🕒 Le test libre est en cours. Les réponses s'afficheront ici une fois publiées par le formateur.
-                </div>
-            `;
-        }
-    }
-
 TrainingApp.prototype.showPublicExercisePanel = async function(ex, showResults) {
         const panel = document.getElementById('interactivity-panel');
         if (panel) panel.classList.add('open');
