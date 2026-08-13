@@ -1727,6 +1727,90 @@ function getSlideHTML(slide, theme) {
                         `).join('')}
                     </div>
                 `;
+            } else if (slide.type === 's3ns-premi3ns') {
+                html += `
+                    <p style="margin-bottom:1.25rem; font-size:0.92rem; line-height:1.5;">${slide.desc || ''}</p>
+                    
+                    <!-- Top Grid: Qu'est-ce que c'est + Coûts -->
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.25rem; margin-bottom:1.25rem;">
+                        <!-- Qu'est-ce que S3NS PREMI3NS -->
+                        <div style="background:var(--bg-main); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md); display:flex; flex-direction:column; justify-content:space-between;">
+                            <div>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                                    <h4 style="font-family:'Outfit',sans-serif; color:var(--accent-purple); font-size:1rem; margin:0;">
+                                        ${(slide.alliance && slide.alliance.title) || ''}
+                                    </h4>
+                                    <span style="font-size:0.72rem; font-weight:800; background:rgba(99,102,241,0.12); color:var(--accent-purple); padding:0.25rem 0.5rem; border-radius:12px; border:1px solid rgba(99,102,241,0.25);">
+                                        🛡️ SecNumCloud 3.2 ANSSI
+                                    </span>
+                                </div>
+                                <div style="display:flex; gap:0.5rem; margin-bottom:0.75rem;">
+                                    <span style="font-size:0.78rem; font-weight:700; background:#e0e7ff; color:#3730a3; padding:0.2rem 0.5rem; border-radius:4px;">${slide.alliance ? slide.alliance.share : ''}</span>
+                                    <span style="font-size:0.78rem; font-weight:700; background:#dcfce7; color:#166534; padding:0.2rem 0.5rem; border-radius:4px;">${slide.alliance ? slide.alliance.qualification : ''}</span>
+                                </div>
+                                <p style="font-size:0.85rem; line-height:1.5; color:var(--text-body); margin:0;">
+                                    ${(slide.alliance && slide.alliance.advantage) || ''}
+                                </p>
+                            </div>
+                            <div style="margin-top:1rem; background:rgba(99,102,241,0.06); border:1px solid rgba(99,102,241,0.2); padding:0.75rem; border-radius:6px; font-size:0.8rem; color:var(--text-title);">
+                                🎯 <strong>Usage Cible :</strong> Éléments décisionnels complexes, RAG volumineux, intégration directe avec l'écosystème Google Cloud sans sas de conversion.
+                            </div>
+                        </div>
+
+                        <!-- Financiers & Coûts -->
+                        <div style="background:var(--bg-main); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md); display:flex; flex-direction:column; justify-content:space-between;">
+                            <div>
+                                <h4 style="font-family:'Outfit',sans-serif; color:var(--accent-blue); font-size:1rem; margin-bottom:0.75rem;">
+                                    ${(slide.financials && slide.financials.title) || ''}
+                                </h4>
+                                
+                                <div style="background:white; border:1px solid var(--border-color); padding:0.85rem; border-radius:8px; margin-bottom:0.75rem;">
+                                    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Investissement Initial (Démarrage)</div>
+                                    <div style="font-size:1.3rem; font-weight:800; color:var(--accent-blue); margin:0.2rem 0;">
+                                        ${(slide.financials && slide.financials.initialCost) || ''}
+                                    </div>
+                                    <p style="font-size:0.75rem; color:var(--text-muted); margin:0; line-height:1.3;">
+                                        ${(slide.financials && slide.financials.initialDesc) || ''}
+                                    </p>
+                                </div>
+
+                                <div style="font-size:0.78rem; font-weight:700; color:var(--text-title); margin-bottom:0.4rem;">Coûts Récurrents Annuels Estimés :</div>
+                                <div style="display:flex; flex-direction:column; gap:0.4rem;">
+                                    ${((slide.financials && slide.financials.recurringCosts) || []).map(rc => `
+                                        <div style="display:flex; justify-content:space-between; align-items:center; background:white; border:1px solid var(--border-color); padding:0.5rem 0.75rem; border-radius:6px; font-size:0.8rem;">
+                                            <span style="color:var(--text-body); font-weight:500;">${rc.scale}</span>
+                                            <strong style="color:var(--accent-purple); font-weight:800;">${rc.cost}</strong>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Grid: Conformité Réglementaire 360° -->
+                    <div style="background:white; border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:1.25rem;">
+                        <h4 style="font-family:'Outfit',sans-serif; font-size:0.95rem; color:var(--text-title); margin-bottom:0.88rem; display:flex; align-items:center; gap:0.5rem;">
+                            ⚖️ Diagnostic de Conformité Réglementaire (Score 360°)
+                        </h4>
+                        
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.88rem;">
+                            ${(slide.compliance || []).map(c => `
+                                <div style="background:var(--bg-main); border:1px solid var(--border-color); border-top:4px solid ${c.color}; padding:0.88rem; border-radius:8px;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                                        <span style="font-weight:800; font-size:0.85rem; color:var(--text-title);">${c.norm}</span>
+                                        <span style="font-size:0.72rem; font-weight:800; color:${c.color}; background:${c.badgeBg}; padding:0.15rem 0.4rem; border-radius:4px;">${c.status}</span>
+                                    </div>
+                                    <p style="font-size:0.78rem; color:var(--text-body); line-height:1.4; margin:0;">${c.text}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Final Verdict Banner -->
+                    <div style="background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(168,85,247,0.08)); border:1px solid rgba(99,102,241,0.3); padding:0.88rem 1.25rem; border-radius:var(--radius-md); font-size:0.85rem; color:var(--text-title); line-height:1.5;">
+                        ${slide.verdict || ''}
+                    </div>
+                `;
             } else if (slide.type === 'pipeline-cost-calculator') {
                 html += `
                     <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>

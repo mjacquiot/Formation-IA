@@ -1030,6 +1030,32 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
                 }
             },
             {
+                title: "Alternative 'Grandes Collectivités' : S3NS PREMI3NS (Thales x Google)",
+                type: "s3ns-premi3ns",
+                desc: "Pour les grandes Métropoles, Départements et Régions disposant de budgets importants, l'offre S3NS (filiale Thales à 51% et Google Cloud à 49%) propose d'exécuter Gemini et Vertex AI directement au sein d'un environnement qualifié SecNumCloud 3.2 par l'ANSSI.",
+                alliance: {
+                    title: "🏛️ Qu'est-ce que S3NS PREMI3NS ?",
+                    share: "51% Thales / 49% Google Cloud",
+                    qualification: "SecNumCloud 3.2 (ANSSI)",
+                    advantage: "Accès natif aux modèles de pointe Google (Gemini, Vertex AI, RAG) 100% hébergés et opérés en France par du personnel français. Élimine le besoin de sas de pseudonymisation externe car tout reste dans la bulle SecNumCloud."
+                },
+                financials: {
+                    title: "💰 Modèle Économique & Budgets Estimés",
+                    initialCost: "55 000 € à 150 000 € HT",
+                    initialDesc: "Ticket d'entrée / Investissement initial (Landing Zone SecNumCloud, clés HSM Thales, intégration RAG/Vertex AI, homologation PSSI & AIPD).",
+                    recurringCosts: [
+                        { scale: "Métropole moyenne (500 à 1 500 agents)", cost: "60 000 € à 120 000 € / an" },
+                        { scale: "Grande Métropole / Région / Département (> 3 000 agents)", cost: "120 000 € à 300 000 €+ / an" }
+                    ]
+                },
+                compliance: [
+                    { norm: "RGPD", status: "Conforme 🟢", color: "var(--accent-green)", badgeBg: "rgba(34,197,94,0.1)", text: "Données localisées en France, chiffrement HSM Thales souverain. Aucun entraînement public des modèles sur vos données." },
+                    { norm: "US CLOUD Act", status: "Protégé 🟢 / Nuance 🟡", color: "var(--accent-gold)", badgeBg: "rgba(234,179,8,0.1)", text: "Qualification SecNumCloud 3.2 ANSSI et contrôle Thales (51%). Nuance : le code source et les modèles Gemini restent d'origine US." },
+                    { norm: "EU AI Act", status: "Socle Conforme 🟢 / Usage ⚠️", color: "var(--accent-blue)", badgeBg: "rgba(14,165,233,0.1)", text: "Fournisseur conforme. La collectivité reste responsable de l'évaluation d'impact (FRIA) si l'IA cible un usage 'Haut Risque' (Annexe III)." }
+                ],
+                verdict: "💡 <strong>Verdict Décisionnel :</strong> Solution d'excellence pour les très grandes collectivités (Métropoles, Régions, Ministères). Pour les petites et moyennes collectivités, l'architecture <strong>Mistral SecNumCloud + Proxy</strong> reste <strong>5 à 10 fois plus économique</strong> et totalement souveraine."
+            },
+            {
                 title: "Calculateur de Coûts & Financement DSI (TCO 3 Ans)",
                 type: "pipeline-cost-calculator",
                 desc: "Estimez le budget annuel global, le dimensionnement des modèles Mistral souverains et la gestion des quotas de crédits par catégorie d'agents (Catégorie A, B, C).",
@@ -1059,22 +1085,22 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
                 desc: "Évaluez votre niveau de maîtrise sur les 10 notions clés de la formation IA Territoriale.",
                 questions: [
                     { 
-                        q: "1. Qu'est-ce qu'un Token en IA ?", 
+                        q: "1. Qu'est-ce qu'un Token en IA générative ?", 
                         choices: [
-                            "Une pièce de monnaie virtuelle réservée aux transactions sur le Dark Web", 
-                            "Un morceau de mot, de syllabe ou de symbole numérisé par le modèle", 
-                            "Un script de sécurité installé par le DSI sur l'ordinateur de l'agent", 
-                            "Un composant physique situé à l'intérieur du processeur graphique (GPU)"
+                            "Une pièce de monnaie virtuelle réservée aux transactions du Dark Web", 
+                            "Un morceau de mot, de syllabe ou de symbole numérisé par le modèle pour effectuer ses calculs", 
+                            "Un script de sécurité imposé par le DSI pour verrouiller le poste de l'agent", 
+                            "Un composant physique soudé à l'intérieur du processeur graphique (GPU)"
                         ], 
                         correct: 1, 
                         exp: "Le token est la plus petite unité de texte numérisée et traitée par un LLM." 
                     },
                     { 
-                        q: "2. Quel texte de loi américain autorise l'accès aux données des entreprises US même situées en Europe ?", 
+                        q: "2. Quel texte de loi américain permet aux autorités US d'exiger l'accès aux données des entreprises américaines hébergées en Europe ?", 
                         choices: [
-                            "Le Cloud Act américain", 
+                            "Le US CLOUD Act (Clarifying Lawful Overseas Use of Data Act)", 
                             "Le Règlement Général sur la Protection des Données (RGPD)", 
-                            "La Loi de Roy Amara sur les révolutions technologiques", 
+                            "La Loi de Roy Amara sur l'adoption technologique", 
                             "Le Code de la Route des Autoroutes de l'Information"
                         ], 
                         correct: 0, 
@@ -1085,11 +1111,33 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
                         choices: [
                             "Elle garantit la rédaction automatique du document en format PDF final imprimable", 
                             "Elle fournit les données et textes officiels de travail pour ancrer l'IA et éliminer les hallucinations", 
-                            "Elle vérifie la vitesse de connexion réseau du serveur avant de lancer le calcul", 
-                            "Elle réserve automatiquement une salle de réunion et des chouquettes pour le conseil municipal"
+                            "Elle vérifie la vitesse de connexion réseau du serveur avant de démarrer le calcul", 
+                            "Elle réserve automatiquement une boîte de chouquettes pour la prochaine réunion de service"
                         ], 
                         correct: 1, 
                         exp: "Fournir des ressources de travail (ancrage RAG) empêche l'IA d'inventer des faits ou de fausses références juridiques." 
+                    },
+                    { 
+                        q: "4. Quelle est la différence majeure entre l'offre S3NS (PREMI3NS) et un modèle Mistral hébergé localement ?", 
+                        choices: [
+                            "S3NS est une solution 100% gratuite offerte par l'État à toutes les petites mairies", 
+                            "S3NS offre Gemini/Vertex AI dans une enclave SecNumCloud pour grands comptes, alors que Mistral local est 5 à 10x plus économique et 100% souverain", 
+                            "S3NS s'installe sans connexion Internet directement sur l'ordinateur portable de l'agent", 
+                            "Mistral local exige que l'agent souffle sur le processeur pour le refroidir"
+                        ], 
+                        correct: 1, 
+                        exp: "S3NS est taillé pour les très grandes collectivités avec l'écosystème Google, tandis que Mistral SecNumCloud/local convient à toutes les tailles de collectivités." 
+                    },
+                    { 
+                        q: "5. Que classe le règlement européen EU AI Act en catégorie 'Haut Risque' pour une collectivité ?", 
+                        choices: [
+                            "Un chatbot d'information générale destiné aux usagers du site web municipal", 
+                            "Un système algorithmique d'évaluation ou de sélection automatique des candidatures RH et attribution d'aides sociales", 
+                            "Un correcteur d'orthographe utilisé pour la rédaction des mails du cabinet", 
+                            "Une machine à café connectée installée dans la salle des pauses des agents"
+                        ], 
+                        correct: 1, 
+                        exp: "Les systèmes d'IA impactant l'accès aux droits, à l'emploi (RH) et aux aides sociales font partie de la catégorie 'Haut Risque' (Annexe III d'AI Act)." 
                     }
                 ]
             }

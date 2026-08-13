@@ -8,94 +8,58 @@ TrainingApp.prototype.closeInteractivityPanel = function() {
     }
 
 TrainingApp.prototype.zoomResponse = async function(prenom) {
-        if (!this.supabase || this.role !== 'formateur') return;
-        
-        let targetPollId = null;
-        let pollIdForQuery = null;
-        if (this.activePoll) {
-            targetPollId = this.activePoll.id;
-            const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
-            targetPollId = `${targetPollId}${suffix}:zoom:${prenom}`;
-            pollIdForQuery = this.activePoll.id;
-        } else if (this.activeExercise) {
-            targetPollId = `exercise-zoom:${prenom}`;
-            pollIdForQuery = `ex-${this.activeExercise.id}`;
-        }
-        
-        if (targetPollId) {
-            // Mise à jour en base de données pour les stagiaires
-            await this.supabase.from('sessions').update({
-                active_poll_id: targetPollId
-            }).eq('id', this.sessionId);
-
-            // Récupérer et afficher la réponse localement sur l'écran du formateur
-            const { data: vote } = await this.supabase.from('votes')
-                .select('reponse')
-                .eq('session_id', this.sessionId)
-                .eq('poll_id', pollIdForQuery)
-                .eq('prenom', prenom)
-                .maybeSingle();
-            if (vote) {
-                this.showZoomOverlay(prenom, vote.reponse);
-            }
-        }
+    if (!this.supabase || this.role !== 'formateur') return;
+    
+    if (this.currentZoomedPrenom === prenom) {
+        this.clearZoom();
+        return;
     }
-
-TrainingApp.prototype.clearZoom = async function() {
-        if (!this.supabase || this.role !== 'formateur') return;
-        
-        let targetPollId = null;
-        if (this.activePoll) {
-            targetPollId = this.activePoll.id;
-            const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
-            targetPollId = `${targetPollId}${suffix}`;
-        } else if (this.activeExercise) {
-            targetPollId = null;
-        }
-        
+    
+    let targetPollId = null;
+    let pollIdForQuery = null;
+    if (this.activePoll) {
+        targetPollId = this.activePoll.id;
+        const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
+        targetPollId = `${targetPollId}${suffix}:zoom:${prenom}`;
+        pollIdForQuery = this.activePoll.id;
+    } else if (this.activeExercise) {
+        targetPollId = `exercise-zoom:${prenom}`;
+        pollIdForQuery = `ex-${this.activeExercise.id}`;
+    }
+    
+    if (targetPollId) {
+        this.currentZoomedPrenom = prenom;
         await this.supabase.from('sessions').update({
             active_poll_id: targetPollId
         }).eq('id', this.sessionId);
-
-        // Masquer localement sur l'écran du formateur
-        this.hideZoomOverlay();
     }
+};
+
+TrainingApp.prototype.clearZoom = async function() {
+    this.currentZoomedPrenom = null;
+    if (!this.supabase || this.role !== 'formateur') {
+        this.hideZoomOverlay();
+        return;
+    }
+    
+    let targetPollId = null;
+    if (this.activePoll) {
+        targetPollId = this.activePoll.id;
+        const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
+        targetPollId = `${targetPollId}${suffix}`;
+    } else if (this.activeExercise) {
+        targetPollId = null;
+    }
+    
+    await this.supabase.from('sessions').update({
+        active_poll_id: targetPollId
+    }).eq('id', this.sessionId);
+
+    this.hideZoomOverlay();
+};
 
 TrainingApp.prototype.showZoomOverlay = function(prenom, responseText) {
-        let overlay = document.getElementById('zoom-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'zoom-overlay';
-            overlay.className = 'zoom-response-overlay';
-            document.body.appendChild(overlay);
-        }
-        
-        const isFormateur = this.role === 'formateur';
-        overlay.innerHTML = `
-            <div class="zoom-overlay-content">
-                ${isFormateur ? `<button class="zoom-overlay-close" id="btn-close-zoom">&times;</button>` : ''}
-                <div class="zoom-overlay-header">
-                    <span class="zoom-overlay-avatar">👤</span>
-                    <h3 class="zoom-overlay-title">Réponse de <span class="zoom-overlay-name">${this.escapeHtml(prenom)}</span></h3>
-                </div>
-                <div class="zoom-overlay-body">
-                    <pre class="zoom-overlay-text">${this.escapeHtml(responseText)}</pre>
-                </div>
-            </div>
-        `;
-        
-        overlay.classList.add('visible');
-        
-        if (isFormateur) {
-            const btnClose = overlay.querySelector('#btn-close-zoom');
-            if (btnClose) {
-                btnClose.onclick = () => this.clearZoom();
-            }
-        }
-    }
-
-
-TrainingApp.prototype.zoomOption = function(key, label, count, pct, poll) {
+    this.currentZoomedPrenom = prenom;
     let overlay = document.getElementById('zoom-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -104,43 +68,176 @@ TrainingApp.prototype.zoomOption = function(key, label, count, pct, poll) {
         document.body.appendChild(overlay);
     }
     
-    const isQuiz = poll && poll.type === 'quiz';
-    const isCorrect = isQuiz && poll.correct === key;
-    const badgeHtml = isQuiz ? (isCorrect ? '<span style="color:#34d399; font-weight:800; font-size:0.9rem; display:block; margin-top:0.4rem;">✔️ BONNE RÉPONSE OFFICIELLE</span>' : '<span style="color:#f87171; font-weight:800; font-size:0.9rem; display:block; margin-top:0.4rem;">❌ OPTION INCORRECTE</span>') : '';
-
+    const isFormateur = (this.role === 'formateur');
+    
     overlay.innerHTML = `
-        <div class="zoom-overlay-content" style="max-width: 650px; text-align:center;">
-            <button class="zoom-overlay-close" id="btn-close-zoom">&times;</button>
-            <div class="zoom-overlay-header" style="justify-content:center; flex-direction:column; gap:0.4rem;">
-                <div style="font-size: 2.5rem; margin-bottom:0.2rem;">📊 Option ${key}</div>
-                <h3 class="zoom-overlay-title" style="font-size:1.35rem; color:var(--text-title); line-height:1.4;">
-                    ${key}. ${this.escapeHtml(label)}
+        <div class="zoom-overlay-content" style="max-width: 750px; width:92%; background:#0f172a; border:2px solid var(--accent-purple); border-radius:16px; padding:2rem; text-align:center; color:white; box-shadow:0 25px 50px -12px rgba(0,0,0,0.7); position:relative;">
+            ${isFormateur ? `<button class="zoom-overlay-close" id="btn-close-zoom" style="position:absolute; top:1rem; right:1.2rem; background:rgba(255,255,255,0.1); border:none; color:white; font-size:1.5rem; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>` : ''}
+            
+            <div style="display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-bottom:1rem;">
+                <span style="font-size:2rem;">👤</span>
+                <h3 style="font-size:1.5rem; font-weight:800; color:#f8fafc; margin:0;">
+                    Réponse de <span style="color:var(--accent-sky);">${this.escapeHtml(prenom)}</span>
                 </h3>
-                ${badgeHtml}
             </div>
-            <div class="zoom-overlay-body" style="margin-top:1.25rem;">
-                <div style="background:linear-gradient(135deg, rgba(14,165,233,0.12), rgba(139,92,246,0.12)); border:1px solid rgba(14,165,233,0.3); padding:1.5rem; border-radius:12px;">
-                    <div style="font-size:3.2rem; font-weight:800; color:var(--accent-blue); line-height:1;">${pct}%</div>
-                    <div style="font-size:1rem; font-weight:700; color:var(--text-title); margin-top:0.4rem;">${count} vote${count > 1 ? 's' : ''} enregistré${count > 1 ? 's' : ''} sur cette option</div>
-                </div>
+            
+            <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); padding:1.5rem; border-radius:12px; max-height:50vh; overflow-y:auto; text-align:left; font-size:1.1rem; line-height:1.6; color:#f1f5f9; white-space:pre-wrap; font-family:'Outfit', sans-serif;">
+                ${this.escapeHtml(responseText || 'Aucune réponse fournie')}
             </div>
+            
+            ${isFormateur ? `<div style="font-size:0.75rem; color:#64748b; margin-top:1.25rem; font-style:italic;">Cliquez sur ✖️ ou appuyez sur Échap pour fermer l'affichage grand écran pour toute la classe.</div>` : ''}
         </div>
     `;
     
     overlay.classList.add('visible');
     
-    const btnClose = overlay.querySelector('#btn-close-zoom');
-    if (btnClose) {
-        btnClose.onclick = () => this.hideZoomOverlay();
+    if (isFormateur) {
+        const btnClose = overlay.querySelector('#btn-close-zoom');
+        if (btnClose) {
+            btnClose.onclick = () => this.clearZoom();
+        }
+    }
+};
+
+
+TrainingApp.prototype.zoomOption = async function(key, poll) {
+    const currentPoll = poll || this.activePoll;
+    if (!currentPoll) return;
+    
+    if (this.role !== 'formateur') {
+        this.showOptionZoomOverlay(currentPoll, key, this.revealState);
+        return;
+    }
+    
+    if (this.currentZoomedOption === key) {
+        this.closeOptionZoom();
+        return;
+    }
+    
+    const baseId = currentPoll.id;
+    const rev = this.revealState || 'hidden';
+    const newActivePollId = `${baseId}:${rev}:opt:${key}`;
+    
+    await this.supabase.from('sessions').update({
+        active_poll_id: newActivePollId
+    }).eq('id', this.sessionId);
+};
+
+TrainingApp.prototype.closeOptionZoom = async function() {
+    this.currentZoomedOption = null;
+    if (!this.supabase || this.role !== 'formateur') {
+        this.hideZoomOverlay();
+        return;
+    }
+    const currentPoll = this.activePoll;
+    if (!currentPoll) {
+        this.hideZoomOverlay();
+        return;
+    }
+    const baseId = currentPoll.id;
+    const rev = this.revealState || 'hidden';
+    const newActivePollId = (rev !== 'hidden') ? `${baseId}:${rev}` : baseId;
+    
+    await this.supabase.from('sessions').update({
+        active_poll_id: newActivePollId
+    }).eq('id', this.sessionId);
+};
+
+TrainingApp.prototype.showOptionZoomOverlay = async function(poll, key, revealState) {
+    this.currentZoomedOption = key;
+    let overlay = document.getElementById('zoom-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'zoom-overlay';
+        overlay.className = 'zoom-response-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    const currentPoll = poll || this.activePoll;
+    let count = 0;
+    let total = 0;
+    let pct = 0;
+    
+    if (this.supabase && this.sessionId && currentPoll) {
+        const { data: votes } = await this.supabase.from('votes')
+            .select('*')
+            .eq('session_id', this.sessionId)
+            .eq('poll_id', currentPoll.id);
+        const votesList = votes || [];
+        total = votesList.length;
+        count = votesList.filter(v => v.reponse === key).length;
+        pct = total > 0 ? Math.round((count / total) * 100) : 0;
+    }
+    
+    const label = (currentPoll && currentPoll.options && currentPoll.options[key]) ? currentPoll.options[key] : key;
+    const isQuiz = currentPoll && currentPoll.type === 'quiz';
+    const isAnswerRevealed = revealState === 'answer';
+    const isCorrect = isQuiz && isAnswerRevealed && currentPoll.correct === key;
+    const isIncorrect = isQuiz && isAnswerRevealed && currentPoll.correct !== key;
+    
+    let badgeHtml = '';
+    if (isAnswerRevealed && isQuiz) {
+        if (isCorrect) {
+            badgeHtml = `<div style="display:inline-block; background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:0.4rem 1.2rem; border-radius:20px; font-weight:800; font-size:0.95rem; margin-top:0.75rem;">🎉 RÉPONSE CORRECTE</div>`;
+        } else {
+            badgeHtml = `<div style="display:inline-block; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:0.4rem 1.2rem; border-radius:20px; font-weight:800; font-size:0.95rem; margin-top:0.75rem;">❌ RÉPONSE INCORRECTE (La bonne réponse est : Option ${currentPoll.correct})</div>`;
+        }
+    }
+    
+    const isFormateur = (this.role === 'formateur');
+    
+    overlay.innerHTML = `
+        <div class="zoom-overlay-content" style="max-width: 750px; width:92%; background:#0f172a; border:2px solid ${isCorrect ? '#22c55e' : (isIncorrect ? '#ef4444' : '#6366f1')}; border-radius:16px; padding:2rem; text-align:center; color:white; box-shadow:0 25px 50px -12px rgba(0,0,0,0.7); position:relative;">
+            ${isFormateur ? `<button class="zoom-overlay-close" id="btn-close-zoom" style="position:absolute; top:1rem; right:1.2rem; background:rgba(255,255,255,0.1); border:none; color:white; font-size:1.5rem; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>` : ''}
+            
+            <div style="font-size:0.8rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:0.5rem;">
+                ${currentPoll ? this.escapeHtml(currentPoll.question || '') : 'Question'}
+            </div>
+            
+            <div style="font-size:2.2rem; font-weight:900; color:${isCorrect ? '#4ade80' : (isIncorrect ? '#f87171' : '#60a5fa')}; margin-bottom:0.75rem;">
+                Option ${key}
+            </div>
+            
+            <div style="font-size:1.35rem; font-weight:700; color:#f8fafc; line-height:1.5; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:1.25rem; border-radius:12px; margin-bottom:1.25rem;">
+                "${this.escapeHtml(label)}"
+            </div>
+            
+            ${(revealState === 'votes' || revealState === 'answer') ? `
+                <div style="background:linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.15)); border:1px solid rgba(99,102,241,0.3); padding:1rem; border-radius:12px; display:inline-block; min-width:200px;">
+                    <div style="font-size:2.5rem; font-weight:800; color:#818cf8; line-height:1;">${pct}%</div>
+                    <div style="font-size:0.85rem; color:#cbd5e1; margin-top:0.3rem;">${count} vote${count > 1 ? 's' : ''} sur ${total}</div>
+                </div>
+            ` : ''}
+            
+            ${badgeHtml}
+            
+            ${(isAnswerRevealed && isQuiz && currentPoll.explanation) ? `
+                <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); padding:1rem; border-radius:10px; font-size:0.85rem; color:#e2e8f0; text-align:left; margin-top:1.25rem; line-height:1.5;">
+                    💡 <strong>Explication :</strong> ${this.escapeHtml(currentPoll.explanation)}
+                </div>
+            ` : ''}
+            
+            ${isFormateur ? `<div style="font-size:0.75rem; color:#64748b; margin-top:1rem; font-style:italic;">Cliquez sur ✖️ ou appuyez sur Échap pour fermer l'affichage grand écran pour toute la classe.</div>` : ''}
+        </div>
+    `;
+    
+    overlay.classList.add('visible');
+    
+    if (isFormateur) {
+        const btnClose = overlay.querySelector('#btn-close-zoom');
+        if (btnClose) {
+            btnClose.onclick = () => this.closeOptionZoom();
+        }
     }
 };
 
 TrainingApp.prototype.hideZoomOverlay = function() {
-        const overlay = document.getElementById('zoom-overlay');
-        if (overlay) {
-            overlay.classList.remove('visible');
-        }
+    this.currentZoomedOption = null;
+    const overlay = document.getElementById('zoom-overlay');
+    if (overlay) {
+        overlay.classList.remove('visible');
     }
+};
 
 TrainingApp.prototype.refreshFormateurPanel = async function() {
         if (!this.supabase || this.role !== 'formateur') return;
@@ -158,12 +255,20 @@ TrainingApp.prototype.refreshFormateurPanel = async function() {
             qSection.innerHTML = `
                 <div class="poll-question-wrapper">
                     <p class="poll-category">Test Libre Actif ✏️</p>
-                    <h4 style="margin: 0.5rem 0; font-size:1.05rem;">Atelier / Échanges improvisés</h4>
-                    <p style="font-size:0.78rem; color:var(--text-muted); line-height:1.45; margin-top:0.4rem;">
-                        Les stagiaires écrivent librement leurs réponses ou remarques. Leurs réponses s'affichent ci-dessous en temps réel. Cliquer sur une réponse pour l'afficher en grand à tout le monde.
-                    </p>
+                    <div style="background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.25); padding:0.85rem; border-radius:8px; margin-top:0.4rem; text-align:left;">
+                        <span style="font-size:0.75rem; font-weight:800; color:var(--accent-sky); text-transform:uppercase;">📌 Énoncé diffusé aux stagiaires :</span>
+                        <h4 style="margin:0.3rem 0 0.6rem 0; font-size:1rem; font-weight:700; color:var(--text-title); line-height:1.4;">${this.escapeHtml(this.activePoll.question)}</h4>
+                        <button class="btn btn-secondary btn-sm" id="btn-edit-free-test-prompt" style="font-size:0.75rem; padding:0.3rem 0.65rem;">✏️ Modifier l'énoncé de la question</button>
+                    </div>
                 </div>
             `;
+            
+            const btnEditPrompt = qSection.querySelector('#btn-edit-free-test-prompt');
+            if (btnEditPrompt) {
+                btnEditPrompt.onclick = () => {
+                    this.startFreeTest(this.activePoll.question);
+                };
+            }
             
             actionsSection.style.display = 'flex';
             const btnToggle = document.getElementById('btn-panel-toggle-results');
@@ -280,13 +385,20 @@ TrainingApp.prototype.refreshFormateurPanel = async function() {
                 <h4 style="margin:0.5rem 0; font-size: 1rem;">${poll.question}</h4>
                 <div class="poll-options-preview" style="margin-top: 0.75rem;">
                     ${Object.entries(poll.options).map(([key, val]) => `
-                        <div class="poll-preview-option" style="font-size:0.78rem; margin-bottom:0.35rem; color:var(--text-body);">
-                            <strong style="color:var(--accent-blue)">${key} :</strong> ${val}
+                        <div class="poll-preview-option btn-zoom-poll-preview" data-key="${key}" style="font-size:0.78rem; margin-bottom:0.35rem; color:var(--text-body); padding:0.4rem 0.6rem; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid var(--border-color); cursor:pointer; transition:all 0.15s ease;" title="Cliquer pour afficher l'Option ${key} en Grand Écran pour toute la classe">
+                            <strong style="color:var(--accent-blue)">Option ${key} :</strong> ${val} <span style="float:right; opacity:0.6;">🔍 Grand Écran</span>
                         </div>
                     `).join('')}
                 </div>
             </div>
         `;
+
+        qSection.querySelectorAll('.btn-zoom-poll-preview').forEach(optEl => {
+            optEl.onclick = () => {
+                const key = optEl.dataset.key;
+                this.zoomOption(key, poll);
+            };
+        });
 
         if (!this.activePoll) {
             actionsSection.style.display = 'none';
@@ -420,8 +532,15 @@ TrainingApp.prototype.loadPollResults = async function(poll) {
         
         votersCountSpan.innerText = votesList.length;
         votersListDiv.innerHTML = votesList.map(v => `
-            <span class="voter-badge-name voted">✅ ${this.escapeHtml(v.prenom)}</span>
+            <span class="voter-badge-name voted trainee-card-clickable" data-prenom="${this.escapeHtml(v.prenom)}" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.3rem;" title="Cliquer pour afficher la réponse de ${this.escapeHtml(v.prenom)} en Grand Écran">✅ ${this.escapeHtml(v.prenom)} 🔍</span>
         `).join('');
+
+        votersListDiv.querySelectorAll('.trainee-card-clickable').forEach(badge => {
+            badge.onclick = () => {
+                const prenom = badge.dataset.prenom;
+                this.zoomResponse(prenom);
+            };
+        });
 
         const resultsSection = document.getElementById('panel-results-section');
         
@@ -467,10 +586,7 @@ TrainingApp.prototype.loadPollResults = async function(poll) {
             resultsSection.querySelectorAll('.btn-zoom-poll-option').forEach(row => {
                 row.onclick = () => {
                     const key = row.dataset.key;
-                    const label = row.dataset.label;
-                    const count = parseInt(row.dataset.count, 10);
-                    const pct = parseInt(row.dataset.pct, 10);
-                    this.zoomOption(key, label, count, pct, poll);
+                    this.zoomOption(key, poll);
                 };
             });
         } else {
@@ -998,10 +1114,17 @@ TrainingApp.prototype.loadTestResults = async function(testObj) {
             votersListDiv.innerHTML = voters.map(v => {
                 const isCompleted = v.answered >= totalQuestions;
                 const scoreText = showScoreText ? ` (${v.correct}/${totalQuestions})` : ` (${v.answered}/${totalQuestions})`;
-                const badgeClass = isCompleted ? 'voter-badge-name voted' : 'voter-badge-name';
+                const badgeClass = isCompleted ? 'voter-badge-name voted trainee-card-clickable' : 'voter-badge-name trainee-card-clickable';
                 const icon = isCompleted ? '✅' : '⏳';
-                return `<span class="${badgeClass}">${icon} ${this.escapeHtml(v.prenom)}${scoreText}</span>`;
+                return `<span class="${badgeClass}" data-prenom="${this.escapeHtml(v.prenom)}" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.3rem;" title="Cliquer pour afficher les réponses de ${this.escapeHtml(v.prenom)} en Grand Écran">${icon} ${this.escapeHtml(v.prenom)}${scoreText} 🔍</span>`;
             }).join('');
+
+            votersListDiv.querySelectorAll('.trainee-card-clickable').forEach(badge => {
+                badge.onclick = () => {
+                    const prenom = badge.dataset.prenom;
+                    this.zoomResponse(prenom);
+                };
+            });
         }
 
         const resultsSection = document.getElementById('panel-results-section');
@@ -1313,188 +1436,289 @@ TrainingApp.prototype.showPublicTestPanel = async function(testObj, revealState)
         }
     }
 
-TrainingApp.prototype.startFreeTest = async function() {
-        if (!this.supabase || this.role !== 'formateur') return;
-        const theme = THEMES[this.currentThemeIndex];
-        const testId = 'test-libre-' + theme.id;
-        
-        await this.supabase.from('votes').delete().eq('session_id', this.sessionId).eq('poll_id', testId);
-        
-        this.sessionState.show_results = false;
-        this.revealState = 'hidden';
-        
-        this.activePoll = {
-            id: testId,
-            type: 'test-libre',
-            title: `Atelier libre / Échanges improvisés ✏️`,
-            question: `Proposez vos réponses ou remarques par écrit suite aux échanges en cours.`
-        };
-        
-        await this.supabase.from('sessions').update({
-            active_poll_id: testId,
-            show_results: false,
-            active_exercise_id: null
-        }).eq('id', this.sessionId);
-
-        this.refreshFormateurPanel();
+TrainingApp.prototype.startFreeTest = function(initialQuestion) {
+    if (!this.supabase || this.role !== 'formateur') return;
+    
+    let modal = document.getElementById('modal-start-free-test');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'modal-start-free-test';
+        modal.className = 'zoom-response-overlay';
+        document.body.appendChild(modal);
     }
+    
+    const theme = (this.currentThemeIndex >= 0 && THEMES[this.currentThemeIndex]) ? THEMES[this.currentThemeIndex] : { id: 'general', title: 'Général' };
+    const defaultQuestion = initialQuestion || "Proposez vos réponses, réflexions ou cas pratiques suite aux récents échanges.";
+    
+    modal.innerHTML = `
+        <div class="zoom-overlay-content" style="max-width: 620px; width:92%; background:#0f172a; border:2px solid var(--accent-blue); border-radius:16px; padding:2rem; color:white; box-shadow:0 25px 50px -12px rgba(0,0,0,0.7); position:relative; text-align:left;">
+            <button class="zoom-overlay-close" id="btn-close-free-test-modal" style="position:absolute; top:1rem; right:1.2rem; background:rgba(255,255,255,0.1); border:none; color:white; font-size:1.5rem; width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;">&times;</button>
+            
+            <h3 style="font-size:1.3rem; font-weight:800; color:#f8fafc; margin:0 0 0.5rem 0; display:flex; align-items:center; gap:0.5rem;">
+                ✏️ Lancer un Test Libre (${this.escapeHtml(theme.title)})
+            </h3>
+            
+            <p style="font-size:0.85rem; color:#94a3b8; margin-bottom:1.25rem; line-height:1.4;">
+                Saisissez l'énoncé de la question ci-dessous. Elle sera diffusée instantanément en temps réel sur les écrans de l'ensemble des stagiaires.
+            </p>
+            
+            <div style="margin-bottom:1.25rem;">
+                <label style="font-size:0.8rem; font-weight:700; color:var(--accent-sky); display:block; margin-bottom:0.4rem;">
+                    📌 Énoncé de la question :
+                </label>
+                <textarea id="free-test-prompt-input" style="width:100%; min-height:100px; background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:white; padding:0.88rem; font-family:inherit; font-size:0.9rem; outline:none; resize:vertical;">${this.escapeHtml(defaultQuestion)}</textarea>
+            </div>
+            
+            <div style="display:flex; gap:0.75rem; justify-content:flex-end;">
+                <button class="btn btn-secondary" id="btn-cancel-free-test-modal" style="padding:0.6rem 1rem; font-size:0.85rem;">Annuler</button>
+                <button class="btn btn-primary" id="btn-confirm-free-test-modal" style="padding:0.6rem 1.25rem; font-size:0.85rem;">🚀 Diffuser la question (Temps Réel)</button>
+            </div>
+        </div>
+    `;
+    
+    modal.classList.add('visible');
+    
+    const closeModal = () => modal.classList.remove('visible');
+    modal.querySelector('#btn-close-free-test-modal').onclick = closeModal;
+    modal.querySelector('#btn-cancel-free-test-modal').onclick = closeModal;
+    
+    modal.querySelector('#btn-confirm-free-test-modal').onclick = async () => {
+        const questionText = modal.querySelector('#free-test-prompt-input').value.trim() || defaultQuestion;
+        closeModal();
+        await this.executeStartFreeTest(questionText);
+    };
+};
+
+TrainingApp.prototype.executeStartFreeTest = async function(questionText) {
+    if (!this.supabase || this.role !== 'formateur') return;
+    const theme = (this.currentThemeIndex >= 0 && THEMES[this.currentThemeIndex]) ? THEMES[this.currentThemeIndex] : { id: 'general', title: 'Général' };
+    const baseId = 'test-libre-' + theme.id;
+    
+    await this.supabase.from('votes').delete().eq('session_id', this.sessionId).eq('poll_id', baseId);
+    
+    this.sessionState.show_results = false;
+    this.revealState = 'hidden';
+    
+    const encodedQ = encodeURIComponent(questionText);
+    const fullActivePollId = `${baseId}:q:${encodedQ}`;
+    
+    this.activePoll = {
+        id: fullActivePollId,
+        baseId: baseId,
+        type: 'test-libre',
+        title: `Atelier libre / Échanges improvisés ✏️`,
+        question: questionText
+    };
+    
+    await this.supabase.from('sessions').update({
+        active_poll_id: fullActivePollId,
+        show_results: false,
+        active_exercise_id: null
+    }).eq('id', this.sessionId);
+
+    this.refreshFormateurPanel();
+};
 
 TrainingApp.prototype.loadFreeTestResults = async function(testObj) {
-        if (!this.supabase) return;
-        const { data: votes } = await this.supabase.from('votes').select('*').eq('session_id', this.sessionId).eq('poll_id', testObj.id);
-        const votesList = votes || [];
-        
-        const votersCountSpan = document.getElementById('voters-count');
-        const votersListDiv = document.getElementById('voters-names-list');
-        
-        if (votersCountSpan) votersCountSpan.innerText = `${votesList.length}`;
-        
-        const showResults = (this.revealState === 'votes' || this.revealState === 'answer');
-        
-        if (votersListDiv) {
-            if (votesList.length === 0) {
-                votersListDiv.innerHTML = `<div style="text-align:center; padding:1rem; color:var(--text-muted); font-style:italic;">En attente des réponses des stagiaires...</div>`;
-            } else {
-                votersListDiv.innerHTML = votesList.map(v => {
-                    return `
-                        <div class="free-test-response-card trainee-card-clickable" data-prenom="${this.escapeHtml(v.prenom)}" style="background:rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.5rem; text-align:left; cursor:pointer;">
-                            <div style="font-weight:700; color:var(--accent-sky); font-size:0.8rem; margin-bottom:0.25rem; display:flex; justify-content:space-between; pointer-events:none;">
-                                <span>👤 ${this.escapeHtml(v.prenom)}</span>
-                                <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">${new Date(v.created_at).toLocaleTimeString('fr-FR')}</span>
-                            </div>
-                            <div style="font-size:0.82rem; line-height:1.4; color:#f8fafc; white-space:pre-wrap; pointer-events:none;">${this.escapeHtml(v.reponse)}</div>
+    if (!this.supabase) return;
+    const baseQueryId = testObj.baseId || testObj.id.split(':q:')[0].split(':')[0];
+    const { data: votes } = await this.supabase.from('votes').select('*').eq('session_id', this.sessionId).eq('poll_id', baseQueryId);
+    const votesList = votes || [];
+    
+    const votersCountSpan = document.getElementById('voters-count');
+    const votersListDiv = document.getElementById('voters-names-list');
+    
+    if (votersCountSpan) votersCountSpan.innerText = `${votesList.length}`;
+    
+    if (votersListDiv) {
+        if (votesList.length === 0) {
+            votersListDiv.innerHTML = `<div style="text-align:center; padding:1rem; color:var(--text-muted); font-style:italic;">En attente des réponses des stagiaires...</div>`;
+        } else {
+            votersListDiv.innerHTML = votesList.map(v => {
+                return `
+                    <div class="free-test-response-card trainee-card-clickable" data-prenom="${this.escapeHtml(v.prenom)}" style="background:rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.5rem; text-align:left; cursor:pointer;" title="Cliquer pour afficher la réponse de ${this.escapeHtml(v.prenom)} en Grand Écran">
+                        <div style="font-weight:700; color:var(--accent-sky); font-size:0.8rem; margin-bottom:0.25rem; display:flex; justify-content:space-between; pointer-events:none;">
+                            <span>👤 ${this.escapeHtml(v.prenom)} 🔍</span>
+                            <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">${new Date(v.created_at).toLocaleTimeString('fr-FR')}</span>
                         </div>
-                    `;
-                }).join('');
+                        <div style="font-size:0.82rem; line-height:1.4; color:#f8fafc; white-space:pre-wrap; pointer-events:none;">${this.escapeHtml(v.reponse)}</div>
+                    </div>
+                `;
+            }).join('');
 
-                votersListDiv.querySelectorAll('.trainee-card-clickable').forEach(card => {
-                    card.onclick = () => {
-                        const prenom = card.dataset.prenom;
-                        this.zoomResponse(prenom);
-                    };
-                });
-            }
+            votersListDiv.querySelectorAll('.trainee-card-clickable').forEach(card => {
+                card.onclick = () => {
+                    const prenom = card.dataset.prenom;
+                    this.zoomResponse(prenom);
+                };
+            });
         }
     }
+};
 
 TrainingApp.prototype.showStagiaireFreeTestPanel = async function(testObj, revealState) {
-        const panel = document.getElementById('interactivity-panel');
-        if (panel) panel.classList.add('open');
+    const panel = document.getElementById('interactivity-panel');
+    if (panel) panel.classList.add('open');
 
-        const panelTitle = document.getElementById('panel-title');
-        if (panelTitle) panelTitle.innerText = testObj.title;
+    const panelTitle = document.getElementById('panel-title');
+    if (panelTitle) panelTitle.innerText = testObj.title;
 
-        const qSection = document.getElementById('panel-question-section');
-        if (qSection) {
-            qSection.innerHTML = `
-                <div class="poll-question-wrapper">
-                    <p class="poll-category">Test Libre ✏️</p>
-                    <h4 style="margin: 0.3rem 0; font-size:0.95rem; line-height:1.4;">${testObj.question}</h4>
+    const qSection = document.getElementById('panel-question-section');
+    if (qSection) {
+        qSection.innerHTML = `
+            <div class="poll-question-wrapper">
+                <p class="poll-category">Test Libre ✏️</p>
+                <div style="background:linear-gradient(135deg, rgba(14,165,233,0.12), rgba(99,102,241,0.12)); border:1px solid rgba(14,165,233,0.3); padding:1rem; border-radius:8px; margin-top:0.4rem; text-align:left;">
+                    <span style="font-size:0.75rem; font-weight:800; color:var(--accent-sky); text-transform:uppercase;">📌 Énoncé de la question :</span>
+                    <h4 style="margin:0.4rem 0 0 0; font-size:1.05rem; font-weight:700; color:white; line-height:1.45;">${this.escapeHtml(testObj.question)}</h4>
                 </div>
-            `;
-        }
-
-        const voteFormSection = document.getElementById('panel-vote-form-section');
-        const resultsSection = document.getElementById('panel-results-section');
-        
-        if (voteFormSection) voteFormSection.style.display = 'none';
-        if (!resultsSection) return;
-        resultsSection.style.display = 'block';
-
-        const { data: myVote } = await this.supabase.from('votes').select('*').eq('session_id', this.sessionId).eq('poll_id', testObj.id).eq('prenom', this.prenom).maybeSingle();
-        const hasEnded = (revealState === 'answer');
-        const showAllResults = (revealState === 'votes' || revealState === 'answer');
-
-        if (!myVote && !hasEnded) {
-            resultsSection.innerHTML = `
-                <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:left;">
-                    <textarea id="free-test-response-input" placeholder="Saisissez votre réponse ici..." style="width:100%; min-height:120px; background:rgba(30,41,59,0.5); border:1px solid var(--border-color); border-radius:6px; color:white; padding:0.75rem; font-family:inherit; font-size:0.85rem; outline:none; resize:vertical;"></textarea>
-                    <button class="btn btn-primary" id="btn-submit-free-test" style="justify-content:center; width:100%;">🚀 Soumettre ma réponse</button>
-                </div>
-            `;
-            
-            const btnSubmit = resultsSection.querySelector('#btn-submit-free-test');
-            const textarea = resultsSection.querySelector('#free-test-response-input');
-            btnSubmit.onclick = async () => {
-                const responseText = textarea.value.trim();
-                if (!responseText) return;
-                
-                await this.supabase.from('votes').insert({
-                    session_id: this.sessionId,
-                    poll_id: testObj.id,
-                    prenom: this.prenom,
-                    reponse: responseText,
-                    is_correct: null
-                });
-                
-                this.showStagiaireFreeTestPanel(testObj, revealState);
-            };
-        } else {
-            let html = '';
-            if (myVote) {
-                html += `
-                    <div class="score-banner correct" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); color:#34d399; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.8rem; text-align:left; margin-bottom:1rem; line-height:1.45;">
-                        <strong>Votre réponse a été enregistrée :</strong><br>
-                        <p style="margin: 0.4rem 0 0 0; font-weight:normal; font-size:0.82rem; white-space:pre-wrap; color:#f8fafc;">${this.escapeHtml(myVote.reponse)}</p>
-                    </div>
-                `;
-            } else {
-                html += `
-                    <div class="score-banner incorrect" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.8rem; text-align:center; margin-bottom:1rem;">
-                        🔒 Le test libre est clos (Vous n'avez pas répondu).
-                    </div>
-                `;
-            }
-
-            if (showAllResults) {
-                const { data: allVotes } = await this.supabase.from('votes').select('*').eq('session_id', this.sessionId).eq('poll_id', testObj.id);
-                const votesList = allVotes || [];
-                
-                html += `
-                    <h5 style="text-align:left; font-size:0.82rem; font-weight:700; margin-bottom:0.5rem; color:#f8fafc;">Réponses des participants :</h5>
-                    <div class="free-test-responses-container" style="max-height: 250px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem; padding-right:4px;">
-                `;
-                
-                if (votesList.length === 0) {
-                    html += `<p style="text-align:center; color:var(--text-muted); font-size:0.78rem; font-style:italic;">Aucune réponse pour le moment...</p>`;
-                } else {
-                    votesList.forEach(v => {
-                        html += `
-                            <div class="free-test-response-card" style="background:rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.6rem 0.75rem; text-align:left;">
-                                <span style="font-weight:700; color:var(--accent-sky); font-size:0.76rem; display:block; margin-bottom:0.2rem;">👤 ${this.escapeHtml(v.prenom)}</span>
-                                <p style="font-size:0.78rem; color:#f8fafc; line-height:1.4; margin:0; white-space:pre-wrap;">${this.escapeHtml(v.reponse)}</p>
-                            </div>
-                        `;
-                    });
-                }
-                html += `</div>`;
-            } else {
-                html += `
-                    <div style="text-align:center; padding:1.5rem; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.1); border-radius:6px; color:var(--text-muted); font-size:0.8rem; font-style:italic;">
-                        🕒 En attente de la publication des réponses des autres stagiaires par le formateur.
-                    </div>
-                `;
-            }
-            resultsSection.innerHTML = html;
-        }
+            </div>
+        `;
     }
 
-TrainingApp.prototype.showPublicFreeTestPanel = async function(testObj, revealState) {
-        const panel = document.getElementById('interactivity-panel');
-        if (panel) panel.classList.add('open');
+    const voteFormSection = document.getElementById('panel-vote-form-section');
+    const resultsSection = document.getElementById('panel-results-section');
+    
+    if (voteFormSection) voteFormSection.style.display = 'none';
+    if (!resultsSection) return;
+    resultsSection.style.display = 'block';
 
-        const panelTitle = document.getElementById('panel-title');
-        if (panelTitle) panelTitle.innerText = testObj.title;
+    const baseQueryId = testObj.baseId || testObj.id.split(':q:')[0].split(':')[0];
+    const { data: myVote } = await this.supabase.from('votes').select('*').eq('session_id', this.sessionId).eq('poll_id', baseQueryId).eq('prenom', this.prenom).maybeSingle();
+    const hasEnded = (revealState === 'answer');
+    const showAllResults = (revealState === 'votes' || revealState === 'answer');
 
-        const qSection = document.getElementById('panel-question-section');
-        if (qSection) {
-            qSection.innerHTML = `
-                <div class="poll-question-wrapper">
-                    <p class="poll-category">Test Libre (Visiteur) ✏️</p>
-                    <h4 style="margin: 0.3rem 0; font-size:0.95rem; line-height:1.4;">${testObj.question}</h4>
+    if (!myVote && !hasEnded) {
+        resultsSection.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:left;">
+                <textarea id="free-test-response-input" placeholder="Saisissez votre réponse ici..." style="width:100%; min-height:120px; background:rgba(30,41,59,0.5); border:1px solid var(--border-color); border-radius:6px; color:white; padding:0.75rem; font-family:inherit; font-size:0.85rem; outline:none; resize:vertical;"></textarea>
+                <button class="btn btn-primary" id="btn-submit-free-test" style="justify-content:center; width:100%;">🚀 Soumettre ma réponse</button>
+            </div>
+        `;
+        
+        const btnSubmit = resultsSection.querySelector('#btn-submit-free-test');
+        const textarea = resultsSection.querySelector('#free-test-response-input');
+        btnSubmit.onclick = async () => {
+            const responseText = textarea.value.trim();
+            if (!responseText) return;
+            
+            await this.supabase.from('votes').insert({
+                session_id: this.sessionId,
+                poll_id: baseQueryId,
+                prenom: this.prenom,
+                reponse: responseText,
+                is_correct: null
+            });
+            
+            this.showStagiaireFreeTestPanel(testObj, revealState);
+        };
+    } else {
+        let html = '';
+        if (myVote) {
+            html += `
+                <div class="score-banner correct" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); color:#34d399; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.8rem; text-align:left; margin-bottom:1rem; line-height:1.45;">
+                    <strong>Votre réponse a été enregistrée :</strong><br>
+                    <p style="margin: 0.4rem 0 0 0; font-weight:normal; font-size:0.82rem; white-space:pre-wrap; color:#f8fafc;">${this.escapeHtml(myVote.reponse)}</p>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="score-banner incorrect" style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:0.75rem; border-radius:6px; font-weight:700; font-size:0.8rem; text-align:center; margin-bottom:1rem;">
+                    🔒 Le test libre est clos (Vous n'avez pas répondu).
                 </div>
             `;
         }
+
+        if (showAllResults) {
+            const { data: allVotes } = await this.supabase.from('votes').select('*').eq('session_id', this.sessionId).eq('poll_id', baseQueryId);
+            const votesList = allVotes || [];
+            
+            html += `
+                <h5 style="text-align:left; font-size:0.82rem; font-weight:700; margin-bottom:0.5rem; color:#f8fafc;">Réponses des participants :</h5>
+                <div class="free-test-responses-container" style="max-height: 250px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem; padding-right:4px;">
+            `;
+            
+            if (votesList.length === 0) {
+                html += `<p style="text-align:center; color:var(--text-muted); font-size:0.78rem; font-style:italic;">Aucune réponse pour le moment...</p>`;
+            } else {
+                html += votesList.map(v => `
+                    <div class="free-test-response-card" style="background:rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.6rem 0.75rem; text-align:left;">
+                        <div style="font-weight:700; color:var(--accent-sky); font-size:0.78rem; margin-bottom:0.2rem; display:flex; justify-content:space-between;">
+                            <span>👤 ${this.escapeHtml(v.prenom)}</span>
+                            <span style="font-size:0.68rem; color:var(--text-muted); font-weight:normal;">${new Date(v.created_at).toLocaleTimeString('fr-FR')}</span>
+                        </div>
+                        <div style="font-size:0.8rem; line-height:1.4; color:#f8fafc; white-space:pre-wrap;">${this.escapeHtml(v.reponse)}</div>
+                    </div>
+                `).join('');
+            }
+            html += `</div>`;
+        }
+        
+        resultsSection.innerHTML = html;
+    }
+};
+
+TrainingApp.prototype.showPublicFreeTestPanel = async function(testObj, revealState) {
+    const panel = document.getElementById('interactivity-panel');
+    if (panel) panel.classList.add('open');
+
+    const panelTitle = document.getElementById('panel-title');
+    if (panelTitle) panelTitle.innerText = testObj.title;
+
+    const qSection = document.getElementById('panel-question-section');
+    if (qSection) {
+        qSection.innerHTML = `
+            <div class="poll-question-wrapper">
+                <p class="poll-category">Test Libre (Visiteur) ✏️</p>
+                <div style="background:linear-gradient(135deg, rgba(14,165,233,0.12), rgba(99,102,241,0.12)); border:1px solid rgba(14,165,233,0.3); padding:1rem; border-radius:8px; margin-top:0.4rem; text-align:left;">
+                    <span style="font-size:0.75rem; font-weight:800; color:var(--accent-sky); text-transform:uppercase;">📌 Énoncé de la question :</span>
+                    <h4 style="margin:0.4rem 0 0 0; font-size:1.05rem; font-weight:700; color:white; line-height:1.45;">${this.escapeHtml(testObj.question)}</h4>
+                </div>
+            </div>
+        `;
+    }
+
+    const voteFormSection = document.getElementById('panel-vote-form-section');
+    const resultsSection = document.getElementById('panel-results-section');
+    
+    if (voteFormSection) voteFormSection.style.display = 'none';
+    if (!resultsSection) return;
+    resultsSection.style.display = 'block';
+
+    const showAllResults = (revealState === 'votes' || revealState === 'answer');
+
+    if (showAllResults) {
+        const baseQueryId = testObj.baseId || testObj.id.split(':q:')[0].split(':')[0];
+        const { data: allVotes } = await this.supabase.from('votes').select('*').eq('session_id', this.sessionId).eq('poll_id', baseQueryId);
+        const votesList = allVotes || [];
+        
+        let html = `
+            <h5 style="text-align:left; font-size:0.82rem; font-weight:700; margin-bottom:0.5rem; color:#f8fafc;">Réponses des participants :</h5>
+            <div class="free-test-responses-container" style="max-height: 250px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem; padding-right:4px;">
+        `;
+        
+        if (votesList.length === 0) {
+            html += `<p style="text-align:center; color:var(--text-muted); font-size:0.78rem; font-style:italic;">Aucune réponse pour le moment...</p>`;
+        } else {
+            votesList.forEach(v => {
+                html += `
+                    <div class="free-test-response-card" style="background:rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.6rem 0.75rem; text-align:left;">
+                        <span style="font-weight:700; color:var(--accent-sky); font-size:0.76rem; display:block; margin-bottom:0.2rem;">👤 ${this.escapeHtml(v.prenom)}</span>
+                        <p style="font-size:0.78rem; color:#f8fafc; line-height:1.4; margin:0; white-space:pre-wrap;">${this.escapeHtml(v.reponse)}</p>
+                    </div>
+                `;
+            });
+        }
+        html += `</div>`;
+        resultsSection.innerHTML = html;
+    } else {
+        resultsSection.innerHTML = `
+            <div style="text-align:center; padding:1.5rem; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.1); border-radius:6px; color:var(--text-muted); font-size:0.8rem; font-style:italic;">
+                🕒 En attente de la publication des réponses des autres stagiaires par le formateur.
+            </div>
+        `;
+    }
+};
 
         const voteFormSection = document.getElementById('panel-vote-form-section');
         const resultsSection = document.getElementById('panel-results-section');

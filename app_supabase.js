@@ -502,6 +502,7 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
 
         let activePollId = data.active_poll_id;
         let zoomedPrenom = null;
+        let zoomedOptionKey = null;
 
         if (activePollId && activePollId.includes(':zoom:')) {
             const zoomParts = activePollId.split(':zoom:');
@@ -520,12 +521,19 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
             zoomedPrenom = activePollId.replace('exercise-zoom:', '');
             activePollId = null;
             this.revealState = 'hidden';
-        } else if (activePollId && activePollId.includes(':')) {
-            const parts = activePollId.split(':');
-            activePollId = parts[0];
-            this.revealState = parts[1];
-        } else if (activePollId) {
-            this.revealState = data.show_results ? 'answer' : 'hidden';
+        } else {
+            if (activePollId && activePollId.includes(':opt:')) {
+                const optParts = activePollId.split(':opt:');
+                activePollId = optParts[0];
+                zoomedOptionKey = optParts[1];
+            }
+            if (activePollId && activePollId.includes(':')) {
+                const parts = activePollId.split(':');
+                activePollId = parts[0];
+                this.revealState = parts[1];
+            } else if (activePollId) {
+                this.revealState = data.show_results ? 'answer' : 'hidden';
+            }
         }
 
         if (activePollId) {
@@ -550,11 +558,35 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
                     this.showPublicTestPanel(testObj, this.revealState);
                 }
             } else if (activePollId.startsWith('test-libre-')) {
+                let customQuestion = "Proposez vos réponses ou remarques par écrit suite aux échanges en cours.";
+                let cleanTestId = activePollId;
+                let revState = this.revealState || 'hidden';
+                
+                if (cleanTestId.includes(':q:')) {
+                    const qParts = cleanTestId.split(':q:');
+                    cleanTestId = qParts[0];
+                    let rest = qParts[1];
+                    if (rest.includes(':')) {
+                        const rParts = rest.split(':');
+                        try { customQuestion = decodeURIComponent(rParts[0]); } catch(e) {}
+                        revState = rParts[1];
+                    } else {
+                        try { customQuestion = decodeURIComponent(rest); } catch(e) {}
+                    }
+                } else if (cleanTestId.includes(':')) {
+                    const parts = cleanTestId.split(':');
+                    cleanTestId = parts[0];
+                    revState = parts[1];
+                }
+                
+                this.revealState = revState;
+                
                 const testObj = {
                     id: activePollId,
+                    baseId: cleanTestId,
                     type: 'test-libre',
                     title: `Atelier libre / Échanges improvisés ✏️`,
-                    question: `Saisissez votre réponse, note ou proposition ci-dessous :`
+                    question: customQuestion
                 };
                 this.activePoll = testObj;
                 if (this.role === 'stagiaire') {
@@ -593,8 +625,10 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
             this.closeInteractivityPanel();
         }
 
-        // 3. Gérer l'affichage du Zoom en temps réel
-        if (zoomedPrenom) {
+        // 3. Gérer l'affichage du Zoom en temps réel (Stagiaire réponse OU Option Grand Écran)
+        if (zoomedOptionKey) {
+            this.showOptionZoomOverlay(this.activePoll, zoomedOptionKey, this.revealState);
+        } else if (zoomedPrenom) {
             let pollIdForQuery = null;
             if (activePollId) {
                 pollIdForQuery = activePollId;

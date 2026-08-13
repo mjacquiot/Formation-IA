@@ -82,6 +82,15 @@ class TrainingApp {
             } else if (e.key === 'ArrowRight') {
                 this.navigate(1);
             } else if (e.key === 'Escape') {
+                const overlay = document.getElementById('zoom-overlay');
+                if (overlay && overlay.classList.contains('visible')) {
+                    if (this.role === 'formateur' && typeof this.closeOptionZoom === 'function') {
+                        this.closeOptionZoom();
+                    } else if (typeof this.hideZoomOverlay === 'function') {
+                        this.hideZoomOverlay();
+                    }
+                    return;
+                }
                 goHome();
             }
         });
