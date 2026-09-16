@@ -69,13 +69,56 @@ Lu et approuvé par l'agent :
 
 ---
 
-# Thématique : 1. L'Histoire de l'IA
+# Thématique : 1. Histoire & Philosophie de l'IA
 - **ID unique :** `histoire-ia`
 - **Catégorie :** `hist`
-- **Icône visuelle :** ⏳
-- **Objectifs d'apprentissage :** Les grandes étapes de l'IA d'Alan Turing à nos jours, avec des comparatifs historiques et des graphiques d'adoption.
+- **Icône visuelle :** 📜
+- **Objectifs d'apprentissage :** Les fondements philosophiques et techniques de l'IA, du pharmakon de Platon à l'alliance Homme-Machine et l'apprentissage profond.
 
 ### Diapositives et Fiches Théoriques du Module `histoire-ia`
+
+### Diapositive : L'IA diminue-t-elle l'intelligence humaine ?
+
+- **Type d'affichage :** `intellect-debate`
+
+*Introduction :* Une interrogation fondamentale traverse l'histoire des technologies : déléguer nos tâches cognitives à une machine affaiblit-il nos facultés naturelles ?
+
+#### ⚠️ Le Risque d'Atrophie (L'outil comme Poison / Aliénation)
+- **Délégation aveugle :** Abandonner l'effort de recherche, de rédaction et de calcul mental.
+- **Perte d'entraînement cérébral :** Moins le cerveau s'exerce, plus il perd ses automatismes d'analyse critique.
+- **Illusion de compétence :** Confondre l'information fluide affichée à l'écran avec un savoir réellement assimilé.
+
+#### 💡 L'Opportunité d'Augmentation (L'outil comme Remède / Émancipation)
+- **Décharge cognitive :** Libérer du temps sur les tâches répétitives pour se concentrer sur la réflexion de fond.
+- **Exploration démultipliée :** Tester 10 hypothèses ou angles d'attaque différents en quelques secondes.
+- **Élévation de posture :** Passer du statut d'exécutant de brouillons à celui de superviseur critique et d'arbitre.
+
+*Synthèse clé :* L'outil ne rend ni plus intelligent ni plus bête : il amplifie la posture de celui qui l'utilise. La passivité atrophie l'esprit, l'exigence méthodologique et l'esprit critique le décuplent.
+
+---
+
+### Diapositive : Philosophie de la Technique : Le Pharmakon (Platon & Stiegler)
+
+- **Type d'affichage :** `philosophy-pharmakon`
+
+*Introduction :* L'angoisse face à l'IA n'est pas nouvelle : elle réactualise un débat philosophique vieux de 2 400 ans sur la nature de nos outils.
+
+#### 🏛️ Le Concept Fondamental : Le Pharmakon (φάρμακον)
+Terme grec désignant à la fois le **Poison** et le **Remède**. Toute technologie inventée par l'humain porte intrinsèquement cette double nature.
+
+#### 📜 Platon (IVᵉ siècle av. J.-C. — *Phèdre*) : L'invention de l'Écriture
+- **Le mythe de Theuth & Thamous :** Le roi d'Égypte Thamous refuse le don de l'écriture fait par le dieu Theuth.
+- **L'amnésie par délégation :** Confier sa mémoire à des rouleaux de papyrus extérieurs atrophie la mémoire vivante intérieure des hommes.
+- **La prothèse externe :** L'écriture n'apporte pas la sagesse en soi, elle n'en donne que l'apparence et le reflet extérieur.
+
+#### 🔧 Bernard Stiegler (1952 - 2020 — *La Technique et le Temps*) : L'Homme est un Être Technique
+- **Origine technique :** L'humain ne préexiste pas à l'outil : il s'est constitué dès l'origine *par* la technique (du silex taillé à l'IA).
+- **Toute technique est un pharmakon :** Tout nouvel outil déstabilise l'esprit et la société avant qu'une nouvelle pratique ne l'apprivoise.
+- **L'exigence d'adoption :** La question n'est pas de refuser l'IA, mais de bâtir la méthode pour en faire un remède et non un poison.
+
+*Citation de référence :* « La technique ne nous détruit ni ne nous sauve : elle nous oblige à inventer de nouvelles pratiques d'attention et de discernement. »
+
+---
 
 ### Diapositive : L'Arbre de l'IA (Symbolique vs Numérique)
 
@@ -154,6 +197,28 @@ Formulé par Hans Moravec dans les années 1980, ce paradoxe décrit une réalit
 - 👩‍💼 Ressentir de l'empathie face à un citoyen ou un usager en détresse
 
 *Intérêt pédagogique et débrief :* <strong>Intérêt pédagogique :</strong> Très rassurant pour les agents territoriaux ! L'IA ne remplacera pas leur rôle d'accueil physique, de gestion des cas sociaux complexes et de décision humaine.<br>➔ <strong>L'IA gère la paperasse, l'humain gère la relation.</strong>
+
+---
+
+### Diapositive : L'Alliance Homme-IA : Arbitrage vs Exécution
+
+- **Type d'affichage :** `arbitrage-execution`
+
+*Introduction :* Comment articuler l'intelligence humaine et l'intelligence artificielle au quotidien ? En comprenant que leurs forces sont parfaitement complémentaires.
+
+#### 👩‍💼 L'Humain (L'Arbitre & le Méthodologue) — *Intelligence Décisionnelle*
+- **Apporter la méthode :** Structurer le cadre, la démarche logique et les critères d'évaluation.
+- **Choisir et arbitrer :** Trancher entre plusieurs options selon le contexte politique et territorial.
+- **Discernement éthique :** Percevoir les non-dits, le bon sens, l'empathie et la sensibilité citoyenne.
+- **Responsabilité légale :** Assumer la signature de l'acte administratif et le dernier mot.
+
+#### 🤖 L'IA (L'Exécutant Rapide & Discipliné) — *Puissance de Calcul*
+- **Suivre la méthode à la lettre :** Respecter rigoureusement la structure et les étapes prescrites.
+- **Vitesse d'exécution :** Traiter, synthétiser ou reformuler des documents en quelques secondes.
+- **Respect parfait de la consigne :** Ne jamais omettre une contrainte formelle explicitement demandée.
+- **Endurance & volume :** Absorber des dizaines de dossiers sans baisse d'attention ni fatigue.
+
+*🎯 Règle d'or de la collaboration :* L'IA est un moteur d'exécution exceptionnel, mais l'Humain tient le volant. Sans méthode humaine, l'IA produit du vide à grande vitesse. Guidée par une méthode rigoureuse, elle devient un levier d'action publique surpuissant.
 
 ---
 
@@ -1117,7 +1182,7 @@ Cliquez sur les choix ci-dessous pour identifier les actions réglementaires et 
 ##### 📜 Niveau 3 : Poste Ouvert & Pionnier (Droits locaux débridés)
 - **Compétences / Expertise de l'agent :** Référent IA
 - **Bénéfice de productivité :** +60% à +70% de gain de temps
-- **Impact IFSE :** Éligibilité IFSE avancée + NBI (Nouvelle Bonification Indiciaire)
+- **Impact IFSE :** Éligibilité IFSE avancée (sujétion d'expertise Référent IA)
 - **Situation DSI :** L'agent dispose des droits d'administration sur son PC local (installation d'outils autorisée) mais aucun cadre d'usage formel n'a été défini par la mairie.
 - **💡 Démarche administrative :** Rédiger et faire voter la Charte municipale en conseil municipal. Installer des applications desktop autonomes s'exécutant à 100% hors ligne locale (comme LM Studio avec des modèles comme Mistral ou Llama) pour confiner totalement les données sensibles.
 
@@ -1135,7 +1200,7 @@ Cliquez sur les choix ci-dessous pour identifier les actions réglementaires et 
 - **Type d'affichage :** `dsi-ifse-matrix`
 
 L'utilisation professionnelle de l'IA doit être valorisée à la hauteur des gains de productivité et de la responsabilité réglementaire (RGPD/sécurité) portée par l'agent.
-Ce tableau de correspondance croise le niveau de compétence, le gain de temps moyen estimé et l'impact potentiel sur le régime indemnitaire (IFSE) ou la NBI.
+Ce tableau de correspondance croise le niveau de compétence, le gain de temps moyen estimé et l'impact potentiel sur le régime indemnitaire (IFSE).
 
 #### Matrice d'évaluation IFSE, Compétences et Productivité :
 
@@ -1143,7 +1208,7 @@ Ce tableau de correspondance croise le niveau de compétence, le gain de temps m
 | :--- | :--- | :--- | :--- | :--- |
 | **Niveau 1 : Débutant formé**<br>*(Utilisateur Occasionnel)* | Correction d'orthographe, résumés de textes publics, brainstorming. | **+30% à 40%** | Initiale (données publiques, anonymisation de base) | Revalorisation Socle (+80€ à 120€ / mois) |
 | **Niveau 2 : Intermédiaire**<br>*(Praticien Averti)* | Méthode M.A.I.R.E., pseudonymisation par extension Chrome, gestion régulière de rédactions. | **+45% à 55%** | Moyenne (anonymisation locale rigoureuse) | Revalorisation Pratique (+130€ à 180€ / mois) |
-| **Niveau 3 : Avancé**<br>*(Référent IA de Direction)* | Garant de la conformité du service, aide aux collègues, test d'applications locales, audit des usages. | **+60% à 70%** | Forte (garant des règles du service) | Revalorisation Référent (+200€ à 300€ / mois + NBI) |
+| **Niveau 3 : Avancé**<br>*(Référent IA de Direction)* | Garant de la conformité du service, aide aux collègues, test d'applications locales, audit des usages. | **+60% à 70%** | Forte (garant des règles du service) | Revalorisation Référent (+200€ à 300€ / mois) |
 | **Niveau 4 : Expert**<br>*(Concepteur Agentique)* | Conception et paramétrage du pipeline local des 3 dossiers, configuration API souveraine, gestion de boucle et du budget. | **+80% à 100%** | Très Forte (gestionnaire technique de l'API) | Revalorisation Expert (+350€ à 500€ / mois + Prime projet) |
 
 ---

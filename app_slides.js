@@ -187,7 +187,7 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
             if (valReq) valReq.innerText = `${reqs} Requêtes / jour`;
 
             const banner = this.slideContainer.querySelector('#cluster-desc-banner');
-            let secnumCostYear = 18000;
+            let secnumCostYear = 48000;
             if (cluster === 'small') {
                 secnumCostYear = 2400;
                 if (banner) banner.innerHTML = `💡 <strong>Cluster S (Mistral NeMo 12B) :</strong> Serveur 1x RTX 6000 Ada (48GB VRAM). Économique, adapté pour les petites structures (5-50 agents) effectuant du traitement de texte simple.`;
@@ -195,8 +195,8 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
                 secnumCostYear = 7200;
                 if (banner) banner.innerHTML = `💡 <strong>Cluster M (Mistral Small 3 24B) :</strong> Serveur 1x Nvidia A100 (80GB VRAM). Standard équilibré pour les collectivités moyennes (50-300 agents).`;
             } else if (cluster === 'large') {
-                secnumCostYear = 18000;
-                if (banner) banner.innerHTML = `💡 <strong>Cluster L Recommandé (Mistral Large 2 123B) :</strong> Cluster dédié 2x H100 (160GB VRAM). Puissance maximale pour analyser des dossiers municipaux volumineux et exécuter la pseudonymisation sémantique sans hallucination.`;
+                secnumCostYear = 48000;
+                if (banner) banner.innerHTML = `💡 <strong>Cluster L Recommandé (Mistral Large 2 123B FP8) :</strong> Cluster dédié 2x H100 (160GB VRAM, quantifié FP8). Puissance maximale pour analyser des dossiers municipaux volumineux et exécuter la pseudonymisation sémantique sans saturation mémoire.`;
             }
 
             // Token calculation: 1500 tokens per prompt (in/out avg) * reqs * 220 workdays * agents

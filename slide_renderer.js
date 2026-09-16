@@ -3,7 +3,101 @@
 // ==========================================
 function getSlideHTML(slide, theme) {
     let html = '';
-            if (slide.type === 'moravec-paradox') {
+    if (slide.type === 'intellect-debate') {
+        html += `
+            <p style="margin-bottom:1.5rem; font-size:1.05rem; line-height:1.6;">${slide.intro || ''}</p>
+            <div class="intellect-debate-grid">
+                <div class="intellect-card card-risk">
+                    <div class="intellect-card-header">
+                        <h3>${(slide.riskCard && slide.riskCard.title) || ''}</h3>
+                        <div class="intellect-card-sub">${(slide.riskCard && slide.riskCard.subtitle) || ''}</div>
+                    </div>
+                    <ul class="intellect-list">
+                        ${((slide.riskCard && slide.riskCard.items) || []).map(item => `<li><span class="bullet">⚠️</span> <span>${item}</span></li>`).join('')}
+                    </ul>
+                </div>
+                <div class="intellect-card card-gain">
+                    <div class="intellect-card-header">
+                        <h3>${(slide.gainCard && slide.gainCard.title) || ''}</h3>
+                        <div class="intellect-card-sub">${(slide.gainCard && slide.gainCard.subtitle) || ''}</div>
+                    </div>
+                    <ul class="intellect-list">
+                        ${((slide.gainCard && slide.gainCard.items) || []).map(item => `<li><span class="bullet">💡</span> <span>${item}</span></li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+            ${slide.takeaway ? `<div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-purple);">${slide.takeaway}</div>` : ''}
+        `;
+    } else if (slide.type === 'philosophy-pharmakon') {
+        const pConcept = slide.pharmakonConcept || {};
+        const plato = slide.plato || {};
+        const stiegler = slide.stiegler || {};
+        html += `
+            <p style="margin-bottom:1.25rem; font-size:1.02rem; line-height:1.6;">${slide.intro || ''}</p>
+            
+            <div class="pharmakon-banner">
+                <div class="pharmakon-badge">Concept Clé</div>
+                <div class="pharmakon-title">${pConcept.term || 'Le Pharmakon'}</div>
+                <div class="pharmakon-def">${pConcept.definition || ''}</div>
+            </div>
+
+            <div class="philosophy-grid">
+                <div class="philosophy-card card-plato">
+                    <div class="philosophy-card-header">
+                        <div class="philosophy-author">🏛️ ${plato.philosopher || 'Platon'}</div>
+                        <div class="philosophy-period">${plato.period || ''}</div>
+                        <h4 class="philosophy-thesis">${plato.conceptTitle || ''}</h4>
+                    </div>
+                    <ul class="philosophy-list">
+                        ${((plato.points) || []).map(pt => `<li><span class="bullet">📜</span> <span>${pt}</span></li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="philosophy-card card-stiegler">
+                    <div class="philosophy-card-header">
+                        <div class="philosophy-author">🔧 ${stiegler.philosopher || 'Bernard Stiegler'}</div>
+                        <div class="philosophy-period">${stiegler.period || ''}</div>
+                        <h4 class="philosophy-thesis">${stiegler.conceptTitle || ''}</h4>
+                    </div>
+                    <ul class="philosophy-list">
+                        ${((stiegler.points) || []).map(pt => `<li><span class="bullet">⚙️</span> <span>${pt}</span></li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+
+            ${slide.quote ? `<div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-sky); font-style:italic;">${slide.quote}</div>` : ''}
+        `;
+    } else if (slide.type === 'arbitrage-execution') {
+        const human = slide.humanSide || {};
+        const ai = slide.aiSide || {};
+        html += `
+            <p style="margin-bottom:1.25rem; font-size:1.02rem; line-height:1.6;">${slide.intro || ''}</p>
+            
+            <div class="arbitrage-grid">
+                <div class="arbitrage-card card-human-side">
+                    <div class="arbitrage-card-header">
+                        <h3>${human.title || ''}</h3>
+                        <span class="arbitrage-badge badge-human">${human.badge || 'Méthode & Choix'}</span>
+                    </div>
+                    <ul class="arbitrage-list">
+                        ${((human.points) || []).map(pt => `<li><span class="bullet">👩‍💼</span> <span>${pt}</span></li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="arbitrage-card card-ai-side">
+                    <div class="arbitrage-card-header">
+                        <h3>${ai.title || ''}</h3>
+                        <span class="arbitrage-badge badge-ai">${ai.badge || 'Vitesse & Consigne'}</span>
+                    </div>
+                    <ul class="arbitrage-list">
+                        ${((ai.points) || []).map(pt => `<li><span class="bullet">🤖</span> <span>${pt}</span></li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+
+            ${slide.takeaway ? `<div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-blue);">${slide.takeaway}</div>` : ''}
+        `;
+    } else if (slide.type === 'moravec-paradox') {
                 const cardLeft = slide.cardLeft || {
                     title: slide.hardForHuman ? slide.hardForHuman.title : "Difficile pour l'Homme",
                     desc: slide.hardForHuman ? slide.hardForHuman.desc : "",
@@ -1615,7 +1709,7 @@ function getSlideHTML(slide, theme) {
                             <div>
                                 <div class="ifse-card-metric">⚡ Gain de temps : <strong>+60% à 70%</strong></div>
                                 <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Forte (garant des règles du service)</strong></div>
-                                <div class="ifse-card-impact">💼 IFSE : Revalorisation Référent (+200€ à 300€ / mois + NBI)</div>
+                                <div class="ifse-card-impact">💼 IFSE : Revalorisation Référent (+200€ à 300€ / mois)</div>
                             </div>
                         </div>
                         
@@ -1841,12 +1935,12 @@ function getSlideHTML(slide, theme) {
                                     🌩️ Instance SecNumCloud & Modèle Mistral :
                                 </label>
                                 <select id="pipeline-cost-cluster-select" class="form-select" style="width:100%; padding:0.5rem; font-size:0.85rem; border-radius:6px; background:white;">
-                                    <option value="large" selected>🏆 Cluster L (Recommandé) : Mistral Large 2 123B (1 500€/mois - 2x H100 GPU)</option>
+                                    <option value="large" selected>🏆 Cluster L (Recommandé) : Mistral Large 2 123B (4 000€/mois - 2x H100 GPU FP8)</option>
                                     <option value="med">Cluster M : Mistral Small 3 24B (600€/mois - 1x A100 GPU)</option>
                                     <option value="small">Cluster S : Mistral NeMo 12B (200€/mois - 1x RTX 6000 Ada)</option>
                                 </select>
                                 <div id="cluster-desc-banner" style="margin-top:0.5rem; font-size:0.78rem; color:var(--text-muted); background:rgba(99,102,241,0.06); border:1px solid rgba(99,102,241,0.2); padding:0.6rem; border-radius:6px;">
-                                    💡 <strong>Cluster L Recommandé :</strong> Embarque <strong>Mistral Large 2 (123 Milliards de paramètres)</strong> sur un cluster dédié 2x H100 (160GB VRAM). Garantit une puissance maximale pour analyser des dossiers municipaux volumineux et exécuter la pseudonymisation sans aucune hallucination.
+                                    💡 <strong>Cluster L Recommandé :</strong> Embarque <strong>Mistral Large 2 (123 Milliards de paramètres quantifié FP8)</strong> sur un cluster dédié 2x H100 (160GB VRAM). Garantit une puissance maximale pour analyser des dossiers municipaux volumineux et exécuter la pseudonymisation sémantique sans saturation mémoire.
                                 </div>
                             </div>
                         </div>

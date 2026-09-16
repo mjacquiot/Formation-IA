@@ -6,10 +6,64 @@ const THEMES = [
     {
         id: "histoire-ia",
         category: "histoire",
-        title: "1. L'Histoire de l'IA",
+        title: "1. Histoire & Philosophie de l'IA",
         icon: "📜",
-        desc: "Comprendre les origines de l'IA, de la théorie d'Alan Turing aux réseaux de neurones modernes.",
+        desc: "Comprendre les fondements philosophiques et techniques de l'IA, du pharmakon de Platon aux réseaux de neurones modernes.",
         slides: [
+            {
+                title: "L'IA diminue-t-elle l'intelligence humaine ?",
+                type: "intellect-debate",
+                intro: "Une interrogation fondamentale traverse l'histoire des technologies : déléguer nos tâches cognitives à une machine affaiblit-il nos facultés naturelles ?",
+                riskCard: {
+                    title: "⚠️ Le Risque d'Atrophie",
+                    subtitle: "L'outil comme Poison (Aliénation)",
+                    items: [
+                        "<strong>Délégation aveugle :</strong> Abandonner l'effort de recherche, de rédaction et de calcul mental.",
+                        "<strong>Perte d'entraînement cérébral :</strong> Moins le cerveau s'exerce, plus il perd ses automatismes d'analyse critique.",
+                        "<strong>Illusion de compétence :</strong> Confondre l'information fluide affichée à l'écran avec un savoir réellement assimilé."
+                    ]
+                },
+                gainCard: {
+                    title: "💡 L'Opportunité d'Augmentation",
+                    subtitle: "L'outil comme Remède (Émancipation)",
+                    items: [
+                        "<strong>Décharge cognitive :</strong> Libérer du temps sur les tâches répétitives pour se concentrer sur la réflexion de fond.",
+                        "<strong>Exploration démultipliée :</strong> Tester 10 hypothèses ou angles d'attaque différents en quelques secondes.",
+                        "<strong>Élévation de posture :</strong> Passer du statut d'exécutant de brouillons à celui de superviseur critique et d'arbitre."
+                    ]
+                },
+                takeaway: "<strong>💡 Synthèse clé :</strong> L'outil ne rend ni plus intelligent ni plus bête : il amplifie la posture de celui qui l'utilise. La passivité atrophie l'esprit, l'exigence méthodologique et l'esprit critique le décuplent."
+            },
+            {
+                title: "Philosophie de la Technique : Le Pharmakon (Platon & Stiegler)",
+                type: "philosophy-pharmakon",
+                intro: "L'angoisse face à l'IA n'est pas nouvelle : elle réactualise un débat philosophique vieux de 2 400 ans sur la nature de nos outils.",
+                pharmakonConcept: {
+                    term: "Le Pharmakon (φάρμακον)",
+                    definition: "Terme grec désignant à la fois le <strong>Poison</strong> et le <strong>Remède</strong>. Toute technologie inventée par l'humain porte intrinsèquement cette double nature."
+                },
+                plato: {
+                    philosopher: "Platon",
+                    period: "IVᵉ siècle av. J.-C. (Phèdre)",
+                    conceptTitle: "L'invention de l'Écriture",
+                    points: [
+                        "<strong>Le mythe de Theuth & Thamous :</strong> Le roi Thamous refuse le don de l'écriture fait par le dieu Theuth.",
+                        "<strong>L'oubli par délégation :</strong> Confier sa mémoire à des rouleaux de papyrus extérieurs atrophie la mémoire vivante intérieure.",
+                        "<strong>La prothèse externe :</strong> L'écriture n'apporte pas la sagesse, mais seulement l'apparence du savoir."
+                    ]
+                },
+                stiegler: {
+                    philosopher: "Bernard Stiegler",
+                    period: "1952 - 2020 (La Technique et le Temps)",
+                    conceptTitle: "L'Homme est un Être Technique",
+                    points: [
+                        "<strong>Origine technique :</strong> L'humain ne préexiste pas à l'outil : il s'est constitué dès l'origine <em>par</em> la technique (du silex à l'IA).",
+                        "<strong>La technique est toujours un pharmakon :</strong> Tout nouvel outil désarme l'esprit avant qu'une nouvelle culture ne l'apprivoise.",
+                        "<strong>L'exigence d'adoption :</strong> La question n'est pas de refuser l'IA, mais de bâtir la méthode pour en faire un remède et non un poison."
+                    ]
+                },
+                quote: "« La technique ne nous détruit ni ne nous sauve : elle nous oblige à inventer de nouvelles pratiques d'attention et de discernement. »"
+            },
             {
                 title: "L'Arbre de l'IA (Symbolique vs Numérique)",
                 type: "comparison-cards",
@@ -34,7 +88,7 @@ const THEMES = [
             {
                 title: "Frise Chronologique (1950 - 2022)",
                 type: "timeline",
-                desc: "Découvrez les 5 grandes étapes de la révolution de l'intelligence artificielle.",
+                desc: "Découvrez les grandes étapes de la révolution de l'intelligence artificielle.",
                 events: [
                     { year: "1950", title: "Test d'Imitation de Turing", desc: "Alan Turing pose la question fondamentale : 'Les machines peuvent-elles penser ?' et invente son test d'imitation." },
                     { year: "1956", title: "Séminaire de Dartmouth", desc: "Naissance officielle de l'expression 'Intelligence Artificielle' lors de la conférence réunissant McCarthy, Minsky et Shannon." },
@@ -63,7 +117,7 @@ const THEMES = [
                 desc: "Formulé par Hans Moravec dans les années 1980, ce paradoxe scientifique explique pourquoi l'IA nous surprend là où on ne l'attendait pas :",
                 hardForHuman: {
                     title: "Difficile pour l'Homme",
-                    desc: "Calculer la racine carrée de 849 302, mémoriser le Code Général des Collectivités Territoriales par cœur, analyser 10 000 lignes de comptabilité en 1 seconde.",
+                    desc: "Calculer la racine carrée de 849 302, mémoriser des millions de statistiques fiscales, analyser 10 000 lignes de comptabilité en 1 seconde.",
                     result: "⚡ Très Facile pour l'IA"
                 },
                 easyForHuman: {
@@ -71,7 +125,33 @@ const THEMES = [
                     desc: "Reconnaître un visage dans une foule, faire preuve d'empathie face à un administré en détresse, lacer ses chaussures, sentir une ambiance dans une salle de réunion.",
                     result: "🤖 Ultra-Difficile pour l'IA"
                 },
-                conclusion: "L'IA ne remplace pas l'humain : elle excelle là où nous sommes lents (calcul, mémoire), et échoue là où nous sommes naturellement doués (empathie, bon sens, présence physique)."
+                conclusion: "L'IA ne remplace pas l'humain : elle excelle là où nous sommes lents (calcul, vitesse), et échoue là où nous sommes naturellement doués (empathie, bon sens, présence physique)."
+            },
+            {
+                title: "L'Alliance Homme-IA : Arbitrage vs Exécution",
+                type: "arbitrage-execution",
+                intro: "Comment articuler l'intelligence humaine et l'intelligence artificielle au quotidien ? En comprenant que leurs forces sont parfaitement complémentaires.",
+                humanSide: {
+                    title: "👩‍💼 L'Humain (L'Arbitre & le Méthodologue)",
+                    badge: "Intelligence Décisionnelle",
+                    points: [
+                        "<strong>Apporter la méthode :</strong> Structurer le cadre, la démarche logique et les critères d'évaluation.",
+                        "<strong>Choisir et arbitrer :</strong> Trancher entre plusieurs options selon le contexte politique et territorial.",
+                        "<strong>Discernement éthique :</strong> Percevoir les non-dits, le bon sens, l'empathie et la sensibilité citoyenne.",
+                        "<strong>Responsabilité légale :</strong> Assumer la signature de l'acte administratif et le dernier mot."
+                    ]
+                },
+                aiSide: {
+                    title: "🤖 L'IA (L'Exécutant Rapide & Discipliné)",
+                    badge: "Puissance de Calcul",
+                    points: [
+                        "<strong>Suivre la méthode à la lettre :</strong> Respecter rigoureusement la structure et les étapes prescrites.",
+                        "<strong>Vitesse d'exécution :</strong> Traiter, synthétiser ou reformuler des documents en quelques secondes.",
+                        "<strong>Respect parfait de la consigne :</strong> Ne jamais omettre une contrainte formelle explicitement demandée.",
+                        "<strong>Endurance & volume :</strong> Absorber des dizaines de dossiers sans baisse d'attention ni fatigue."
+                    ]
+                },
+                takeaway: "<strong>🎯 Règle d'or de la collaboration :</strong> L'IA est un moteur d'exécution exceptionnel, mais l'Humain tient le volant. Sans méthode humaine, l'IA produit du vide à grande vitesse. Guidée par une méthode rigoureuse, elle devient un levier d'action publique surpuissant."
             }
         ]
     },
@@ -128,7 +208,7 @@ const THEMES = [
                     items: [
                         { label: "1 Go de VRAM", val: "1 000 000 000 d'octets (8 bits par octet)" },
                         { label: "Poids par Paramètre", val: "2 octets (Précision FP16 / BF16)" },
-                        { label: "Mémoire du Contexte (KV Cache)", val: "~2 Mo par token (attention croisée)" }
+                        { label: "Mémoire du Contexte (KV Cache)", val: "~128 Ko par token (auto-attention GQA)" }
                     ]
                 },
                 modelsComparison: [
@@ -324,7 +404,7 @@ const THEMES = [
                     { letter: "R", label: "Ressources", desc: "Quelles données fournissez-vous ? (Ex: Voici le plan du parvis et la liste des essences d'arbres autorisées par notre charte)." },
                     { letter: "E", label: "Exigence", desc: "Quel est le livrable attendu ? (Ex: Rédige une liste structurée en 5 points clés sous format tableau Markdown, ton technique)." }
                 ],
-                example: "La méthode M.A.I.R.E. permet d'éviter l'effet 'page blanche' et garantit que l'IA dispose de tous les éléments nécessaires dès son premier calcul."
+                example: "<strong>Règle fondamentale :</strong> L'humain apporte la méthode et arbitre, l'IA suit la méthode et exécute. La méthode M.A.I.R.E. est précisément le cadre rigoureux que l'agent public transmet à la machine pour calibrer son exécution et éliminer les divagations."
             },
             {
                 title: "Exemple Réel Décortiqué",
@@ -727,7 +807,7 @@ const THEMES = [
                 ],
                 models: [
                     { name: "Mistral Small 24B", provider: "Mistral AI 🇫🇷", type: "Open-Source / Souverain", params: "24B", speed: "110 t/s", costInput: 0.20, costOutput: 0.60, scoreReasoning: 85, rgpd: "100% Souverain / Local", bestFor: "Courriels, Notes & Intranet municipal" },
-                    { name: "Mistral Large 2", provider: "Mistral AI 🇫🇷", type: "Open-Source / Cloud", params: "123B", speed: "45 t/s", costInput: 2.00, costOutput: 6.00, scoreReasoning: 93, rgpd: "Conforme SecNumCloud", bestFor: "Analyse juridique & Délibérations complexes" },
+                    { name: "Mistral Large 2", provider: "Mistral AI 🇫🇷", type: "Cloud Souverain (Poids MRL)", params: "123B", speed: "45 t/s", costInput: 2.00, costOutput: 6.00, scoreReasoning: 93, rgpd: "Conforme SecNumCloud", bestFor: "Analyse juridique & Délibérations complexes" },
                     { name: "Llama 3.3 70B", provider: "Meta 🇺🇸", type: "Open-Source", params: "70B", speed: "65 t/s", costInput: 0.35, costOutput: 0.90, scoreReasoning: 92, rgpd: "Hébergeable en Local", bestFor: "Raisonnement général & Métiers" },
                     { name: "DeepSeek V3 / R1", provider: "DeepSeek 🇨🇳", type: "Open-Weights", params: "671B (MoE)", speed: "55 t/s", costInput: 0.14, costOutput: 0.55, scoreReasoning: 96, rgpd: "Hébergeable sur serveur privé", bestFor: "Maths, Code DSI & Raisonnement complexe" },
                     { name: "Qwen 2.5 72B", provider: "Alibaba 🇨🇳", type: "Open-Source", params: "72B", speed: "70 t/s", costInput: 0.30, costOutput: 0.80, scoreReasoning: 91, rgpd: "Hébergeable en Local", bestFor: "Traitement multilingue & Données" },
@@ -997,17 +1077,17 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
                     { step: "1", title: "Nature de la Donnée", desc: "Le texte contient-il des données à caractère personnel (RGPD) ou des secrets administratifs ?" },
                     { step: "2", title: "Option Anonymisation", desc: "SI OUI ➔ Passage obligatoire dans le module d'anonymisation local avant envoi." },
                     { step: "3", title: "Choix de l'Hébergement", desc: "SI NON ➔ Préférer un modèle souverain européen (ex: Mistral AI) ou un serveur privé local." },
-                    { step: "4", title: "Validation Humaine", desc: "Validation obligatoire de tout livrable par un agent titulaire avant signature officielle." }
+                    { step: "4", title: "Validation Humaine", desc: "Validation obligatoire de tout livrable par un agent public habilité avant signature officielle." }
                 ]
             },
             {
-                title: "Matrice de Compétences IA & Valorisation IFSE / NBI",
+                title: "Matrice de Compétences IA & Valorisation IFSE (RIFSEEP)",
                 type: "dsi-ifse-matrix",
-                desc: "Pour encourager la montée en compétences des fonctionnaires territoriaux sans créer de blocages RH, intégrez la maîtrise des outils d'IA dans les fiches de poste et la valorisation indemnitaire (IFSE) :",
+                desc: "Pour encourager la montée en compétences des agents territoriaux sans créer de blocages RH, intégrez la maîtrise des outils d'IA dans les fiches de poste et la valorisation indemnitaire de technicité/sujétions (IFSE) :",
                 levels: [
                     { level: "Niveau 1 : Agent Sensibilisé", skills: "Compréhension de la charte IA municipale, utilisation des règles de sécurité RGPD et correction des hallucinations basiques.", ifseBonus: "Validation des compétences numériques de base" },
                     { level: "Niveau 2 : Agent Praticien (Prompt Master)", skills: "Maîtrise de la méthode M.A.I.R.E., création de prompts de synthèse complexes, anonymisation autonome des dossiers.", ifseBonus: "Revalorisation du coefficient de technicité IFSE" },
-                    { level: "Niveau 3 : Agent Référent / Concevant", skills: "Création d'agents autonomes sur-mesure (ex: via Antigravity), formation des collègues du service, audit des flux de données.", ifseBonus: "Attribution de la NBI (Nouvelle Bonification Indiciaire) Référent Numérique" }
+                    { level: "Niveau 3 : Agent Référent / Concevant", skills: "Création d'agents autonomes sur-mesure (ex: via Antigravity), formation des collègues du service, audit des flux de données.", ifseBonus: "Majoration de l'IFSE (Groupe de fonctions / sujétion d'expertise Référent IA)" }
                 ]
             },
             {
@@ -1062,7 +1142,7 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
                 infraTiers: [
                     { id: "tier-small", name: "Cluster S : Mistral NeMo 12B (200€/mois)", model: "Mistral NeMo 12B", gpu: "1x RTX 6000 Ada (48GB VRAM)", baseServerCostYear: 2400, desc: "Adapté pour petites structures (5-50 agents). Traitement de textes simples." },
                     { id: "tier-med", name: "Cluster M : Mistral Small 3 24B (600€/mois)", model: "Mistral Small 3 24B", gpu: "1x Nvidia A100 (80GB VRAM)", baseServerCostYear: 7200, desc: "Standard moyen (50-300 agents). Pseudonymisation sémantique rapide." },
-                    { id: "tier-large", name: "Cluster L (Recommandé) : Mistral Large 2 123B (1 500€/mois)", model: "Mistral Large 2 123B", gpu: "Cluster Dedié 2x Nvidia H100 (160GB VRAM)", baseServerCostYear: 18000, desc: "Puissance maximale pour Métropoles/Départements. Précision parfaite sur documents volumineux." }
+                    { id: "tier-large", name: "Cluster L (Recommandé) : Mistral Large 2 123B (4 000€/mois)", model: "Mistral Large 2 123B (FP8)", gpu: "Cluster Dédié 2x Nvidia H100 (160GB VRAM - Quantifié FP8)", baseServerCostYear: 48000, desc: "Puissance maximale pour Métropoles/Départements. Exécution en FP8 optimisée pour tenir dans les 160 Go de VRAM avec un débit ultra-rapide." }
                 ],
                 roleQuotas: [
                     { category: "Catégorie C (Agents Techniques & Terrain)", reqPerDay: 10, label: "10 requêtes / jour", usage: "Dictée vocale, signalements voirie, photos encombrants." },
@@ -1082,7 +1162,7 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
             {
                 title: "Test d'Évaluation de Fin de Stage (Corrigé)",
                 type: "eval-stage",
-                desc: "Évaluez votre niveau de maîtrise sur les 10 notions clés de la formation IA Territoriale.",
+                desc: "Évaluez votre niveau de maîtrise sur les notions clés fondamentales de la formation IA Territoriale.",
                 questions: [
                     { 
                         q: "1. Qu'est-ce qu'un Token en IA générative ?", 
@@ -1308,7 +1388,7 @@ const INTERACTIVE_QUESTIONS = [
         question: "Quelle est la règle d'or juridique concernant la responsabilité d'un courrier administratif officiel rédigé avec l'aide d'une IA ?",
         options: {
             A: "La responsabilité est partagée à 50/50 entre la mairie et le fournisseur d'accès à Internet",
-            B: "La validation humaine est obligatoire : l'agent public titulaire qui valide et signe le document en conserve la responsabilité juridique exclusive",
+            B: "La validation humaine est obligatoire : l'agent public habilité qui valide et signe le document en conserve la responsabilité juridique exclusive",
             C: "C'est l'éditeur de l'outil d'IA (OpenAI, Google ou Anthropic) qui est légalement responsable en cas d'erreur dans le texte généré",
             D: "En cas de litige, c'est le robot serveur du datacenter qui est convoqué à la barre du Tribunal Administratif"
         },

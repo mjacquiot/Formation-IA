@@ -4733,3 +4733,304 @@ body {
         gap: 0.75rem;
     }
 }
+
+/* --- Slide: Intellect Debate (L'IA diminue-t-elle l'intelligence ?) --- */
+.intellect-debate-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+}
+
+.intellect-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.intellect-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.intellect-card.card-risk {
+    border-top: 4px solid var(--accent-red);
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.03) 0%, transparent 100%);
+}
+
+.intellect-card.card-gain {
+    border-top: 4px solid var(--accent-green);
+    background: linear-gradient(180deg, rgba(34, 197, 94, 0.03) 0%, transparent 100%);
+}
+
+.intellect-card-header {
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.intellect-card-header h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-title);
+    margin-bottom: 0.3rem;
+}
+
+.intellect-card-sub {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.intellect-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.intellect-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-body);
+}
+
+.intellect-list li .bullet {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* --- Slide: Philosophy Pharmakon (Platon & Stiegler) --- */
+.pharmakon-banner {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pharmakon-badge {
+    background: var(--accent-purple);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.35rem 0.65rem;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+}
+
+.pharmakon-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-purple);
+    white-space: nowrap;
+}
+
+.pharmakon-def {
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--text-body);
+}
+
+.philosophy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.philosophy-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.4rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.philosophy-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.philosophy-card.card-plato {
+    border-top: 4px solid var(--accent-blue);
+}
+
+.philosophy-card.card-stiegler {
+    border-top: 4px solid var(--accent-gold);
+}
+
+.philosophy-card-header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.6rem;
+}
+
+.philosophy-author {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text-title);
+}
+
+.philosophy-period {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.philosophy-thesis {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin: 0;
+}
+
+.philosophy-card.card-stiegler .philosophy-thesis {
+    color: var(--accent-gold);
+}
+
+.philosophy-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.philosophy-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--text-body);
+}
+
+.philosophy-list li .bullet {
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+/* --- Slide: Arbitrage vs Execution --- */
+.arbitrage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+}
+
+.arbitrage-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.4rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.arbitrage-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.arbitrage-card.card-human-side {
+    border-top: 4px solid var(--accent-green);
+    background: linear-gradient(180deg, rgba(34, 197, 94, 0.03) 0%, transparent 100%);
+}
+
+.arbitrage-card.card-ai-side {
+    border-top: 4px solid var(--accent-purple);
+    background: linear-gradient(180deg, rgba(168, 85, 247, 0.03) 0%, transparent 100%);
+}
+
+.arbitrage-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.6rem;
+}
+
+.arbitrage-card-header h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text-title);
+    margin: 0;
+}
+
+.arbitrage-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-sm);
+}
+
+.arbitrage-badge.badge-human {
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--accent-green);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.arbitrage-badge.badge-ai {
+    background: rgba(168, 85, 247, 0.12);
+    color: var(--accent-purple);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.arbitrage-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.arbitrage-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    color: var(--text-body);
+}
+
+.arbitrage-list li .bullet {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+    .intellect-debate-grid,
+    .philosophy-grid,
+    .arbitrage-grid {
+        grid-template-columns: 1fr;
+    }
+    .pharmakon-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
