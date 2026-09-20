@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation IA - CNFPT</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- KaTeX CSS & JS for LaTeX math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo" id="logo-home">
+                    <div class="logo-row">
+                        <img src="Logo_CNFPT.png" alt="CNFPT" class="logo-img-header">
+                        <img src="logo.png" alt="Collectivité" class="logo-img-header">
+                    </div>
+                    <span>Formation IA</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-home-btn active" id="btn-home">
+                    <span class="icon">🏠</span> Accueil
+                </button>
+                
+                <div class="nav-section-title">Thématiques</div>
+                <div id="sidebar-themes-list" class="themes-accordion">
+                    <!-- Injected by JS -->
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <p>Version 2.0 • Simplifiée</p>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main id="main-content" class="main-content">
+            <!-- Screen 1: Home Dashboard -->
+            <section id="home-screen" class="content-screen active">
+                <header class="home-header">
+                    <h1>Devenez acteur de la transition IA 🚀</h1>
+                    <p>Une formation concise, visuelle et narrative pensée pour les agents et stagiaires de la fonction publique territoriale.</p>
+                </header>
+
+                <div class="themes-grid" id="themes-grid">
+                    <!-- Injected by JS: 10 Theme Cards -->
+                </div>
+
+                <div class="live-session-home-card" id="live-session-home-card" style="display: none;">
+                    <div class="live-qr-container">
+                        <img id="live-session-qr" src="" alt="Scan QR Code pour participer">
+                        <div class="live-qr-desc">
+                            <h4>Session de Groupe Active 🎯</h4>
+                            <p>Scannez ce QR Code avec votre smartphone ou accédez à l'adresse ci-dessous pour rejoindre la session de vote et d'exercices en temps réel.</p>
+                            <a id="live-session-url" href="#" target="_blank"></a>
+                        </div>
+                    </div>
+                    
+                    <!-- Dashboard formateur d'accueil -->
+                    <div id="formateur-dashboard-container" class="formateur-dashboard" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
+                            <h4 style="font-family:'Outfit',sans-serif; font-size:1.15rem; color:#f8fafc; margin: 0;">👥 Émargement & Gestion des Participants</h4>
+                            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                                <button id="btn-home-reset-session" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; font-weight:700; height: auto; min-height: unset; line-height: 1.2;">Réinitialiser les votes ⚠️</button>
+                                <button id="btn-home-close-session" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; font-weight:700; height: auto; min-height: unset; line-height: 1.2; background: linear-gradient(135deg, #8b5cf6, #6d28d9); border:none;">🔒 Clôturer la Session du Jour</button>
+                            </div>
+                        </div>
+                        <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.4;">
+                            Visualisez la liste des stagiaires connectés. Cliquez sur la croix (<span style="color:var(--accent-red); font-weight:bold;">✕</span>) à côté d'un prénom pour supprimer et déconnecter cet utilisateur.
+                        </p>
+                        <div id="formateur-trainees-grid" style="display:flex; flex-wrap:wrap; gap:0.6rem; min-height:40px; width: 100%;">
+                            <div style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Aucun participant connecté pour le moment.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-start-info">
+                    <div class="info-badge">💡 Astuce</div>
+                    <p>Utilisez la barre latérale à gauche ou cliquez sur un thème ci-dessus pour commencer votre lecture dynamique.</p>
+                </div>
+            </section>
+
+            <!-- Screen 2: Slide Viewer -->
+            <section id="presentation-screen" class="content-screen">
+                <div id="slide-container" class="slide-container">
+                    <!-- Dynamic Slide Content Injected by JS -->
+                </div>
+                
+                <footer class="slide-navigation">
+                    <button id="nav-prev" class="btn btn-secondary">
+                        <span class="arrow">◀</span> Slide précédente
+                    </button>
+                    <div id="slide-progress" class="slide-progress-bar">
+                        <div class="progress-track">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <span id="slide-indicator" class="indicator-text">Thème 1 • Slide 1/5</span>
+                    </div>
+                    <button id="nav-next" class="btn btn-primary">
+                        Slide suivante <span class="arrow">▶</span>
+                    </button>
+                </footer>
+            </section>
+        </main>
+    </div>
+
+    <!-- Interface d'Authentification Administrateur (Formateur) -->
+    <div id="admin-login-overlay" class="auth-overlay" style="display: none;">
+        <div class="auth-card">
+            <h3>Console Formateur Sécurisée 🔐</h3>
+            <p>Entrez le mot de passe administrateur pour démarrer le pilotage interactif de la session.</p>
+            <input type="password" id="admin-password-input" placeholder="Mot de passe...">
+            <div id="admin-login-error" class="error-text"></div>
+            <div class="auth-buttons">
+                <button id="btn-admin-login" class="btn btn-primary">Se connecter</button>
+                <button id="btn-admin-cancel" class="btn btn-secondary">Mode Public (Lecture seule)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interface de Saisie de Prénom (Stagiaire) -->
+    <div id="stagiaire-login-overlay" class="auth-overlay" style="display: none;">
+        <div class="auth-card">
+            <h3>Rejoindre la Session Interactive 👋</h3>
+            <p>Saisissez votre prénom pour participer aux sondages, quiz et ateliers en direct.</p>
+            <input type="text" id="stagiaire-name-input" placeholder="Votre prénom...">
+            <input type="text" id="stagiaire-pin-input" placeholder="Code PIN à 4 chiffres (ex: 7492)..." style="margin-top: 0.5rem; display: none;">
+            <div id="stagiaire-login-error" class="error-text"></div>
+            <button id="btn-stagiaire-login" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">Se connecter</button>
+        </div>
+    </div>
+
+    <!-- Panneau de Contrôle & de Vote Interactif Flottant -->
+    <button id="btn-floating-poll" class="btn-floating-poll" style="display: none;" title="Ouvrir le panneau interactif">📊</button>
+
+    <div id="interactivity-panel" class="interactivity-panel">
+        <div class="panel-header">
+            <h3 id="panel-title">Sondage & Quiz Interactif</h3>
+            <button id="btn-close-panel" class="btn-close-panel">✕</button>
+        </div>
+        <div class="panel-body">
+            <!-- Section Question / Réponses -->
+            <div id="panel-question-section"></div>
+
+            <!-- Section Réponses Stagiaire (Formulaires boutons) -->
+            <div id="panel-vote-form-section" style="display: none;">
+                <div class="vote-options-grid" id="vote-options-grid">
+                    <!-- Injected by JS: A, B, C, D buttons -->
+                </div>
+            </div>
+
+            <!-- Section Actions Formateur (Clôturer, Révéler) -->
+            <div id="panel-actions-section" class="panel-actions-section" style="display: none;">
+                <button id="btn-panel-toggle-results" class="btn btn-secondary">Masquer les votes</button>
+                <button id="btn-panel-stop" class="btn btn-primary">Clôturer les votes</button>
+            </div>
+
+            <!-- Section Graphique des Résultats -->
+            <div id="panel-results-section" class="panel-results-section" style="display: none;">
+                <!-- Injected by JS: CSS bar chart -->
+            </div>
+
+            <!-- Section Participants / Présences -->
+            <div id="panel-voters-section" class="panel-voters-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h4 style="margin: 0;">Émargement en temps réel (<span id="voters-count">0</span>) :</h4>
+                </div>
+                <div id="voters-names-list" class="voters-names-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="content.js"></script>
+    <script src="exercises.js"></script>
+    <script src="slide_renderer.js"></script>
+    <script src="app.js"></script>
+    <script src="app_slides.js"></script>
+    <script src="app_supabase.js"></script>
+    <script src="app_interactivity.js"></script>
+</body>
+</html>
+

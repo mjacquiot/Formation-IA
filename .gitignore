@@ -1,0 +1,49 @@
+﻿# Dependances & packages
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+ENV/
+
+# Fichiers volumineux, modeles IA & runtimes (> 100 Mo interdits par GitHub)
+*.gguf
+*.bin
+*.onnx
+*.safetensors
+models/
+runtime/
+*.iso
+*.zip
+*.tar.gz
+
+# Fichiers de build
+dist/
+dist-ssr/
+build/
+out/
+.next/
+
+# Fichiers d'environnement & secrets
+.env
+.env.*
+*.local
+*.secret
+*.key
+
+# Logs & caches
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Fichiers systeme & editeurs
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
