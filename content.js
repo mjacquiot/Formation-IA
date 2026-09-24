@@ -197,7 +197,7 @@ const THEMES = [
                 title: "Bac à sable : Expérimenter la tokenisation",
                 type: "token-sandbox",
                 desc: "La tokenisation influence directement la vitesse, le coût et l'empreinte écologique des modèles d'IA. Tapez votre propre texte ci-dessous pour voir comment l'IA le découpe et comparer les architectures de Google et OpenAI.",
-                explanation: "<strong>💡 Comparatif Technique :</strong><br>• <strong>Modèle ChatGPT (OpenAI)</strong> : Utilise un dictionnaire de tokens moins optimisé pour le français (1 mot ≈ 1.35 tokens). Exécute ses calculs sur des GPU standard (Nvidia) très énergivores.<br>• <strong>Modèle Gemini (Google)</strong> : Utilise un tokenizer multilingue très optimisé (1 mot ≈ 1.1 tokens). Exécute ses calculs sur des processeurs TPU (Google) conçus pour l'IA, quatre fois plus sobres en électricité.<br>➔ <strong>Résultat :</strong> Pour les administrations publiques, utiliser un modèle européen ou optimisé comme Gemini permet de réduire les factures d'API et la pollution numérique."
+                explanation: "<strong>💡 Comparatif Technique & Arbitrage Public :</strong><br>• <strong>Modèle ChatGPT (OpenAI)</strong> : Tokenizer moins optimisé pour le français (1 mot ≈ 1.35 tokens), calculs sur GPU standards.<br>• <strong>Modèle Gemini (Google - US)</strong> : Tokenizer très optimisé (1 mot ≈ 1.1 tokens) et puces TPU sobres : il offre une puissance d'analyse impressionnante et réduit fortement les coûts d'API, mais reste soumis au droit américain.<br>• <strong>Modèle Mistral AI (France - UE)</strong> : Bien qu'encore en retrait sur la puissance brute face aux géants américains, il garantit une vraie souveraineté européenne et un déploiement sécurisé en local ou sur cloud de confiance.<br>➔ <strong>Arbitrage pour les collectivités :</strong> Choisir Gemini pour la puissance et les coûts sur des données publiques/anonymisées, ou Mistral pour la souveraineté totale sur des données sensibles."
             },
             {
                 title: "Le Verrou Technique : VRAM, Coûts & Singularité",
@@ -706,10 +706,10 @@ const THEMES = [
                     },
                     {
                         num: "3",
-                        title: "Souveraineté Juridique face au Cloud Act",
+                        title: "Souveraineté Juridique face au Cloud Act et Hébergement RGPD",
                         points: [
-                            "<strong>Rappel Juridique</strong> : Les entreprises américaines éditrices d'IA (OpenAI, Microsoft, Anthropic, Amazon, etc.) sont soumises au <strong>Cloud Act</strong>. Cette loi autorise les autorités judiciaires et de renseignement américaines à réclamer l'accès aux données stockées sur leurs serveurs, y compris ceux situés physiquement en Europe.",
-                            "<strong>Obligation d'Hébergement</strong> : Pour le stockage de bases de données internes ou la création d'applications municipales, la collectivité impose l'utilisation de serveurs localisés en Europe (choix impératif de la région <strong>Europe/Francfort</strong> sur des bases comme Supabase) pour garantir le respect du RGPD."
+                            "<strong>Rappel Juridique</strong> : Les entreprises américaines éditrices d'IA et de services cloud (OpenAI, Microsoft, Anthropic, Amazon, Supabase Inc., etc.) sont soumises au <strong>Cloud Act</strong>. Cette loi autorise les autorités judiciaires et de renseignement américaines à réclamer l'accès aux données gérées par ces sociétés, y compris celles stockées sur des serveurs situés physiquement en Europe.",
+                            "<strong>Territorialité (RGPD) & Souveraineté</strong> : Pour le stockage interne ou les applications municipales, la collectivité impose des serveurs localisés dans l'UE (ex. région <strong>Europe/Francfort</strong>) pour respecter la territorialité RGPD. La localisation européenne ne protégeant pas du Cloud Act si le prestataire est américain, les données sensibles exigent impérativement un hébergeur sous juridiction européenne exclusive (SecNumCloud)."
                         ]
                     },
                     {
@@ -916,7 +916,7 @@ const THEMES = [
                 desc: "Antigravity est un agent d'ingénierie logicielle autonome conçu par Google DeepMind. Pour les fonctionnaires territoriaux, il résout une barrière majeure : **la compétence technique**.",
                 benefits: [
                     "<strong>Autonomie complète :</strong> Vous ne lui demandez pas de vous expliquer comment faire ; vous lui demandez de le faire pour vous dans votre dossier de travail.",
-                    "<strong>Sécurisation du code :</strong> Antigravity teste le code qu'il produit en boucle sur des consoles locales. Il s'assure que l'application ne contient aucune faille de sécurité.",
+                    "<strong>Cycle de test & fiabilisation :</strong> Antigravity teste et débogue son code en boucle sur des consoles locales, éliminant les erreurs d'exécution et renforçant la fiabilité (bien qu'un contrôle de conformité et de sécurité reste nécessaire avant tout déploiement réel).",
                     "<strong>Outil d'inclusion :</strong> Il permet à un agent administratif sans aucune notion de programmation de concevoir des petits logiciels fonctionnels sur-mesure pour son service."
                 ]
             },
@@ -1081,13 +1081,14 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
                 ]
             },
             {
-                title: "Matrice de Compétences IA & Valorisation IFSE (RIFSEEP)",
+                title: "Piste Prospective RH : Valorisation des Compétences IA (Optionnelle)",
                 type: "dsi-ifse-matrix",
-                desc: "Pour encourager la montée en compétences des agents territoriaux sans créer de blocages RH, intégrez la maîtrise des outils d'IA dans les fiches de poste et la valorisation indemnitaire de technicité/sujétions (IFSE) :",
+                intro: "L'IFSE relève de la libre délibération de chaque collectivité. Cette grille est une piste de réflexion RH indicative pour valoriser l'acquisition de compétences numériques et la responsabilité RGPD associée :",
+                desc: "Gains observés très forts sur les tâches administratives pures (rédaction, synthèses), mais nuls sur le contact humain et la médiation sociale (qui restent 100% humains).",
                 levels: [
-                    { level: "Niveau 1 : Agent Sensibilisé", skills: "Compréhension de la charte IA municipale, utilisation des règles de sécurité RGPD et correction des hallucinations basiques.", ifseBonus: "Validation des compétences numériques de base" },
-                    { level: "Niveau 2 : Agent Praticien (Prompt Master)", skills: "Maîtrise de la méthode M.A.I.R.E., création de prompts de synthèse complexes, anonymisation autonome des dossiers.", ifseBonus: "Revalorisation du coefficient de technicité IFSE" },
-                    { level: "Niveau 3 : Agent Référent / Concevant", skills: "Création d'agents autonomes sur-mesure (ex: via Antigravity), formation des collègues du service, audit des flux de données.", ifseBonus: "Majoration de l'IFSE (Groupe de fonctions / sujétion d'expertise Référent IA)" }
+                    { level: "Niveau 1 : Agent Sensibilisé", skills: "Charte IA municipale, RGPD de base, correction d'hallucinations. Gain administratif : +30-40% (humain : 0%).", ifseBonus: "Piste indicative : valorisation socle" },
+                    { level: "Niveau 2 : Agent Praticien (Prompt Master)", skills: "Méthode M.A.I.R.E., synthèses de réunions, pseudonymisation autonome. Gain administratif : +45-55% (humain : 0%).", ifseBonus: "Piste indicative : sujétion de technicité" },
+                    { level: "Niveau 3 : Agent Référent de Direction", skills: "Création d'agents de service, accompagnement des collègues, audit des flux RGPD. Gain administratif : +60-70% (humain : 0%).", ifseBonus: "Piste indicative : sujétion d'expertise Référent IA" }
                 ]
             },
             {
@@ -1365,7 +1366,7 @@ const INTERACTIVE_QUESTIONS = [
             D: "Parce que GitHub Pages exige obligatoirement une connexion à une base de données allemande pour fonctionner"
         },
         correct: "C",
-        explanation: "Localiser la BDD en région Europe (Francfort) garantit le respect de la souveraineté et des règles de protection des données du RGPD."
+        explanation: "Localiser la BDD en région Europe (Francfort) garantit la territorialité des données au sens du RGPD. Attention : le Cloud Act s'appliquant aux éditeurs de droit US même en Europe, les données sensibles en production exigent un hébergeur souverain (SecNumCloud)."
     },
     {
         themeId: "guide-dsi-ultime",

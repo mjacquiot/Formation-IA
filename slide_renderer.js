@@ -956,7 +956,7 @@ function getSlideHTML(slide, theme) {
                                 <div>
                                     <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Investissement GPU Estimé</div>
                                     <div style="font-size:1.8rem; font-weight:800; color:#10b981; font-family:'Outfit',sans-serif;" id="vram-out-cost">29 700 € HT</div>
-                                    <div style="font-size:0.72rem; color:var(--text-muted);">Basé sur ~450€ / Go VRAM Pro</div>
+                                    <div style="font-size:0.72rem; color:var(--text-muted);">Coût serveur complet datacenter ramené au Go de VRAM utile (~450€ HT/Go)</div>
                                 </div>
 
                                 <div style="background:rgba(168,85,247,0.08); border:1px solid rgba(168,85,247,0.25); border-radius:8px; padding:0.75rem;">
@@ -1672,18 +1672,20 @@ function getSlideHTML(slide, theme) {
                 `;
             } else if (slide.type === 'dsi-ifse-matrix') {
                 html += `
-                    <p style="margin-bottom:1.25rem;">${slide.intro || ''}</p>
+                    <div style="background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); border-radius:8px; padding:0.75rem 1rem; margin-bottom:1.25rem; font-size:0.85rem; color:var(--text-muted); line-height:1.5;">
+                        ℹ️ <strong>Piste de réflexion prospective RH (Optionnelle) :</strong> L'IFSE relève exclusivement de la libre administration de chaque collectivité par délibération municipale. Cette matrice est une simulation indicative pour alimenter le dialogue social et valoriser la technicité numérique acquise.
+                    </div>
                     <div class="ifse-matrix-container">
                         <div class="ifse-card">
                             <div>
                                 <span class="ifse-card-level ifse-level-1">Niveau 1 : Débutant formé</span>
                                 <h3 class="ifse-card-title">Utilisateur Occasionnel</h3>
-                                <p class="ifse-card-desc">L'agent utilise ponctuellement les LLM en ligne pour de la correction orthographique, des synthèses ou de la recherche. Tout agent formé et utilisant l'IA à ce niveau est éligible de plein droit à l'IFSE (+80€ à 120€ / mois) en raison de gains de productivité massifs dès la première utilisation.</p>
+                                <p class="ifse-card-desc">L'agent utilise ponctuellement les LLM pour de la correction orthographique, des synthèses ou du brainstorming. Option de valorisation socle pour reconnaître l'acculturation numérique.</p>
                             </div>
                             <div>
-                                <div class="ifse-card-metric">⚡ Gain de temps : <strong>+30% à 40%</strong></div>
+                                <div class="ifse-card-metric">⚡ Gain administratif : <strong>+30% à 40%</strong> (Humain : 0%)</div>
                                 <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Initiale (données publiques, anonymisation de base)</strong></div>
-                                <div class="ifse-card-impact">💼 IFSE : Revalorisation Socle (+80€ à 120€ / mois)</div>
+                                <div class="ifse-card-impact">💼 Piste IFSE : Option Socle (+80€ à 120€ / mois)</div>
                             </div>
                         </div>
                         
@@ -1691,12 +1693,12 @@ function getSlideHTML(slide, theme) {
                             <div>
                                 <span class="ifse-card-level ifse-level-2">Niveau 2 : Intermédiaire</span>
                                 <h3 class="ifse-card-title">Praticien Averti</h3>
-                                <p class="ifse-card-desc">L'agent maîtrise la méthode M.A.I.R.E, le filtrage par extension Chrome ou formulaire JS, et gère de manière récurrente des tâches de rédaction de dossiers. Tout agent formé à ce niveau prétend à l'IFSE.</p>
+                                <p class="ifse-card-desc">L'agent maîtrise la méthode M.A.I.R.E, la pseudonymisation locale et gère régulièrement des rédactions complexes. Piste pour valoriser cette technicité opérationnelle.</p>
                             </div>
                             <div>
-                                <div class="ifse-card-metric">⚡ Gain de temps : <strong>+45% à 55%</strong></div>
-                                <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Moyenne (anonymisation locale rigoureuse)</strong></div>
-                                <div class="ifse-card-impact">💼 IFSE : Revalorisation Pratique (+130€ à 180€ / mois)</div>
+                                <div class="ifse-card-metric">⚡ Gain administratif : <strong>+45% à 55%</strong> (Humain : 0%)</div>
+                                <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Moyenne (pseudonymisation locale rigoureuse)</strong></div>
+                                <div class="ifse-card-impact">💼 Piste IFSE : Option Technicité (+130€ à 180€ / mois)</div>
                             </div>
                         </div>
                         
@@ -1707,9 +1709,9 @@ function getSlideHTML(slide, theme) {
                                 <p class="ifse-card-desc">L'agent est le garant de la conformité du service, aide ses collègues à formuler des requêtes sûres, teste des applications locales et audite les usages.</p>
                             </div>
                             <div>
-                                <div class="ifse-card-metric">⚡ Gain de temps : <strong>+60% à 70%</strong></div>
+                                <div class="ifse-card-metric">⚡ Gain administratif : <strong>+60% à 70%</strong> (Humain : 0%)</div>
                                 <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Forte (garant des règles du service)</strong></div>
-                                <div class="ifse-card-impact">💼 IFSE : Revalorisation Référent (+200€ à 300€ / mois)</div>
+                                <div class="ifse-card-impact">💼 Piste IFSE : Option Sujétion Référent (+200€ à 300€ / mois)</div>
                             </div>
                         </div>
                         
@@ -1717,12 +1719,12 @@ function getSlideHTML(slide, theme) {
                             <div>
                                 <span class="ifse-card-level ifse-level-4">Niveau 4 : Expert</span>
                                 <h3 class="ifse-card-title">Concepteur Agentique</h3>
-                                <p class="ifse-card-desc">L'agent conçoit et configure le pipeline local des 3 dossiers, optimise l'API souveraine, gère la boucle agentique et surveille le budget API.</p>
+                                <p class="ifse-card-desc">L'agent conçoit et configure le pipeline local des 3 dossiers, optimise l'API souveraine et surveille le budget. Le temps administratif libéré renforce la présence humaine sur le terrain.</p>
                             </div>
                             <div>
-                                <div class="ifse-card-metric">⚡ Gain de temps : <strong>+80% à 100%</strong></div>
+                                <div class="ifse-card-metric">⚡ Gain administratif : <strong>jusqu'à +70% à 80%</strong> (Terrain : renforcé)</div>
                                 <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Très Forte (paramétrage des flux et API)</strong></div>
-                                <div class="ifse-card-impact">💼 IFSE : Revalorisation Expert (+350€ à 500€ / mois + Prime projet)</div>
+                                <div class="ifse-card-impact">💼 Piste IFSE : Option Expert / Projet (+350€ à 500€ / mois)</div>
                             </div>
                         </div>
                     </div>

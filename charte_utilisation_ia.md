@@ -24,9 +24,10 @@ Il est strictement interdit de copier-coller dans une invite de saisie (prompt) 
 
 ---
 
-## Article 3 : Souveraineté Juridique face au Cloud Act
-1. **Rappel Juridique** : Les entreprises américaines éditrices d'IA (OpenAI, Microsoft, Anthropic, Amazon, etc.) sont soumises au **Cloud Act**. Cette loi autorise les autorités judiciaires et de renseignement américaines à réclamer l'accès aux données stockées sur leurs serveurs, y compris ceux situés physiquement en Europe.
-2. **Obligation d'Hébergement** : Pour le stockage de bases de données internes ou la création d'applications municipales, la collectivité impose l'utilisation de serveurs localisés en Europe (choix impératif de la région **Europe/Francfort** sur des bases comme Supabase) pour garantir le respect du RGPD.
+## Article 3 : Souveraineté Juridique face au Cloud Act et Hébergement RGPD
+1. **Rappel Juridique** : Les entreprises américaines éditrices d'IA et d'infrastructures cloud (OpenAI, Microsoft, Anthropic, Amazon, Supabase Inc., etc.) sont soumises au **Cloud Act**. Cette loi autorise les autorités judiciaires et de renseignement américaines à réclamer l'accès aux données gérées par ces sociétés, y compris celles stockées sur des serveurs situés physiquement en Europe.
+2. **Territorialité des Données (RGPD)** : Pour le stockage de bases de données internes ou le développement d'applications municipales, la collectivité impose l'utilisation de serveurs localisés au sein de l'Union européenne (ex. région **Europe/Francfort**) afin de respecter le principe de territorialité du RGPD (limitation stricte des transferts de données hors UE).
+3. **Exigence de Souveraineté Complète** : La localisation en Europe ne protégeant pas du Cloud Act si le prestataire est de droit américain, la collectivité exige pour toutes les données sensibles ou confidentielles le recours à des hébergeurs sous juridiction européenne exclusive (ex. OVHcloud, Scaleway, ou des acteurs qualifiés SecNumCloud comme Outscale), exempts de toute loi extraterritoriale étrangère.
 
 ---
 
