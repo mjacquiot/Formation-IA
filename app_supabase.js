@@ -495,7 +495,7 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
             }
         }
 
-        // 2. Synchroniser le sondage ou quiz
+        // 2. Synchroniser le sondage, quiz ou atelier libre
         this.activePoll = null;
         this.activeExercise = null;
         this.revealState = 'hidden';
@@ -504,7 +504,87 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
         let zoomedPrenom = null;
         let zoomedOptionKey = null;
 
-        if (activePollId && activePollId.includes(':zoom:')) {
+        // 2.1 Détection prioritaire : Test Libre / Sondage JSON
+        if (activePollId && activePollId.startsWith('test-libre-json:')) {
+            try {
+                const rawJson = decodeURIComponent(activePollId.replace('test-libre-json:', ''));
+                const payload = JSON.parse(rawJson);
+                this.revealState = payload.rev || 'hidden';
+                zoomedPrenom = payload.zoom || null;
+                zoomedOptionKey = payload.zoomOpt || null;
+
+                const testObj = {
+                    id: activePollId,
+                    baseId: payload.baseId || 'test-libre-general',
+                    type: 'test-libre',
+                    mode: payload.mode || 'text',
+                    title: payload.mode === 'choice' ? `Sondage Express 📊` : `Atelier libre / Échanges improvisés ✏️`,
+                    question: payload.q || "Proposez vos réponses ou remarques par écrit suite aux échanges en cours.",
+                    options: payload.options || null,
+                    payload: payload
+                };
+                this.activePoll = testObj;
+
+                if (this.role === 'stagiaire') {
+                    this.showStagiaireFreeTestPanel(testObj, this.revealState);
+                } else if (this.role === 'formateur') {
+                    this.refreshFormateurPanel();
+                } else if (this.role === 'public') {
+                    this.showPublicFreeTestPanel(testObj, this.revealState);
+                }
+            } catch(e) {
+                console.error("Erreur de parsing test-libre-json:", e);
+            }
+        } else if (activePollId && activePollId.startsWith('test-libre-')) {
+            // 2.2 Rétrocompatibilité : Ancien format test-libre-
+            let customQuestion = "Proposez vos réponses ou remarques par écrit suite aux échanges en cours.";
+            let cleanTestId = activePollId;
+            let revState = 'hidden';
+
+            if (cleanTestId.includes(':zoom:')) {
+                const zParts = cleanTestId.split(':zoom:');
+                cleanTestId = zParts[0];
+                zoomedPrenom = zParts[1];
+            }
+            if (cleanTestId.includes(':q:')) {
+                const qParts = cleanTestId.split(':q:');
+                cleanTestId = qParts[0];
+                let rest = qParts[1];
+                if (rest.includes(':')) {
+                    const rParts = rest.split(':');
+                    try { customQuestion = decodeURIComponent(rParts[0]); } catch(e) {}
+                    revState = rParts[1];
+                } else {
+                    try { customQuestion = decodeURIComponent(rest); } catch(e) {}
+                }
+            } else if (cleanTestId.includes(':')) {
+                const parts = cleanTestId.split(':');
+                cleanTestId = parts[0];
+                revState = parts[1];
+            }
+
+            this.revealState = revState;
+
+            const testObj = {
+                id: activePollId,
+                baseId: cleanTestId,
+                type: 'test-libre',
+                mode: 'text',
+                title: `Atelier libre / Échanges improvisés ✏️`,
+                question: customQuestion,
+                options: null,
+                payload: { baseId: cleanTestId, mode: 'text', q: customQuestion, rev: revState, zoom: zoomedPrenom }
+            };
+            this.activePoll = testObj;
+
+            if (this.role === 'stagiaire') {
+                this.showStagiaireFreeTestPanel(testObj, this.revealState);
+            } else if (this.role === 'formateur') {
+                this.refreshFormateurPanel();
+            } else if (this.role === 'public') {
+                this.showPublicFreeTestPanel(testObj, this.revealState);
+            }
+        } else if (activePollId && activePollId.includes(':zoom:')) {
             const zoomParts = activePollId.split(':zoom:');
             const pollIdAndReveal = zoomParts[0];
             zoomedPrenom = zoomParts[1];
@@ -536,7 +616,8 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
             }
         }
 
-        if (activePollId) {
+        // 2.3 Traitement des autres sondages / quiz prédéfinis
+        if (activePollId && !activePollId.startsWith('test-libre')) {
             if (activePollId.startsWith('test-idx-')) {
                 const maxThemeIdx = parseInt(activePollId.replace('test-idx-', ''), 10);
                 const testQuestions = INTERACTIVE_QUESTIONS.filter(q => {
@@ -557,45 +638,6 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
                 } else if (this.role === 'public') {
                     this.showPublicTestPanel(testObj, this.revealState);
                 }
-            } else if (activePollId.startsWith('test-libre-')) {
-                let customQuestion = "Proposez vos réponses ou remarques par écrit suite aux échanges en cours.";
-                let cleanTestId = activePollId;
-                let revState = this.revealState || 'hidden';
-                
-                if (cleanTestId.includes(':q:')) {
-                    const qParts = cleanTestId.split(':q:');
-                    cleanTestId = qParts[0];
-                    let rest = qParts[1];
-                    if (rest.includes(':')) {
-                        const rParts = rest.split(':');
-                        try { customQuestion = decodeURIComponent(rParts[0]); } catch(e) {}
-                        revState = rParts[1];
-                    } else {
-                        try { customQuestion = decodeURIComponent(rest); } catch(e) {}
-                    }
-                } else if (cleanTestId.includes(':')) {
-                    const parts = cleanTestId.split(':');
-                    cleanTestId = parts[0];
-                    revState = parts[1];
-                }
-                
-                this.revealState = revState;
-                
-                const testObj = {
-                    id: activePollId,
-                    baseId: cleanTestId,
-                    type: 'test-libre',
-                    title: `Atelier libre / Échanges improvisés ✏️`,
-                    question: customQuestion
-                };
-                this.activePoll = testObj;
-                if (this.role === 'stagiaire') {
-                    this.showStagiaireFreeTestPanel(testObj, this.revealState);
-                } else if (this.role === 'formateur') {
-                    this.refreshFormateurPanel();
-                } else if (this.role === 'public') {
-                    this.showPublicFreeTestPanel(testObj, this.revealState);
-                }
             } else {
                 const poll = INTERACTIVE_QUESTIONS.find(q => q.id === activePollId);
                 if (poll) {
@@ -609,7 +651,7 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
                     }
                 }
             }
-        } else if (data.active_exercise_id) {
+        } else if (!activePollId && data.active_exercise_id) {
             const ex = EXERCISES_DATABASE.find(e => e.id === data.active_exercise_id);
             if (ex) {
                 this.activeExercise = ex;
@@ -621,7 +663,7 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
                     this.showPublicExercisePanel(ex, data.show_results);
                 }
             }
-        } else {
+        } else if (!activePollId && !data.active_exercise_id) {
             this.closeInteractivityPanel();
         }
 
@@ -630,7 +672,9 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
             this.showOptionZoomOverlay(this.activePoll, zoomedOptionKey, this.revealState);
         } else if (zoomedPrenom) {
             let pollIdForQuery = null;
-            if (activePollId) {
+            if (this.activePoll && this.activePoll.type === 'test-libre') {
+                pollIdForQuery = this.activePoll.baseId;
+            } else if (activePollId) {
                 pollIdForQuery = activePollId;
             } else if (data.active_exercise_id) {
                 pollIdForQuery = `ex-${data.active_exercise_id}`;
