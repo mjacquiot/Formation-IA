@@ -1,4 +1,4 @@
-﻿# Dependances & packages
+# Dependances & packages
 node_modules/
 __pycache__/
 *.py[cod]
@@ -47,3 +47,4 @@ Thumbs.db
 !.vscode/extensions.json
 .idea/
 *.swp
+scratch/
