@@ -865,7 +865,20 @@ TrainingApp.prototype.listenToPresenceAndVotes = function() {
         if (this.votesSubscription) this.supabase.removeChannel(this.votesSubscription);
 
         this.votesSubscription = this.supabase.channel('votes-channel')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'votes' }, () => {
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'votes' }, (payload) => {
+            // Détection en direct de la projection index.html par le formateur
+            if (payload && payload.new && payload.new.poll_id === 'projector_index_html' && payload.new.session_id === this.sessionId) {
+                if (this.role === 'stagiaire') {
+                    this.displayProjectedHtml(payload.new.reponse, false);
+                }
+                return;
+            } else if (payload && payload.eventType === 'DELETE' && payload.old && payload.old.poll_id === 'projector_index_html') {
+                if (this.role === 'stagiaire') {
+                    this.closeProjectedHtml();
+                }
+                return;
+            }
+
             if (this.activePoll) {
                 if (this.role === 'formateur') {
                     if (this.activePoll.type === 'test-complet') {

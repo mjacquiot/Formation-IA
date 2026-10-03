@@ -506,14 +506,18 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
 
         // Synchronisation de la projection index.html
         if (data.active_poll_id === 'html-projector-active') {
-            const overlay = document.getElementById('html-projector-fullscreen-overlay');
-            if (overlay && overlay.style.display !== 'flex' && this.role === 'stagiaire') {
-                if (this.htmlProjectorChannel) {
-                    this.htmlProjectorChannel.send({
-                        type: 'broadcast',
-                        event: 'request_current_html'
+            if (this.role === 'stagiaire') {
+                this.supabase.from('votes')
+                    .select('reponse')
+                    .eq('session_id', this.sessionId)
+                    .eq('poll_id', 'projector_index_html')
+                    .eq('prenom', '__HOST__')
+                    .maybeSingle()
+                    .then(({ data: vote, error }) => {
+                        if (vote && vote.reponse) {
+                            this.displayProjectedHtml(vote.reponse, false);
+                        }
                     });
-                }
             }
         } else {
             const overlay = document.getElementById('html-projector-fullscreen-overlay');
@@ -753,8 +757,13 @@ TrainingApp.prototype.openHtmlProjectorModal = function() {
         modal.style.display = 'flex';
         const input = document.getElementById('html-projector-code-input');
         if (input) {
-            if (this.activeProjectedHtml && !input.value) {
-                input.value = this.activeProjectedHtml;
+            if (!input.value) {
+                const saved = localStorage.getItem('saved_formateur_projected_html');
+                if (saved) {
+                    input.value = saved;
+                } else if (this.activeProjectedHtml) {
+                    input.value = this.activeProjectedHtml;
+                }
             }
             setTimeout(() => input.focus(), 100);
         }
@@ -778,12 +787,33 @@ TrainingApp.prototype.startHtmlProjection = async function(customCode) {
     }
 
     this.activeProjectedHtml = code;
+    try {
+        localStorage.setItem('saved_formateur_projected_html', code);
+    } catch(e) {}
     this.closeHtmlProjectorModal();
 
     // 1. Afficher immédiatement sur l'écran local du formateur
     this.displayProjectedHtml(code, true);
 
-    // 2. Diffuser en temps réel aux stagiaires via broadcast
+    // 2. Persister dans la BDD Supabase (table votes + sessions)
+    if (this.supabase && this.role === 'formateur' && this.sessionId) {
+        try {
+            await this.supabase.from('votes').upsert({
+                session_id: this.sessionId,
+                poll_id: 'projector_index_html',
+                prenom: '__HOST__',
+                reponse: code
+            }, { onConflict: 'session_id,poll_id,prenom' });
+
+            await this.supabase.from('sessions').update({
+                active_poll_id: 'html-projector-active'
+            }).eq('id', this.sessionId);
+        } catch(e) {
+            console.warn("Erreur mise à jour Supabase pour index.html:", e);
+        }
+    }
+
+    // 3. Diffuser en temps réel aux stagiaires via broadcast
     if (this.htmlProjectorChannel) {
         try {
             await this.htmlProjectorChannel.send({
@@ -793,17 +823,6 @@ TrainingApp.prototype.startHtmlProjection = async function(customCode) {
             });
         } catch(e) {
             console.warn("Échec d'envoi broadcast project_html:", e);
-        }
-    }
-
-    // 3. Mettre à jour l'état de session en base de données
-    if (this.supabase && this.role === 'formateur' && this.sessionId) {
-        try {
-            await this.supabase.from('sessions').update({
-                active_poll_id: 'html-projector-active'
-            }).eq('id', this.sessionId);
-        } catch(e) {
-            console.warn("Erreur mise à jour active_poll_id pour index.html:", e);
         }
     }
 };
@@ -832,22 +851,29 @@ TrainingApp.prototype.stopHtmlProjection = async function() {
     this.closeProjectedHtml();
     this.activeProjectedHtml = null;
 
-    // 1. Diffuser l'arrêt en direct
+    // 1. Nettoyer en base de données Supabase
+    if (this.supabase && this.role === 'formateur' && this.sessionId) {
+        try {
+            await this.supabase.from('votes').delete()
+                .eq('session_id', this.sessionId)
+                .eq('poll_id', 'projector_index_html')
+                .eq('prenom', '__HOST__');
+
+            await this.supabase.from('sessions').update({
+                active_poll_id: null
+            }).eq('id', this.sessionId);
+        } catch(e) {
+            console.warn("Erreur réinitialisation session index.html:", e);
+        }
+    }
+
+    // 2. Diffuser l'arrêt en direct
     if (this.htmlProjectorChannel) {
         try {
             await this.htmlProjectorChannel.send({
                 type: 'broadcast',
                 event: 'stop_project_html'
             });
-        } catch(e) {}
-    }
-
-    // 2. Réinitialiser la session en base de données
-    if (this.supabase && this.role === 'formateur' && this.sessionId) {
-        try {
-            await this.supabase.from('sessions').update({
-                active_poll_id: null
-            }).eq('id', this.sessionId);
         } catch(e) {}
     }
 };
