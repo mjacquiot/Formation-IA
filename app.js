@@ -406,6 +406,9 @@ class TrainingApp {
                     <button class="btn btn-sm btn-control-free" id="btn-slide-launch-free-test">
                         ✏️ Lancer un Test Libre
                     </button>
+                    <button class="btn btn-sm btn-control-html" id="btn-slide-launch-html" title="Projeter un fichier index.html">
+                        💻 index.html
+                    </button>
                 </div>
             `;
         }

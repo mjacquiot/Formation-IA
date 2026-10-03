@@ -384,6 +384,66 @@ const THEMES = [
                     { title: "🌉 Le Pont du Prompt", desc: "Vous transmettez cette scène par écrit à l'IA : description de l'usager, règlement municipal, profil de votre commune." },
                     { title: "💾 Le Cerveau de l'IA", desc: "L'IA applique ses capacités logiques sur ce contexte précis pour vous générer une réponse de désescalade sur-mesure." }
                 ]
+            },
+            {
+                title: "Le Champ des Possibles : Précision vs Créativité",
+                type: "prompt-funnel-cone",
+                intro: "Comment vos mots orientent-ils le calcul probabiliste du modèle ? Découvrez visuellement la mécanique de réduction du champ des possibles, ainsi que l'art subtil de doser l'imprécision pour stimuler l'inventivité.",
+                targetLabel: "Solution idéale recherchée",
+                steps: [
+                    {
+                        id: "step-1",
+                        num: "1",
+                        badge: "Départ",
+                        name: "Aucun prompt (0 consigne)",
+                        icon: "🔘",
+                        coneType: "circle",
+                        summary: "Champ des possibles à 360° : une infinité de réponses équiprobables.",
+                        desc: "Sans consigne, l'espace probabiliste de l'IA est totalement ouvert. La solution parfaite que vous avez en tête (le point rouge) est perdue au milieu de milliards de directions potentielles. La probabilité que l'IA tombe juste par hasard est quasi-nulle.",
+                        iaBehavior: "L'IA attend une impulsion ou répond par une salutation polie standard ('Comment puis-je vous aider ?').",
+                        promptExample: "<em>(Aucun prompt saisi)</em>",
+                        takeaway: "Le silence ou le manque absolu de direction laisse l'IA dans une errance statistique complète."
+                    },
+                    {
+                        id: "step-2",
+                        num: "2",
+                        badge: "Prompt imprécis",
+                        name: "Consigne vague ou floue",
+                        icon: "📐",
+                        coneType: "wide-cone",
+                        summary: "Cône de sélection ouvert (~60°) : orientation globale mais fort risque de dérive.",
+                        desc: "Vous donnez une intention générale, mais sans contraintes, sans format et sans contexte territorial. L'IA réduit son champ de recherche à un cône large. Le résultat peut parfois effleurer ce que vous voulez, mais il dévie facilement vers des généralités creuses ou des contresens.",
+                        iaBehavior: "L'IA comble les trous béants en inventant des hypothèses par défaut ou en générant du remplissage banal.",
+                        promptExample: "« Fais-moi un mot pour les administrés sur les travaux de voirie. »",
+                        takeaway: "Une consigne floue produit un livrable tiède qui nécessite 80% de réécriture humaine."
+                    },
+                    {
+                        id: "step-3",
+                        num: "3",
+                        badge: "Prompt précis",
+                        name: "Consigne calibrée & contrainte",
+                        icon: "🎯",
+                        coneType: "laser-cone",
+                        summary: "Faisceau laser directif (~12°) : verrouillage exact du résultat attendu.",
+                        desc: "Plus votre consigne est méthodique (rôle, contexte, ressources et format exigé), plus vous réduisez l'espace des possibles. Le faisceau se resserre en un entonnoir ultra-ciblé qui frappe directement la cible rouge recherchée.",
+                        iaBehavior: "L'IA concentre toute son attention sur vos contraintes strictes et élimine les divagations hors-sujet.",
+                        promptExample: "« En tant que responsable voirie, rédige un avis aux riverains de la rue Pasteur (180 mots). Travaux d'assainissement du 12 au 26 oct. Circulation alternée de 8h à 17h, ramassage des bacs maintenu. Ton courtois et pragmatique. »",
+                        takeaway: "La précision chirurgicale de la contrainte est la clé d'un résultat 'prêt à l'emploi'."
+                    },
+                    {
+                        id: "step-4",
+                        num: "4",
+                        badge: "Exploration créative",
+                        name: "Doser l'imprécision pour innover",
+                        icon: "💡",
+                        coneType: "creative-sparks",
+                        summary: "Ouverture volontaire : lever ses propres barrières mentales et biais.",
+                        desc: "<strong>La nuance capitale :</strong> Parfois, on ne sait PAS exactement quelle solution on recherche ! Si on sur-contraint le prompt dès le départ, on enferme l'IA dans nos propres habitudes et angles morts. Jouer volontairement avec une consigne ouverte et décalée pousse l'IA à explorer des territoires inédits et à faire preuve d'inventivité.",
+                        iaBehavior: "L'IA utilise sa vaste base de connaissances croisées pour proposer des associations d'idées insolites et disruptives.",
+                        promptExample: "« Imagine 5 approches originales et non punitives inspirées des sciences comportementales (nudges) pour inciter les usagers à respecter la propreté des abords des conteneurs à verre. Sors des schémas classiques de verbalisation. »",
+                        takeaway: "Pour exécuter une tâche connue : ciblez au laser. Pour inventer et sortir de vos certitudes : ouvrez le faisceau !"
+                    }
+                ]
             }
         ]
     },
@@ -432,6 +492,103 @@ const THEMES = [
 
 [EXIGENCE] : Le livrable doit être rédigé sous forme de [format attendu : mail, tableau, note de synthèse]. Le ton doit être [professionnel, technique, neutre] et la longueur maximale de [nombre de mots/paragraphes].`,
                 tips: "<strong>💡 Conseil de pro :</strong> Si vos ressources sont très longues (ex: un rapport PDF de 50 pages), n'hésitez pas à utiliser des outils dotés d'une grande fenêtre de contexte (comme Claude ou Gemini) pour y glisser le fichier entier."
+            },
+            {
+                title: "Ce que peut vous fournir en sortie une IA",
+                type: "ai-output-formats",
+                intro: "L'IA ne sert pas seulement à rédiger des courriers ou des paragraphes de texte : elle est un moteur de génération polymorphe. Mais attention aux illusions de facilité avec les formats bureautiques propriétaires !",
+                categories: [
+                    {
+                        title: "📝 Texte & Rédactionnel",
+                        icon: "✍️",
+                        badge: "Quotidien",
+                        color: "var(--accent-blue)",
+                        items: [
+                            "Courriers d'usagers, réponses à réclamations",
+                            "Notes de cadrage, délibérations, arrêtés types",
+                            "Synthèses de rapports volumineux (PDF de 50 pages)",
+                            "Discours officiels et vulgarisation tout public"
+                        ]
+                    },
+                    {
+                        title: "📊 Données & Tableaux",
+                        icon: "📈",
+                        badge: "Analytique",
+                        color: "var(--accent-purple)",
+                        items: [
+                            "Tableaux comparatifs synthétiques en Markdown",
+                            "Fichiers de données tabulaires (CSV universel)",
+                            "Nettoyage et normalisation de listes d'adresses",
+                            "Structures de données pour l'open data (JSON, GeoJSON)"
+                        ]
+                    },
+                    {
+                        title: "📄 Documents Bureautiques",
+                        icon: "💼",
+                        badge: "Nuancé",
+                        color: "var(--accent-gold)",
+                        items: [
+                            "Structures complètes de dossiers de subvention",
+                            "Trames de présentations (plans de diapositives)",
+                            "Matrices d'évaluation et grilles de critères RH",
+                            "Formulaires types de recueil de besoins"
+                        ]
+                    },
+                    {
+                        title: "💻 Code & Applications",
+                        icon: "⚡",
+                        badge: "Super-Pouvoir",
+                        color: "var(--accent-green)",
+                        items: [
+                            "L'IA est exceptionnellement douée pour coder",
+                            "Scripts d'automatisation (Python, Bash, PowerShell)",
+                            "Requêtes de bases de données (SQL)",
+                            "Applications web autonomes complètes (HTML / CSS / JS)"
+                        ]
+                    }
+                ],
+                proprietaryTrap: {
+                    title: "⚠️ Le Piège des Logiciels Propriétaires (Excel / Word & Macros VBA)",
+                    subtitle: "Pourquoi demander des fichiers Excel avec macros est souvent une fausse bonne idée :",
+                    points: [
+                        {
+                            label: "Blocages de Sécurité DSI",
+                            desc: "Dans 95% des collectivités territoriales, l'exécution des macros VBA est <strong>strictement verrouillée</strong> par la sécurité informatique pour prévenir les rançongiciels."
+                        },
+                        {
+                            label: "Incompatibilités de Versions",
+                            desc: "Formules cassées, fonctions inexistantes entre différentes versions d'Office (Office 2016, 2019, 2021, Microsoft 365, LibreOffice)."
+                        },
+                        {
+                            label: "Fragilité des Dépendances",
+                            desc: "Une formule mal traduite ou une macro mal calibrée rend le fichier totalement inutilisable et chronophage à réparer."
+                        }
+                    ]
+                },
+                htmlRecommendation: {
+                    title: "🌟 La Recommandation d'Or : Le Fichier « index.html »",
+                    subtitle: "Le livrable ultime, libre, gratuit et immédiatement opérationnel",
+                    desc: "Au lieu d'un tableur complexe ou d'une macro incertaine, demandez à l'IA de concevoir votre outil sous la forme d'un <strong>unique fichier autonome <code>index.html</code></strong> intégrant structure, design et calculs.",
+                    advantages: [
+                        {
+                            title: "100% Libre & Gratuit",
+                            desc: "Aucune licence payante requise, aucun coût caché de logiciel propriétaire."
+                        },
+                        {
+                            title: "Universel & Sans Installation",
+                            desc: "Fonctionne par un simple double-clic sur n'importe quel ordinateur, tablette ou smartphone dans n'importe quel navigateur (Edge, Chrome, Firefox)."
+                        },
+                        {
+                            title: "Conforme & Autorisé",
+                            desc: "Ne nécessite aucun droit administrateur sur le poste de travail et respecte les contraintes de sécurité des DSI."
+                        },
+                        {
+                            title: "Visuel & Hyper-Interactif",
+                            desc: "Permet de concevoir des calculateurs de tarifs municipaux, des simulateurs d'indemnités, des formulaires de démarches ou des dashboards visuels en quelques secondes."
+                        }
+                    ],
+                    promptTip: "<strong>💡 Conseil dans la lettre 'E' (Exigence) de M.A.I.R.E. :</strong> Demandez explicitement : <em>« Fournis-moi le résultat sous forme d'un fichier <code>index.html</code> autonome, moderne et interactif avec du code HTML/CSS/JS directement exécutable dans mon navigateur. »</em>"
+                }
             }
         ]
     },

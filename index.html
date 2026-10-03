@@ -144,6 +144,53 @@
 
     <!-- Panneau de Contrôle & de Vote Interactif Flottant -->
     <button id="btn-floating-poll" class="btn-floating-poll" style="display: none;" title="Ouvrir le panneau interactif">📊</button>
+    <!-- Bouton Flottant Formateur : Projeter index.html -->
+    <button id="btn-formateur-project-html" class="btn-formateur-project-html" style="display: none;" title="Projeter un fichier index.html">
+        <span class="icon">💻</span> <span>index.html</span>
+    </button>
+
+    <!-- Modal Éditeur Formateur pour index.html -->
+    <div id="html-projector-modal" class="auth-overlay" style="display: none;">
+        <div class="auth-card html-projector-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h3 style="margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 0.5rem; color: #f8fafc;">
+                    💻 Projeter un fichier HTML (index.html)
+                </h3>
+                <button id="btn-close-projector-modal" class="btn-close-panel" style="position: static; font-size: 1.2rem;">✕</button>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5;">
+                Collez le code complet de votre fichier <code>index.html</code> (HTML, CSS, JS inclus). Il sera immédiatement exécuté et projeté en plein écran sur votre écran et sur celui de tous les stagiaires connectés.
+            </p>
+            <div class="html-editor-wrapper">
+                <textarea id="html-projector-code-input" placeholder="<!DOCTYPE html>&#10;<html>&#10;<head>&#10;  <meta charset='utf-8'>&#10;  <title>Application</title>&#10;  <style>&#10;    body { font-family: sans-serif; padding: 2rem; background: #f8fafc; }&#10;  </style>&#10;</head>&#10;<body>&#10;  <h1>Mon Application Locale</h1>&#10;  <p>Tapez ou collez votre code ici...</p>&#10;</body>&#10;</html>" spellcheck="false"></textarea>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+                <button id="btn-cancel-projector" class="btn btn-secondary">Annuler</button>
+                <button id="btn-launch-projector" class="btn btn-primary" style="background: linear-gradient(135deg, #059669, #10b981); border:none; font-weight:700;">🚀 Lancer la projection plein écran</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visionneuse Plein Écran de Projection (Formateur & Stagiaires) -->
+    <div id="html-projector-fullscreen-overlay" class="html-projector-fullscreen" style="display: none;">
+        <div class="html-projector-topbar">
+            <div class="projector-topbar-left">
+                <span class="projector-live-badge">🔴 PROJECTION EN DIRECT</span>
+                <span class="projector-title">Rendu de <code>index.html</code></span>
+            </div>
+            <div class="projector-topbar-right">
+                <button id="btn-stop-projection" class="btn btn-danger btn-stop-projection" style="display: none;">
+                    ✕ Arrêter la projection pour tous
+                </button>
+                <span id="stagiaire-projector-notice" class="stagiaire-projector-notice" style="display: none;">
+                    👁️ Vue Stagiaire synchronisée
+                </span>
+            </div>
+        </div>
+        <div class="html-projector-content">
+            <iframe id="html-projector-iframe" sandbox="allow-scripts allow-modals allow-forms allow-same-origin" title="Projection index.html"></iframe>
+        </div>
+    </div>
 
     <div id="interactivity-panel" class="interactivity-panel">
         <div class="panel-header">
@@ -184,13 +231,13 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="content.js?v=2.1"></script>
-    <script src="exercises.js?v=2.1"></script>
-    <script src="slide_renderer.js?v=2.1"></script>
-    <script src="app.js?v=2.1"></script>
-    <script src="app_slides.js?v=2.1"></script>
-    <script src="app_supabase.js?v=2.1"></script>
-    <script src="app_interactivity.js?v=2.1"></script>
+    <script src="content.js?v=2.2"></script>
+    <script src="exercises.js?v=2.2"></script>
+    <script src="slide_renderer.js?v=2.2"></script>
+    <script src="app.js?v=2.2"></script>
+    <script src="app_slides.js?v=2.2"></script>
+    <script src="app_supabase.js?v=2.2"></script>
+    <script src="app_interactivity.js?v=2.2"></script>
 </body>
 </html>
 

@@ -2010,6 +2010,326 @@ function getSlideHTML(slide, theme) {
                         </div>
                     </div>
                 `;
+            } else if (slide.type === 'prompt-funnel-cone') {
+                const steps = slide.steps || [];
+                const firstStep = steps[0] || {};
+                html += `
+                    <p style="margin-bottom:1.25rem; font-size:1.02rem; line-height:1.6;">${slide.intro || ''}</p>
+                    
+                    <div class="prompt-funnel-container">
+                        <!-- Navigation par Boutons d'Étapes -->
+                        <div class="cone-steps-nav" id="cone-steps-nav">
+                            ${steps.map((st, idx) => `
+                                <button class="cone-step-btn ${idx === 0 ? 'active' : ''}" data-step-idx="${idx}" id="btn-cone-step-${idx + 1}">
+                                    <span class="step-num">${st.num}</span>
+                                    <span class="step-icon">${st.icon}</span>
+                                    <span class="step-label">${st.badge}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        <!-- Zone Visuelle Graphique (SVG Haute Définition) -->
+                        <div class="cone-diagram-wrapper">
+                            <div class="cone-diagram-legend">
+                                <span class="legend-item"><span class="legend-dot dot-emitter"></span> Émetteur (Votre prompt)</span>
+                                <span class="legend-item"><span class="legend-dot dot-target"></span> ${slide.targetLabel || 'Solution idéale recherchée'} (Point rouge)</span>
+                                <span class="legend-item"><span class="legend-dot dot-possibilities"></span> Champ des réponses générées</span>
+                            </div>
+
+                            <svg id="cone-interactive-svg" viewBox="0 0 800 360" class="cone-svg" preserveAspectRatio="xMidYMid meet">
+                                <defs>
+                                    <!-- Gradients & Filters -->
+                                    <radialGradient id="grad-circle-field" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="rgba(14, 165, 233, 0.08)" />
+                                        <stop offset="70%" stop-color="rgba(14, 165, 233, 0.04)" />
+                                        <stop offset="100%" stop-color="rgba(14, 165, 233, 0)" />
+                                    </radialGradient>
+
+                                    <linearGradient id="grad-wide-cone" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="rgba(14, 165, 233, 0.35)" />
+                                        <stop offset="100%" stop-color="rgba(14, 165, 233, 0.03)" />
+                                    </linearGradient>
+
+                                    <linearGradient id="grad-laser-cone" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="rgba(16, 185, 129, 0.85)" />
+                                        <stop offset="85%" stop-color="rgba(16, 185, 129, 0.45)" />
+                                        <stop offset="100%" stop-color="rgba(239, 68, 68, 0.9)" />
+                                    </linearGradient>
+
+                                    <filter id="glow-target" x="-40%" y="-40%" width="180%" height="180%">
+                                        <feGaussianBlur stdDeviation="4" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+
+                                    <filter id="glow-laser" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="6" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                </defs>
+
+                                <!-- Arrière-plan grille discrète -->
+                                <g opacity="0.15">
+                                    <line x1="50" y1="90" x2="750" y2="90" stroke="#94a3b8" stroke-dasharray="4,4" />
+                                    <line x1="50" y1="180" x2="750" y2="180" stroke="#94a3b8" stroke-dasharray="4,4" />
+                                    <line x1="50" y1="270" x2="750" y2="270" stroke="#94a3b8" stroke-dasharray="4,4" />
+                                    <line x1="200" y1="30" x2="200" y2="330" stroke="#94a3b8" stroke-dasharray="4,4" />
+                                    <line x1="400" y1="30" x2="400" y2="330" stroke="#94a3b8" stroke-dasharray="4,4" />
+                                    <line x1="600" y1="30" x2="600" y2="330" stroke="#94a3b8" stroke-dasharray="4,4" />
+                                </g>
+
+                                <!-- GROUPE ÉTAPE 1 : DÉPART (Grand cercle 360°) -->
+                                <g id="vis-step-0" class="vis-step-group">
+                                    <!-- Grand cercle de toutes les possibilités à 360° -->
+                                    <circle cx="200" cy="180" r="130" fill="url(#grad-circle-field)" stroke="#0ea5e9" stroke-width="3" stroke-dasharray="6,4" />
+                                    <circle cx="200" cy="180" r="85" fill="none" stroke="#0ea5e9" stroke-width="1.5" opacity="0.3" stroke-dasharray="3,3" />
+                                    <circle cx="200" cy="180" r="40" fill="none" stroke="#0ea5e9" stroke-width="1" opacity="0.2" />
+
+                                    <!-- Nuage de points dispersés dans tout le cercle -->
+                                    <circle cx="160" cy="120" r="3" fill="#0284c7" opacity="0.6" />
+                                    <circle cx="250" cy="110" r="3" fill="#0284c7" opacity="0.6" />
+                                    <circle cx="130" cy="210" r="3" fill="#0284c7" opacity="0.6" />
+                                    <circle cx="260" cy="230" r="3" fill="#0284c7" opacity="0.6" />
+                                    <circle cx="210" cy="270" r="3" fill="#0284c7" opacity="0.6" />
+                                    <circle cx="120" cy="150" r="3" fill="#0284c7" opacity="0.6" />
+                                    <circle cx="280" cy="170" r="3" fill="#0284c7" opacity="0.6" />
+                                    <circle cx="170" cy="240" r="3" fill="#0284c7" opacity="0.6" />
+
+                                    <!-- Émetteur au centre du cercle -->
+                                    <circle cx="200" cy="180" r="14" fill="#ffffff" stroke="#0ea5e9" stroke-width="4" />
+                                    <circle cx="200" cy="180" r="5" fill="#0284c7" />
+
+                                    <!-- Point rouge (Cible) situé sur le pourtour des possibilités comme sur le dessin -->
+                                    <g transform="translate(290, 95)">
+                                        <circle cx="0" cy="0" r="14" fill="rgba(239, 68, 68, 0.2)" />
+                                        <circle cx="0" cy="0" r="8" fill="#ef4444" stroke="#ffffff" stroke-width="2" filter="url(#glow-target)" />
+                                        <text x="14" y="4" fill="#ef4444" font-size="12" font-weight="800">Cible (Noyée dans la masse)</text>
+                                    </g>
+
+                                    <!-- Annotation pédagogique -->
+                                    <text x="200" y="335" text-anchor="middle" fill="#64748b" font-size="12" font-weight="600">
+                                        Espace latent à 360° : aucune direction donnée, probabilité d'atteindre la cible quasi-nulle
+                                    </text>
+                                </g>
+
+                                <!-- GROUPE ÉTAPE 2 : PROMPT IMPRÉCIS (Cône ouvert) -->
+                                <g id="vis-step-1" class="vis-step-group" style="display:none;">
+                                    <!-- Cône ouvert depuis l'émetteur -->
+                                    <polygon points="120,180 580,60 580,300" fill="url(#grad-wide-cone)" />
+                                    <line x1="120" y1="180" x2="580" y2="60" stroke="#0ea5e9" stroke-width="3" />
+                                    <line x1="120" y1="180" x2="580" y2="300" stroke="#0ea5e9" stroke-width="3" />
+                                    <path d="M 580,60 A 240,240 0 0,1 580,300" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-dasharray="5,5" opacity="0.7" />
+
+                                    <!-- Points de réponses déviées -->
+                                    <g>
+                                        <circle cx="340" cy="130" r="4" fill="#0284c7" />
+                                        <text x="350" y="125" fill="#64748b" font-size="10">Réponse vague</text>
+
+                                        <circle cx="480" cy="240" r="4" fill="#f59e0b" />
+                                        <text x="490" y="245" fill="#f59e0b" font-size="10">Dérive / Hors-sujet</text>
+
+                                        <circle cx="420" cy="170" r="4" fill="#0284c7" />
+                                        <text x="430" y="165" fill="#64748b" font-size="10">Généralités creuses</text>
+
+                                        <!-- Trajectoires divergentes -->
+                                        <line x1="120" y1="180" x2="480" y2="240" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />
+                                        <line x1="120" y1="180" x2="340" y2="130" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6" />
+                                    </g>
+
+                                    <!-- Émetteur -->
+                                    <circle cx="120" cy="180" r="14" fill="#ffffff" stroke="#0ea5e9" stroke-width="4" />
+                                    <circle cx="120" cy="180" r="5" fill="#0284c7" />
+
+                                    <!-- Cible rouge : en marge / lisière du cône -->
+                                    <g transform="translate(560, 130)">
+                                        <circle cx="0" cy="0" r="16" fill="rgba(239, 68, 68, 0.25)" />
+                                        <circle cx="0" cy="0" r="9" fill="#ef4444" stroke="#ffffff" stroke-width="2" filter="url(#glow-target)" />
+                                        <text x="16" y="4" fill="#ef4444" font-size="12" font-weight="800">Cible (Frôlée ou manquée)</text>
+                                    </g>
+
+                                    <text x="400" y="335" text-anchor="middle" fill="#64748b" font-size="12" font-weight="600">
+                                        Cône ouvert (~60°) : orientation globale mais fort aléa statistique
+                                    </text>
+                                </g>
+
+                                <!-- GROUPE ÉTAPE 3 : PROMPT PRÉCIS (Cône laser ciblé) -->
+                                <g id="vis-step-2" class="vis-step-group" style="display:none;">
+                                    <!-- Faisceau laser étroit et concentré -->
+                                    <polygon points="120,180 620,158 620,202" fill="url(#grad-laser-cone)" opacity="0.75" />
+                                    <line x1="120" y1="180" x2="620" y2="158" stroke="#10b981" stroke-width="3" filter="url(#glow-laser)" />
+                                    <line x1="120" y1="180" x2="620" y2="202" stroke="#10b981" stroke-width="3" filter="url(#glow-laser)" />
+                                    <line x1="120" y1="180" x2="620" y2="180" stroke="#34d399" stroke-width="2" stroke-dasharray="6,3" />
+
+                                    <!-- Ondes de précision convergentes -->
+                                    <path d="M 320,173 A 40,40 0 0,1 320,187" fill="none" stroke="#10b981" stroke-width="2" opacity="0.8" />
+                                    <path d="M 470,167 A 60,60 0 0,1 470,193" fill="none" stroke="#10b981" stroke-width="2" opacity="0.9" />
+
+                                    <!-- Émetteur calibré -->
+                                    <circle cx="120" cy="180" r="14" fill="#ffffff" stroke="#10b981" stroke-width="4" />
+                                    <circle cx="120" cy="180" r="5" fill="#10b981" />
+
+                                    <!-- Cible rouge verrouillée avec onde de choc de réussite -->
+                                    <g transform="translate(620, 180)">
+                                        <circle cx="0" cy="0" r="28" fill="none" stroke="#ef4444" stroke-width="2" opacity="0.4">
+                                            <animate attributeName="r" values="12;32;12" dur="2s" repeatCount="indefinite" />
+                                            <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite" />
+                                        </circle>
+                                        <circle cx="0" cy="0" r="18" fill="rgba(239, 68, 68, 0.3)" />
+                                        <circle cx="0" cy="0" r="9" fill="#ef4444" stroke="#ffffff" stroke-width="2.5" filter="url(#glow-target)" />
+                                        <text x="18" y="5" fill="#ef4444" font-size="13" font-weight="800">🎯 Cible atteinte à 100%</text>
+                                    </g>
+
+                                    <text x="400" y="335" text-anchor="middle" fill="#047857" font-size="12" font-weight="700">
+                                        Faisceau ultra-directif (~12°) : les contraintes de contexte et de format éliminent toute dérive
+                                    </text>
+                                </g>
+
+                                <!-- GROUPE ÉTAPE 4 : EXPLORATION CRÉATIVE (Gerbe d'idées & rupture de biais) -->
+                                <g id="vis-step-3" class="vis-step-group" style="display:none;">
+                                    <!-- Faisceau souple + étincelles créatives multi-directions -->
+                                    <polygon points="120,180 500,40 500,320" fill="rgba(168, 85, 247, 0.12)" />
+                                    <line x1="120" y1="180" x2="500" y2="40" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6,4" />
+                                    <line x1="120" y1="180" x2="500" y2="320" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6,4" />
+
+                                    <!-- Émetteur créatif -->
+                                    <circle cx="120" cy="180" r="14" fill="#ffffff" stroke="#8b5cf6" stroke-width="4" />
+                                    <circle cx="120" cy="180" r="6" fill="#8b5cf6" />
+
+                                    <!-- Ancienne cible classique (préconceptions humaines) -->
+                                    <g transform="translate(560, 180)" opacity="0.45">
+                                        <circle cx="0" cy="0" r="10" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="3,3" />
+                                        <circle cx="0" cy="0" r="5" fill="#94a3b8" />
+                                        <text x="14" y="4" fill="#64748b" font-size="11">Idée attendue (Biais habituel)</text>
+                                    </g>
+
+                                    <!-- Étincelles d'innovations inattendues en dehors du carcan -->
+                                    <g transform="translate(460, 80)">
+                                        <circle cx="0" cy="0" r="12" fill="rgba(139, 92, 246, 0.25)" />
+                                        <circle cx="0" cy="0" r="7" fill="#8b5cf6" stroke="#fff" stroke-width="1.5" />
+                                        <text x="14" y="4" fill="#7c3aed" font-size="11" font-weight="700">💡 Angle mort révélé</text>
+                                    </g>
+
+                                    <g transform="translate(580, 70)">
+                                        <circle cx="0" cy="0" r="12" fill="rgba(16, 185, 129, 0.25)" />
+                                        <circle cx="0" cy="0" r="7" fill="#10b981" stroke="#fff" stroke-width="1.5" />
+                                        <text x="14" y="4" fill="#059669" font-size="11" font-weight="700">✨ Solution innovante (Nudge)</text>
+                                    </g>
+
+                                    <g transform="translate(520, 275)">
+                                        <circle cx="0" cy="0" r="12" fill="rgba(245, 158, 11, 0.25)" />
+                                        <circle cx="0" cy="0" r="7" fill="#f59e0b" stroke="#fff" stroke-width="1.5" />
+                                        <text x="14" y="4" fill="#d97706" font-size="11" font-weight="700">🚀 Idée disruptive inattendue</text>
+                                    </g>
+
+                                    <!-- Trajectoires d'inspiration créative -->
+                                    <line x1="120" y1="180" x2="460" y2="80" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4,4" />
+                                    <line x1="120" y1="180" x2="580" y2="70" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,4" />
+                                    <line x1="120" y1="180" x2="520" y2="275" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4" />
+
+                                    <text x="400" y="335" text-anchor="middle" fill="#6d28d9" font-size="12" font-weight="700">
+                                        Lâcher-prise volontaire : l'imprécision calculée permet d'ôter nos barrières mentales et de surprendre
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- Carte Explicative Dynamique -->
+                        <div class="cone-explanation-card" id="cone-explanation-card">
+                            <div class="explanation-card-header">
+                                <div class="step-badge" id="card-step-badge">${firstStep.badge || ''}</div>
+                                <h3 class="step-title" id="card-step-title">${firstStep.name || ''}</h3>
+                                <div class="step-summary" id="card-step-summary">${firstStep.summary || ''}</div>
+                            </div>
+                            
+                            <div class="explanation-card-body">
+                                <p class="card-desc" id="card-step-desc">${firstStep.desc || ''}</p>
+                                
+                                <div class="card-details-grid">
+                                    <div class="detail-box box-behavior">
+                                        <span class="detail-label">🤖 Comportement du modèle :</span>
+                                        <div class="detail-content" id="card-step-behavior">${firstStep.iaBehavior || ''}</div>
+                                    </div>
+                                    <div class="detail-box box-prompt">
+                                        <span class="detail-label">💬 Exemple de consigne :</span>
+                                        <div class="detail-content" id="card-step-prompt">${firstStep.promptExample || ''}</div>
+                                    </div>
+                                </div>
+
+                                <div class="card-takeaway" id="card-step-takeaway">
+                                    <strong>💡 Règle d'or :</strong> <span>${firstStep.takeaway || ''}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === 'ai-output-formats') {
+                const cats = slide.categories || [];
+                const trap = slide.proprietaryTrap || {};
+                const htmlRec = slide.htmlRecommendation || {};
+                html += `
+                    <p style="margin-bottom:1.5rem; font-size:1.02rem; line-height:1.6;">${slide.intro || ''}</p>
+
+                    <!-- 1. Panorama des Formats de Sortie -->
+                    <div class="ai-outputs-grid">
+                        ${cats.map(cat => `
+                            <div class="ai-output-cat-card" style="border-top-color: ${cat.color};">
+                                <div class="cat-header">
+                                    <div class="cat-icon-title">
+                                        <span class="cat-icon">${cat.icon}</span>
+                                        <h4>${cat.title}</h4>
+                                    </div>
+                                    <span class="cat-badge" style="background: ${cat.color}15; color: ${cat.color}; border: 1px solid ${cat.color}40;">${cat.badge}</span>
+                                </div>
+                                <ul class="cat-list">
+                                    ${(cat.items || []).map(it => `<li><span class="bullet">✓</span> <span>${it}</span></li>`).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- 2. Alerte : Le Piège des Logiciels Propriétaires (Excel / VBA) -->
+                    <div class="proprietary-trap-banner">
+                        <div class="trap-banner-header">
+                            <div class="trap-icon">⚠️</div>
+                            <div>
+                                <h3>${trap.title || ''}</h3>
+                                <p class="trap-subtitle">${trap.subtitle || ''}</p>
+                            </div>
+                        </div>
+                        <div class="trap-points-grid">
+                            ${(trap.points || []).map(pt => `
+                                <div class="trap-point-item">
+                                    <div class="trap-point-label">${pt.label}</div>
+                                    <div class="trap-point-desc">${pt.desc}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- 3. La Recommandation d'Or : Le Fichier index.html -->
+                    <div class="html-rec-hero-card">
+                        <div class="html-rec-header">
+                            <div class="html-rec-badge">Format Recommandé ⭐</div>
+                            <h3>${htmlRec.title || ''}</h3>
+                            <div class="html-rec-sub">${htmlRec.subtitle || ''}</div>
+                            <p class="html-rec-intro">${htmlRec.desc || ''}</p>
+                        </div>
+
+                        <div class="html-rec-advantages-grid">
+                            ${(htmlRec.advantages || []).map(adv => `
+                                <div class="html-adv-card">
+                                    <div class="html-adv-title">✨ ${adv.title}</div>
+                                    <div class="html-adv-desc">${adv.desc}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        ${htmlRec.promptTip ? `
+                            <div class="html-prompt-tip-box">
+                                ${htmlRec.promptTip}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
             }
     return html;
 }

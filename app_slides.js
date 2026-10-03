@@ -218,8 +218,58 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
         
         calculateCost();
     }
+
+    // Interactive Prompt Funnel Cone (Précision vs Créativité)
+    if (slide.type === 'prompt-funnel-cone') {
+        const stepBtns = this.slideContainer.querySelectorAll('.cone-step-btn');
+        const steps = slide.steps || [];
+
+        const activateStep = (stepIdx) => {
+            stepBtns.forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === stepIdx);
+            });
+
+            // Toggle SVG groups
+            for (let i = 0; i < 4; i++) {
+                const group = this.slideContainer.querySelector(`#vis-step-${i}`);
+                if (group) {
+                    group.style.display = (i === stepIdx) ? 'inline' : 'none';
+                }
+            }
+
+            // Update explanation card
+            const stepData = steps[stepIdx];
+            if (stepData) {
+                const badgeEl = this.slideContainer.querySelector('#card-step-badge');
+                const titleEl = this.slideContainer.querySelector('#card-step-title');
+                const sumEl = this.slideContainer.querySelector('#card-step-summary');
+                const descEl = this.slideContainer.querySelector('#card-step-desc');
+                const behEl = this.slideContainer.querySelector('#card-step-behavior');
+                const promptEl = this.slideContainer.querySelector('#card-step-prompt');
+                const takeawayEl = this.slideContainer.querySelector('#card-step-takeaway span');
+
+                if (badgeEl) badgeEl.innerText = stepData.badge || '';
+                if (titleEl) titleEl.innerText = stepData.name || '';
+                if (sumEl) sumEl.innerText = stepData.summary || '';
+                if (descEl) descEl.innerHTML = stepData.desc || '';
+                if (behEl) behEl.innerText = stepData.iaBehavior || '';
+                if (promptEl) promptEl.innerHTML = stepData.promptExample || '';
+                if (takeawayEl) takeawayEl.innerText = stepData.takeaway || '';
+            }
+        };
+
+        stepBtns.forEach(btn => {
+            btn.onclick = () => {
+                const idx = parseInt(btn.getAttribute('data-step-idx'), 10);
+                if (!isNaN(idx)) {
+                    activateStep(idx);
+                }
+            };
+        });
+    }
+
     // Post-render bindings
-        if (slide.type === 'datacenter-cost') {
+    if (slide.type === 'datacenter-cost') {
             const tabs = this.slideContainer.querySelectorAll('.datacenter-tab-btn');
             const panes = this.slideContainer.querySelectorAll('.datacenter-tab-pane');
             tabs.forEach(tab => {
@@ -799,6 +849,13 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
                 btnSlideFree.onclick = () => {
                     this.startFreeTest();
                     document.getElementById('interactivity-panel').classList.add('open');
+                };
+            }
+
+            const btnSlideHtml = this.slideContainer.querySelector('#btn-slide-launch-html');
+            if (btnSlideHtml) {
+                btnSlideHtml.onclick = () => {
+                    this.openHtmlProjectorModal();
                 };
             }
         }

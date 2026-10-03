@@ -55,6 +55,7 @@ TrainingApp.prototype.initSupabase = function() {
     }
 
 TrainingApp.prototype.initInteractivity = async function() {
+        this.bindHtmlProjectorEvents();
         if (!this.supabase) return;
 
         // Bind panel close button
@@ -242,6 +243,10 @@ TrainingApp.prototype.setupFormateurMode = async function() {
             };
         }
 
+        // Activer le bouton et le canal de projection index.html
+        this.bindHtmlProjectorEvents();
+        this.initHtmlProjectorChannel();
+
         // Afficher le tableau de bord formateur d'accueil
         const formateurDashboard = document.getElementById('formateur-dashboard-container');
         if (formateurDashboard) {
@@ -336,6 +341,10 @@ TrainingApp.prototype.setupStagiaireMode = function() {
         // S'abonner aux changements de sessions du formateur
         this.subscribeToSession();
         this.listenToPresenceAndVotes();
+
+        // Écouter les projections index.html en direct
+        this.bindHtmlProjectorEvents();
+        this.initHtmlProjectorChannel();
     }
 
 TrainingApp.prototype.setupPublicMode = function() {
@@ -492,6 +501,24 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
                 this.updateSidebarActiveState();
                 this.renderSlide();
                 this.updateProgressIndicator();
+            }
+        }
+
+        // Synchronisation de la projection index.html
+        if (data.active_poll_id === 'html-projector-active') {
+            const overlay = document.getElementById('html-projector-fullscreen-overlay');
+            if (overlay && overlay.style.display !== 'flex' && this.role === 'stagiaire') {
+                if (this.htmlProjectorChannel) {
+                    this.htmlProjectorChannel.send({
+                        type: 'broadcast',
+                        event: 'request_current_html'
+                    });
+                }
+            }
+        } else {
+            const overlay = document.getElementById('html-projector-fullscreen-overlay');
+            if (overlay && overlay.style.display === 'flex' && this.role === 'stagiaire') {
+                this.closeProjectedHtml();
             }
         }
 
@@ -713,5 +740,175 @@ TrainingApp.prototype.closeFormateurSession = async function() {
         localStorage.removeItem('active_formateur_session_id');
         alert(`La session N° ${this.sessionId} a été clôturée avec succès.`);
         window.location.href = window.location.pathname + '?role=formateur';
+    }
+};
+
+// ==========================================
+// PROJECTION INTERACTIVE INDEX.HTML (SUPABASE REALTIME)
+// ==========================================
+
+TrainingApp.prototype.openHtmlProjectorModal = function() {
+    const modal = document.getElementById('html-projector-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        const input = document.getElementById('html-projector-code-input');
+        if (input) {
+            if (this.activeProjectedHtml && !input.value) {
+                input.value = this.activeProjectedHtml;
+            }
+            setTimeout(() => input.focus(), 100);
+        }
+    }
+};
+
+TrainingApp.prototype.closeHtmlProjectorModal = function() {
+    const modal = document.getElementById('html-projector-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+};
+
+TrainingApp.prototype.startHtmlProjection = async function(customCode) {
+    const input = document.getElementById('html-projector-code-input');
+    const code = (typeof customCode === 'string' ? customCode : (input ? input.value : '')).trim();
+
+    if (!code) {
+        alert("Veuillez coller ou saisir du code HTML avant de lancer la projection.");
+        return;
+    }
+
+    this.activeProjectedHtml = code;
+    this.closeHtmlProjectorModal();
+
+    // 1. Afficher immédiatement sur l'écran local du formateur
+    this.displayProjectedHtml(code, true);
+
+    // 2. Diffuser en temps réel aux stagiaires via broadcast
+    if (this.htmlProjectorChannel) {
+        try {
+            await this.htmlProjectorChannel.send({
+                type: 'broadcast',
+                event: 'project_html',
+                payload: { html: code }
+            });
+        } catch(e) {
+            console.warn("Échec d'envoi broadcast project_html:", e);
+        }
+    }
+
+    // 3. Mettre à jour l'état de session en base de données
+    if (this.supabase && this.role === 'formateur' && this.sessionId) {
+        try {
+            await this.supabase.from('sessions').update({
+                active_poll_id: 'html-projector-active'
+            }).eq('id', this.sessionId);
+        } catch(e) {
+            console.warn("Erreur mise à jour active_poll_id pour index.html:", e);
+        }
+    }
+};
+
+TrainingApp.prototype.displayProjectedHtml = function(code, isFormateur) {
+    const overlay = document.getElementById('html-projector-fullscreen-overlay');
+    const iframe = document.getElementById('html-projector-iframe');
+    const btnStop = document.getElementById('btn-stop-projection');
+    const notice = document.getElementById('stagiaire-projector-notice');
+
+    if (!overlay || !iframe) return;
+
+    overlay.style.display = 'flex';
+    iframe.srcdoc = code;
+
+    const isHost = (this.role === 'formateur' || isFormateur);
+    if (btnStop) {
+        btnStop.style.display = isHost ? 'block' : 'none';
+    }
+    if (notice) {
+        notice.style.display = isHost ? 'none' : 'block';
+    }
+};
+
+TrainingApp.prototype.stopHtmlProjection = async function() {
+    this.closeProjectedHtml();
+    this.activeProjectedHtml = null;
+
+    // 1. Diffuser l'arrêt en direct
+    if (this.htmlProjectorChannel) {
+        try {
+            await this.htmlProjectorChannel.send({
+                type: 'broadcast',
+                event: 'stop_project_html'
+            });
+        } catch(e) {}
+    }
+
+    // 2. Réinitialiser la session en base de données
+    if (this.supabase && this.role === 'formateur' && this.sessionId) {
+        try {
+            await this.supabase.from('sessions').update({
+                active_poll_id: null
+            }).eq('id', this.sessionId);
+        } catch(e) {}
+    }
+};
+
+TrainingApp.prototype.closeProjectedHtml = function() {
+    const overlay = document.getElementById('html-projector-fullscreen-overlay');
+    const iframe = document.getElementById('html-projector-iframe');
+    if (overlay) overlay.style.display = 'none';
+    if (iframe) iframe.srcdoc = '';
+};
+
+TrainingApp.prototype.bindHtmlProjectorEvents = function() {
+    const btnCloseModal = document.getElementById('btn-close-projector-modal');
+    const btnCancelModal = document.getElementById('btn-cancel-projector');
+    const btnLaunch = document.getElementById('btn-launch-projector');
+    const btnStop = document.getElementById('btn-stop-projection');
+    const btnFloating = document.getElementById('btn-formateur-project-html');
+
+    if (btnCloseModal) btnCloseModal.onclick = () => this.closeHtmlProjectorModal();
+    if (btnCancelModal) btnCancelModal.onclick = () => this.closeHtmlProjectorModal();
+    if (btnLaunch) btnLaunch.onclick = () => this.startHtmlProjection();
+    if (btnStop) btnStop.onclick = () => this.stopHtmlProjection();
+    if (btnFloating) {
+        btnFloating.onclick = () => this.openHtmlProjectorModal();
+        if (this.role === 'formateur') {
+            btnFloating.style.display = 'flex';
+        }
+    }
+};
+
+TrainingApp.prototype.initHtmlProjectorChannel = function() {
+    if (!this.supabase || !this.sessionId) return;
+
+    if (this.htmlProjectorChannel) {
+        try { this.supabase.removeChannel(this.htmlProjectorChannel); } catch(e) {}
+    }
+
+    try {
+        this.htmlProjectorChannel = this.supabase.channel('html-projector-' + this.sessionId)
+            .on('broadcast', { event: 'project_html' }, (payload) => {
+                if (payload && payload.payload && payload.payload.html) {
+                    this.displayProjectedHtml(payload.payload.html, false);
+                }
+            })
+            .on('broadcast', { event: 'stop_project_html' }, () => {
+                this.closeProjectedHtml();
+            })
+            .on('broadcast', { event: 'request_current_html' }, () => {
+                if (this.role === 'formateur' && this.activeProjectedHtml) {
+                    this.htmlProjectorChannel.send({
+                        type: 'broadcast',
+                        event: 'project_html',
+                        payload: { html: this.activeProjectedHtml }
+                    });
+                }
+            });
+
+        this.htmlProjectorChannel.subscribe((status, err) => {
+            if (err) console.log("Canal broadcast projector hors-ligne");
+        });
+    } catch(e) {
+        console.warn("Erreur souscription html-projector channel:", e);
     }
 };
