@@ -3,7 +3,7 @@
 // ==========================================
 
 const THEMES = [
-    {
+        {
         id: "histoire-ia",
         category: "histoire",
         title: "1. Histoire & Philosophie de l'IA",
@@ -483,328 +483,9 @@ const THEMES = [
         ]
     },
     {
-        id: "prompt-homme",
-        category: "prompt",
-        title: "4. Prompt vs Homme",
-        icon: "🧠",
-        desc: "L'analogie narrative complète pour comprendre l'absence de sens inné chez l'IA et l'exigence de contexte.",
-        slides: [
-            {
-                title: "Le Parallèle des Contextes",
-                type: "analogy",
-                humanCreator: {
-                    title: "Situation Familiale de Naissance",
-                    desc: "La situation familiale dans laquelle on naît, nos parents, notre éducation, notre histoire personnelle et les barrières morales que la société nous a inculquées en grandissant."
-                },
-                humanSituation: {
-                    title: "Ce qui se passe maintenant",
-                    desc: "La situation immédiate qui se produit autour de nous à cet instant précis, perçue par nos yeux, nos oreilles et notre corps (le vent, le froid, une personne qui s'énerve)."
-                },
-                iaCreator: {
-                    title: "Consignes Système (System Prompt)",
-                    desc: "Les garde-fous programmés par les créateurs de l'IA (règles de sécurité, interdiction de donner des recettes de bombes, style poli, neutralité politique)."
-                },
-                iaSituation: {
-                    title: "Contexte Utilisateur (Le Prompt)",
-                    desc: "Toutes les descriptions, consignes et informations de travail que l'utilisateur tape explicitement dans le champ textuel de l'IA pour lui décrire sa situation."
-                },
-                conclusion: "L'Homme réagit beaucoup plus vite à la situation immédiate car il n'a pas besoin qu'on lui décrive la pièce, le bruit ou l'urgence : ses capteurs biologiques s'en chargent. En revanche, l'IA est enfermée dans un serveur aveugle. Sans une description méticuleuse et rédigée de votre part (le contexte utilisateur), l'IA ne sait rien de votre urgence ni de vos contraintes."
-            },
-            {
-                title: "Mise en Situation : L'Alarme Incendie",
-                type: "comparison-cards",
-                intro: "Pour comprendre l'importance d'un prompt complet, imaginons qu'une alarme incendie se déclenche dans le hall d'accueil de la mairie.",
-                cardLeft: {
-                    title: "👩‍💼 Réaction de l'Agent d'Accueil (Homme)",
-                    subtitle: "Instantanée mais stressée",
-                    desc: "L'agent n'a pas besoin qu'on lui explique la situation. Il entend la sirène, il sent l'odeur de fumée. Il réagit en 2 secondes en ordonnant l'évacuation.",
-                    formula: "Sens Biologiques ➔ Action de Sécurité",
-                    advantage: "Réaction réflexe immédiate sans aucune perte de temps d'analyse écrite.",
-                    drawback: "Sous le coup du stress, l'agent peut oublier de vérifier si la réserve est fermée ou paniquer face aux usagers."
-                },
-                cardRight: {
-                    title: "🤖 Réaction de l'IA (Sans contexte complet)",
-                    subtitle: "Précise mais aveugle",
-                    desc: "Si vous tapez juste : <em>'L'alarme sonne, je fais quoi ?'</em>, l'IA va vous répondre par des généralités inutiles (ex: appeler les pompiers). Elle ne sait pas où vous êtes, ni de quelle alarme il s'agit.",
-                    formula: "Prompt Vague ➔ Conseils Génériques et Flous",
-                    advantage: "L'IA conserve son sang-froid mathématique absolu.",
-                    drawback: "Incapable d'agir utilement sans que vous lui précisiez le protocole interne de la mairie et la nature de l'incident."
-                }
-            },
-            {
-                title: "Le Pont Sensoriel du Prompt",
-                type: "bridge-schema",
-                desc: "Rédiger un bon prompt consiste à construire un **pont sensoriel** pour l'IA. Puisqu'elle n'a pas d'yeux ni d'oreilles, votre texte doit simuler son environnement pour qu'elle puisse réagir avec pertinence.",
-                elements: [
-                    { title: "🧠 Vos Capteurs", desc: "Vous observez la situation réelle (ex: un usager en colère refuse de payer son amende de stationnement)." },
-                    { title: "🌉 Le Pont du Prompt", desc: "Vous transmettez cette scène par écrit à l'IA : description de l'usager, règlement municipal, profil de votre commune." },
-                    { title: "💾 Le Cerveau de l'IA", desc: "L'IA applique ses capacités logiques sur ce contexte précis pour vous générer une réponse de désescalade sur-mesure." }
-                ]
-            },
-            {
-                title: "Le Champ des Possibles : Précision vs Créativité",
-                type: "prompt-funnel-cone",
-                intro: "Comment vos mots orientent-ils le calcul probabiliste du modèle ? Découvrez visuellement la mécanique de réduction du champ des possibles, ainsi que l'art subtil de doser l'imprécision pour stimuler l'inventivité.",
-                targetLabel: "Solution idéale recherchée",
-                steps: [
-                    {
-                        id: "step-1",
-                        num: "1",
-                        badge: "Départ",
-                        name: "Aucun prompt (0 consigne)",
-                        icon: "🔘",
-                        coneType: "circle",
-                        summary: "Champ des possibles à 360° : une infinité de réponses équiprobables.",
-                        desc: "Sans consigne, l'espace probabiliste de l'IA est totalement ouvert. La solution parfaite que vous avez en tête (le point rouge) est perdue au milieu de milliards de directions potentielles. La probabilité que l'IA tombe juste par hasard est quasi-nulle.",
-                        iaBehavior: "L'IA attend une impulsion ou répond par une salutation polie standard ('Comment puis-je vous aider ?').",
-                        promptExample: "<em>(Aucun prompt saisi)</em>",
-                        takeaway: "Le silence ou le manque absolu de direction laisse l'IA dans une errance statistique complète."
-                    },
-                    {
-                        id: "step-2",
-                        num: "2",
-                        badge: "Prompt imprécis",
-                        name: "Consigne vague ou floue",
-                        icon: "📐",
-                        coneType: "wide-cone",
-                        summary: "Cône de sélection ouvert (~60°) : orientation globale mais fort risque de dérive.",
-                        desc: "Vous donnez une intention générale, mais sans contraintes, sans format et sans contexte territorial. L'IA réduit son champ de recherche à un cône large. Le résultat peut parfois effleurer ce que vous voulez, mais il dévie facilement vers des généralités creuses ou des contresens.",
-                        iaBehavior: "L'IA comble les trous béants en inventant des hypothèses par défaut ou en générant du remplissage banal.",
-                        promptExample: "« Fais-moi un mot pour les administrés sur les travaux de voirie. »",
-                        takeaway: "Une consigne floue produit un livrable tiède qui nécessite 80% de réécriture humaine."
-                    },
-                    {
-                        id: "step-3",
-                        num: "3",
-                        badge: "Prompt précis",
-                        name: "Consigne calibrée & contrainte",
-                        icon: "🎯",
-                        coneType: "laser-cone",
-                        summary: "Faisceau laser directif (~12°) : verrouillage exact du résultat attendu.",
-                        desc: "Plus votre consigne est méthodique (rôle, contexte, ressources et format exigé), plus vous réduisez l'espace des possibles. Le faisceau se resserre en un entonnoir ultra-ciblé qui frappe directement la cible rouge recherchée.",
-                        iaBehavior: "L'IA concentre toute son attention sur vos contraintes strictes et élimine les divagations hors-sujet.",
-                        promptExample: "« En tant que responsable voirie, rédige un avis aux riverains de la rue Pasteur (180 mots). Travaux d'assainissement du 12 au 26 oct. Circulation alternée de 8h à 17h, ramassage des bacs maintenu. Ton courtois et pragmatique. »",
-                        takeaway: "La précision chirurgicale de la contrainte est la clé d'un résultat 'prêt à l'emploi'."
-                    },
-                    {
-                        id: "step-4",
-                        num: "4",
-                        badge: "Exploration créative",
-                        name: "Doser l'imprécision pour innover",
-                        icon: "💡",
-                        coneType: "creative-sparks",
-                        summary: "Ouverture volontaire : lever ses propres barrières mentales et biais.",
-                        desc: "<strong>La nuance capitale :</strong> Parfois, on ne sait PAS exactement quelle solution on recherche ! Si on sur-contraint le prompt dès le départ, on enferme l'IA dans nos propres habitudes et angles morts. Jouer volontairement avec une consigne ouverte et décalée pousse l'IA à explorer des territoires inédits et à faire preuve d'inventivité.",
-                        iaBehavior: "L'IA utilise sa vaste base de connaissances croisées pour proposer des associations d'idées insolites et disruptives.",
-                        promptExample: "« Imagine 5 approches originales et non punitives inspirées des sciences comportementales (nudges) pour inciter les usagers à respecter la propreté des abords des conteneurs à verre. Sors des schémas classiques de verbalisation. »",
-                        takeaway: "Pour exécuter une tâche connue : ciblez au laser. Pour inventer et sortir de vos certitudes : ouvrez le faisceau !"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        id: "methode-maire",
-        category: "prompt",
-        title: "5. La Méthode M.A.I.R.E.",
-        icon: "📋",
-        desc: "La méthodologie de structuration des invites professionnelles pour le secteur public.",
-        slides: [
-            {
-                title: "Le Tableau de Bord M.A.I.R.E.",
-                type: "maire",
-                steps: [
-                    { letter: "M", label: "Moi", desc: "Qui êtes-vous ? (Ex: Chef de projet transition écologique dans une métropole de 150 000 habitants)." },
-                    { letter: "A", label: "Agent", desc: "Quel rôle donnez-vous à l'IA ? (Ex: Agis en tant qu'expert en aménagement urbain durable)." },
-                    { letter: "I", label: "Information", desc: "Quelle est la tâche ou le problème ? (Ex: Je dois rédiger le cahier des charges pour l'installation d'îlots de fraîcheur)." },
-                    { letter: "R", label: "Ressources", desc: "Quelles données fournissez-vous ? (Ex: Voici le plan du parvis et la liste des essences d'arbres autorisées par notre charte)." },
-                    { letter: "E", label: "Exigence", desc: "Quel est le livrable attendu ? (Ex: Rédige une liste structurée en 5 points clés sous format tableau Markdown, ton technique)." }
-                ],
-                example: "<strong>Règle fondamentale :</strong> L'humain apporte la méthode et arbitre, l'IA suit la méthode et exécute. La méthode M.A.I.R.E. est précisément le cadre rigoureux que l'agent public transmet à la machine pour calibrer son exécution et éliminer les divagations."
-            },
-            {
-                title: "Exemple Réel Décortiqué",
-                type: "color-coded-prompt",
-                promptTitle: "Prompt pour la rédaction d'un discours municipal",
-                parts: [
-                    { key: "M", color: "var(--accent-blue)", label: "Moi", text: "Je suis le directeur de cabinet du maire d'une petite commune rurale de 1200 habitants." },
-                    { key: "A", color: "var(--accent-purple)", label: "Agent", text: "Tu es une plume politique expérimentée, spécialisée dans les discours républicains de proximité." },
-                    { key: "I", color: "var(--accent-sky)", label: "Information", text: "Le Maire doit prononcer un discours d'inauguration pour la réouverture de la bibliothèque municipale après travaux." },
-                    { key: "R", color: "var(--accent-green)", label: "Ressources", text: "Appuie-toi sur ces éléments : travaux financés à 40% par l'État et 30% par la Région, création d'un espace numérique pour les jeunes, bibliothèque nommée 'Espace George Sand'." },
-                    { key: "E", color: "var(--accent-gold)", label: "Exigence", text: "Rédige un discours de 400 mots. Structure avec : salutations officielles, remerciements aux partenaires financiers, focus sur George Sand et conclusion républicaine. Évite les phrases trop longues." }
-                ]
-            },
-            {
-                title: "Gabarit Prêt à Remplir (Copier-Coller)",
-                type: "gabarit",
-                desc: "Voici un modèle universel que vous pouvez copier et conserver. Remplissez simplement les crochets avant de soumettre votre demande à l'IA.",
-                template: `[MOI] : Je suis [votre poste/rôle] au sein de la collectivité [nom/type de collectivité].
-
-[AGENT] : Agis en tant que [expert/rôle attribué à l'IA] spécialisé en [domaine précis].
-
-[INFORMATION] : Ta tâche consiste à [décrire précisément le travail, le document à rédiger ou le problème à analyser].
-
-[RESSOURCES] : Pour ce faire, base-toi uniquement sur les données suivantes : [coller vos textes, chiffres, extraits de règlements ou lois]. Ne fais pas de suppositions en dehors de ces informations.
-
-[EXIGENCE] : Le livrable doit être rédigé sous forme de [format attendu : mail, tableau, note de synthèse]. Le ton doit être [professionnel, technique, neutre] et la longueur maximale de [nombre de mots/paragraphes].`,
-                tips: "<strong>💡 Conseil de pro :</strong> Si vos ressources sont très longues (ex: un rapport PDF de 50 pages), n'hésitez pas à utiliser des outils dotés d'une grande fenêtre de contexte (comme Claude ou Gemini) pour y glisser le fichier entier."
-            },
-            {
-                title: "Hygiène de Conversation : Brouillon vs Chat Propre",
-                type: "chat-hygiene-context",
-                subtitle: "On explore au brouillon, on produit au propre.",
-                fptContext: "Exemple FPT : Tarification sociale de cantine (Loi EGalim & quotient familial).",
-                directPath: {
-                    title: "Trajectoire Directe",
-                    subtitle: "Besoin clair dès le départ",
-                    badge: "Ligne Droite",
-                    steps: [
-                        { icon: "📝", label: "1. Prompt M.A.I.R.E.", desc: "Cadrage complet + Données brutes", status: "success" },
-                        { icon: "⚡", label: "2. Micro-ajustement", desc: "1 précision de mise en forme", status: "info" },
-                        { icon: "🎯", label: "3. Livrable Validé", desc: "Note de cadrage finale parfaite", status: "target" }
-                    ],
-                    stats: [
-                        { label: "Bruit", val: "0%", color: "var(--accent-green)" },
-                        { label: "Contexte", val: "100% Pur", color: "var(--accent-green)" },
-                        { label: "Tokens", val: "~700", color: "var(--accent-blue)" }
-                    ]
-                },
-                exploratoryPath: {
-                    title: "Trajectoire Exploratoire",
-                    subtitle: "Le piège du fil infini",
-                    badge: "Brouillon & Pollution",
-                    items: [
-                        { id: 1, type: "noise", label: "1. Prompt vague", icon: "❌" },
-                        { id: 2, type: "noise", label: "2. Contradiction", icon: "❌" },
-                        { id: 3, type: "noise", label: "3. Consigne oubliée", icon: "❌" },
-                        { id: 4, type: "gem", label: "4. Données réelles", icon: "💎", desc: "Grille des 4 quotients" },
-                        { id: 5, type: "noise", label: "5. Hors-sujet", icon: "❌" },
-                        { id: 6, type: "noise", label: "6. Ordre annulé", icon: "❌" },
-                        { id: 7, type: "noise", label: "7. Tâtonnement", icon: "❌" },
-                        { id: 8, type: "gem", label: "8. Plan validé", icon: "💎", desc: "Structure en 3 axes" },
-                        { id: 9, type: "noise", label: "9. Ton inadapté", icon: "❌" },
-                        { id: 10, type: "noise", label: "10. Correction tardive", icon: "❌" }
-                    ],
-                    gemsSummary: [
-                        { title: "💎 Pépite n°1", desc: "4 tranches réelles de quotient familial" },
-                        { title: "💎 Pépite n°2", desc: "Plan de cadrage institutionnel validé" }
-                    ],
-                    cleanPromptShort: `[MOI] : Resp. finances & éducation scolaire.
-[AGENT] : Expert finances publiques locales.
-[INFO] : Note de cadrage tarification cantine (18 000 hab).
-[RESSOURCES] : 4 tranches QF (1€ à 4,90€) & coût repas (4,20€).
-[EXIGENCE] : Plan en 3 parties (EGalim, grille, budget). Ton officiel.`
-                },
-                proSteps: [
-                    { num: "1", icon: "🌪️", title: "Brainstormez", desc: "Chat jetable sans filtre" },
-                    { num: "2", icon: "💎", title: "Extrayez", desc: "Isolez les 2 pépites en 1 prompt M.A.I.R.E." },
-                    { num: "3", icon: "🚀", title: "Exécutez", desc: "Nouveau chat vierge = 100% de clarté" }
-                ],
-                takeaway: "💡 <strong>Règle d'or :</strong> Ne travaillez jamais dans un fil infini pollué. Quand vos idées sont claires, <strong>tuez le brouillon</strong> et repartez dans un chat neuf !"
-            },
-            {
-                title: "Ce que peut vous fournir en sortie une IA",
-                type: "ai-output-formats",
-                intro: "L'IA ne sert pas seulement à rédiger des courriers ou des paragraphes de texte : elle est un moteur de génération polymorphe. Mais attention aux illusions de facilité avec les formats bureautiques propriétaires !",
-                categories: [
-                    {
-                        title: "📝 Texte & Rédactionnel",
-                        icon: "✍️",
-                        badge: "Quotidien",
-                        color: "var(--accent-blue)",
-                        items: [
-                            "Courriers d'usagers, réponses à réclamations",
-                            "Notes de cadrage, délibérations, arrêtés types",
-                            "Synthèses de rapports volumineux (PDF de 50 pages)",
-                            "Discours officiels et vulgarisation tout public"
-                        ]
-                    },
-                    {
-                        title: "📊 Données & Tableaux",
-                        icon: "📈",
-                        badge: "Analytique",
-                        color: "var(--accent-purple)",
-                        items: [
-                            "Tableaux comparatifs synthétiques en Markdown",
-                            "Fichiers de données tabulaires (CSV universel)",
-                            "Nettoyage et normalisation de listes d'adresses",
-                            "Structures de données pour l'open data (JSON, GeoJSON)"
-                        ]
-                    },
-                    {
-                        title: "📄 Documents Bureautiques",
-                        icon: "💼",
-                        badge: "Nuancé",
-                        color: "var(--accent-gold)",
-                        items: [
-                            "Structures complètes de dossiers de subvention",
-                            "Trames de présentations (plans de diapositives)",
-                            "Matrices d'évaluation et grilles de critères RH",
-                            "Formulaires types de recueil de besoins"
-                        ]
-                    },
-                    {
-                        title: "💻 Code & Applications",
-                        icon: "⚡",
-                        badge: "Super-Pouvoir",
-                        color: "var(--accent-green)",
-                        items: [
-                            "L'IA est exceptionnellement douée pour coder",
-                            "Scripts d'automatisation (Python, Bash, PowerShell)",
-                            "Requêtes de bases de données (SQL)",
-                            "Applications web autonomes complètes (HTML / CSS / JS)"
-                        ]
-                    }
-                ],
-                proprietaryTrap: {
-                    title: "⚠️ Le Piège des Logiciels Propriétaires (Excel / Word & Macros VBA)",
-                    subtitle: "Pourquoi demander des fichiers Excel avec macros est souvent une fausse bonne idée :",
-                    points: [
-                        {
-                            label: "Blocages de Sécurité DSI",
-                            desc: "Dans 95% des collectivités territoriales, l'exécution des macros VBA est <strong>strictement verrouillée</strong> par la sécurité informatique pour prévenir les rançongiciels."
-                        },
-                        {
-                            label: "Incompatibilités de Versions",
-                            desc: "Formules cassées, fonctions inexistantes entre différentes versions d'Office (Office 2016, 2019, 2021, Microsoft 365, LibreOffice)."
-                        },
-                        {
-                            label: "Fragilité des Dépendances",
-                            desc: "Une formule mal traduite ou une macro mal calibrée rend le fichier totalement inutilisable et chronophage à réparer."
-                        }
-                    ]
-                },
-                htmlRecommendation: {
-                    title: "🌟 La Recommandation d'Or : Le Fichier « index.html »",
-                    subtitle: "Le livrable ultime, libre, gratuit et immédiatement opérationnel",
-                    desc: "Au lieu d'un tableur complexe ou d'une macro incertaine, demandez à l'IA de concevoir votre outil sous la forme d'un <strong>unique fichier autonome <code>index.html</code></strong> intégrant structure, design et calculs.",
-                    advantages: [
-                        {
-                            title: "100% Libre & Gratuit",
-                            desc: "Aucune licence payante requise, aucun coût caché de logiciel propriétaire."
-                        },
-                        {
-                            title: "Universel & Sans Installation",
-                            desc: "Fonctionne par un simple double-clic sur n'importe quel ordinateur, tablette ou smartphone dans n'importe quel navigateur (Edge, Chrome, Firefox)."
-                        },
-                        {
-                            title: "Conforme & Autorisé",
-                            desc: "Ne nécessite aucun droit administrateur sur le poste de travail et respecte les contraintes de sécurité des DSI."
-                        },
-                        {
-                            title: "Visuel & Hyper-Interactif",
-                            desc: "Permet de concevoir des calculateurs de tarifs municipaux, des simulateurs d'indemnités, des formulaires de démarches ou des dashboards visuels en quelques secondes."
-                        }
-                    ],
-                    promptTip: "<strong>💡 Conseil dans la lettre 'E' (Exigence) de M.A.I.R.E. :</strong> Demandez explicitement : <em>« Fournis-moi le résultat sous forme d'un fichier <code>index.html</code> autonome, moderne et interactif avec du code HTML/CSS/JS directement exécutable dans mon navigateur. »</em>"
-                }
-            }
-        ]
-    },
-    {
         id: "securite-reglementation",
         category: "reg",
-        title: "6. Sécurité & Réglementation",
+        title: "4. Sécurité & Réglementation",
         icon: "🛡️",
         desc: "La protection des données dans le secteur public : concilier RGPD, souveraineté et conformité de l'AI Act.",
         slides: [
@@ -1101,94 +782,328 @@ const THEMES = [
         ]
     },
     {
-        id: "guerre-ia",
-        category: "tech",
-        title: "7. La Guerre des IA & Matériel",
-        icon: "⚔️",
-        desc: "Les coulisses géopolitiques : la cartographie des acteurs, la physique des puces et les datacenters de demain.",
+        id: "prompt-homme",
+        category: "prompt",
+        title: "5. Prompt vs Homme",
+        icon: "🧠",
+        desc: "L'analogie narrative complète pour comprendre l'absence de sens inné chez l'IA et l'exigence de contexte.",
         slides: [
             {
-                title: "La Carte des Alliances Mondiales",
-                type: "alliance-map",
-                desc: "Le marché de l'IA est une guerre de capitaux et d'infrastructures contrôlée par quelques géants de la technologie :",
-                alliances: [
-                    { leader: "OpenAI + Microsoft", models: "GPT", target: "Domination du marché bureautique et intégration dans Windows / Office." },
-                    { leader: "Google (Gemini)", models: "Gemini", target: "Écosystème natif Android, Workspace et recherche en ligne." },
-                    { leader: "Anthropic + Amazon", models: "Claude", target: "Modèles sécurisés et hautement qualitatifs pour les entreprises via AWS." },
-                    { leader: "Mistral AI (France)", models: "Mistral / Codestral", target: "Alternative de souveraineté européenne avec des modèles efficaces et hébergeables localement." }
+                title: "Le Parallèle des Contextes",
+                type: "analogy",
+                humanCreator: {
+                    title: "Situation Familiale de Naissance",
+                    desc: "La situation familiale dans laquelle on naît, nos parents, notre éducation, notre histoire personnelle et les barrières morales que la société nous a inculquées en grandissant."
+                },
+                humanSituation: {
+                    title: "Ce qui se passe maintenant",
+                    desc: "La situation immédiate qui se produit autour de nous à cet instant précis, perçue par nos yeux, nos oreilles et notre corps (le vent, le froid, une personne qui s'énerve)."
+                },
+                iaCreator: {
+                    title: "Consignes Système (System Prompt)",
+                    desc: "Les garde-fous programmés par les créateurs de l'IA (règles de sécurité, interdiction de donner des recettes de bombes, style poli, neutralité politique)."
+                },
+                iaSituation: {
+                    title: "Contexte Utilisateur (Le Prompt)",
+                    desc: "Toutes les descriptions, consignes et informations de travail que l'utilisateur tape explicitement dans le champ textuel de l'IA pour lui décrire sa situation."
+                },
+                conclusion: "L'Homme réagit beaucoup plus vite à la situation immédiate car il n'a pas besoin qu'on lui décrive la pièce, le bruit ou l'urgence : ses capteurs biologiques s'en chargent. En revanche, l'IA est enfermée dans un serveur aveugle. Sans une description méticuleuse et rédigée de votre part (le contexte utilisateur), l'IA ne sait rien de votre urgence ni de vos contraintes."
+            },
+            {
+                title: "Mise en Situation : L'Alarme Incendie",
+                type: "comparison-cards",
+                intro: "Pour comprendre l'importance d'un prompt complet, imaginons qu'une alarme incendie se déclenche dans le hall d'accueil de la mairie.",
+                cardLeft: {
+                    title: "👩‍💼 Réaction de l'Agent d'Accueil (Homme)",
+                    subtitle: "Instantanée mais stressée",
+                    desc: "L'agent n'a pas besoin qu'on lui explique la situation. Il entend la sirène, il sent l'odeur de fumée. Il réagit en 2 secondes en ordonnant l'évacuation.",
+                    formula: "Sens Biologiques ➔ Action de Sécurité",
+                    advantage: "Réaction réflexe immédiate sans aucune perte de temps d'analyse écrite.",
+                    drawback: "Sous le coup du stress, l'agent peut oublier de vérifier si la réserve est fermée ou paniquer face aux usagers."
+                },
+                cardRight: {
+                    title: "🤖 Réaction de l'IA (Sans contexte complet)",
+                    subtitle: "Précise mais aveugle",
+                    desc: "Si vous tapez juste : <em>'L'alarme sonne, je fais quoi ?'</em>, l'IA va vous répondre par des généralités inutiles (ex: appeler les pompiers). Elle ne sait pas où vous êtes, ni de quelle alarme il s'agit.",
+                    formula: "Prompt Vague ➔ Conseils Génériques et Flous",
+                    advantage: "L'IA conserve son sang-froid mathématique absolu.",
+                    drawback: "Incapable d'agir utilement sans que vous lui précisiez le protocole interne de la mairie et la nature de l'incident."
+                }
+            },
+            {
+                title: "Le Pont Sensoriel du Prompt",
+                type: "bridge-schema",
+                desc: "Rédiger un bon prompt consiste à construire un **pont sensoriel** pour l'IA. Puisqu'elle n'a pas d'yeux ni d'oreilles, votre texte doit simuler son environnement pour qu'elle puisse réagir avec pertinence.",
+                elements: [
+                    { title: "🧠 Vos Capteurs", desc: "Vous observez la situation réelle (ex: un usager en colère refuse de payer son amende de stationnement)." },
+                    { title: "🌉 Le Pont du Prompt", desc: "Vous transmettez cette scène par écrit à l'IA : description de l'usager, règlement municipal, profil de votre commune." },
+                    { title: "💾 Le Cerveau de l'IA", desc: "L'IA applique ses capacités logiques sur ce contexte précis pour vous générer une réponse de désescalade sur-mesure." }
                 ]
             },
             {
-                title: "Physique des Puces : GPU vs TPU vs LPU",
-                type: "hardware-comparison",
-                desc: "Tous les processeurs d'IA ne se valent pas. Selon l'architecture choisie, la vitesse d'exécution et la facture énergétique varient du simple au quadruple :",
-                hardwareTypes: [
-                    { type: "GPU (Nvidia)", role: "Processeur graphique de forte consommation pour l'entraînement intensif.", power: "Très énergivore (~700W par carte)" },
-                    { type: "TPU (Google)", role: "Puces tenso-vectorielles optimisées pour exécuter les calculs de Gemini.", power: "Consommation modérée" },
-                    { type: "LPU (Groq)", role: "Puces ultra-rapides spécialisées dans l'inférence textuelle en temps réel.", power: "Très économe en énergie" }
+                title: "Le Champ des Possibles : Précision vs Créativité",
+                type: "prompt-funnel-cone",
+                intro: "Comment vos mots orientent-ils le calcul probabiliste du modèle ? Découvrez visuellement la mécanique de réduction du champ des possibles, ainsi que l'art subtil de doser l'imprécision pour stimuler l'inventivité.",
+                targetLabel: "Solution idéale recherchée",
+                steps: [
+                    {
+                        id: "step-1",
+                        num: "1",
+                        badge: "Départ",
+                        name: "Aucun prompt (0 consigne)",
+                        icon: "🔘",
+                        coneType: "circle",
+                        summary: "Champ des possibles à 360° : une infinité de réponses équiprobables.",
+                        desc: "Sans consigne, l'espace probabiliste de l'IA est totalement ouvert. La solution parfaite que vous avez en tête (le point rouge) est perdue au milieu de milliards de directions potentielles. La probabilité que l'IA tombe juste par hasard est quasi-nulle.",
+                        iaBehavior: "L'IA attend une impulsion ou répond par une salutation polie standard ('Comment puis-je vous aider ?').",
+                        promptExample: "<em>(Aucun prompt saisi)</em>",
+                        takeaway: "Le silence ou le manque absolu de direction laisse l'IA dans une errance statistique complète."
+                    },
+                    {
+                        id: "step-2",
+                        num: "2",
+                        badge: "Prompt imprécis",
+                        name: "Consigne vague ou floue",
+                        icon: "📐",
+                        coneType: "wide-cone",
+                        summary: "Cône de sélection ouvert (~60°) : orientation globale mais fort risque de dérive.",
+                        desc: "Vous donnez une intention générale, mais sans contraintes, sans format et sans contexte territorial. L'IA réduit son champ de recherche à un cône large. Le résultat peut parfois effleurer ce que vous voulez, mais il dévie facilement vers des généralités creuses ou des contresens.",
+                        iaBehavior: "L'IA comble les trous béants en inventant des hypothèses par défaut ou en générant du remplissage banal.",
+                        promptExample: "« Fais-moi un mot pour les administrés sur les travaux de voirie. »",
+                        takeaway: "Une consigne floue produit un livrable tiède qui nécessite 80% de réécriture humaine."
+                    },
+                    {
+                        id: "step-3",
+                        num: "3",
+                        badge: "Prompt précis",
+                        name: "Consigne calibrée & contrainte",
+                        icon: "🎯",
+                        coneType: "laser-cone",
+                        summary: "Faisceau laser directif (~12°) : verrouillage exact du résultat attendu.",
+                        desc: "Plus votre consigne est méthodique (rôle, contexte, ressources et format exigé), plus vous réduisez l'espace des possibles. Le faisceau se resserre en un entonnoir ultra-ciblé qui frappe directement la cible rouge recherchée.",
+                        iaBehavior: "L'IA concentre toute son attention sur vos contraintes strictes et élimine les divagations hors-sujet.",
+                        promptExample: "« En tant que responsable voirie, rédige un avis aux riverains de la rue Pasteur (180 mots). Travaux d'assainissement du 12 au 26 oct. Circulation alternée de 8h à 17h, ramassage des bacs maintenu. Ton courtois et pragmatique. »",
+                        takeaway: "La précision chirurgicale de la contrainte est la clé d'un résultat 'prêt à l'emploi'."
+                    },
+                    {
+                        id: "step-4",
+                        num: "4",
+                        badge: "Exploration créative",
+                        name: "Doser l'imprécision pour innover",
+                        icon: "💡",
+                        coneType: "creative-sparks",
+                        summary: "Ouverture volontaire : lever ses propres barrières mentales et biais.",
+                        desc: "<strong>La nuance capitale :</strong> Parfois, on ne sait PAS exactement quelle solution on recherche ! Si on sur-contraint le prompt dès le départ, on enferme l'IA dans nos propres habitudes et angles morts. Jouer volontairement avec une consigne ouverte et décalée pousse l'IA à explorer des territoires inédits et à faire preuve d'inventivité.",
+                        iaBehavior: "L'IA utilise sa vaste base de connaissances croisées pour proposer des associations d'idées insolites et disruptives.",
+                        promptExample: "« Imagine 5 approches originales et non punitives inspirées des sciences comportementales (nudges) pour inciter les usagers à respecter la propreté des abords des conteneurs à verre. Sors des schémas classiques de verbalisation. »",
+                        takeaway: "Pour exécuter une tâche connue : ciblez au laser. Pour inventer et sortir de vos certitudes : ouvrez le faisceau !"
+                    }
                 ]
-            },
+            }
+        ]
+    },
+    {
+        id: "methode-maire",
+        category: "prompt",
+        title: "6. La Méthode M.A.I.R.E.",
+        icon: "📋",
+        desc: "La méthodologie de structuration des invites professionnelles pour le secteur public.",
+        slides: [
             {
-                title: "Calculateur d'Empreinte Écologique & Eau des Prompts",
-                type: "eco-calculator",
-                desc: "Chaque requête soumise à une IA consomme de l'électricité et de l'eau pour refroidir les Datacenters. Ajustez les paramètres ci-dessous pour calculer l'empreinte environnementale de votre collectivité.",
-                scenarios: [
-                    { id: "frugal", label: "🌱 Modèle Frugal / TPU (Gemini / Mistral 8B)", waterPerReq: 0.05, co2PerReq: 0.15, kwhPerReq: 0.001 },
-                    { id: "heavy", label: "🏭 Méga-Modèle Cloud (GPT-4o / Claude 3.5)", waterPerReq: 0.50, co2PerReq: 1.20, kwhPerReq: 0.008 }
-                ]
-            },
-            {
-                title: "Simulateur Interactif VRAM & Choix du Matériel GPU",
-                type: "vram-calculator",
-                desc: "Pour exécuter un modèle d'IA localement dans votre mairie (sans envoyer de données sur Internet), vous devez calculer la mémoire vidéo (VRAM) nécessaire sur vos serveurs.",
-                models: [
-                    { label: "8B Paramètres (ex: Llama 3 / Mistral 8B)", baseParams: 8 },
-                    { label: "14B Paramètres (ex: Qwen 2.5 14B)", baseParams: 14 },
-                    { label: "32B Paramètres (ex: DeepSeek R1 32B)", baseParams: 32 },
-                    { label: "70B Paramètres (ex: Llama 3.3 70B)", baseParams: 70 },
-                    { label: "405B Paramètres (ex: Llama 3 405B)", baseParams: 405 }
+                title: "Le Tableau de Bord M.A.I.R.E.",
+                type: "maire",
+                steps: [
+                    { letter: "M", label: "Moi", desc: "Qui êtes-vous ? (Ex: Chef de projet transition écologique dans une métropole de 150 000 habitants)." },
+                    { letter: "A", label: "Agent", desc: "Quel rôle donnez-vous à l'IA ? (Ex: Agis en tant qu'expert en aménagement urbain durable)." },
+                    { letter: "I", label: "Information", desc: "Quelle est la tâche ou le problème ? (Ex: Je dois rédiger le cahier des charges pour l'installation d'îlots de fraîcheur)." },
+                    { letter: "R", label: "Ressources", desc: "Quelles données fournissez-vous ? (Ex: Voici le plan du parvis et la liste des essences d'arbres autorisées par notre charte)." },
+                    { letter: "E", label: "Exigence", desc: "Quel est le livrable attendu ? (Ex: Rédige une liste structurée en 5 points clés sous format tableau Markdown, ton technique)." }
                 ],
-                quantizations: [
-                    { label: "4-bit (Quantifié Frugal)", bytesPerParam: 0.65 },
-                    { label: "8-bit (Précision Moyenne)", bytesPerParam: 1.10 },
-                    { label: "16-bit (Précision FP16 Totale)", bytesPerParam: 2.00 }
+                example: "<strong>Règle fondamentale :</strong> L'humain apporte la méthode et arbitre, l'IA suit la méthode et exécute. La méthode M.A.I.R.E. est précisément le cadre rigoureux que l'agent public transmet à la machine pour calibrer son exécution et éliminer les divagations."
+            },
+            {
+                title: "Exemple Réel Décortiqué",
+                type: "color-coded-prompt",
+                promptTitle: "Prompt pour la rédaction d'un discours municipal",
+                parts: [
+                    { key: "M", color: "var(--accent-blue)", label: "Moi", text: "Je suis le directeur de cabinet du maire d'une petite commune rurale de 1200 habitants." },
+                    { key: "A", color: "var(--accent-purple)", label: "Agent", text: "Tu es une plume politique expérimentée, spécialisée dans les discours républicains de proximité." },
+                    { key: "I", color: "var(--accent-sky)", label: "Information", text: "Le Maire doit prononcer un discours d'inauguration pour la réouverture de la bibliothèque municipale après travaux." },
+                    { key: "R", color: "var(--accent-green)", label: "Ressources", text: "Appuie-toi sur ces éléments : travaux financés à 40% par l'État et 30% par la Région, création d'un espace numérique pour les jeunes, bibliothèque nommée 'Espace George Sand'." },
+                    { key: "E", color: "var(--accent-gold)", label: "Exigence", text: "Rédige un discours de 400 mots. Structure avec : salutations officielles, remerciements aux partenaires financiers, focus sur George Sand et conclusion républicaine. Évite les phrases trop longues." }
                 ]
             },
             {
-                title: "Les Datacenters Spatiaux & Nucléaires",
-                type: "satellite-datacenter",
-                desc: "Face à l'explosion de la consommation électrique de l'IA, les géants de la Tech réactivent des centrales nucléaires (ex: Three Mile Island pour Microsoft) et projettent de déployer des Datacenters en orbite solaire.",
-                details: "Les datacenters spatiaux bénéficient d'un rayonnement solaire ininterrompu 24h/24 et du froid absolu du vide spatial pour refroidir les puces sans consommer une seule goutte d'eau."
+                title: "Gabarit Prêt à Remplir (Copier-Coller)",
+                type: "gabarit",
+                desc: "Voici un modèle universel que vous pouvez copier et conserver. Remplissez simplement les crochets avant de soumettre votre demande à l'IA.",
+                template: `[MOI] : Je suis [votre poste/rôle] au sein de la collectivité [nom/type de collectivité].
+
+[AGENT] : Agis en tant que [expert/rôle attribué à l'IA] spécialisé en [domaine précis].
+
+[INFORMATION] : Ta tâche consiste à [décrire précisément le travail, le document à rédiger ou le problème à analyser].
+
+[RESSOURCES] : Pour ce faire, base-toi uniquement sur les données suivantes : [coller vos textes, chiffres, extraits de règlements ou lois]. Ne fais pas de suppositions en dehors de ces informations.
+
+[EXIGENCE] : Le livrable doit être rédigé sous forme de [format attendu : mail, tableau, note de synthèse]. Le ton doit être [professionnel, technique, neutre] et la longueur maximale de [nombre de mots/paragraphes].`,
+                tips: "<strong>💡 Conseil de pro :</strong> Si vos ressources sont très longues (ex: un rapport PDF de 50 pages), n'hésitez pas à utiliser des outils dotés d'une grande fenêtre de contexte (comme Claude ou Gemini) pour y glisser le fichier entier."
             },
             {
-                title: "Matrice Comparative des Modèles Récents",
-                type: "model-arbitrage",
-                intro: "Ajustez les cas d'usages administratifs ci-dessous pour filtrer les modèles d'IA les plus performants et conformes au RGPD.",
-                useCases: [
-                    { id: "all", label: "Tous les Cas d'Usages" },
-                    { id: "delib", label: "📑 Synthèse de Délibérations (50p)" },
-                    { id: "mail", label: "✉️ Rédaction de Courriels & Courriers" },
-                    { id: "incident", label: "🚨 Routage d'Incidents de Voirie" },
-                    { id: "dsi", label: "💻 Code & Intranet DSI" }
+                title: "Hygiène de Conversation : Brouillon vs Chat Propre",
+                type: "chat-hygiene-context",
+                subtitle: "On explore au brouillon, on produit au propre.",
+                fptContext: "Exemple FPT : Tarification sociale de cantine (Loi EGalim & quotient familial).",
+                directPath: {
+                    title: "Trajectoire Directe",
+                    subtitle: "Besoin clair dès le départ",
+                    badge: "Ligne Droite",
+                    steps: [
+                        { icon: "📝", label: "1. Prompt M.A.I.R.E.", desc: "Cadrage complet + Données brutes", status: "success" },
+                        { icon: "⚡", label: "2. Micro-ajustement", desc: "1 précision de mise en forme", status: "info" },
+                        { icon: "🎯", label: "3. Livrable Validé", desc: "Note de cadrage finale parfaite", status: "target" }
+                    ],
+                    stats: [
+                        { label: "Bruit", val: "0%", color: "var(--accent-green)" },
+                        { label: "Contexte", val: "100% Pur", color: "var(--accent-green)" },
+                        { label: "Tokens", val: "~700", color: "var(--accent-blue)" }
+                    ]
+                },
+                exploratoryPath: {
+                    title: "Trajectoire Exploratoire",
+                    subtitle: "Le piège du fil infini",
+                    badge: "Brouillon & Pollution",
+                    items: [
+                        { id: 1, type: "noise", label: "1. Prompt vague", icon: "❌" },
+                        { id: 2, type: "noise", label: "2. Contradiction", icon: "❌" },
+                        { id: 3, type: "noise", label: "3. Consigne oubliée", icon: "❌" },
+                        { id: 4, type: "gem", label: "4. Données réelles", icon: "💎", desc: "Grille des 4 quotients" },
+                        { id: 5, type: "noise", label: "5. Hors-sujet", icon: "❌" },
+                        { id: 6, type: "noise", label: "6. Ordre annulé", icon: "❌" },
+                        { id: 7, type: "noise", label: "7. Tâtonnement", icon: "❌" },
+                        { id: 8, type: "gem", label: "8. Plan validé", icon: "💎", desc: "Structure en 3 axes" },
+                        { id: 9, type: "noise", label: "9. Ton inadapté", icon: "❌" },
+                        { id: 10, type: "noise", label: "10. Correction tardive", icon: "❌" }
+                    ],
+                    gemsSummary: [
+                        { title: "💎 Pépite n°1", desc: "4 tranches réelles de quotient familial" },
+                        { title: "💎 Pépite n°2", desc: "Plan de cadrage institutionnel validé" }
+                    ],
+                    cleanPromptShort: `[MOI] : Resp. finances & éducation scolaire.
+[AGENT] : Expert finances publiques locales.
+[INFO] : Note de cadrage tarification cantine (18 000 hab).
+[RESSOURCES] : 4 tranches QF (1€ à 4,90€) & coût repas (4,20€).
+[EXIGENCE] : Plan en 3 parties (EGalim, grille, budget). Ton officiel.`
+                },
+                proSteps: [
+                    { num: "1", icon: "🌪️", title: "Brainstormez", desc: "Chat jetable sans filtre" },
+                    { num: "2", icon: "💎", title: "Extrayez", desc: "Isolez les 2 pépites en 1 prompt M.A.I.R.E." },
+                    { num: "3", icon: "🚀", title: "Exécutez", desc: "Nouveau chat vierge = 100% de clarté" }
                 ],
-                models: [
-                    { name: "Mistral Small 24B", provider: "Mistral AI 🇫🇷", type: "Open-Source / Souverain", params: "24B", speed: "110 t/s", costInput: 0.20, costOutput: 0.60, scoreReasoning: 85, rgpd: "100% Souverain / Local", bestFor: "Courriels, Notes & Intranet municipal" },
-                    { name: "Mistral Large 2", provider: "Mistral AI 🇫🇷", type: "Cloud Souverain (Poids MRL)", params: "123B", speed: "45 t/s", costInput: 2.00, costOutput: 6.00, scoreReasoning: 93, rgpd: "Conforme SecNumCloud", bestFor: "Analyse juridique & Délibérations complexes" },
-                    { name: "Llama 3.3 70B", provider: "Meta 🇺🇸", type: "Open-Source", params: "70B", speed: "65 t/s", costInput: 0.35, costOutput: 0.90, scoreReasoning: 92, rgpd: "Hébergeable en Local", bestFor: "Raisonnement général & Métiers" },
-                    { name: "DeepSeek V3 / R1", provider: "DeepSeek 🇨🇳", type: "Open-Weights", params: "671B (MoE)", speed: "55 t/s", costInput: 0.14, costOutput: 0.55, scoreReasoning: 96, rgpd: "Hébergeable sur serveur privé", bestFor: "Maths, Code DSI & Raisonnement complexe" },
-                    { name: "Qwen 2.5 72B", provider: "Alibaba 🇨🇳", type: "Open-Source", params: "72B", speed: "70 t/s", costInput: 0.30, costOutput: 0.80, scoreReasoning: 91, rgpd: "Hébergeable en Local", bestFor: "Traitement multilingue & Données" },
-                    { name: "GPT-4o", provider: "OpenAI 🇺🇸", type: "Propriétaire Cloud", params: "Inconnu", speed: "80 t/s", costInput: 2.50, costOutput: 10.00, scoreReasoning: 95, rgpd: "Cloud Act (Nécessite anonymisation)", bestFor: "Multimodal (Vision/Voix) & Généraliste" },
-                    { name: "Claude 3.5 Sonnet", provider: "Anthropic 🇺🇸", type: "Propriétaire Cloud", params: "Inconnu", speed: "75 t/s", costInput: 3.00, costOutput: 15.00, scoreReasoning: 97, rgpd: "Cloud Act (Nécessite anonymisation)", bestFor: "Rédaction littéraire & Code haute qualité" },
-                    { name: "Kimi K3 / Moonshot", provider: "Moonshot 🇨🇳", type: "Propriétaire Cloud", params: "Inconnu", speed: "90 t/s", costInput: 0.40, costOutput: 1.20, scoreReasoning: 93, rgpd: "Cloud externe", bestFor: "Ultra-long contexte (Documents 2M tokens)" },
-                    { name: "GLM-4 9B / 130B", provider: "Zhipu AI 🇨🇳", type: "Open / Cloud", params: "9B-130B", speed: "100 t/s", costInput: 0.25, costOutput: 0.70, scoreReasoning: 89, rgpd: "Hébergeable en Local (9B)", bestFor: "Frugalité & Automatisation rapide" }
-                ]
+                takeaway: "💡 <strong>Règle d'or :</strong> Ne travaillez jamais dans un fil infini pollué. Quand vos idées sont claires, <strong>tuez le brouillon</strong> et repartez dans un chat neuf !"
+            },
+            {
+                title: "Ce que peut vous fournir en sortie une IA",
+                type: "ai-output-formats",
+                intro: "L'IA ne sert pas seulement à rédiger des courriers ou des paragraphes de texte : elle est un moteur de génération polymorphe. Mais attention aux illusions de facilité avec les formats bureautiques propriétaires !",
+                categories: [
+                    {
+                        title: "📝 Texte & Rédactionnel",
+                        icon: "✍️",
+                        badge: "Quotidien",
+                        color: "var(--accent-blue)",
+                        items: [
+                            "Courriers d'usagers, réponses à réclamations",
+                            "Notes de cadrage, délibérations, arrêtés types",
+                            "Synthèses de rapports volumineux (PDF de 50 pages)",
+                            "Discours officiels et vulgarisation tout public"
+                        ]
+                    },
+                    {
+                        title: "📊 Données & Tableaux",
+                        icon: "📈",
+                        badge: "Analytique",
+                        color: "var(--accent-purple)",
+                        items: [
+                            "Tableaux comparatifs synthétiques en Markdown",
+                            "Fichiers de données tabulaires (CSV universel)",
+                            "Nettoyage et normalisation de listes d'adresses",
+                            "Structures de données pour l'open data (JSON, GeoJSON)"
+                        ]
+                    },
+                    {
+                        title: "📄 Documents Bureautiques",
+                        icon: "💼",
+                        badge: "Nuancé",
+                        color: "var(--accent-gold)",
+                        items: [
+                            "Structures complètes de dossiers de subvention",
+                            "Trames de présentations (plans de diapositives)",
+                            "Matrices d'évaluation et grilles de critères RH",
+                            "Formulaires types de recueil de besoins"
+                        ]
+                    },
+                    {
+                        title: "💻 Code & Applications",
+                        icon: "⚡",
+                        badge: "Super-Pouvoir",
+                        color: "var(--accent-green)",
+                        items: [
+                            "L'IA est exceptionnellement douée pour coder",
+                            "Scripts d'automatisation (Python, Bash, PowerShell)",
+                            "Requêtes de bases de données (SQL)",
+                            "Applications web autonomes complètes (HTML / CSS / JS)"
+                        ]
+                    }
+                ],
+                proprietaryTrap: {
+                    title: "⚠️ Le Piège des Logiciels Propriétaires (Excel / Word & Macros VBA)",
+                    subtitle: "Pourquoi demander des fichiers Excel avec macros est souvent une fausse bonne idée :",
+                    points: [
+                        {
+                            label: "Blocages de Sécurité DSI",
+                            desc: "Dans 95% des collectivités territoriales, l'exécution des macros VBA est <strong>strictement verrouillée</strong> par la sécurité informatique pour prévenir les rançongiciels."
+                        },
+                        {
+                            label: "Incompatibilités de Versions",
+                            desc: "Formules cassées, fonctions inexistantes entre différentes versions d'Office (Office 2016, 2019, 2021, Microsoft 365, LibreOffice)."
+                        },
+                        {
+                            label: "Fragilité des Dépendances",
+                            desc: "Une formule mal traduite ou une macro mal calibrée rend le fichier totalement inutilisable et chronophage à réparer."
+                        }
+                    ]
+                },
+                htmlRecommendation: {
+                    title: "🌟 La Recommandation d'Or : Le Fichier « index.html »",
+                    subtitle: "Le livrable ultime, libre, gratuit et immédiatement opérationnel",
+                    desc: "Au lieu d'un tableur complexe ou d'une macro incertaine, demandez à l'IA de concevoir votre outil sous la forme d'un <strong>unique fichier autonome <code>index.html</code></strong> intégrant structure, design et calculs.",
+                    advantages: [
+                        {
+                            title: "100% Libre & Gratuit",
+                            desc: "Aucune licence payante requise, aucun coût caché de logiciel propriétaire."
+                        },
+                        {
+                            title: "Universel & Sans Installation",
+                            desc: "Fonctionne par un simple double-clic sur n'importe quel ordinateur, tablette ou smartphone dans n'importe quel navigateur (Edge, Chrome, Firefox)."
+                        },
+                        {
+                            title: "Conforme & Autorisé",
+                            desc: "Ne nécessite aucun droit administrateur sur le poste de travail et respecte les contraintes de sécurité des DSI."
+                        },
+                        {
+                            title: "Visuel & Hyper-Interactif",
+                            desc: "Permet de concevoir des calculateurs de tarifs municipaux, des simulateurs d'indemnités, des formulaires de démarches ou des dashboards visuels en quelques secondes."
+                        }
+                    ],
+                    promptTip: "<strong>💡 Conseil dans la lettre 'E' (Exigence) de M.A.I.R.E. :</strong> Demandez explicitement : <em>« Fournis-moi le résultat sous forme d'un fichier <code>index.html</code> autonome, moderne et interactif avec du code HTML/CSS/JS directement exécutable dans mon navigateur. »</em>"
+                }
             }
         ]
     },
     {
         id: "agentique-territorial",
         category: "agent",
-        title: "8. L'IA Agentique & Antigravity",
+        title: "7. L'IA Agentique & Antigravity",
         icon: "🤖",
         desc: "Comprendre pourquoi la boucle agentique dépasse largement l'utilisation passive d'un chat d'intelligence artificielle.",
         slides: [
@@ -1313,6 +1228,91 @@ const THEMES = [
                         title: "🔒 Validation Humaine (Human-in-the-Loop)",
                         desc: "Ne jamais utiliser de mode '100% autonome' pour des tâches système. L'agent doit obligatoirement s'arrêter et solliciter votre validation manuelle (comme le système de validation d'Antigravity) avant chaque commande d'écriture ou d'exécution de script."
                     }
+                ]
+            }
+        ]
+    },
+    {
+        id: "guerre-ia",
+        category: "tech",
+        title: "8. La Guerre des IA & Matériel",
+        icon: "⚔️",
+        desc: "Les coulisses géopolitiques : la cartographie des acteurs, la physique des puces et les datacenters de demain.",
+        slides: [
+            {
+                title: "La Carte des Alliances Mondiales",
+                type: "alliance-map",
+                desc: "Le marché de l'IA est une guerre de capitaux et d'infrastructures contrôlée par quelques géants de la technologie :",
+                alliances: [
+                    { leader: "OpenAI + Microsoft", models: "GPT", target: "Domination du marché bureautique et intégration dans Windows / Office." },
+                    { leader: "Google (Gemini)", models: "Gemini", target: "Écosystème natif Android, Workspace et recherche en ligne." },
+                    { leader: "Anthropic + Amazon", models: "Claude", target: "Modèles sécurisés et hautement qualitatifs pour les entreprises via AWS." },
+                    { leader: "Mistral AI (France)", models: "Mistral / Codestral", target: "Alternative de souveraineté européenne avec des modèles efficaces et hébergeables localement." }
+                ]
+            },
+            {
+                title: "Physique des Puces : GPU vs TPU vs LPU",
+                type: "hardware-comparison",
+                desc: "Tous les processeurs d'IA ne se valent pas. Selon l'architecture choisie, la vitesse d'exécution et la facture énergétique varient du simple au quadruple :",
+                hardwareTypes: [
+                    { type: "GPU (Nvidia)", role: "Processeur graphique de forte consommation pour l'entraînement intensif.", power: "Très énergivore (~700W par carte)" },
+                    { type: "TPU (Google)", role: "Puces tenso-vectorielles optimisées pour exécuter les calculs de Gemini.", power: "Consommation modérée" },
+                    { type: "LPU (Groq)", role: "Puces ultra-rapides spécialisées dans l'inférence textuelle en temps réel.", power: "Très économe en énergie" }
+                ]
+            },
+            {
+                title: "Calculateur d'Empreinte Écologique & Eau des Prompts",
+                type: "eco-calculator",
+                desc: "Chaque requête soumise à une IA consomme de l'électricité et de l'eau pour refroidir les Datacenters. Ajustez les paramètres ci-dessous pour calculer l'empreinte environnementale de votre collectivité.",
+                scenarios: [
+                    { id: "frugal", label: "🌱 Modèle Frugal / TPU (Gemini / Mistral 8B)", waterPerReq: 0.05, co2PerReq: 0.15, kwhPerReq: 0.001 },
+                    { id: "heavy", label: "🏭 Méga-Modèle Cloud (GPT-4o / Claude 3.5)", waterPerReq: 0.50, co2PerReq: 1.20, kwhPerReq: 0.008 }
+                ]
+            },
+            {
+                title: "Simulateur Interactif VRAM & Choix du Matériel GPU",
+                type: "vram-calculator",
+                desc: "Pour exécuter un modèle d'IA localement dans votre mairie (sans envoyer de données sur Internet), vous devez calculer la mémoire vidéo (VRAM) nécessaire sur vos serveurs.",
+                models: [
+                    { label: "8B Paramètres (ex: Llama 3 / Mistral 8B)", baseParams: 8 },
+                    { label: "14B Paramètres (ex: Qwen 2.5 14B)", baseParams: 14 },
+                    { label: "32B Paramètres (ex: DeepSeek R1 32B)", baseParams: 32 },
+                    { label: "70B Paramètres (ex: Llama 3.3 70B)", baseParams: 70 },
+                    { label: "405B Paramètres (ex: Llama 3 405B)", baseParams: 405 }
+                ],
+                quantizations: [
+                    { label: "4-bit (Quantifié Frugal)", bytesPerParam: 0.65 },
+                    { label: "8-bit (Précision Moyenne)", bytesPerParam: 1.10 },
+                    { label: "16-bit (Précision FP16 Totale)", bytesPerParam: 2.00 }
+                ]
+            },
+            {
+                title: "Les Datacenters Spatiaux & Nucléaires",
+                type: "satellite-datacenter",
+                desc: "Face à l'explosion de la consommation électrique de l'IA, les géants de la Tech réactivent des centrales nucléaires (ex: Three Mile Island pour Microsoft) et projettent de déployer des Datacenters en orbite solaire.",
+                details: "Les datacenters spatiaux bénéficient d'un rayonnement solaire ininterrompu 24h/24 et du froid absolu du vide spatial pour refroidir les puces sans consommer une seule goutte d'eau."
+            },
+            {
+                title: "Matrice Comparative des Modèles Récents",
+                type: "model-arbitrage",
+                intro: "Ajustez les cas d'usages administratifs ci-dessous pour filtrer les modèles d'IA les plus performants et conformes au RGPD.",
+                useCases: [
+                    { id: "all", label: "Tous les Cas d'Usages" },
+                    { id: "delib", label: "📑 Synthèse de Délibérations (50p)" },
+                    { id: "mail", label: "✉️ Rédaction de Courriels & Courriers" },
+                    { id: "incident", label: "🚨 Routage d'Incidents de Voirie" },
+                    { id: "dsi", label: "💻 Code & Intranet DSI" }
+                ],
+                models: [
+                    { name: "Mistral Small 24B", provider: "Mistral AI 🇫🇷", type: "Open-Source / Souverain", params: "24B", speed: "110 t/s", costInput: 0.20, costOutput: 0.60, scoreReasoning: 85, rgpd: "100% Souverain / Local", bestFor: "Courriels, Notes & Intranet municipal" },
+                    { name: "Mistral Large 2", provider: "Mistral AI 🇫🇷", type: "Cloud Souverain (Poids MRL)", params: "123B", speed: "45 t/s", costInput: 2.00, costOutput: 6.00, scoreReasoning: 93, rgpd: "Conforme SecNumCloud", bestFor: "Analyse juridique & Délibérations complexes" },
+                    { name: "Llama 3.3 70B", provider: "Meta 🇺🇸", type: "Open-Source", params: "70B", speed: "65 t/s", costInput: 0.35, costOutput: 0.90, scoreReasoning: 92, rgpd: "Hébergeable en Local", bestFor: "Raisonnement général & Métiers" },
+                    { name: "DeepSeek V3 / R1", provider: "DeepSeek 🇨🇳", type: "Open-Weights", params: "671B (MoE)", speed: "55 t/s", costInput: 0.14, costOutput: 0.55, scoreReasoning: 96, rgpd: "Hébergeable sur serveur privé", bestFor: "Maths, Code DSI & Raisonnement complexe" },
+                    { name: "Qwen 2.5 72B", provider: "Alibaba 🇨🇳", type: "Open-Source", params: "72B", speed: "70 t/s", costInput: 0.30, costOutput: 0.80, scoreReasoning: 91, rgpd: "Hébergeable en Local", bestFor: "Traitement multilingue & Données" },
+                    { name: "GPT-4o", provider: "OpenAI 🇺🇸", type: "Propriétaire Cloud", params: "Inconnu", speed: "80 t/s", costInput: 2.50, costOutput: 10.00, scoreReasoning: 95, rgpd: "Cloud Act (Nécessite anonymisation)", bestFor: "Multimodal (Vision/Voix) & Généraliste" },
+                    { name: "Claude 3.5 Sonnet", provider: "Anthropic 🇺🇸", type: "Propriétaire Cloud", params: "Inconnu", speed: "75 t/s", costInput: 3.00, costOutput: 15.00, scoreReasoning: 97, rgpd: "Cloud Act (Nécessite anonymisation)", bestFor: "Rédaction littéraire & Code haute qualité" },
+                    { name: "Kimi K3 / Moonshot", provider: "Moonshot 🇨🇳", type: "Propriétaire Cloud", params: "Inconnu", speed: "90 t/s", costInput: 0.40, costOutput: 1.20, scoreReasoning: 93, rgpd: "Cloud externe", bestFor: "Ultra-long contexte (Documents 2M tokens)" },
+                    { name: "GLM-4 9B / 130B", provider: "Zhipu AI 🇨🇳", type: "Open / Cloud", params: "9B-130B", speed: "100 t/s", costInput: 0.25, costOutput: 0.70, scoreReasoning: 89, rgpd: "Hébergeable en Local (9B)", bestFor: "Frugalité & Automatisation rapide" }
                 ]
             }
         ]
@@ -1609,169 +1609,143 @@ FOR SELECT USING (auth.role() = 'authenticated');`,
 // Base de données des questions interactives (Sondages & Quiz) associées à chaque thème
 const INTERACTIVE_QUESTIONS = [
     {
-        themeId: "histoire-ia",
-        id: "q1",
-        type: "quiz",
-        question: "En 1950, Alan Turing publie son célèbre 'Test d'Imitation'. Quel était le principe fondamental de ce test pour évaluer l'intelligence d'une machine ?",
-        options: {
-            A: "Vérifier si un supercalculateur peut résoudre un problème de mathématiques complexes plus vite qu'un être humain",
-            B: "Demander à la machine d'obtenir une augmentation de salaire auprès de sa hiérarchie sans trembler",
-            C: "Évaluer si un juge humain dialoguant à aveugle par texte est incapable de distinguer les réponses de la machine de celles d'un humain",
-            D: "Mesurer le temps de réponse d'un processeur pour traduire instantanément un texte administratif en cinq langues"
+        "themeId": "histoire-ia",
+        "id": "q1",
+        "type": "quiz",
+        "question": "En 1950, Alan Turing publie son célèbre 'Test d'Imitation'. Quel était le principe fondamental de ce test pour évaluer l'intelligence d'une machine ?",
+        "options": {
+            "A": "Vérifier si un supercalculateur peut résoudre un problème de mathématiques complexes plus vite qu'un être humain",
+            "B": "Demander à la machine d'obtenir une augmentation de salaire auprès de sa hiérarchie sans trembler",
+            "C": "Évaluer si un juge humain dialoguant à aveugle par texte est incapable de distinguer les réponses de la machine de celles d'un humain",
+            "D": "Mesurer le temps de réponse d'un processeur pour traduire instantanément un texte administratif en cinq langues"
         },
-        correct: "C",
-        explanation: "Le Test de Turing (1950) repose sur le dialogue textuel en aveugle : si l'évaluateur humain ne peut pas distinguer la machine de l'humain, le test est réussi."
+        "correct": "C",
+        "explanation": "Le Test de Turing (1950) repose sur le dialogue textuel en aveugle : si l'évaluateur humain ne peut pas distinguer la machine de l'humain, le test est réussi."
     },
     {
-        themeId: "technique-llm",
-        id: "q2",
-        type: "quiz",
-        question: "Pourquoi les sigles et acronymes de l'administration (ex: P.L.U., R.G.P.D., D.G.S.) consomment-ils proportionnellement plus de tokens et coûtent-ils plus cher ?",
-        options: {
-            A: "Parce que les termes rares et les lettres séparées par des points ne figurent pas dans le dictionnaire du tokenizer, qui doit les découper lettre par lettre",
-            B: "Parce que la législation européenne AI Act impose une taxe fiscale supplémentaire sur l'usage des sigles publics",
-            C: "Parce que l'IA traduit obligatoirement les abréviations françaises en anglais avant d'exécuter son calcul",
-            D: "Parce que les serveurs d'OpenAI appliquent un tarif de punition chaque fois qu'on utilise du jargon administratif"
+        "themeId": "technique-llm",
+        "id": "q2",
+        "type": "quiz",
+        "question": "Pourquoi les sigles et acronymes de l'administration (ex: P.L.U., R.G.P.D., D.G.S.) consomment-ils proportionnellement plus de tokens et coûtent-ils plus cher ?",
+        "options": {
+            "A": "Parce que les termes rares et les lettres séparées par des points ne figurent pas dans le dictionnaire du tokenizer, qui doit les découper lettre par lettre",
+            "B": "Parce que la législation européenne AI Act impose une taxe fiscale supplémentaire sur l'usage des sigles publics",
+            "C": "Parce que l'IA traduit obligatoirement les abréviations françaises en anglais avant d'exécuter son calcul",
+            "D": "Parce que les serveurs d'OpenAI appliquent un tarif de punition chaque fois qu'on utilise du jargon administratif"
         },
-        correct: "A",
-        explanation: "Le tokenizer scinde les mots rares et les lettres isolées par des points en multiples tokens individuels, ce qui augmente la consommation de tokens."
+        "correct": "A",
+        "explanation": "Le tokenizer scinde les mots rares et les lettres isolées par des points en multiples tokens individuels, ce qui augmente la consommation de tokens."
     },
     {
-        themeId: "hallucinations-ia",
-        id: "q3",
-        type: "quiz",
-        question: "Quelle est la cause scientifique première d'une 'hallucination' lorsqu'un LLM génère un texte administratif ou juridique ?",
-        options: {
-            A: "Un dysfonctionnement temporaire de la connexion réseau entre le poste de l'agent et le datacenter",
-            B: "Une erreur d'indexation dans la base de données de jurisprudence du Journal Officiel consultée par l'IA",
-            C: "Une surchauffe des cartes graphiques qui pousse le serveur à prendre des initiatives créatives",
-            D: "La nature probabiliste du réseau de neurones, qui prédit la suite de mots la plus fluide sans consulter de base de faits réels"
+        "themeId": "hallucinations-ia",
+        "id": "q3",
+        "type": "quiz",
+        "question": "Quelle est la cause scientifique première d'une 'hallucination' lorsqu'un LLM génère un texte administratif ou juridique ?",
+        "options": {
+            "A": "Un dysfonctionnement temporaire de la connexion réseau entre le poste de l'agent et le datacenter",
+            "B": "Une erreur d'indexation dans la base de données de jurisprudence du Journal Officiel consultée par l'IA",
+            "C": "Une surchauffe des cartes graphiques qui pousse le serveur à prendre des initiatives créatives",
+            "D": "La nature probabiliste du réseau de neurones, qui prédit la suite de mots la plus fluide sans consulter de base de faits réels"
         },
-        correct: "D",
-        explanation: "Un LLM est un moteur de prédiction statistique de mots : il vise la fluidité rédactionnelle et non la vérité factuelle. Sans ancrage (RAG), il comble les manques en inventant."
+        "correct": "D",
+        "explanation": "Un LLM est un moteur de prédiction statistique de mots : il vise la fluidité rédactionnelle et non la vérité factuelle. Sans ancrage (RAG), il comble les manques en inventant."
     },
     {
-        themeId: "prompt-homme",
-        id: "q4",
-        type: "quiz",
-        question: "Si une alarme incendie retentit dans l'accueil de la mairie, pourquoi l'IA est-elle incapable d'ordonner l'évacuation de son propre chef ?",
-        options: {
-            A: "Parce qu'elle attend systématiquement une délibération votée à l'unanimité en conseil municipal",
-            B: "Parce qu'elle n'a ni corps ni capteurs biologiques : sans prompt textuel décrivant l'urgence, elle reste complètement aveugle au monde réel",
-            C: "Parce que les consignes de sécurité (System Prompt) d'OpenAI lui interdisent de donner des conseils de secourisme",
-            D: "Parce que son algorithme de traitement est limité par le nombre maximal de requêtes autorisées par minute"
+        "themeId": "securite-reglementation",
+        "id": "q4",
+        "type": "quiz",
+        "question": "En quoi le 'Cloud Act' américain constitue-t-il un risque majeur de souveraineté pour les collectivités territoriales européennes ?",
+        "options": {
+            "A": "Il interdit aux éditeurs américains de vendre des abonnements logiciels aux mairies françaises de moins de 10 000 habitants",
+            "B": "Il oblige les collectivités à payer une taxe foncière sur les serveurs informatiques situés en Europe",
+            "C": "Il permet aux autorités judiciaires US de réclamer l'accès aux données stockées chez les Big Tech US, même sur leurs serveurs situés en Europe",
+            "D": "Il impose aux agents publics de rédiger tous leurs courriels administratifs en anglais américain"
         },
-        correct: "B",
-        explanation: "L'humain perçoit l'urgence par ses sens. L'IA est enfermée dans un serveur aveugle et dépend entièrement du contexte rédigé dans le prompt."
+        "correct": "C",
+        "explanation": "Le Cloud Act extraterritorial permet aux autorités US d'exiger les données détenues par des entreprises américaines, d'où le besoin d'anonymisation ou d'outils souverains."
     },
     {
-        themeId: "methode-maire",
-        id: "q5",
-        type: "quiz",
-        question: "Dans la méthodologie M.A.I.R.E. recommandée pour le secteur public, quel est l'objectif clé de la lettre 'R' (Ressources) ?",
-        options: {
-            A: "Rappel réglementaire : exiger que l'IA cite les articles du Code du Travail à la fin de sa réponse",
-            B: "Ressources : fournir les textes, arrêtés et données exactes de la collectivité pour verrouiller l'IA et éliminer les hallucinations",
-            C: "Rédaction automatique : demander à l'IA de générer le document directement au format PDF imprimable",
-            D: "Pause RTT : autoriser l'agent à aller prendre un café pendant que l'ordinateur travaille à sa place"
+        "themeId": "prompt-homme",
+        "id": "q5",
+        "type": "quiz",
+        "question": "Si une alarme incendie retentit dans l'accueil de la mairie, pourquoi l'IA est-elle incapable d'ordonner l'évacuation de son propre chef ?",
+        "options": {
+            "A": "Parce qu'elle attend systématiquement une délibération votée à l'unanimité en conseil municipal",
+            "B": "Parce qu'elle n'a ni corps ni capteurs biologiques : sans prompt textuel décrivant l'urgence, elle reste complètement aveugle au monde réel",
+            "C": "Parce que les consignes de sécurité (System Prompt) d'OpenAI lui interdisent de donner des conseils de secourisme",
+            "D": "Parce que son algorithme de traitement est limité par le nombre maximal de requêtes autorisées par minute"
         },
-        correct: "B",
-        explanation: "Le 'R' de M.A.I.R.E. représente les 'Ressources' (technique d'ancrage RAG). Transmettre la documentation exacte empêche l'IA d'inventer des faits."
+        "correct": "B",
+        "explanation": "L'humain perçoit l'urgence par ses sens. L'IA est enfermée dans un serveur aveugle et dépend entièrement du contexte rédigé dans le prompt."
     },
     {
-        themeId: "securite-reglementation",
-        id: "q6",
-        type: "quiz",
-        question: "En quoi le 'Cloud Act' américain constitue-t-il un risque majeur de souveraineté pour les collectivités territoriales européennes ?",
-        options: {
-            A: "Il interdit aux éditeurs américains de vendre des abonnements logiciels aux mairies françaises de moins de 10 000 habitants",
-            B: "Il oblige les collectivités à payer une taxe foncière sur les serveurs informatiques situés en Europe",
-            C: "Il permet aux autorités judiciaires US de réclamer l'accès aux données stockées chez les Big Tech US, même sur leurs serveurs situés en Europe",
-            D: "Il impose aux agents publics de rédiger tous leurs courriels administratifs en anglais américain"
+        "themeId": "methode-maire",
+        "id": "q6",
+        "type": "quiz",
+        "question": "Dans la méthodologie M.A.I.R.E. recommandée pour le secteur public, quel est l'objectif clé de la lettre 'R' (Ressources) ?",
+        "options": {
+            "A": "Rappel réglementaire : exiger que l'IA cite les articles du Code du Travail à la fin de sa réponse",
+            "B": "Ressources : fournir les textes, arrêtés et données exactes de la collectivité pour verrouiller l'IA et éliminer les hallucinations",
+            "C": "Rédaction automatique : demander à l'IA de générer le document directement au format PDF imprimable",
+            "D": "Pause RTT : autoriser l'agent à aller prendre un café pendant que l'ordinateur travaille à sa place"
         },
-        correct: "C",
-        explanation: "Le Cloud Act extraterritorial permet aux autorités US d'exiger les données détenues par des entreprises américaines, d'où le besoin d'anonymisation ou d'outils souverains."
+        "correct": "B",
+        "explanation": "Le 'R' de M.A.I.R.E. représente les 'Ressources' (technique d'ancrage RAG). Transmettre la documentation exacte empêche l'IA d'inventer des faits."
     },
     {
-        themeId: "guerre-ia",
-        id: "q7",
-        type: "quiz",
-        question: "Pourquoi les géants de la Tech développent-ils des puces sur-mesure (TPU Google, LPU Groq) comme alternatives aux GPU Nvidia ?",
-        options: {
-            A: "Parce que ces puces spécialisées accélèrent considérablement la vitesse de génération de texte tout en réduisant la facture énergétique",
-            B: "Parce que les GPU Nvidia sont en rupture de stock suite à des commandes massives du Ministère de la Magie",
-            C: "Parce que le règlement européen AI Act va interdire l'usage des cartes graphiques Nvidia sur le sol européen d'ici 2026",
-            D: "Parce que ces puces permettent d'utiliser les intelligences artificielles entièrement sans connexion Internet"
+        "themeId": "agentique-territorial",
+        "id": "q7",
+        "type": "quiz",
+        "question": "Quelle est la différence fondamentale entre un simple Chatbot et un Agent IA autonome (comme Antigravity) ?",
+        "options": {
+            "A": "Le Chatbot fonctionne uniquement sur smartphone alors que l'Agent IA s'installe uniquement sur serveur Linux",
+            "B": "Le Chatbot est un outil gratuit alors que l'Agent IA autonome est obligatoirement payant et sous licence privée",
+            "C": "Le Chatbot génère du texte de façon linéaire sans tester, tandis que l'Agent s'appuie sur une boucle ReAct pour planifier, exécuter des outils et corriger ses propres erreurs",
+            "D": "Le Chatbot a besoin d'une pause déjeuner à midi alors que l'Agent IA se nourrit uniquement d'électricité"
         },
-        correct: "A",
-        explanation: "Les TPU et LPU sont des processeurs optimisés spécifiquement pour l'inférence des LLM, offrant une sobriété énergétique et une vitesse de texte supérieures."
+        "correct": "C",
+        "explanation": "Un Agent IA autonome dispose d'outils et fonctionne en boucle de raisonnement (Planifier -> Agir -> Observer -> Corriger) pour réaliser des projets complexes."
     },
     {
-        themeId: "agentique-territorial",
-        id: "q8",
-        type: "quiz",
-        question: "Quelle est la différence fondamentale entre un simple Chatbot et un Agent IA autonome (comme Antigravity) ?",
-        options: {
-            A: "Le Chatbot fonctionne uniquement sur smartphone alors que l'Agent IA s'installe uniquement sur serveur Linux",
-            B: "Le Chatbot est un outil gratuit alors que l'Agent IA autonome est obligatoirement payant et sous licence privée",
-            C: "Le Chatbot génère du texte de façon linéaire sans tester, tandis que l'Agent s'appuie sur une boucle ReAct pour planifier, exécuter des outils et corriger ses propres erreurs",
-            D: "Le Chatbot a besoin d'une pause déjeuner à midi alors que l'Agent IA se nourrit uniquement d'électricité"
+        "themeId": "guerre-ia",
+        "id": "q8",
+        "type": "quiz",
+        "question": "Pourquoi les géants de la Tech développent-ils des puces sur-mesure (TPU Google, LPU Groq) comme alternatives aux GPU Nvidia ?",
+        "options": {
+            "A": "Parce que ces puces spécialisées accélèrent considérablement la vitesse de génération de texte tout en réduisant la facture énergétique",
+            "B": "Parce que les GPU Nvidia sont en rupture de stock suite à des commandes massives du Ministère de la Magie",
+            "C": "Parce que le règlement européen AI Act va interdire l'usage des cartes graphiques Nvidia sur le sol européen d'ici 2026",
+            "D": "Parce que ces puces permettent d'utiliser les intelligences artificielles entièrement sans connexion Internet"
         },
-        correct: "C",
-        explanation: "Un Agent IA autonome dispose d'outils et fonctionne en boucle de raisonnement (Planifier -> Agir -> Observer -> Corriger) pour réaliser des projets complexes."
+        "correct": "A",
+        "explanation": "Les TPU et LPU sont des processeurs optimisés spécifiquement pour l'inférence des LLM, offrant une sobriété énergétique et une vitesse de texte supérieures."
     },
     {
-        themeId: "tuto-technique",
-        id: "q9",
-        type: "quiz",
-        question: "Dans une architecture web souveraine pour collectivité, pourquoi héberger sa base de données (ex: Supabase) en région Europe (Francfort) ?",
-        options: {
-            A: "Parce que les serveurs allemands sont équipés de saucisses et de bières gratuites pour les développeurs",
-            B: "Parce que la vitesse de la fibre optique est physiquement deux fois plus rapide entre Paris et Francfort qu'entre Paris et Lyon",
-            C: "Pour garantir la localisation physique des données au sein de l'UE et assurer la conformité stricte avec le RGPD et le DPO",
-            D: "Parce que GitHub Pages exige obligatoirement une connexion à une base de données allemande pour fonctionner"
+        "themeId": "tuto-technique",
+        "id": "q9",
+        "type": "quiz",
+        "question": "Dans une architecture web souveraine pour collectivité, pourquoi héberger sa base de données (ex: Supabase) en région Europe (Francfort) ?",
+        "options": {
+            "A": "Parce que les serveurs allemands sont équipés de saucisses et de bières gratuites pour les développeurs",
+            "B": "Parce que la vitesse de la fibre optique est physiquement deux fois plus rapide entre Paris et Francfort qu'entre Paris et Lyon",
+            "C": "Pour garantir la localisation physique des données au sein de l'UE et assurer la conformité stricte avec le RGPD et le DPO",
+            "D": "Parce que GitHub Pages exige obligatoirement une connexion à une base de données allemande pour fonctionner"
         },
-        correct: "C",
-        explanation: "Localiser la BDD en région Europe (Francfort) garantit la territorialité des données au sens du RGPD. Attention : le Cloud Act s'appliquant aux éditeurs de droit US même en Europe, les données sensibles en production exigent un hébergeur souverain (SecNumCloud)."
+        "correct": "C",
+        "explanation": "Localiser la BDD en région Europe (Francfort) garantit la territorialité des données au sens du RGPD. Attention : le Cloud Act s'appliquant aux éditeurs de droit US même en Europe, les données sensibles en production exigent un hébergeur souverain (SecNumCloud)."
     },
     {
-        themeId: "guide-dsi-ultime",
-        id: "q10",
-        type: "quiz",
-        question: "Que préconise la célèbre 'Loi d'Amara' concernant la vision stratégique d'une DSI sur l'adoption de l'IA ?",
-        options: {
-            A: "Elle stipule qu'une collectivité doit remplacer 50% de ses logiciels métiers par des IA génératives dans un délai maximal de 12 mois",
-            B: "Elle rappelle que l'on surestime toujours l'impact d'une technologie à court terme, mais qu'on sous-estime sa transformation profonde à long terme",
-            C: "Elle interdit l'usage des outils d'IA pour la rédaction des documents budgétaires et comptables des mairies",
-            D: "Elle exige que tous les directeurs informatiques portent une cape de super-héros lors des réunions de crise"
+        "themeId": "guide-dsi-ultime",
+        "id": "q10",
+        "type": "quiz",
+        "question": "Que préconise la célèbre 'Loi d'Amara' concernant la vision stratégique d'une DSI sur l'adoption de l'IA ?",
+        "options": {
+            "A": "Elle stipule qu'une collectivité doit remplacer 50% de ses logiciels métiers par des IA génératives dans un délai maximal de 12 mois",
+            "B": "Elle rappelle que l'on surestime toujours l'impact d'une technologie à court terme, mais qu'on sous-estime sa transformation profonde à long terme",
+            "C": "Elle interdit l'usage des outils d'IA pour la rédaction des documents budgétaires et comptables des mairies",
+            "D": "Elle exige que tous les directeurs informatiques portent une cape de super-héros lors des réunions de crise"
         },
-        correct: "B",
-        explanation: "La Loi d'Amara explique pourquoi les premières expérimentations déçoivent parfois (surestimation court terme) avant de métamorphoser les organisations (long terme)."
-    },
-    {
-        themeId: "eval-stage-bilan",
-        id: "q11",
-        type: "quiz",
-        question: "Quelle est la règle d'or juridique concernant la responsabilité d'un courrier administratif officiel rédigé avec l'aide d'une IA ?",
-        options: {
-            A: "La responsabilité est partagée à 50/50 entre la mairie et le fournisseur d'accès à Internet",
-            B: "La validation humaine est obligatoire : l'agent public habilité qui valide et signe le document en conserve la responsabilité juridique exclusive",
-            C: "C'est l'éditeur de l'outil d'IA (OpenAI, Google ou Anthropic) qui est légalement responsable en cas d'erreur dans le texte généré",
-            D: "En cas de litige, c'est le robot serveur du datacenter qui est convoqué à la barre du Tribunal Administratif"
-        },
-        correct: "B",
-        explanation: "La validation humaine ('Dernier Mot') est non négociable dans la fonction publique : l'agent public signataire est l'unique auteur légalement responsable."
-    },
-    {
-        themeId: "exercices-ateliers",
-        id: "q12",
-        type: "sondage",
-        question: "À l'issue de cette formation interactive, quelle est votre priorité pour intégrer l'IA dans votre collectivité ?",
-        options: {
-            A: "🚀 Expérimenter la méthode M.A.I.R.E. dès cette semaine pour mes rédactions quotidiennes",
-            B: "🛡️ Proposer la Charte d'Utilisation IA et mettre en place l'anonymisation locale au sein de mon service",
-            C: "💻 Échanger avec ma DSI pour étudier le déploiement d'outils souverains (ex: Albert ou Mistral local)",
-            D: "🎓 Organiser des ateliers pratiques approfondis pour former l'ensemble de mon équipe"
-        }
+        "correct": "B",
+        "explanation": "La Loi d'Amara explique pourquoi les premières expérimentations déçoivent parfois (surestimation court terme) avant de métamorphoser les organisations (long terme)."
     }
 ];
