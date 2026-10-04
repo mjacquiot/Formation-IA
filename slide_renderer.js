@@ -2473,6 +2473,204 @@ function getSlideHTML(slide, theme) {
                         </div>
                     ` : ''}
                 `;
+            } else if (slide.type === 'chat-hygiene-context') {
+                const scDirect = slide.scenarios?.direct || {};
+                const scExpl = slide.scenarios?.exploratory || {};
+
+                html += `
+                    <p style="margin-bottom:0.75rem;">${slide.intro || ''}</p>
+
+                    <!-- Contexte métier FPT -->
+                    <div class="hygiene-fpt-banner">
+                        <span class="fpt-tag">🏛️ Cas concret FPT</span>
+                        <span>${slide.contextUseScenario || ''}</span>
+                    </div>
+
+                    <!-- Sélecteur de scénario -->
+                    <div class="hygiene-scenario-nav">
+                        <button class="btn hygiene-tab-btn active" data-scenario="direct">
+                            🛣️ Scénario 1 : Trajectoire Directe (Besoin clair)
+                        </button>
+                        <button class="btn hygiene-tab-btn" data-scenario="exploratory">
+                            🧭 Scénario 2 : Trajectoire Exploratoire (Le Brouillon & Rebond)
+                        </button>
+                    </div>
+
+                    <!-- PANNEAU SCÉNARIO 1 : DIRECT -->
+                    <div id="hygiene-panel-direct" class="hygiene-panel active">
+                        <div class="hygiene-status-bar direct-theme">
+                            <div class="status-summary">
+                                <span class="badge-direct">🟢 Ligne Droite</span>
+                                <strong>${scDirect.summary || ''}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Métriques Scénario 1 -->
+                        <div class="hygiene-metrics-grid">
+                            <div class="hygiene-metric-card">
+                                <span class="metric-icon">🎯</span>
+                                <span class="metric-label">Bruit / Hors-sujet</span>
+                                <strong class="metric-val text-green">${scDirect.metrics?.noiseRate || '0%'}</strong>
+                                <span class="metric-sub">0 consigne contradictoire</span>
+                            </div>
+                            <div class="hygiene-metric-card">
+                                <span class="metric-icon">🧠</span>
+                                <span class="metric-label">Qualité du Contexte</span>
+                                <strong class="metric-val text-green">${scDirect.metrics?.contextHealth || '100%'}</strong>
+                                <span class="metric-sub">Attention maximale du LLM</span>
+                            </div>
+                            <div class="hygiene-metric-card">
+                                <span class="metric-icon">⚡</span>
+                                <span class="metric-label">Tokens Consommés</span>
+                                <strong class="metric-val text-blue">${scDirect.metrics?.tokensUsed || '~750'}</strong>
+                                <span class="metric-sub">Empreinte & coût minimes</span>
+                            </div>
+                            <div class="hygiene-metric-card">
+                                <span class="metric-icon">🛡️</span>
+                                <span class="metric-label">Risque d'Hallucination</span>
+                                <strong class="metric-val text-green">${scDirect.metrics?.riskOfHallucination || 'Nul'}</strong>
+                                <span class="metric-sub">Cadrage M.A.I.R.E. hermétique</span>
+                            </div>
+                        </div>
+
+                        <!-- Fil linéaire direct -->
+                        <div class="hygiene-thread-flow">
+                            ${(scDirect.steps || []).map((st) => `
+                                <div class="hygiene-step-bubble ${st.role === 'user' ? 'bubble-user' : 'bubble-assistant'}">
+                                    <div class="bubble-header">
+                                        <span class="bubble-role">${st.role === 'user' ? '👤 Agent territorial' : '🤖 Assistant IA'}</span>
+                                        <span class="bubble-step-badge">${st.label}</span>
+                                    </div>
+                                    <div class="bubble-body">${st.text}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- PANNEAU SCÉNARIO 2 : EXPLORATOIRE (LE BROUILLON) -->
+                    <div id="hygiene-panel-exploratory" class="hygiene-panel" style="display: none;">
+                        <div class="hygiene-status-bar exploratory-theme">
+                            <div class="status-summary">
+                                <span class="badge-exploratory">⚠️ Trajectoire Brouillon</span>
+                                <strong>${scExpl.summary || ''}</strong>
+                            </div>
+                        </div>
+
+                        <!-- Barre d'outils interactifs -->
+                        <div class="hygiene-toolbar">
+                            <div class="toolbar-actions-left">
+                                <button id="btn-hygiene-add-step" class="btn btn-secondary btn-sm">➕ Échange suivant (+1 prompt)</button>
+                                <button id="btn-hygiene-fill-all" class="btn btn-secondary btn-sm">⏩ Remplir les 10 échanges</button>
+                                <button id="btn-hygiene-reset" class="btn btn-secondary btn-sm">🔄 Réinitialiser</button>
+                            </div>
+                            <div class="toolbar-actions-right">
+                                <button id="btn-hygiene-purge-clean" class="btn btn-primary btn-hygiene-purge">
+                                    🧹 Extraire les Pépites & Ouvrir un Chat Propre
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Jauge de saturation du contexte -->
+                        <div class="hygiene-gauge-card">
+                            <div class="gauge-header">
+                                <span class="gauge-title">📊 Saturation & Bruit dans la Fenêtre de Contexte</span>
+                                <span id="hygiene-gauge-counts" class="gauge-counts">
+                                    <strong id="count-noise" class="text-red">0</strong> bruit | <strong id="count-gems" class="text-green">0</strong> pépite | <strong id="count-tokens">0</strong> tokens
+                                </span>
+                            </div>
+                            <div class="gauge-bar-track">
+                                <div id="gauge-bar-noise" class="gauge-fill-noise" style="width: 0%;"></div>
+                                <div id="gauge-bar-gems" class="gauge-fill-gems" style="width: 0%;"></div>
+                            </div>
+                            <div id="hygiene-gauge-diagnosis" class="gauge-diagnosis">
+                                💬 Cliquez sur <strong>« ➕ Échange suivant »</strong> ou <strong>« ⏩ Remplir les 10 échanges »</strong> pour simuler l'accumulation d'allers-retours.
+                            </div>
+                        </div>
+
+                        <!-- Conteneur des 2 vues : Vue Fil Brouillon vs Vue Chat Propre extrait -->
+                        <div id="hygiene-draft-view">
+                            <div class="draft-view-header">
+                                <h4 style="margin:0; font-size:0.95rem; color:var(--text-muted); display:flex; align-items:center; gap:0.5rem;">
+                                    💬 Fil de discussion en cours (<span id="hygiene-visible-count">0</span> / 10 messages)
+                                </h4>
+                                <span style="font-size:0.8rem; color:var(--text-muted);">
+                                    Observez les <strong style="color:var(--accent-red)">🔴 prompts bruyants</strong> et les <strong style="color:var(--accent-green)">🟢 pépites émergentes</strong>
+                                </span>
+                            </div>
+
+                            <div id="hygiene-draft-thread" class="hygiene-draft-thread">
+                                <!-- Bulles injectées par JS -->
+                            </div>
+                        </div>
+
+                        <!-- Vue Nouveau Chat Propre (post purge) -->
+                        <div id="hygiene-clean-view" style="display: none;" class="hygiene-clean-card">
+                            <div class="clean-card-header">
+                                <div class="clean-title-group">
+                                    <span class="clean-badge">✨ NOUVEAU CHAT DÉMARRÉ — CONTEXTE 100% PUR</span>
+                                    <h4>Le Résultat de l'Hygiène de Conversation</h4>
+                                </div>
+                                <button id="btn-hygiene-back-draft" class="btn btn-secondary btn-sm">↩️ Revoir le fil brouillon</button>
+                            </div>
+
+                            <!-- Comparatif Avant / Après -->
+                            <div class="clean-comparison-grid">
+                                <div class="clean-comparison-col before">
+                                    <span class="col-tag tag-danger">❌ Ancien Fil Pollué</span>
+                                    <ul>
+                                        <li>10 allers-retours accumulés (~4 800 tokens)</li>
+                                        <li>Ordres et contre-ordres (bio / pas bio, emojis / pas d'emojis)</li>
+                                        <li>L'IA mélange les versions et commence à halluciner</li>
+                                    </ul>
+                                </div>
+                                <div class="clean-comparison-col after">
+                                    <span class="col-tag tag-success">✅ Nouveau Chat Vierge</span>
+                                    <ul>
+                                        <li>1 prompt de synthèse pur (~600 tokens)</li>
+                                        <li>Zéro contradiction en mémoire vive</li>
+                                        <li>Livrable final généré du 1er coup avec une précision chirurgicale</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Les 2 Pépites Extraites -->
+                            <div class="gems-extracted-box">
+                                <h5 style="margin:0 0 0.5rem 0; color:var(--accent-green); font-size:0.92rem; display:flex; align-items:center; gap:0.5rem;">
+                                    💎 Les 2 pépites sauvées du brouillon :
+                                </h5>
+                                <ul style="margin:0; padding-left:1.25rem; font-size:0.85rem; line-height:1.6;">
+                                    ${(scExpl.extractedGems || []).map(g => `<li>${g}</li>`).join('')}
+                                </ul>
+                            </div>
+
+                            <!-- Le Prompt M.A.I.R.E. purifié prêt à l'emploi -->
+                            <div class="clean-prompt-synthetic-box">
+                                <div class="box-top-bar">
+                                    <span>📋 Le Prompt de Synthèse M.A.I.R.E. injecté dans le chat neuf :</span>
+                                    <button class="btn btn-secondary btn-xs" id="btn-copy-clean-prompt" style="font-size:0.75rem; padding:3px 8px;">📋 Copier</button>
+                                </div>
+                                <pre id="clean-prompt-text" class="clean-prompt-pre"><code>${this.escapeHtml(scExpl.cleanPromptSynthetic || '')}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Encart Règle des Pros -->
+                    <div class="hygiene-rules-grid">
+                        ${(slide.methodRules || []).map(r => `
+                            <div class="hygiene-rule-card">
+                                <div class="rule-icon">${r.icon}</div>
+                                <h5>${r.title}</h5>
+                                <p>${r.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${slide.takeaway ? `
+                        <div class="maire-example-box" style="margin-top:1.25rem; border-left-color: var(--accent-gold);">
+                            ${slide.takeaway}
+                        </div>
+                    ` : ''}
+                `;
             }
     return html;
 }

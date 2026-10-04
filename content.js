@@ -650,6 +650,187 @@ const THEMES = [
                 tips: "<strong>💡 Conseil de pro :</strong> Si vos ressources sont très longues (ex: un rapport PDF de 50 pages), n'hésitez pas à utiliser des outils dotés d'une grande fenêtre de contexte (comme Claude ou Gemini) pour y glisser le fichier entier."
             },
             {
+                title: "Hygiène de Conversation : L'Effet Brouillon vs Conversation Propre",
+                type: "chat-hygiene-context",
+                intro: "Dans un échange avec un LLM, accumuler des dizaines d'allers-retours sature et embrouille la fenêtre de contexte. Savoir jeter son brouillon pour repartir sur une conversation propre est le secret d'une IA performante.",
+                contextUseScenario: "Exemple FPT : Rédiger une note de cadrage pour la nouvelle tarification sociale des cantines scolaires (Quotient familial, loi EGalim, inflation).",
+                scenarios: {
+                    direct: {
+                        id: "direct",
+                        title: "🛣️ Scénario 1 : Trajectoire Directe (Besoin clair dès le départ)",
+                        badge: "Ligne Droite",
+                        summary: "L'agent sait précisément ce qu'il veut. 1 prompt M.A.I.R.E. structuré + 1 ajustement ciblé = Résultat impeccable.",
+                        metrics: {
+                            noiseRate: "0%",
+                            contextHealth: "Excellent (100% pertinent)",
+                            tokensUsed: "~750 tokens",
+                            riskOfHallucination: "Nul"
+                        },
+                        steps: [
+                            {
+                                role: "user",
+                                label: "Prompt 1 (M.A.I.R.E. complet)",
+                                text: "<strong>[Moi]</strong> Resp. finances & éducation scolaire. <strong>[Agent]</strong> Expert finances locales. <strong>[Info]</strong> Calcule l'impact d'une grille de 4 tranches de quotient familial pour nos 1 200 écoliers. <strong>[Ressources]</strong> Grille tarifaire votée (1€ à 4,90€) et coût de revient communal de 4,20€/repas. <strong>[Exigence]</strong> Tableau Markdown avec gain moyen par famille et balance pour le budget communal."
+                            },
+                            {
+                                role: "assistant",
+                                label: "Réponse 1",
+                                text: "✅ Tableau Markdown généré immédiatement avec les 4 tranches, le reste à charge des familles et la subvention communale compensatrice."
+                            },
+                            {
+                                role: "user",
+                                label: "Prompt 2 (Ajustement mineur)",
+                                text: "Ajoute une colonne avec le taux d'effort moyen des ménages de la tranche 1."
+                            },
+                            {
+                                role: "assistant",
+                                label: "Sortie Finale 🎯",
+                                text: "🏆 Note de cadrage parfaite, validée en 2 minutes. Contexte limpide, zéro hallucination, réutilisation immédiate."
+                            }
+                        ]
+                    },
+                    exploratory: {
+                        id: "exploratory",
+                        title: "🧭 Scénario 2 : Trajectoire Exploratoire (Le Brouillon & Rebond)",
+                        badge: "Exploration & Bruit",
+                        summary: "L'agent ne sait pas exactement où il va et teste des pistes. 10 échanges s'enchaînent : 8 prompts vagues/contradictoires et 2 pépites. Le fil est pollué, l'IA risque de divaguer.",
+                        metricsPolluted: {
+                            noiseRate: "80%",
+                            contextHealth: "Critique (Pollution & Contradictions)",
+                            tokensUsed: "~4 800 tokens",
+                            riskOfHallucination: "Élevé (L'IA se contredit et mélange les versions)"
+                        },
+                        metricsClean: {
+                            noiseRate: "0%",
+                            contextHealth: "Parfait (100% pur)",
+                            tokensUsed: "~600 tokens",
+                            riskOfHallucination: "Nul"
+                        },
+                        draftSteps: [
+                            {
+                                id: 1,
+                                type: "noise",
+                                role: "user",
+                                label: "Prompt 1 (Vague)",
+                                text: "Fais-moi un texte sur les tarifs de cantine.",
+                                comment: "Trop vague : l'IA invente des chiffres au hasard."
+                            },
+                            {
+                                id: 2,
+                                type: "noise",
+                                role: "user",
+                                label: "Prompt 2 (Changement de cap)",
+                                text: "Non en fait parle plutôt du bio et des circuits courts d'abord.",
+                                comment: "Contradiction : le modèle change brutalement d'axe."
+                            },
+                            {
+                                id: 3,
+                                type: "noise",
+                                role: "user",
+                                label: "Prompt 3 (Hésitation)",
+                                text: "Oublie le bio pour l'instant, focalise sur les familles modestes.",
+                                comment: "Bruit résiduel : les consignes précédentes encombrent la mémoire."
+                            },
+                            {
+                                id: 4,
+                                type: "gem",
+                                role: "user",
+                                label: "Prompt 4 (🟢 Pépite n°1 : Données officielles)",
+                                text: "Voici les 4 tranches exactes de quotient familial votées : T1 (<450€ : 1,00€), T2 (450-800€ : 2,50€), T3 (800-1200€ : 3,80€), T4 (>1200€ : 4,90€).",
+                                comment: "Pépite métier ! Données officielles et précises."
+                            },
+                            {
+                                id: 5,
+                                type: "noise",
+                                role: "user",
+                                label: "Prompt 5 (Hors-sujet)",
+                                text: "Et si on parlait aussi des animateurs du temps méridien ?",
+                                comment: "Digression : l'IA commence à mélanger cantine et personnel."
+                            },
+                            {
+                                id: 6,
+                                type: "noise",
+                                role: "user",
+                                label: "Prompt 6 (Annulation)",
+                                text: "Non laisse tomber les animateurs, reviens uniquement aux tarifs des repas.",
+                                comment: "Le contexte est saturé d'ordres et de contre-ordres."
+                            },
+                            {
+                                id: 7,
+                                type: "noise",
+                                role: "user",
+                                label: "Prompt 7 (Tâtonnement)",
+                                text: "Fais un tableau mais rajoute des hypothèses d'inflation denrées à 8%.",
+                                comment: "Complexité inutile qui dilue la cible."
+                            },
+                            {
+                                id: 8,
+                                type: "gem",
+                                role: "user",
+                                label: "Prompt 8 (🟢 Pépite n°2 : Structure cible)",
+                                text: "Garde exactement cette structure : 1. Contexte légal EGalim, 2. Nouvelle grille tarifaire en 4 tranches, 3. Impact budgétaire communal.",
+                                comment: "Pépite de structure ! Le plan idéal est trouvé."
+                            },
+                            {
+                                id: 9,
+                                type: "noise",
+                                role: "user",
+                                label: "Prompt 9 (Formatage douteux)",
+                                text: "Mets plein d'emojis partout pour rendre le document moderne.",
+                                comment: "Inadaptation au contexte institutionnel."
+                            },
+                            {
+                                id: 10,
+                                type: "noise",
+                                role: "user",
+                                label: "Prompt 10 (Correction tardive)",
+                                text: "En fait enlève les emojis, c'est pour les élus du conseil municipal.",
+                                comment: "10 allers-retours accumulés : le LLM hésite entre les 10 versions."
+                            }
+                        ],
+                        extractedGems: [
+                            "<strong>Données chiffrées officielles (Prompt 4) :</strong> Les 4 tranches de quotient familial (1,00€, 2,50€, 3,80€, 4,90€) et coût de revient (4,20€).",
+                            "<strong>Structure de cadrage validée (Prompt 8) :</strong> Plan en 3 parties (1. Contexte EGalim, 2. Grille tarifaire, 3. Impact budgétaire)."
+                        ],
+                        cleanPromptSynthetic: `[MOI] : Responsable des affaires scolaires & finances dans une commune de 18 000 habitants.
+
+[AGENT] : Agis en tant qu'expert en finances publiques locales et restauration scolaire.
+
+[INFORMATION] : Rédige la note de cadrage pour la nouvelle tarification progressive des cantines scolaires.
+
+[RESSOURCES] : Appuie-toi exclusivement sur ces 4 tranches de quotient familial :
+- Tranche 1 (< 450 €) : 1,00 € / repas
+- Tranche 2 (450 € à 800 €) : 2,50 € / repas
+- Tranche 3 (800 € à 1 200 €) : 3,80 € / repas
+- Tranche 4 (> 1 200 €) : 4,90 € / repas
+(Coût de revient communal : 4,20 € / repas).
+
+[EXIGENCE] : Document rédigé sur un ton institutionnel strict selon ce plan en 3 parties :
+1. Contexte réglementaire (loi EGalim & justice sociale)
+2. Nouvelle grille tarifaire et gain moyen par famille
+3. Bilan d'impact budgétaire prévisionnel pour la collectivité.`
+                    }
+                },
+                methodRules: [
+                    {
+                        icon: "📝",
+                        title: "1. Acceptez le premier chat comme un brouillon",
+                        desc: "Il est parfaitement normal de ne pas savoir ce que l'on veut au départ. Utilisez l'IA comme un partenaire de réflexion (brainstorming), posez des questions naïves, explorez et testez des idées."
+                    },
+                    {
+                        icon: "🪄",
+                        title: "2. Le Prompt Magique de Synthèse",
+                        desc: "Avant de quitter votre brouillon, demandez à l'IA : <em>« Synthétise l'ensemble de nos échanges validés sous la forme d'un prompt M.A.I.R.E. parfait et exhaustif pour démarrer une nouvelle conversation vierge. »</em>"
+                    },
+                    {
+                        icon: "🧹",
+                        title: "3. Ouvrez TOUJOURS un nouveau chat",
+                        desc: "Copiez ce prompt de synthèse dans un nouveau fil vierge. L'IA repart avec 100% de mémoire utile, 0 contradiction, une rapidité maximale et zéro risque d'hallucination."
+                    }
+                ],
+                takeaway: "<strong>💡 Règle d'or :</strong> Ne restez jamais dans un fil infini de 30 messages pour faire un travail sérieux. Dès que vos idées sont claires, <strong>tuez la conversation brouillon</strong> et ouvrez un nouveau fil propre avec votre prompt de synthèse !"
+            },
+            {
                 title: "Ce que peut vous fournir en sortie une IA",
                 type: "ai-output-formats",
                 intro: "L'IA ne sert pas seulement à rédiger des courriers ou des paragraphes de texte : elle est un moteur de génération polymorphe. Mais attention aux illusions de facilité avec les formats bureautiques propriétaires !",

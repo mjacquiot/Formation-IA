@@ -332,6 +332,174 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
         }
     }
 
+    // Interactivity for chat-hygiene-context (Effet Brouillon vs Conversation Propre)
+    if (slide.type === 'chat-hygiene-context') {
+        const tabBtns = this.slideContainer.querySelectorAll('.hygiene-tab-btn');
+        const panelDirect = this.slideContainer.querySelector('#hygiene-panel-direct');
+        const panelExpl = this.slideContainer.querySelector('#hygiene-panel-exploratory');
+
+        // Tab scenario switcher
+        tabBtns.forEach(btn => {
+            btn.onclick = () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const sc = btn.getAttribute('data-scenario');
+                if (sc === 'direct') {
+                    if (panelDirect) panelDirect.style.display = 'block';
+                    if (panelExpl) panelExpl.style.display = 'none';
+                } else {
+                    if (panelDirect) panelDirect.style.display = 'none';
+                    if (panelExpl) panelExpl.style.display = 'block';
+                }
+            };
+        });
+
+        // Exploratory scenario interactivity
+        const scExpl = slide.scenarios?.exploratory || {};
+        const draftSteps = scExpl.draftSteps || [];
+        let visibleCount = 3; // start with 3 steps to show progression
+
+        const btnAddStep = this.slideContainer.querySelector('#btn-hygiene-add-step');
+        const btnFillAll = this.slideContainer.querySelector('#btn-hygiene-fill-all');
+        const btnReset = this.slideContainer.querySelector('#btn-hygiene-reset');
+        const btnPurgeClean = this.slideContainer.querySelector('#btn-hygiene-purge-clean');
+        const btnBackDraft = this.slideContainer.querySelector('#btn-hygiene-back-draft');
+        const btnCopyPrompt = this.slideContainer.querySelector('#btn-copy-clean-prompt');
+
+        const draftView = this.slideContainer.querySelector('#hygiene-draft-view');
+        const cleanView = this.slideContainer.querySelector('#hygiene-clean-view');
+        const threadContainer = this.slideContainer.querySelector('#hygiene-draft-thread');
+
+        const countNoiseEl = this.slideContainer.querySelector('#count-noise');
+        const countGemsEl = this.slideContainer.querySelector('#count-gems');
+        const countTokensEl = this.slideContainer.querySelector('#count-tokens');
+        const visibleCountEl = this.slideContainer.querySelector('#hygiene-visible-count');
+        const barNoise = this.slideContainer.querySelector('#gauge-bar-noise');
+        const barGems = this.slideContainer.querySelector('#gauge-bar-gems');
+        const diagnosisEl = this.slideContainer.querySelector('#hygiene-gauge-diagnosis');
+
+        const renderDraftThread = (count) => {
+            if (!threadContainer) return;
+            const currentSteps = draftSteps.slice(0, count);
+
+            threadContainer.innerHTML = currentSteps.map((st) => {
+                const isGem = st.type === 'gem';
+                const tagClass = isGem ? 'tag-gem' : 'tag-noise';
+                const tagLabel = isGem ? '🟢 Pépite Métier' : '🔴 Consigne Confuse / Bruit';
+                const cardClass = isGem ? 'draft-bubble-gem' : 'draft-bubble-noise';
+                const icon = isGem ? '💎' : '⚠️';
+
+                return `
+                    <div class="draft-step-bubble ${cardClass}">
+                        <div class="draft-bubble-head">
+                            <span class="draft-bubble-step">${st.label}</span>
+                            <span class="bubble-tag ${tagClass}">${tagLabel}</span>
+                        </div>
+                        <div class="draft-bubble-text">${this.escapeHtml(st.text)}</div>
+                        <div class="draft-bubble-comment ${isGem ? 'gem-comment' : ''}">
+                            <span class="comment-icon">${icon}</span>
+                            <span class="comment-desc">${st.comment}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Calculate metrics
+            const noiseCount = currentSteps.filter(s => s.type === 'noise').length;
+            const gemCount = currentSteps.filter(s => s.type === 'gem').length;
+            const tokenEstimate = count === 0 ? 0 : 350 + (noiseCount * 420) + (gemCount * 550);
+
+            if (countNoiseEl) countNoiseEl.innerText = noiseCount;
+            if (countGemsEl) countGemsEl.innerText = gemCount;
+            if (countTokensEl) countTokensEl.innerText = '~' + tokenEstimate.toLocaleString('fr-FR');
+            if (visibleCountEl) visibleCountEl.innerText = count;
+
+            const noisePct = (noiseCount / 10) * 100;
+            const gemPct = (gemCount / 10) * 100;
+            if (barNoise) barNoise.style.width = noisePct + '%';
+            if (barGems) barGems.style.width = gemPct + '%';
+
+            if (diagnosisEl) {
+                if (count <= 2) {
+                    diagnosisEl.innerHTML = `💬 <em>Début du fil :</em> L'agent cherche son besoin. Déjà du bruit résiduel accumulé.`;
+                } else if (count < 8) {
+                    diagnosisEl.innerHTML = `⚠️ <em>Saturation moyenne :</em> Des pépites émergent, mais les contre-ordres créent de l'incohérence pour le modèle.`;
+                } else {
+                    diagnosisEl.innerHTML = `🚨 <strong style="color:var(--accent-red)">Saturation critique :</strong> 8 prompts pollués vs 2 pépites. Le LLM risque de mélanger les versions ! Cliquez sur <strong>« 🧹 Extraire les Pépites »</strong> ci-dessus.`;
+                }
+            }
+
+            if (btnAddStep) {
+                btnAddStep.disabled = (count >= draftSteps.length);
+                btnAddStep.style.opacity = (count >= draftSteps.length) ? '0.5' : '1';
+            }
+        };
+
+        if (btnAddStep) {
+            btnAddStep.onclick = () => {
+                if (visibleCount < draftSteps.length) {
+                    visibleCount++;
+                    renderDraftThread(visibleCount);
+                }
+            };
+        }
+
+        if (btnFillAll) {
+            btnFillAll.onclick = () => {
+                visibleCount = draftSteps.length;
+                renderDraftThread(visibleCount);
+            };
+        }
+
+        if (btnReset) {
+            btnReset.onclick = () => {
+                visibleCount = 1;
+                if (draftView) draftView.style.display = 'block';
+                if (cleanView) cleanView.style.display = 'none';
+                renderDraftThread(visibleCount);
+            };
+        }
+
+        if (btnPurgeClean) {
+            btnPurgeClean.onclick = () => {
+                if (draftView) draftView.style.display = 'none';
+                if (cleanView) cleanView.style.display = 'block';
+
+                // Update gauge to 100% clean
+                if (barNoise) barNoise.style.width = '0%';
+                if (barGems) barGems.style.width = '100%';
+                if (countNoiseEl) countNoiseEl.innerText = '0';
+                if (countGemsEl) countGemsEl.innerText = '2';
+                if (countTokensEl) countTokensEl.innerText = '~600';
+                if (diagnosisEl) {
+                    diagnosisEl.innerHTML = `✨ <strong style="color:var(--accent-green)">Contexte 100% purifié !</strong> Les 2 pépites ont été synthétisées en 1 prompt M.A.I.R.E. net dans un nouveau chat vierge.`;
+                }
+            };
+        }
+
+        if (btnBackDraft) {
+            btnBackDraft.onclick = () => {
+                if (draftView) draftView.style.display = 'block';
+                if (cleanView) cleanView.style.display = 'none';
+                renderDraftThread(visibleCount);
+            };
+        }
+
+        if (btnCopyPrompt) {
+            btnCopyPrompt.onclick = () => {
+                const text = scExpl.cleanPromptSynthetic || '';
+                navigator.clipboard.writeText(text).then(() => {
+                    const prev = btnCopyPrompt.innerText;
+                    btnCopyPrompt.innerText = 'Copié ! ✅';
+                    setTimeout(() => { btnCopyPrompt.innerText = prev; }, 2000);
+                }).catch(() => {});
+            };
+        }
+
+        // Initial render
+        renderDraftThread(visibleCount);
+    }
+
     // Post-render bindings
     if (slide.type === 'datacenter-cost') {
             const tabs = this.slideContainer.querySelectorAll('.datacenter-tab-btn');

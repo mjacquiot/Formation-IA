@@ -6110,3 +6110,546 @@ body {
     }
 }
 
+/* ==========================================================================
+   Slide : Hygiène de Conversation (L'Effet Brouillon vs Conversation Propre)
+   ========================================================================== */
+
+.hygiene-fpt-banner {
+    background: rgba(14, 165, 233, 0.08);
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    color: var(--text-title);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.45;
+}
+
+.hygiene-fpt-banner .fpt-tag {
+    background: var(--accent-blue);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.hygiene-scenario-nav {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.hygiene-tab-btn {
+    flex: 1;
+    min-width: 240px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.hygiene-tab-btn:hover {
+    color: var(--text-title);
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.hygiene-tab-btn.active {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(139, 92, 246, 0.15));
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.15);
+}
+
+.hygiene-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.hygiene-status-bar {
+    border-radius: 8px;
+    padding: 0.85rem 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hygiene-status-bar.direct-theme {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.hygiene-status-bar.exploratory-theme {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.badge-direct {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+    border: 1px solid var(--accent-green);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+.badge-exploratory {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--accent-gold);
+    border: 1px solid var(--accent-gold);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
+.hygiene-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+}
+
+.hygiene-metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+}
+
+.hygiene-metric-card .metric-icon {
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.hygiene-metric-card .metric-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.hygiene-metric-card .metric-val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+}
+
+.hygiene-metric-card .metric-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.text-green { color: var(--accent-green); }
+.text-red { color: var(--accent-red); }
+.text-blue { color: var(--accent-blue); }
+
+/* Thread flow direct */
+.hygiene-thread-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.hygiene-step-bubble {
+    border-radius: 8px;
+    padding: 0.85rem 1.1rem;
+    line-height: 1.5;
+    font-size: 0.88rem;
+}
+
+.hygiene-step-bubble.bubble-user {
+    background: rgba(14, 165, 233, 0.08);
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    border-left: 4px solid var(--accent-blue);
+}
+
+.hygiene-step-bubble.bubble-assistant {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-left: 4px solid var(--accent-green);
+}
+
+.bubble-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+
+.bubble-role {
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--text-title);
+}
+
+.bubble-step-badge {
+    font-size: 0.72rem;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text-muted);
+}
+
+/* Exploratory Toolbar */
+.hygiene-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+}
+
+.toolbar-actions-left {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-hygiene-purge {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3) !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn-hygiene-purge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45) !important;
+}
+
+/* Gauge card */
+.hygiene-gauge-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.85rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.gauge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.gauge-title {
+    font-weight: 700;
+    color: var(--text-title);
+}
+
+.gauge-counts {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.gauge-bar-track {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+}
+
+.gauge-fill-noise {
+    background: linear-gradient(90deg, #f87171, #ef4444);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.gauge-fill-gems {
+    background: linear-gradient(90deg, #34d399, #10b981);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.gauge-diagnosis {
+    font-size: 0.82rem;
+    color: var(--text-title);
+    line-height: 1.45;
+}
+
+/* Draft thread list */
+.draft-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.hygiene-draft-thread {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.draft-step-bubble {
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+.draft-bubble-noise {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-left: 4px solid var(--accent-red);
+}
+
+.draft-bubble-gem {
+    background: rgba(16, 185, 129, 0.09);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-left: 4px solid var(--accent-green);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+}
+
+.draft-bubble-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.3rem;
+}
+
+.draft-bubble-step {
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--text-title);
+}
+
+.bubble-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.tag-noise {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.tag-gem {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+}
+
+.draft-bubble-text {
+    color: var(--text-title);
+    margin-bottom: 0.35rem;
+}
+
+.draft-bubble-comment {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.draft-bubble-comment.gem-comment {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    font-weight: 600;
+}
+
+/* Clean post-purge card */
+.hygiene-clean-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 8px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.08);
+}
+
+.clean-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clean-badge {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+    border: 1px solid var(--accent-green);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 0.25rem;
+}
+
+.clean-card-header h4 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--text-title);
+}
+
+.clean-comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.clean-comparison-col {
+    border-radius: 8px;
+    padding: 0.85rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.clean-comparison-col.before {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.clean-comparison-col.after {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.clean-comparison-col ul {
+    margin: 0.4rem 0 0 1.15rem;
+    padding: 0;
+}
+
+.col-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
+}
+
+.tag-danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.tag-success {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+}
+
+.gems-extracted-box {
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px dashed rgba(16, 185, 129, 0.35);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+}
+
+.clean-prompt-synthetic-box {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.clean-prompt-synthetic-box .box-top-bar {
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.clean-prompt-pre {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    font-family: 'Consolas', 'Monaco', monospace;
+    white-space: pre-wrap;
+    color: #e2e8f0;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+/* Pro rules grid */
+.hygiene-rules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.hygiene-rule-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.hygiene-rule-card .rule-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.2rem;
+}
+
+.hygiene-rule-card h5 {
+    margin: 0;
+    font-size: 0.88rem;
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-title);
+}
+
+.hygiene-rule-card p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+    .hygiene-metrics-grid,
+    .clean-comparison-grid,
+    .hygiene-rules-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
