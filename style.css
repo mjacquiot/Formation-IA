@@ -5662,3 +5662,451 @@ body {
     }
 }
 
+/* ===================================================
+   BILAN ÉCOLOGIQUE & RESSOURCES : CYCLE DE VIE AGENT
+   =================================================== */
+
+.eco-scale-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+}
+
+.scale-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-title);
+}
+
+.scale-buttons-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.scale-btn {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-body);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.scale-btn:hover {
+    border-color: var(--accent-purple);
+    color: var(--accent-purple);
+}
+
+.scale-btn.active {
+    background: var(--accent-purple);
+    border-color: var(--accent-purple);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.eco-profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.eco-profile-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-top: 4px solid var(--accent-blue);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+.eco-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.profile-icon-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.profile-icon {
+    font-size: 1.75rem;
+}
+
+.profile-icon-title h4 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text-title);
+    font-family: 'Outfit', sans-serif;
+}
+
+.profile-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.profile-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.profile-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin-bottom: 1rem;
+    min-height: 48px;
+}
+
+.profile-metrics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.metric-row {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.75rem 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.metric-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.metric-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-title);
+}
+
+.metric-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.metric-val-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.metric-value {
+    font-size: 0.95rem;
+    color: var(--text-title);
+    font-weight: 600;
+}
+
+.metric-value .val-num {
+    font-weight: 800;
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-title);
+}
+
+.surplus-tag {
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+}
+
+.tag-neutral {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.tag-warning {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.tag-danger {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+.profile-card-footer {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+}
+
+.footer-label {
+    color: var(--text-muted);
+}
+
+.footer-val {
+    font-weight: 800;
+    font-size: 0.92rem;
+}
+
+.eco-breakdown-control {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.breakdown-prompt {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-title);
+}
+
+.breakdown-tabs-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.breakdown-tab-btn {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-body);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.breakdown-tab-btn:hover {
+    border-color: var(--accent-purple);
+    color: var(--accent-purple);
+}
+
+.breakdown-tab-btn.active {
+    background: var(--accent-purple);
+    border-color: var(--accent-purple);
+    color: #ffffff;
+}
+
+.eco-detail-pane {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.detail-pane-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.detail-pane-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-title);
+    font-family: 'Outfit', sans-serif;
+}
+
+.detail-pane-unit {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.detail-columns-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.detail-col-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-top: 3px solid var(--accent-blue);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.detail-col-title {
+    font-size: 0.88rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.detail-items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.detail-items-list li {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: var(--text-body);
+    position: relative;
+    padding-left: 1rem;
+}
+
+.detail-items-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--accent-purple);
+    font-weight: bold;
+}
+
+.eco-water-focus-card {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.06), rgba(99, 102, 241, 0.06));
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    border-left: 5px solid var(--accent-sky);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.water-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.water-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.water-icon {
+    font-size: 1.5rem;
+}
+
+.water-title-group h4 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #0369a1;
+    font-family: 'Outfit', sans-serif;
+}
+
+.water-sub {
+    margin: 0.15rem 0 0 0;
+    font-size: 0.8rem;
+    color: #0284c7;
+}
+
+.btn-toggle-water {
+    background: #ffffff;
+    border: 1px solid #7dd3fc;
+    color: #0284c7;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-toggle-water:hover {
+    background: #f0f9ff;
+    border-color: #0284c7;
+}
+
+.water-net-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.water-net-item {
+    background: #ffffff;
+    border: 1px solid #e0f2fe;
+    border-radius: 8px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.water-net-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-title);
+}
+
+.water-net-val {
+    font-size: 1.15rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.water-net-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+}
+
+.water-explanation-box {
+    margin-top: 1rem;
+    background: #ffffff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: #0c4a6e;
+}
+
+@media (max-width: 900px) {
+    .eco-profiles-grid,
+    .detail-columns-grid,
+    .water-net-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

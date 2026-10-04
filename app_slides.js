@@ -268,6 +268,70 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
         });
     }
 
+    // Interactivity for eco-lifecycle-agent
+    if (slide.type === 'eco-lifecycle-agent') {
+        const scaleBtns = this.slideContainer.querySelectorAll('.scale-btn');
+        const valNums = this.slideContainer.querySelectorAll('.val-num');
+
+        // Multiplier scale interaction
+        scaleBtns.forEach(btn => {
+            btn.onclick = () => {
+                scaleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const multiplier = parseInt(btn.getAttribute('data-multiplier'), 10) || 1;
+
+                valNums.forEach(el => {
+                    const baseVal = parseFloat(el.getAttribute('data-base')) || 0;
+                    const computed = Math.round(baseVal * multiplier);
+                    el.innerText = computed.toLocaleString('fr-FR');
+                });
+            };
+        });
+
+        // Detail breakdown tabs interaction
+        const breakdownTabs = this.slideContainer.querySelectorAll('.breakdown-tab-btn');
+        const detailTitle = this.slideContainer.querySelector('#detail-pane-title');
+        const detailColsGrid = this.slideContainer.querySelector('#detail-columns-grid');
+        const metrics = slide.metricsDetails || {};
+        const profiles = slide.profiles || [];
+
+        breakdownTabs.forEach(tab => {
+            tab.onclick = () => {
+                breakdownTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const metricKey = tab.getAttribute('data-metric');
+                const metricData = metrics[metricKey];
+
+                if (metricData && detailTitle && detailColsGrid) {
+                    detailTitle.innerText = metricData.label;
+
+                    detailColsGrid.innerHTML = (metricData.details || []).map(dt => {
+                        const prof = profiles.find(p => p.id === dt.profileId) || {};
+                        return `
+                            <div class="detail-col-card" style="border-top-color: ${prof.color};">
+                                <div class="detail-col-title" style="color: ${prof.color};">${prof.icon} ${prof.title}</div>
+                                <ul class="detail-items-list">
+                                    ${dt.items.map(it => `<li>${it}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            };
+        });
+
+        // Water detail toggle
+        const btnToggleWater = this.slideContainer.querySelector('#btn-toggle-water-detail');
+        const waterBox = this.slideContainer.querySelector('#water-explanation-box');
+        if (btnToggleWater && waterBox) {
+            btnToggleWater.onclick = () => {
+                const isHidden = waterBox.style.display === 'none';
+                waterBox.style.display = isHidden ? 'block' : 'none';
+                btnToggleWater.innerText = isHidden ? '✕ Masquer l\'explication' : '💡 Comprendre ce que devient l\'eau';
+            };
+        }
+    }
+
     // Post-render bindings
     if (slide.type === 'datacenter-cost') {
             const tabs = this.slideContainer.querySelectorAll('.datacenter-tab-btn');

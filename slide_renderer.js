@@ -2330,6 +2330,149 @@ function getSlideHTML(slide, theme) {
                         ` : ''}
                     </div>
                 `;
+            } else if (slide.type === 'eco-lifecycle-agent') {
+                const profiles = slide.profiles || [];
+                const metrics = slide.metricsDetails || {};
+                const water = slide.waterFocus || {};
+                html += `
+                    <p style="margin-bottom:1rem; font-size:1.02rem; line-height:1.55;">${slide.intro || ''}</p>
+
+                    <!-- Simulateur d'Échelle (Nombre d'agents dans la collectivité) -->
+                    <div class="eco-scale-bar">
+                        <span class="scale-label">👥 Échelle de simulation :</span>
+                        <div class="scale-buttons-group" id="eco-scale-buttons">
+                            <button class="scale-btn active" data-multiplier="1">1 Agent</button>
+                            <button class="scale-btn" data-multiplier="10">🏛️ 10 Agents (Mairie rurale)</button>
+                            <button class="scale-btn" data-multiplier="50">🏢 50 Agents (Ville moyenne)</button>
+                            <button class="scale-btn" data-multiplier="200">🌆 200 Agents (Agglomération)</button>
+                        </div>
+                    </div>
+
+                    <!-- 3 Colonnes Comparatives (Circuit Complet) -->
+                    <div class="eco-profiles-grid">
+                        ${profiles.map((p) => `
+                            <div class="eco-profile-card profile-${p.id}" style="border-top-color: ${p.color};">
+                                <div class="eco-profile-header">
+                                    <div class="profile-icon-title">
+                                        <span class="profile-icon">${p.icon}</span>
+                                        <div>
+                                            <h4>${p.title}</h4>
+                                            <div class="profile-subtitle">${p.subtitle}</div>
+                                        </div>
+                                    </div>
+                                    <span class="profile-badge" style="background:${p.color}18; color:${p.color}; border:1px solid ${p.color}40;">${p.badge}</span>
+                                </div>
+                                
+                                <p class="profile-desc">${p.desc}</p>
+
+                                <div class="profile-metrics-list">
+                                    <div class="metric-row">
+                                        <div class="metric-info">
+                                            <span class="metric-name">⚡ Électricité</span>
+                                            <span class="metric-sub">Bureau + Réseau + IA</span>
+                                        </div>
+                                        <div class="metric-val-wrapper">
+                                            <span class="metric-value"><strong class="val-num" data-base="${p.kwh}">${p.kwh.toLocaleString('fr-FR')}</strong> kWh/an</span>
+                                            ${p.kwhSurplusPct > 0 ? `<span class="surplus-tag tag-warning">+${p.kwhSurplusPct}%</span>` : `<span class="surplus-tag tag-neutral">Base</span>`}
+                                        </div>
+                                    </div>
+
+                                    <div class="metric-row">
+                                        <div class="metric-info">
+                                            <span class="metric-name">🌍 Empreinte Carbone</span>
+                                            <span class="metric-sub">Matériel + Chauffage + IA</span>
+                                        </div>
+                                        <div class="metric-val-wrapper">
+                                            <span class="metric-value"><strong class="val-num" data-base="${p.co2}">${p.co2.toLocaleString('fr-FR')}</strong> kg CO₂e</span>
+                                            ${p.co2SurplusPct > 0 ? `<span class="surplus-tag tag-warning">+${p.co2SurplusPct}%</span>` : `<span class="surplus-tag tag-neutral">Base</span>`}
+                                        </div>
+                                    </div>
+
+                                    <div class="metric-row">
+                                        <div class="metric-info">
+                                            <span class="metric-name">⛏️ Matières Premières</span>
+                                            <span class="metric-sub">Minerais extraits amortis</span>
+                                        </div>
+                                        <div class="metric-val-wrapper">
+                                            <span class="metric-value"><strong class="val-num" data-base="${p.minerals}">${p.minerals.toLocaleString('fr-FR')}</strong> kg/an</span>
+                                            ${p.mineralsSurplusPct > 0 ? `<span class="surplus-tag tag-danger">+${p.mineralsSurplusPct}%</span>` : `<span class="surplus-tag tag-neutral">Base</span>`}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="profile-card-footer">
+                                    <span class="footer-label">Surcoût total empreinte :</span>
+                                    <strong class="footer-val" style="color:${p.color};">${p.id === 'classic' ? '0 % (Référence)' : (p.id === 'generative' ? '+6% à +7%' : '+51% à +75%')}</strong>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Boutons pour Déplier le Détail du Circuit -->
+                    <div class="eco-breakdown-control">
+                        <span class="breakdown-prompt">🔍 Cliquez pour comprendre d'où viennent ces chiffres :</span>
+                        <div class="breakdown-tabs-group" id="eco-breakdown-tabs">
+                            <button class="breakdown-tab-btn active" data-metric="kwh">⚡ Détail Électricité</button>
+                            <button class="breakdown-tab-btn" data-metric="co2">🌍 Détail Carbone</button>
+                            <button class="breakdown-tab-btn" data-metric="minerals">⛏️ Détail Matières</button>
+                        </div>
+                    </div>
+
+                    <!-- Zone de Détail Déplié Dynamique -->
+                    <div class="eco-detail-pane" id="eco-detail-pane">
+                        <div class="detail-pane-header">
+                            <h4 id="detail-pane-title">⚡ Décomposition du circuit électrique complet</h4>
+                            <span class="detail-pane-unit">Comprend bâtiment, chauffage, poste informatique et datacenters</span>
+                        </div>
+                        <div class="detail-columns-grid" id="detail-columns-grid">
+                            ${(metrics.kwh?.details || []).map(dt => {
+                                const prof = profiles.find(p => p.id === dt.profileId) || {};
+                                return `
+                                    <div class="detail-col-card" style="border-top-color: ${prof.color};">
+                                        <div class="detail-col-title" style="color: ${prof.color};">${prof.icon} ${prof.title}</div>
+                                        <ul class="detail-items-list">
+                                            ${dt.items.map(it => `<li>${it}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Focus Spécifique : L'Eau Évaporée par les Datacenters -->
+                    <div class="eco-water-focus-card">
+                        <div class="water-card-header">
+                            <div class="water-title-group">
+                                <span class="water-icon">💧</span>
+                                <div>
+                                    <h4>${water.title || ''}</h4>
+                                    <p class="water-sub">${water.subtitle || ''}</p>
+                                </div>
+                            </div>
+                            <button class="btn-toggle-water" id="btn-toggle-water-detail">💡 Comprendre ce que devient l'eau</button>
+                        </div>
+
+                        <div class="water-net-grid">
+                            ${(water.netUsage || []).map((w, idx) => `
+                                <div class="water-net-item">
+                                    <span class="water-net-label">${w.label}</span>
+                                    <strong class="water-net-val" style="color:${idx === 0 ? 'var(--text-muted)' : (idx === 1 ? 'var(--accent-purple)' : 'var(--accent-red)')};">${w.val}</strong>
+                                    <span class="water-net-desc">${w.desc}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="water-explanation-box" id="water-explanation-box" style="display: none;">
+                            ${water.explanation || ''}
+                        </div>
+                    </div>
+
+                    ${slide.takeaway ? `
+                        <div class="maire-example-box" style="margin-top:1.25rem; border-left-color: var(--accent-green);">
+                            ${slide.takeaway}
+                        </div>
+                    ` : ''}
+                `;
             }
     return html;
 }

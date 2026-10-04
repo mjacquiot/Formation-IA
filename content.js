@@ -200,6 +200,162 @@ const THEMES = [
                 explanation: "<strong>💡 Comparatif Technique & Arbitrage Public :</strong><br>• <strong>Modèle ChatGPT (OpenAI)</strong> : Tokenizer moins optimisé pour le français (1 mot ≈ 1.35 tokens), calculs sur GPU standards.<br>• <strong>Modèle Gemini (Google - US)</strong> : Tokenizer très optimisé (1 mot ≈ 1.1 tokens) et puces TPU sobres : il offre une puissance d'analyse impressionnante et réduit fortement les coûts d'API, mais reste soumis au droit américain.<br>• <strong>Modèle Mistral AI (France - UE)</strong> : Bien qu'encore en retrait sur la puissance brute face aux géants américains, il garantit une vraie souveraineté européenne et un déploiement sécurisé en local ou sur cloud de confiance.<br>➔ <strong>Arbitrage pour les collectivités :</strong> Choisir Gemini pour la puissance et les coûts sur des données publiques/anonymisées, ou Mistral pour la souveraineté totale sur des données sensibles."
             },
             {
+                title: "Bilan Écologique & Ressources : L'Impact Réel d'un Agent",
+                type: "eco-lifecycle-agent",
+                intro: "Pour mesurer l'empreinte de l'IA, il faut analyser l'intégralité du cycle de vie d'un agent public (bâtiment, matériel informatique, réseau) et comparer l'impact additionnel de l'IA générative et de l'IA agentique sur une année complète (220 jours ouvrés).",
+                profiles: [
+                    {
+                        id: "classic",
+                        title: "1. Agent Classique",
+                        subtitle: "Sans IA (Bureautique standard)",
+                        icon: "👤",
+                        color: "var(--accent-blue)",
+                        badge: "Base de Référence",
+                        desc: "PC portable, double écran, suite bureautique locale, messagerie interne, sans aucun recours aux LLM.",
+                        kwh: 1450,
+                        co2: 1250,
+                        minerals: 1200,
+                        waterDiff: 0,
+                        kwhSurplusPct: 0,
+                        co2SurplusPct: 0,
+                        mineralsSurplusPct: 0
+                    },
+                    {
+                        id: "generative",
+                        title: "2. Agent + IA Générative",
+                        subtitle: "LLM texte (15-25 requêtes/jour)",
+                        icon: "🤖",
+                        color: "var(--accent-purple)",
+                        badge: "+5% à +7% d'impact global",
+                        desc: "Même poste + rédaction de courriers, résumés de délibérations, reformulation (~5 000 requêtes/an, 7M tokens).",
+                        kwh: 1530,
+                        co2: 1340,
+                        minerals: 1280,
+                        waterDiff: 400,
+                        kwhSurplusPct: 5.5,
+                        co2SurplusPct: 7.2,
+                        mineralsSurplusPct: 6.6
+                    },
+                    {
+                        id: "agentic",
+                        title: "3. Agent + IA Agentique",
+                        subtitle: "Agents autonomes multi-étapes",
+                        icon: "⚡",
+                        color: "var(--accent-gold)",
+                        badge: "+51% à +75% d'impact global",
+                        desc: "Même poste + boucles d'agents autonomes (Antigravity) : analyse de 50 dossiers, code, réessais (>100M tokens/an).",
+                        kwh: 2350,
+                        co2: 1890,
+                        minerals: 2100,
+                        waterDiff: 4500,
+                        kwhSurplusPct: 62.1,
+                        co2SurplusPct: 51.2,
+                        mineralsSurplusPct: 75.0
+                    }
+                ],
+                metricsDetails: {
+                    kwh: {
+                        label: "⚡ Électricité Totale (kWh / an)",
+                        unit: "kWh / an",
+                        details: [
+                            {
+                                profileId: "classic",
+                                items: [
+                                    "<strong>Chauffage & Climatisation bâtiment :</strong> ~1 100 kWh (part agent des locaux municipaux).",
+                                    "<strong>Poste de travail physique :</strong> ~200 kWh (laptop 45W + double écran 24\" pendant 8h/j).",
+                                    "<strong>Réseau & IT mairie :</strong> ~150 kWh (switchs, Wi-Fi, serveurs de messagerie/fichiers)."
+                                ]
+                            },
+                            {
+                                profileId: "generative",
+                                items: [
+                                    "<strong>Socle bureau complet :</strong> 1 450 kWh (identique à l'agent classique).",
+                                    "<strong>Entraînement amorti des LLM :</strong> +15 kWh (part amortie de GPT-4 / Gemini / Mistral).",
+                                    "<strong>Inférence GPU datacenters :</strong> +65 kWh (~4 500 requêtes/an avec PUE datacenter de 1.25)."
+                                ]
+                            },
+                            {
+                                profileId: "agentic",
+                                items: [
+                                    "<strong>Socle bureau complet :</strong> 1 450 kWh (identique à l'agent classique).",
+                                    "<strong>Entraînement & Modèles de raisonnement :</strong> +60 kWh (modèles de pointe type o1 / Claude 3.5 Sonnet).",
+                                    "<strong>Inférence agentique continue :</strong> +840 kWh ! 50 à 150 passes d'auto-correction, tests de code et inspection de fichiers par tâche."
+                                ]
+                            }
+                        ]
+                    },
+                    co2: {
+                        label: "🌍 Empreinte Carbone Globale (kg CO₂e / an)",
+                        unit: "kg CO₂e / an",
+                        details: [
+                            {
+                                profileId: "classic",
+                                items: [
+                                    "<strong>Chauffage urbain / gaz mairie :</strong> ~600 kg CO₂e (part bureau de l'agent).",
+                                    "<strong>Fabrication matériel amortie :</strong> ~350 kg CO₂e (laptop + 2 écrans amortis sur 4 ans).",
+                                    "<strong>Déplacements domicile-travail :</strong> ~250 kg CO₂e (trajets moyens collectivité).",
+                                    "<strong>Bureautique IT & réseau :</strong> ~50 kg CO₂e."
+                                ]
+                            },
+                            {
+                                profileId: "generative",
+                                items: [
+                                    "<strong>Socle complet de vie au bureau :</strong> 1 250 kg CO₂e.",
+                                    "<strong>Fabrication amortie puces GPU (Scope 3) :</strong> +30 kg CO₂e (serveurs d'inférence mondiaux).",
+                                    "<strong>Entraînement amorti :</strong> +15 kg CO₂e.",
+                                    "<strong>Électricité datacenters :</strong> +45 kg CO₂e (mix électrique européen/américain)."
+                                ]
+                            },
+                            {
+                                profileId: "agentic",
+                                items: [
+                                    "<strong>Socle complet de vie au bureau :</strong> 1 250 kg CO₂e.",
+                                    "<strong>Fabrication intensive serveurs GPU :</strong> +210 kg CO₂e (grappes GPU sous charge 24/7 renouvelées tous les 3 ans).",
+                                    "<strong>Entraînement & inférence massive continue :</strong> +430 kg CO₂e (l'équivalent de 3 200 km en voiture thermique ajoutés par an !)."
+                                ]
+                            }
+                        ]
+                    },
+                    minerals: {
+                        label: "⛏️ Pression Matières Premières & Métaux Rares (kg extraits / an)",
+                        unit: "kg / an",
+                        details: [
+                            {
+                                profileId: "classic",
+                                items: [
+                                    "<strong>Extraction brute amortie :</strong> ~1 200 kg de minerais extraits par an pour produire et entretenir le bureau, le bâtiment et le poste informatique (laptop, double écran, cuivre, aluminium, lithium)."
+                                ]
+                            },
+                            {
+                                profileId: "generative",
+                                items: [
+                                    "<strong>Socle matériel classique :</strong> 1 200 kg.",
+                                    "<strong>Quote-part GPU cloud :</strong> +80 kg de minerais extraits (terres rares, or des connecteurs, tantale, cuivre massif des datacenters)."
+                                ]
+                            },
+                            {
+                                profileId: "agentic",
+                                items: [
+                                    "<strong>Socle matériel classique :</strong> 1 200 kg.",
+                                    "<strong>Explosion des puces de pointe :</strong> +900 kg de minerais extraits ! Puces 3nm ultra-denses, mémoire HBM3e (consommant 3x plus de galettes de silicium) et usure prématurée des équipements."
+                                ]
+                            }
+                        ]
+                    }
+                },
+                waterFocus: {
+                    title: "💧 Focus Spécifique : L'Eau Évaporée par les Datacenters",
+                    subtitle: "Pourquoi ne pas mélanger l'eau des toilettes et l'eau des serveurs d'IA ?",
+                    explanation: "<strong>Que devient cette eau ?</strong> Dans un datacenter, l'eau ne disparaît pas de la Terre : elle est pulvérisée dans des tours aéro-réfrigérantes pour refroidir les GPU et <strong>s'évapore dans l'atmosphère</strong> sous forme de vapeur.<br><br><strong>Le problème réel (concurrence locale) :</strong> Les serveurs exigent de l'<strong>eau douce et claire</strong> pour éviter l'entartrage. En été, lorsqu'un datacenter évapore des millions de mètres cubes d'eau potable dans une région en sécheresse, il entre en concurrence directe avec l'agriculture et les habitants.",
+                    netUsage: [
+                        { label: "Agent Classique", val: "0 L / an", desc: "Aucune évaporation d'eau en datacenter IA." },
+                        { label: "Agent + IA Générative", val: "+400 L / an", desc: "Soit ~0.08 L évaporé par requête moyenne." },
+                        { label: "Agent + IA Agentique", val: "+4 500 L / an", desc: "Soit l'équivalent de 60 bains complets évaporés par an !" }
+                    ]
+                },
+                takeaway: "<strong>💡 Enseignement clé :</strong> L'IA générative ponctuelle (LLM texte) a un impact écologique mesuré (+7% de CO₂), très vite compensé par les gains de productivité. En revanche, l'IA agentique change radicalement d'ordre de grandeur énergétique (+62% d'électricité, +51% de CO₂ et 4 500 L d'eau évaporée) : elle impose une stricte sobriété d'usage !"
+            },
+            {
                 title: "Le Verrou Technique : VRAM, Coûts & Singularité",
                 type: "vram-hardware-singularity",
                 intro: "Pourquoi l'IA générative n'a-t-elle pas émergé il y a 10 ans ? La réponse réside dans la <strong>physique du matériel</strong> : la quantité de mémoire VRAM, la taille des paramètres et le coût des infrastructures.",
