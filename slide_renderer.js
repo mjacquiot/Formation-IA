@@ -789,7 +789,8 @@ function getSlideHTML(slide, theme) {
                     <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
                     <div class="hardware-container">
                 `;
-                slide.chips.forEach((chip, idx) => {
+                const chipsList = slide.chips || slide.hardwareTypes || [];
+                chipsList.forEach((chip, idx) => {
                     const energyWidths = [100, 45, 15]; 
                     html += `
                         <div class="hard-chip-row">
@@ -1374,9 +1375,10 @@ function getSlideHTML(slide, theme) {
                     <div class="schema-step-item" style="border-color:var(--accent-blue)">
                         <div class="schema-step-bubble">${slide.stepNum || ''}</div>
                         <div class="schema-step-details">
-                            <h4>Objectif : ${slide.goal || ''}</h4>
+                            <h4>${slide.titleStep || (slide.goal ? 'Objectif : ' + slide.goal : '')}</h4>
+                            ${slide.desc ? `<p style="font-size:0.88rem; color:var(--text-muted); margin:0.35rem 0 0.5rem 0;">${slide.desc}</p>` : ''}
                             <ol style="margin-left:1.25rem; font-size:0.88rem; line-height:1.6; margin-top:0.5rem;">
-                                ${slide.steps.map(s => `<li>${s}</li>`).join('')}
+                                ${(slide.steps || slide.instructions || []).map(s => `<li>${s}</li>`).join('')}
                             </ol>
                         </div>
                     </div>
