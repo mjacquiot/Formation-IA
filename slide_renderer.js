@@ -2474,199 +2474,139 @@ function getSlideHTML(slide, theme) {
                     ` : ''}
                 `;
             } else if (slide.type === 'chat-hygiene-context') {
-                const scDirect = slide.scenarios?.direct || {};
-                const scExpl = slide.scenarios?.exploratory || {};
+                const direct = slide.directPath || {};
+                const expl = slide.exploratoryPath || {};
+                const proSteps = slide.proSteps || [];
 
                 html += `
-                    <p style="margin-bottom:0.75rem;">${slide.intro || ''}</p>
-
-                    <!-- Contexte métier FPT -->
-                    <div class="hygiene-fpt-banner">
-                        <span class="fpt-tag">🏛️ Cas concret FPT</span>
-                        <span>${slide.contextUseScenario || ''}</span>
+                    <!-- Top punchline banner -->
+                    <div class="hygiene-top-header">
+                        <div class="hygiene-punchline">
+                            <span class="punchline-icon">💡</span>
+                            <span class="punchline-text">${slide.subtitle || 'On explore au brouillon, on produit au propre.'}</span>
+                        </div>
+                        <div class="hygiene-context-pill">
+                            ${slide.fptContext || 'Exemple FPT : Tarification sociale de cantine'}
+                        </div>
                     </div>
 
-                    <!-- Sélecteur de scénario -->
-                    <div class="hygiene-scenario-nav">
-                        <button class="btn hygiene-tab-btn active" data-scenario="direct">
-                            🛣️ Scénario 1 : Trajectoire Directe (Besoin clair)
-                        </button>
-                        <button class="btn hygiene-tab-btn" data-scenario="exploratory">
-                            🧭 Scénario 2 : Trajectoire Exploratoire (Le Brouillon & Rebond)
-                        </button>
-                    </div>
+                    <!-- Grille 2 Colonnes Visuelles : Direct vs Exploratoire -->
+                    <div class="hygiene-duo-grid">
+                        
+                        <!-- CARTE 1 : TRAJECTOIRE DIRECTE -->
+                        <div class="hygiene-duo-card card-direct">
+                            <div class="duo-card-header">
+                                <span class="duo-badge badge-direct">🟢 LIGNE DROITE</span>
+                                <h4>${direct.title || 'Trajectoire Directe'}</h4>
+                                <p class="duo-sub">${direct.subtitle || 'Besoin clair dès le départ'}</p>
+                            </div>
 
-                    <!-- PANNEAU SCÉNARIO 1 : DIRECT -->
-                    <div id="hygiene-panel-direct" class="hygiene-panel active">
-                        <div class="hygiene-status-bar direct-theme">
-                            <div class="status-summary">
-                                <span class="badge-direct">🟢 Ligne Droite</span>
-                                <strong>${scDirect.summary || ''}</strong>
-                            </div>
-                        </div>
-
-                        <!-- Métriques Scénario 1 -->
-                        <div class="hygiene-metrics-grid">
-                            <div class="hygiene-metric-card">
-                                <span class="metric-icon">🎯</span>
-                                <span class="metric-label">Bruit / Hors-sujet</span>
-                                <strong class="metric-val text-green">${scDirect.metrics?.noiseRate || '0%'}</strong>
-                                <span class="metric-sub">0 consigne contradictoire</span>
-                            </div>
-                            <div class="hygiene-metric-card">
-                                <span class="metric-icon">🧠</span>
-                                <span class="metric-label">Qualité du Contexte</span>
-                                <strong class="metric-val text-green">${scDirect.metrics?.contextHealth || '100%'}</strong>
-                                <span class="metric-sub">Attention maximale du LLM</span>
-                            </div>
-                            <div class="hygiene-metric-card">
-                                <span class="metric-icon">⚡</span>
-                                <span class="metric-label">Tokens Consommés</span>
-                                <strong class="metric-val text-blue">${scDirect.metrics?.tokensUsed || '~750'}</strong>
-                                <span class="metric-sub">Empreinte & coût minimes</span>
-                            </div>
-                            <div class="hygiene-metric-card">
-                                <span class="metric-icon">🛡️</span>
-                                <span class="metric-label">Risque d'Hallucination</span>
-                                <strong class="metric-val text-green">${scDirect.metrics?.riskOfHallucination || 'Nul'}</strong>
-                                <span class="metric-sub">Cadrage M.A.I.R.E. hermétique</span>
-                            </div>
-                        </div>
-
-                        <!-- Fil linéaire direct -->
-                        <div class="hygiene-thread-flow">
-                            ${(scDirect.steps || []).map((st) => `
-                                <div class="hygiene-step-bubble ${st.role === 'user' ? 'bubble-user' : 'bubble-assistant'}">
-                                    <div class="bubble-header">
-                                        <span class="bubble-role">${st.role === 'user' ? '👤 Agent territorial' : '🤖 Assistant IA'}</span>
-                                        <span class="bubble-step-badge">${st.label}</span>
+                            <!-- Schéma visuel en 3 étapes connectées -->
+                            <div class="direct-pipeline">
+                                ${(direct.steps || []).map((st, idx) => `
+                                    <div class="pipeline-step">
+                                        <div class="pipeline-icon-circle ${st.status}">${st.icon}</div>
+                                        <div class="pipeline-info">
+                                            <strong>${st.label}</strong>
+                                            <span>${st.desc}</span>
+                                        </div>
                                     </div>
-                                    <div class="bubble-body">${st.text}</div>
+                                    ${idx < (direct.steps || []).length - 1 ? '<div class="pipeline-arrow">⬇️</div>' : ''}
+                                `).join('')}
+                            </div>
+
+                            <!-- Micro-indicateurs directs -->
+                            <div class="direct-stats-row">
+                                ${(direct.stats || []).map(s => `
+                                    <div class="direct-stat-pill">
+                                        <span class="stat-lbl">${s.label}</span>
+                                        <strong class="stat-num" style="color:${s.color};">${s.val}</strong>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- CARTE 2 : TRAJECTOIRE EXPLORATOIRE (LE BROUILLON) -->
+                        <div class="hygiene-duo-card card-exploratory">
+                            <div class="duo-card-header">
+                                <span class="duo-badge badge-exploratory">⚠️ BROUILLON ➔ CHAT PROPRE</span>
+                                <h4>${expl.title || 'Trajectoire Exploratoire'}</h4>
+                                <p class="duo-sub">${expl.subtitle || 'Le piège du fil infini'}</p>
+                            </div>
+
+                            <!-- Vue 1 : Grille des 10 pastilles brouillon -->
+                            <div id="v-draft-state">
+                                <div class="draft-chips-grid">
+                                    ${(expl.items || []).map(it => `
+                                        <div class="chip-item ${it.type === 'gem' ? 'chip-gem' : 'chip-noise'}">
+                                            <span class="chip-icon">${it.icon}</span>
+                                            <span class="chip-label">${it.label}</span>
+                                        </div>
+                                    `).join('')}
                                 </div>
-                            `).join('')}
-                        </div>
-                    </div>
 
-                    <!-- PANNEAU SCÉNARIO 2 : EXPLORATOIRE (LE BROUILLON) -->
-                    <div id="hygiene-panel-exploratory" class="hygiene-panel" style="display: none;">
-                        <div class="hygiene-status-bar exploratory-theme">
-                            <div class="status-summary">
-                                <span class="badge-exploratory">⚠️ Trajectoire Brouillon</span>
-                                <strong>${scExpl.summary || ''}</strong>
-                            </div>
-                        </div>
+                                <!-- Mini jauge visuelle -->
+                                <div class="draft-gauge-strip">
+                                    <div class="gauge-split-bar">
+                                        <div class="split-noise" style="width: 80%;">80% Bruit</div>
+                                        <div class="split-gems" style="width: 20%;">20% 💎</div>
+                                    </div>
+                                    <span class="gauge-warning-tag">⚠️ Risque élevé d'hallucinations & contradictions</span>
+                                </div>
 
-                        <!-- Barre d'outils interactifs -->
-                        <div class="hygiene-toolbar">
-                            <div class="toolbar-actions-left">
-                                <button id="btn-hygiene-add-step" class="btn btn-secondary btn-sm">➕ Échange suivant (+1 prompt)</button>
-                                <button id="btn-hygiene-fill-all" class="btn btn-secondary btn-sm">⏩ Remplir les 10 échanges</button>
-                                <button id="btn-hygiene-reset" class="btn btn-secondary btn-sm">🔄 Réinitialiser</button>
-                            </div>
-                            <div class="toolbar-actions-right">
-                                <button id="btn-hygiene-purge-clean" class="btn btn-primary btn-hygiene-purge">
-                                    🧹 Extraire les Pépites & Ouvrir un Chat Propre
+                                <!-- Bouton Action Clé -->
+                                <button id="btn-purge-interactive" class="btn-purge-cta">
+                                    <span>🧹 FILTRER & OUVRIR UN CHAT PROPRE</span>
+                                    <span class="cta-arrow">➔</span>
                                 </button>
                             </div>
-                        </div>
 
-                        <!-- Jauge de saturation du contexte -->
-                        <div class="hygiene-gauge-card">
-                            <div class="gauge-header">
-                                <span class="gauge-title">📊 Saturation & Bruit dans la Fenêtre de Contexte</span>
-                                <span id="hygiene-gauge-counts" class="gauge-counts">
-                                    <strong id="count-noise" class="text-red">0</strong> bruit | <strong id="count-gems" class="text-green">0</strong> pépite | <strong id="count-tokens">0</strong> tokens
-                                </span>
-                            </div>
-                            <div class="gauge-bar-track">
-                                <div id="gauge-bar-noise" class="gauge-fill-noise" style="width: 0%;"></div>
-                                <div id="gauge-bar-gems" class="gauge-fill-gems" style="width: 0%;"></div>
-                            </div>
-                            <div id="hygiene-gauge-diagnosis" class="gauge-diagnosis">
-                                💬 Cliquez sur <strong>« ➕ Échange suivant »</strong> ou <strong>« ⏩ Remplir les 10 échanges »</strong> pour simuler l'accumulation d'allers-retours.
-                            </div>
-                        </div>
+                            <!-- Vue 2 : Chat Propre post-extraction -->
+                            <div id="v-clean-state" style="display: none;">
+                                <div class="clean-filtered-box">
+                                    <span class="filtered-badge">💎 2 Pépites Sauvées :</span>
+                                    <div class="filtered-chips-row">
+                                        ${(expl.gemsSummary || []).map(g => `
+                                            <div class="chip-gem-saved">
+                                                <strong>${g.title}</strong>
+                                                <span>${g.desc}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
 
-                        <!-- Conteneur des 2 vues : Vue Fil Brouillon vs Vue Chat Propre extrait -->
-                        <div id="hygiene-draft-view">
-                            <div class="draft-view-header">
-                                <h4 style="margin:0; font-size:0.95rem; color:var(--text-muted); display:flex; align-items:center; gap:0.5rem;">
-                                    💬 Fil de discussion en cours (<span id="hygiene-visible-count">0</span> / 10 messages)
-                                </h4>
-                                <span style="font-size:0.8rem; color:var(--text-muted);">
-                                    Observez les <strong style="color:var(--accent-red)">🔴 prompts bruyants</strong> et les <strong style="color:var(--accent-green)">🟢 pépites émergentes</strong>
-                                </span>
-                            </div>
+                                <div class="clean-flow-arrow">⬇️ Injection en 1 clic dans un chat vierge</div>
 
-                            <div id="hygiene-draft-thread" class="hygiene-draft-thread">
-                                <!-- Bulles injectées par JS -->
+                                <!-- Nouveau Chat Vierge -->
+                                <div class="new-chat-mock">
+                                    <div class="new-chat-top">
+                                        <span>✨ NOUVEAU CHAT #2 (VIERGE)</span>
+                                        <strong style="color:var(--accent-green)">Contexte 100% Pur</strong>
+                                    </div>
+                                    <pre class="new-chat-snippet"><code>${this.escapeHtml(expl.cleanPromptShort || '')}</code></pre>
+                                </div>
+
+                                <button id="btn-revert-draft" class="btn-revert-link">↩️ Revoir le fil brouillon pollué</button>
                             </div>
                         </div>
 
-                        <!-- Vue Nouveau Chat Propre (post purge) -->
-                        <div id="hygiene-clean-view" style="display: none;" class="hygiene-clean-card">
-                            <div class="clean-card-header">
-                                <div class="clean-title-group">
-                                    <span class="clean-badge">✨ NOUVEAU CHAT DÉMARRÉ — CONTEXTE 100% PUR</span>
-                                    <h4>Le Résultat de l'Hygiène de Conversation</h4>
-                                </div>
-                                <button id="btn-hygiene-back-draft" class="btn btn-secondary btn-sm">↩️ Revoir le fil brouillon</button>
-                            </div>
-
-                            <!-- Comparatif Avant / Après -->
-                            <div class="clean-comparison-grid">
-                                <div class="clean-comparison-col before">
-                                    <span class="col-tag tag-danger">❌ Ancien Fil Pollué</span>
-                                    <ul>
-                                        <li>10 allers-retours accumulés (~4 800 tokens)</li>
-                                        <li>Ordres et contre-ordres (bio / pas bio, emojis / pas d'emojis)</li>
-                                        <li>L'IA mélange les versions et commence à halluciner</li>
-                                    </ul>
-                                </div>
-                                <div class="clean-comparison-col after">
-                                    <span class="col-tag tag-success">✅ Nouveau Chat Vierge</span>
-                                    <ul>
-                                        <li>1 prompt de synthèse pur (~600 tokens)</li>
-                                        <li>Zéro contradiction en mémoire vive</li>
-                                        <li>Livrable final généré du 1er coup avec une précision chirurgicale</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <!-- Les 2 Pépites Extraites -->
-                            <div class="gems-extracted-box">
-                                <h5 style="margin:0 0 0.5rem 0; color:var(--accent-green); font-size:0.92rem; display:flex; align-items:center; gap:0.5rem;">
-                                    💎 Les 2 pépites sauvées du brouillon :
-                                </h5>
-                                <ul style="margin:0; padding-left:1.25rem; font-size:0.85rem; line-height:1.6;">
-                                    ${(scExpl.extractedGems || []).map(g => `<li>${g}</li>`).join('')}
-                                </ul>
-                            </div>
-
-                            <!-- Le Prompt M.A.I.R.E. purifié prêt à l'emploi -->
-                            <div class="clean-prompt-synthetic-box">
-                                <div class="box-top-bar">
-                                    <span>📋 Le Prompt de Synthèse M.A.I.R.E. injecté dans le chat neuf :</span>
-                                    <button class="btn btn-secondary btn-xs" id="btn-copy-clean-prompt" style="font-size:0.75rem; padding:3px 8px;">📋 Copier</button>
-                                </div>
-                                <pre id="clean-prompt-text" class="clean-prompt-pre"><code>${this.escapeHtml(scExpl.cleanPromptSynthetic || '')}</code></pre>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- Encart Règle des Pros -->
-                    <div class="hygiene-rules-grid">
-                        ${(slide.methodRules || []).map(r => `
-                            <div class="hygiene-rule-card">
-                                <div class="rule-icon">${r.icon}</div>
-                                <h5>${r.title}</h5>
-                                <p>${r.desc}</p>
+                    <!-- Bandeau Inférieur : La Règle des Pros en 3 Étapes Visuelles -->
+                    <div class="hygiene-pro-strip">
+                        ${proSteps.map(st => `
+                            <div class="pro-strip-card">
+                                <div class="pro-card-icon">${st.icon}</div>
+                                <div class="pro-card-text">
+                                    <strong>${st.num}. ${st.title}</strong>
+                                    <span>${st.desc}</span>
+                                </div>
                             </div>
                         `).join('')}
                     </div>
 
                     ${slide.takeaway ? `
-                        <div class="maire-example-box" style="margin-top:1.25rem; border-left-color: var(--accent-gold);">
+                        <div class="hygiene-takeaway-bar">
                             ${slide.takeaway}
                         </div>
                     ` : ''}
