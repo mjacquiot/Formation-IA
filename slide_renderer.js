@@ -507,31 +507,6 @@ function getSlideHTML(slide, theme) {
                         ${slide.mathExplanation || ''}
                     </div>
                 `;
-            } else if (slide.type === 'probability-cascade') {
-                html += `
-                    <p>${slide.desc || ''}</p>
-                    <div class="maire-example-box" style="margin-bottom:1.5rem;">
-                        <strong>Phrase en cours de génération :</strong><br>
-                        <span style="font-family:monospace; color:var(--accent-blue); font-size:1.05rem;">"${slide.inputPhrase || ''}"</span>
-                    </div>
-                    <div class="cascade-container">
-                `;
-                slide.options.forEach(opt => {
-                    html += `
-                        <div class="cascade-item">
-                            <div class="cascade-word">${opt.word}</div>
-                            <div class="cascade-track">
-                                <div class="cascade-bar" style="width: ${opt.prob}%; background: ${opt.color};"></div>
-                            </div>
-                            <div class="cascade-prob">${opt.prob}%</div>
-                            <div class="cascade-status status-${opt.status}">${opt.status === 'chosen' ? 'Choisi' : opt.status === 'possible' ? 'Possible' : 'Improbable'}</div>
-                        </div>
-                    `;
-                });
-                html += `
-                    </div>
-                    <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.5;">${slide.explanation || ''}</p>
-                `;
             } else if (slide.type === 'analogy') {
                 html += `
                     <div class="prompt-analogy-container">
@@ -687,24 +662,6 @@ function getSlideHTML(slide, theme) {
                     </div>
                     <div class="tier-detail-box" id="tier-detail-panel">
                         <!-- Dynamic details loaded by JS -->
-                    </div>
-                `;
-            } else if (slide.type === 'charte-checklist') {
-                html += `
-                    <p>${slide.desc || ''}</p>
-                    <div class="charte-columns">
-                        <div class="charte-pane charte-pane-dos">
-                            <h4>✅ À faire (Recommandations)</h4>
-                            <ul class="charte-list">
-                                ${slide.dos.map(item => `<li class="charte-list-item">${item}</li>`).join('')}
-                            </ul>
-                        </div>
-                        <div class="charte-pane charte-pane-donts">
-                            <h4>❌ À ne pas faire (Interdictions)</h4>
-                            <ul class="charte-list">
-                                ${slide.donts.map(item => `<li class="charte-list-item">${item}</li>`).join('')}
-                            </ul>
-                        </div>
                     </div>
                 `;
             } else if (slide.type === 'hallucination') {
@@ -1044,32 +1001,6 @@ function getSlideHTML(slide, theme) {
                         `).join('')}
                     </div>
                 `;
-            } else if (slide.type === 'exercise-list') {
-                html += `<div class="exercises-container">`;
-                slide.exercises.forEach((ex, idx) => {
-                    const levelClass = ex.level === 'débutant' ? 'level-debutant' : 
-                                       ex.level === 'intermédiaire' ? 'level-intermediaire' : 'level-expert';
-                    html += `
-                        <div class="exercise-card">
-                            <div class="exercise-card-header">
-                                <div class="exercise-card-badges">
-                                    <span class="exercise-badge-dept">${ex.department}</span>
-                                    <span class="exercise-badge-level ${levelClass}">${ex.level}</span>
-                                </div>
-                                <button class="btn btn-secondary btn-toggle-correction" data-idx="${idx}">Voir la correction</button>
-                            </div>
-                            <div class="exercise-prompt-req">
-                                <strong>Mise en situation :</strong><br>
-                                ${ex.description}
-                            </div>
-                            <div class="exercise-correction-box" id="correction-${idx}">
-                                <h4>💡 Prompt type & correction :</h4>
-                                <p>${this.escapeHtml(ex.solution)}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += `</div>`;
             } else if (slide.type === 'agentic-comparison') {
                 html += `
                     <p style="margin-bottom:1.5rem;">${slide.desc || ''}</p>
@@ -1728,59 +1659,6 @@ function getSlideHTML(slide, theme) {
                                 <div class="ifse-card-metric">🔒 Responsabilité RGPD : <strong>Très Forte (paramétrage des flux et API)</strong></div>
                                 <div class="ifse-card-impact">💼 Piste IFSE : Option Expert / Projet (+350€ à 500€ / mois)</div>
                             </div>
-                        </div>
-                    </div>
-                `;
-            } else if (slide.type === 'dsi-agent-ultime') {
-                html += `
-                    <p style="margin-bottom:1rem;">${slide.intro || ''}</p>
-                    
-                    <div class="pipeline-wrapper">
-                        <!-- Column 1: Folder 1 Raw -->
-                        <div class="pipeline-col" id="col-folder-raw">
-                            <div class="pipeline-col-header">
-                                <span class="pipeline-col-num">1</span>
-                                📁 Dossier 1 : Fichiers Bruts
-                            </div>
-                            <p class="pipeline-file-desc">L'agent glisse ses documents de travail contenant des données réelles et sensibles (courriels, fiches usagers).</p>
-                            <div class="pipeline-files-list" id="list-raw-files">
-                                <div class="pipeline-file-item">📄 signalement_dufour.txt</div>
-                                <div class="pipeline-file-item">📄 demande_aide_sociale.pdf</div>
-                            </div>
-                            <button class="btn btn-secondary btn-sm" id="btn-simulate-pipeline" style="width:100%; justify-content:center; margin-top:auto;">🚀 Lancer la Pseudonymisation</button>
-                        </div>
-                        
-                        <!-- Column 2: Folder 2 Pseudo -->
-                        <div class="pipeline-col" id="col-folder-pseudo">
-                            <div class="pipeline-col-header">
-                                <span class="pipeline-col-num">2</span>
-                                📁 Dossier 2 : Pseudonymisé
-                            </div>
-                            <p class="pipeline-file-desc">Les données nominatives réelles (ex: Maxime JACQUIOT) sont converties en identités fictives plausibles (ex: Henri DUPONT) via un dictionnaire JSON de substitution. <strong>Conserve la qualité linguistique du LLM !</strong></p>
-                            <div class="pipeline-files-list" id="list-pseudo-files">
-                                <div style="font-size:0.74rem; color:var(--text-muted); text-align:center; padding:1.25rem; font-style:italic;">Dossier vide</div>
-                            </div>
-                            <div class="pipeline-step-action" style="display:none;" id="action-pseudo-sent">
-                                🔒 Envoyé via API bridée
-                            </div>
-                        </div>
-                        
-                        <!-- Column 3: Folder 3 Restored -->
-                        <div class="pipeline-col" id="col-folder-restored">
-                            <div class="pipeline-col-header">
-                                <span class="pipeline-col-num">3</span>
-                                📁 Dossier 3 : Restitué
-                            </div>
-                            <p class="pipeline-file-desc">Le résultat généré par l'IA est ré-associé automatiquement aux données d'identité originales via la clé locale du PC.</p>
-                            <div class="pipeline-files-list" id="list-restored-files">
-                                <div style="font-size:0.74rem; color:var(--text-muted); text-align:center; padding:1.25rem; font-style:italic;">Dossier vide</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Center/Bottom: Cloud server bubble -->
-                        <div class="pipeline-cloud-bubble">
-                            <h4>🌩️ Serveur SecNumCloud (Orchestrateur) ➔ API Gemini (Bridage budgétaire)</h4>
-                            <p>L'agent d'IA s'exécute dans un conteneur cloud souverain et interroge Gemini par API avec un jeton sécurisé. L'IA ne voit et ne traite <strong>QUE</strong> les fichiers du dossier 2 (anonymes), garantissant le respect du RGPD et l'immunité face au Cloud Act.</p>
                         </div>
                     </div>
                 `;

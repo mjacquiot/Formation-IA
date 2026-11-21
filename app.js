@@ -20,6 +20,7 @@ class TrainingApp {
         this.presenceInterval = null;
         this.sessionState = { show_results: false };
         this.revealState = 'hidden';
+        this.supportsJsonState = true;
 
         this.detectRole();
         this.initSupabase();
@@ -58,6 +59,12 @@ class TrainingApp {
             this.currentSlideIndex = 0;
             this.activePoll = null;
             this.activeExercise = null;
+            this.revealState = 'hidden';
+            this.currentZoomedPrenom = null;
+            this.currentZoomedOption = null;
+            this.sessionState.show_results = false;
+            const panel = document.getElementById('interactivity-panel');
+            if (panel) panel.classList.remove('open');
             this.showScreen('home');
             this.syncSessionState();
         };
@@ -77,11 +84,32 @@ class TrainingApp {
         // Keyboard navigation
         window.addEventListener('keydown', (e) => {
             if (this.role === 'stagiaire') return;
+
+            const activeEl = document.activeElement;
+            const isEditingField = activeEl && (
+                ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl.tagName) ||
+                activeEl.isContentEditable
+            );
+
             if (e.key === 'ArrowLeft') {
+                if (isEditingField) return;
                 this.navigate(-1);
             } else if (e.key === 'ArrowRight') {
+                if (isEditingField) return;
                 this.navigate(1);
             } else if (e.key === 'Escape') {
+                const projectorModal = document.getElementById('html-projector-modal');
+                if (projectorModal && projectorModal.style.display === 'flex') {
+                    if (typeof this.closeHtmlProjectorModal === 'function') {
+                        this.closeHtmlProjectorModal();
+                    }
+                    return;
+                }
+                const freeModal = document.getElementById('modal-start-free-test');
+                if (freeModal && freeModal.classList.contains('visible')) {
+                    freeModal.classList.remove('visible');
+                    return;
+                }
                 const overlay = document.getElementById('zoom-overlay');
                 if (overlay && overlay.classList.contains('visible')) {
                     if (this.role === 'formateur' && typeof this.closeOptionZoom === 'function') {
@@ -89,6 +117,10 @@ class TrainingApp {
                     } else if (typeof this.hideZoomOverlay === 'function') {
                         this.hideZoomOverlay();
                     }
+                    return;
+                }
+                if (isEditingField) {
+                    activeEl.blur();
                     return;
                 }
                 goHome();
@@ -199,10 +231,13 @@ class TrainingApp {
             
             const categoryLabels = {
                 'hist': 'Histoire & Origines',
+                'histoire': 'Histoire & Origines',
                 'tech': 'Technique & Fonctionnement',
                 'prompt': 'Méthode & Pratique',
                 'reg': 'Régulation & Sécurité',
-                'agent': 'Futur & Autonomie'
+                'agent': 'Futur & Autonomie',
+                'dsi': 'Stratégie & DSI',
+                'eval': 'Évaluation & Ateliers'
             };
             const catLabel = categoryLabels[theme.category] || 'Général';
 
@@ -263,12 +298,16 @@ class TrainingApp {
     }
 
     navigate(direction) {
+        const visibleThemes = this.getVisibleThemes();
+        if (visibleThemes.length === 0) return;
+
         if (this.currentThemeIndex === -1) {
-            // If on home, clicking next goes to first slide of first theme
+            // If on home, clicking next goes to first slide of first visible theme
             if (direction === 1) {
-                const themeItem = document.getElementById('sidebar-theme-0');
+                const firstRealIdx = THEMES.indexOf(visibleThemes[0]);
+                const themeItem = document.getElementById(`sidebar-theme-${firstRealIdx}`);
                 if (themeItem) themeItem.classList.add('expanded');
-                this.selectSlide(0, 0);
+                this.selectSlide(firstRealIdx, 0);
             }
             return;
         }
@@ -279,27 +318,46 @@ class TrainingApp {
         if (newSlideIndex >= 0 && newSlideIndex < theme.slides.length) {
             // Navigate within the same theme
             this.selectSlide(this.currentThemeIndex, newSlideIndex);
-        } else if (newSlideIndex < 0) {
-            // Go to previous theme
-            if (this.currentThemeIndex > 0) {
-                const prevThemeIdx = this.currentThemeIndex - 1;
-                const prevThemeLastSlideIdx = THEMES[prevThemeIdx].slides.length - 1;
-                this.selectSlide(prevThemeIdx, prevThemeLastSlideIdx);
+        } else {
+            const visiblePos = visibleThemes.indexOf(theme);
+            if (newSlideIndex < 0) {
+                // Go to previous visible theme
+                if (visiblePos > 0) {
+                    const prevTheme = visibleThemes[visiblePos - 1];
+                    const prevThemeIdx = THEMES.indexOf(prevTheme);
+                    this.selectSlide(prevThemeIdx, prevTheme.slides.length - 1);
+                } else {
+                    // Go back to home screen
+                    this.currentThemeIndex = -1;
+                    this.currentSlideIndex = 0;
+                    this.activePoll = null;
+                    this.activeExercise = null;
+                    this.revealState = 'hidden';
+                    this.currentZoomedPrenom = null;
+                    this.currentZoomedOption = null;
+                    this.sessionState.show_results = false;
+                    this.showScreen('home');
+                    if (typeof this.syncSessionState === 'function') this.syncSessionState();
+                }
             } else {
-                // Go back to home screen
-                this.currentThemeIndex = -1;
-                this.currentSlideIndex = 0;
-                this.showScreen('home');
-            }
-        } else if (newSlideIndex >= theme.slides.length) {
-            // Go to next theme
-            if (this.currentThemeIndex < THEMES.length - 1) {
-                this.selectSlide(this.currentThemeIndex + 1, 0);
-            } else {
-                // End of course, go back to home dashboard
-                this.currentThemeIndex = -1;
-                this.currentSlideIndex = 0;
-                this.showScreen('home');
+                // Go to next visible theme
+                if (visiblePos !== -1 && visiblePos < visibleThemes.length - 1) {
+                    const nextTheme = visibleThemes[visiblePos + 1];
+                    const nextThemeIdx = THEMES.indexOf(nextTheme);
+                    this.selectSlide(nextThemeIdx, 0);
+                } else {
+                    // End of course, go back to home dashboard
+                    this.currentThemeIndex = -1;
+                    this.currentSlideIndex = 0;
+                    this.activePoll = null;
+                    this.activeExercise = null;
+                    this.revealState = 'hidden';
+                    this.currentZoomedPrenom = null;
+                    this.currentZoomedOption = null;
+                    this.sessionState.show_results = false;
+                    this.showScreen('home');
+                    if (typeof this.syncSessionState === 'function') this.syncSessionState();
+                }
             }
         }
     }
@@ -308,9 +366,11 @@ class TrainingApp {
         let totalSlides = 0;
         let absoluteIndex = 0;
         const visibleThemes = this.getVisibleThemes();
+        const currentTheme = this.currentThemeIndex === -1 ? null : THEMES[this.currentThemeIndex];
+        const visiblePos = currentTheme ? visibleThemes.indexOf(currentTheme) : -1;
 
         visibleThemes.forEach((theme, idx) => {
-            if (idx < this.currentThemeIndex) {
+            if (visiblePos !== -1 && idx < visiblePos) {
                 absoluteIndex += theme.slides.length;
             }
             totalSlides += theme.slides.length;
@@ -320,16 +380,16 @@ class TrainingApp {
             absoluteIndex += this.currentSlideIndex;
         }
 
-        const percent = this.currentThemeIndex === -1 ? 0 : ((absoluteIndex + 1) / totalSlides) * 100;
+        const percent = (this.currentThemeIndex === -1 || totalSlides === 0) ? 0 : ((absoluteIndex + 1) / totalSlides) * 100;
         this.progressFill.style.width = `${percent}%`;
 
-        if (this.currentThemeIndex === -1) {
+        if (this.currentThemeIndex === -1 || !currentTheme) {
             this.slideIndicator.innerText = '';
             this.btnPrev.style.opacity = '0.2';
             this.btnPrev.style.pointerEvents = 'none';
         } else {
-            const theme = THEMES[this.currentThemeIndex];
-            this.slideIndicator.innerText = `Thème ${this.currentThemeIndex + 1}/${visibleThemes.length} • Slide ${this.currentSlideIndex + 1}/${theme.slides.length}`;
+            const displayThemeNum = visiblePos !== -1 ? visiblePos + 1 : this.currentThemeIndex + 1;
+            this.slideIndicator.innerText = `Thème ${displayThemeNum}/${visibleThemes.length} • Slide ${this.currentSlideIndex + 1}/${currentTheme.slides.length}`;
             this.btnPrev.style.opacity = '1';
             this.btnPrev.style.pointerEvents = 'all';
         }
@@ -427,7 +487,7 @@ class TrainingApp {
                     {left: '$$', right: '$$', display: true},
                     {left: '$', right: '$', display: false},
                     {left: '\\(', right: '\\)', display: false},
-                    {left: '\\[', right: '\\[', display: true}
+                    {left: '\\[', right: '\\]', display: true}
                 ],
                 throwOnError : false
             });

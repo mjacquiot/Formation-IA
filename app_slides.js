@@ -356,78 +356,6 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
     }
 
     // Post-render bindings
-    if (slide.type === 'datacenter-cost') {
-            const tabs = this.slideContainer.querySelectorAll('.datacenter-tab-btn');
-            const panes = this.slideContainer.querySelectorAll('.datacenter-tab-pane');
-            tabs.forEach(tab => {
-                tab.onclick = () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    panes.forEach(p => {
-                        p.classList.remove('active');
-                        p.style.display = 'none';
-                    });
-                    
-                    tab.classList.add('active');
-                    const idx = tab.getAttribute('data-idx');
-                    const pane = this.slideContainer.querySelector(`#datacenter-pane-${idx}`);
-                    if (pane) {
-                        pane.classList.add('active');
-                        pane.style.display = 'block';
-                    }
-                };
-            });
-        }
-
-        if (slide.type === 'dsi-agent-ultime') {
-            const btnSimulate = this.slideContainer.querySelector('#btn-simulate-pipeline');
-            const colRaw = this.slideContainer.querySelector('#col-folder-raw');
-            const colPseudo = this.slideContainer.querySelector('#col-folder-pseudo');
-            const colRestored = this.slideContainer.querySelector('#col-folder-restored');
-            
-            const listRaw = this.slideContainer.querySelector('#list-raw-files');
-            const listPseudo = this.slideContainer.querySelector('#list-pseudo-files');
-            const listRestored = this.slideContainer.querySelector('#list-restored-files');
-            const actionSent = this.slideContainer.querySelector('#action-pseudo-sent');
-            
-            btnSimulate.onclick = () => {
-                btnSimulate.disabled = true;
-                btnSimulate.innerText = "Traitement en cours...";
-                
-                // Step 1: Pseudonymize raw files
-                setTimeout(() => {
-                    colRaw.classList.remove('active');
-                    colPseudo.classList.add('active');
-                    listPseudo.innerHTML = `
-                        <div class="pipeline-file-item" style="color:var(--accent-sky); font-weight:700;">📄 signalement_henri_dupont.txt (Substitué)</div>
-                        <div class="pipeline-file-item" style="color:var(--accent-sky); font-weight:700;">📄 demande_aide_claire_martin.pdf (Substitué)</div>
-                    `;
-                    actionSent.style.display = 'block';
-                    
-                    // Step 2: Send to Cloud API
-                    setTimeout(() => {
-                        actionSent.innerText = "⚡ Traitement IA Gemini...";
-                        actionSent.style.background = 'rgba(14, 165, 233, 0.1)';
-                        actionSent.style.color = 'var(--accent-sky)';
-                        actionSent.style.borderColor = 'rgba(14, 165, 233, 0.3)';
-                        
-                        // Step 3: De-pseudonymize and restore
-                        setTimeout(() => {
-                            colPseudo.classList.remove('active');
-                            colRestored.classList.add('active');
-                            listRestored.innerHTML = `
-                                <div class="pipeline-file-item" style="color:#34d399; font-weight:700; border-color:#34d399;">📄 réponse_officielle_dufour.txt</div>
-                                <div class="pipeline-file-item" style="color:#34d399; font-weight:700; border-color:#34d399;">📄 projet_decision_aide.pdf</div>
-                            `;
-                            btnSimulate.innerText = "✔️ Simulation terminée !";
-                        }, 1800);
-                        
-                    }, 1500);
-                    
-                }, 1200);
-            };
-        }
-
-        // Post-render bindings
         if (slide.type === 'exercises-dashboard') {
             if (this.role === 'stagiaire') {
                 return;
@@ -708,17 +636,6 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
                 btn.onclick = (e) => {
                     const idx = parseInt(e.target.dataset.idx, 10);
                     updateTierDetails(idx);
-                };
-            });
-        } else if (slide.type === 'exercise-list') {
-            // Bind exercise correction toggles
-            this.slideContainer.querySelectorAll('.btn-toggle-correction').forEach(btn => {
-                btn.onclick = (e) => {
-                    const idx = e.target.dataset.idx;
-                    const box = this.slideContainer.querySelector(`#correction-${idx}`);
-                    const isShown = box.style.display === 'block';
-                    box.style.display = isShown ? 'none' : 'block';
-                    e.target.innerText = isShown ? 'Voir la correction' : 'Masquer la correction';
                 };
             });
         } else if (slide.type === 'token-sandbox') {

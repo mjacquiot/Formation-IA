@@ -17,12 +17,13 @@ CREATE TABLE public.sessions (
     active_poll_id text,
     show_results boolean DEFAULT false,
     active_exercise_id integer,
+    state jsonb DEFAULT '{}'::jsonb,
     updated_at timestamp with time zone DEFAULT now()
 );
 
 -- Insérer la session par défaut n°1
-INSERT INTO public.sessions (id, active_theme_id, active_slide_index, show_results) 
-VALUES (1, 'histoire-ia', 0, false) 
+INSERT INTO public.sessions (id, active_theme_id, active_slide_index, show_results, state) 
+VALUES (1, 'histoire-ia', 0, false, '{}'::jsonb) 
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. Table des Présences (Liste des stagiaires connectés)
@@ -88,7 +89,7 @@ ON public.sessions FOR SELECT USING (true);
 
 -- Seul le formateur authentifié (admin@admin.fr) peut modifier la session
 CREATE POLICY "Seul le formateur connecté peut modifier la session" 
-ON public.sessions FOR ALL TO authenticated USING (true);
+ON public.sessions FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 
 -- POLITIQUES SUR LA TABLE PRESENCES
@@ -101,27 +102,27 @@ CREATE POLICY "Tout le monde peut s'inscrire en presence"
 ON public.presences FOR INSERT WITH CHECK (true);
 
 -- Les stagiaires peuvent mettre à jour leur battement de coeur (last_seen_at)
-CREATE POLICY "Chacun peut modifier son etat de presence" 
-ON public.presences FOR ALL USING (true);
+CREATE POLICY "Stagiaires peuvent mettre a jour presence" 
+ON public.presences FOR UPDATE USING (true) WITH CHECK (true);
+
+-- Seul le formateur authentifié peut déconnecter ou nettoyer des présences
+CREATE POLICY "Seul le formateur peut supprimer des presences" 
+ON public.presences FOR DELETE TO authenticated USING (true);
 
 
 -- POLITIQUES SUR LA TABLE VOTES
--- L'admin authentifié (formateur) peut lire tous les votes en détail
-CREATE POLICY "Le formateur peut lire tous les votes" 
-ON public.votes FOR SELECT TO authenticated USING (true);
-
--- Les stagiaires anonymes peuvent lire les votes (pour voir les statistiques ou leur propre vote)
+-- Tout le monde peut lire les votes (pour voir les statistiques ou sa réponse)
 CREATE POLICY "Tout le monde peut lire les votes" 
 ON public.votes FOR SELECT USING (true);
 
--- Les stagiaires anonymes peuvent insérer leur vote
+-- Les stagiaires anonymes peuvent insérer leur vote (sans usurper __HOST__)
 CREATE POLICY "Tout le monde peut voter" 
-ON public.votes FOR INSERT WITH CHECK (true);
+ON public.votes FOR INSERT WITH CHECK (prenom <> '__HOST__');
 
--- Les stagiaires anonymes peuvent corriger leur vote si la session le permet
+-- Les stagiaires anonymes peuvent corriger leur vote (sans toucher à __HOST__)
 CREATE POLICY "Tout le monde peut modifier son vote" 
-ON public.votes FOR UPDATE USING (true);
+ON public.votes FOR UPDATE USING (prenom <> '__HOST__') WITH CHECK (prenom <> '__HOST__');
 
--- Tout le monde peut supprimer des votes (requis pour réinitialiser et relancer les quiz/exercices)
-CREATE POLICY "Tout le monde peut supprimer des votes" 
-ON public.votes FOR DELETE USING (true);
+-- Seul le formateur authentifié peut supprimer/réinitialiser des votes ou gérer __HOST__
+CREATE POLICY "Le formateur gere tous les votes" 
+ON public.votes FOR ALL TO authenticated USING (true) WITH CHECK (true);

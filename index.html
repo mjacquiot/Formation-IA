@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-    <link rel="stylesheet" href="style.css?v=2.8">
+    <link rel="stylesheet" href="style.css?v=20261121-2150">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
 </head>
 <body>
@@ -41,7 +41,7 @@
             </nav>
             
             <div class="sidebar-footer">
-                <p>Version 2.0 • Simplifiée</p>
+                <p id="sidebar-version-label">v2026.11.21 • 21h50</p>
             </div>
         </aside>
 
@@ -89,6 +89,10 @@
                 <div class="quick-start-info">
                     <div class="info-badge">💡 Astuce</div>
                     <p>Utilisez la barre latérale à gauche ou cliquez sur un thème ci-dessus pour commencer votre lecture dynamique.</p>
+                </div>
+
+                <div class="home-version-bar">
+                    <span class="home-version-badge" id="home-version-badge">🕒 v2026.11.21 • 21h50</span>
                 </div>
             </section>
 
@@ -188,7 +192,7 @@
             </div>
         </div>
         <div class="html-projector-content">
-            <iframe id="html-projector-iframe" sandbox="allow-scripts allow-modals allow-forms allow-same-origin" title="Projection index.html"></iframe>
+            <iframe id="html-projector-iframe" sandbox="allow-scripts allow-modals allow-forms" title="Projection index.html"></iframe>
         </div>
     </div>
 
@@ -231,13 +235,14 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="content.js?v=2.8"></script>
-    <script src="exercises.js?v=2.8"></script>
-    <script src="slide_renderer.js?v=2.8"></script>
-    <script src="app.js?v=2.8"></script>
-    <script src="app_slides.js?v=2.8"></script>
-    <script src="app_supabase.js?v=2.8"></script>
-    <script src="app_interactivity.js?v=2.8"></script>
+    <script src="content.js?v=20261121-2150"></script>
+    <script src="exercises.js?v=20261121-2150"></script>
+    <script src="slide_renderer.js?v=20261121-2150"></script>
+    <script src="qrcode_local.js?v=20261121-2150"></script>
+    <script src="app.js?v=20261121-2150"></script>
+    <script src="app_slides.js?v=20261121-2150"></script>
+    <script src="app_supabase.js?v=20261121-2150"></script>
+    <script src="app_interactivity.js?v=20261121-2150"></script>
 </body>
 </html>
 

@@ -347,11 +347,14 @@ body {
 }
 
 /* Border tops based on category */
-.theme-card.cat-hist::before { background: var(--color-hist); }
+.theme-card.cat-hist::before,
+.theme-card.cat-histoire::before { background: var(--color-hist); }
 .theme-card.cat-tech::before { background: var(--color-tech); }
 .theme-card.cat-prompt::before { background: var(--color-prompt); }
 .theme-card.cat-reg::before { background: var(--color-reg); }
 .theme-card.cat-agent::before { background: var(--color-agent); }
+.theme-card.cat-dsi::before { background: var(--accent-sky); }
+.theme-card.cat-eval::before { background: var(--accent-purple); }
 
 .theme-card:hover {
     transform: translateY(-5px);
@@ -380,11 +383,14 @@ body {
     display: inline-block;
 }
 
-.theme-card.cat-hist .theme-card-tag { background: rgba(0, 86, 179, 0.1); color: var(--color-hist); }
+.theme-card.cat-hist .theme-card-tag,
+.theme-card.cat-histoire .theme-card-tag { background: rgba(0, 86, 179, 0.1); color: var(--color-hist); }
 .theme-card.cat-tech .theme-card-tag { background: rgba(139, 92, 246, 0.1); color: var(--color-tech); }
 .theme-card.cat-prompt .theme-card-tag { background: rgba(245, 158, 11, 0.1); color: var(--color-prompt); }
 .theme-card.cat-reg .theme-card-tag { background: rgba(239, 68, 68, 0.1); color: var(--color-reg); }
 .theme-card.cat-agent .theme-card-tag { background: rgba(16, 185, 129, 0.1); color: var(--color-agent); }
+.theme-card.cat-dsi .theme-card-tag { background: rgba(14, 165, 233, 0.1); color: var(--accent-sky); }
+.theme-card.cat-eval .theme-card-tag { background: rgba(139, 92, 246, 0.12); color: var(--accent-purple); }
 
 .theme-card-title {
     font-family: 'Outfit', sans-serif;
@@ -411,11 +417,14 @@ body {
     color: var(--accent-blue);
 }
 
-.theme-card.cat-hist .theme-card-footer { color: var(--color-hist); }
+.theme-card.cat-hist .theme-card-footer,
+.theme-card.cat-histoire .theme-card-footer { color: var(--color-hist); }
 .theme-card.cat-tech .theme-card-footer { color: var(--color-tech); }
 .theme-card.cat-prompt .theme-card-footer { color: var(--color-prompt); }
 .theme-card.cat-reg .theme-card-footer { color: var(--color-reg); }
 .theme-card.cat-agent .theme-card-footer { color: var(--color-agent); }
+.theme-card.cat-dsi .theme-card-footer { color: var(--accent-sky); }
+.theme-card.cat-eval .theme-card-footer { color: var(--accent-purple); }
 
 .quick-start-info {
     max-width: 800px;
@@ -6565,6 +6574,81 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================
+   BOUTON PILULE RÉ-ENTRÉE STAGIAIRE & BADGE VERSION
+   ========================================== */
+@keyframes pulse-reopen {
+    0%, 100% {
+        box-shadow: 0 8px 24px rgba(14, 165, 233, 0.45), 0 0 0 0 rgba(56, 189, 248, 0.55);
+    }
+    50% {
+        box-shadow: 0 12px 30px rgba(139, 92, 246, 0.55), 0 0 0 10px rgba(56, 189, 248, 0);
+    }
+}
+
+.btn-floating-poll.stagiaire-reopen-pill {
+    width: auto;
+    height: auto;
+    min-height: 48px;
+    padding: 0.7rem 1.25rem;
+    border-radius: 9999px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    gap: 0.55rem;
+    background: linear-gradient(135deg, #0284c7, #6d28d9);
+    border: 2px solid rgba(255, 255, 255, 0.28);
+    animation: pulse-reopen 2s infinite;
+}
+
+.reopen-pill-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px #4ade80;
+    flex-shrink: 0;
+}
+
+.home-version-bar {
+    max-width: 1200px;
+    width: 100%;
+    margin: 1.5rem auto 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.home-version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    background: rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+@media (max-width: 768px) {
+    .btn-floating-poll.stagiaire-reopen-pill {
+        bottom: 1.15rem;
+        right: 1rem;
+        left: 1rem;
+        justify-content: center;
+        font-size: 0.95rem;
+    }
+
+    .home-version-bar {
+        justify-content: center;
+        margin-top: 1.25rem;
+    }
+}
+
 
 
 

@@ -55,6 +55,7 @@ TrainingApp.prototype.initSupabase = function() {
     }
 
 TrainingApp.prototype.initInteractivity = async function() {
+        this.draftResponses = this.draftResponses || {};
         this.bindHtmlProjectorEvents();
         if (!this.supabase) return;
 
@@ -68,6 +69,10 @@ TrainingApp.prototype.initInteractivity = async function() {
                         await this.stopPoll();
                     } else if (this.activeExercise) {
                         await this.stopActiveExercise();
+                    }
+                } else if (this.role === 'stagiaire') {
+                    if (typeof this.updateStagiaireReopenButton === 'function') {
+                        this.updateStagiaireReopenButton();
                     }
                 }
             };
@@ -180,11 +185,18 @@ TrainingApp.prototype.setupFormateurMode = async function() {
         
         // S'assurer que la session existe dans la table Supabase
         if (this.supabase) {
-            await this.supabase.from('sessions').upsert({
-                id: this.sessionId,
-                active_theme_id: 'home',
-                show_results: false
-            });
+            await this.persistSessionState({
+                themeId: 'home',
+                slideIndex: 0,
+                closed: false,
+                showResults: false,
+                revealState: 'hidden',
+                poll: null,
+                exerciseId: null,
+                zoomPrenom: null,
+                zoomOption: null,
+                projectedHtml: null
+            }, true);
         }
 
         // Afficher le QR Code et le Code PIN sur la page d'accueil
@@ -208,7 +220,9 @@ TrainingApp.prototype.setupFormateurMode = async function() {
             }
             const qrEl = document.getElementById('live-session-qr');
             if (qrEl) {
-                qrEl.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(joinUrl);
+                if (typeof window.generateQrCodeDataUrl === 'function') {
+                    qrEl.src = window.generateQrCodeDataUrl(joinUrl, 180);
+                }
             }
         }
 
@@ -258,21 +272,21 @@ TrainingApp.prototype.setupFormateurMode = async function() {
         if (btnHomeReset) {
             btnHomeReset.onclick = async () => {
                 if (confirm("Êtes-vous sûr de vouloir réinitialiser la session ? Cela déconnectera tous les stagiaires et supprimera tous les votes de la session courante.")) {
-                    if (this.supabase) {
-                        // Supprimer tous les votes pour la session 1
-                        await this.supabase.from('votes').delete().eq('session_id', this.sessionId);
-                        // Supprimer toutes les présences pour la session 1
-                        await this.supabase.from('presences').delete().eq('session_id', this.sessionId);
-                        // Réinitialiser la session en base de données
-                        await this.supabase.from('sessions').update({
-                            active_poll_id: null,
-                            active_exercise_id: null,
-                            show_results: false
-                        }).eq('id', this.sessionId);
-                    }
                     this.activePoll = null;
                     this.activeExercise = null;
+                    this.revealState = 'hidden';
+                    this.currentZoomedPrenom = null;
+                    this.currentZoomedOption = null;
+                    this.activeProjectedHtml = null;
                     this.sessionState.show_results = false;
+                    if (this.supabase) {
+                        // Supprimer tous les votes pour cette session
+                        await this.supabase.from('votes').delete().eq('session_id', this.sessionId);
+                        // Supprimer toutes les présences pour cette session
+                        await this.supabase.from('presences').delete().eq('session_id', this.sessionId);
+                        // Réinitialiser la session en base de données
+                        await this.persistSessionState();
+                    }
                     const panel = document.getElementById('interactivity-panel');
                     if (panel) panel.classList.remove('open');
                     this.refreshFormateurPanel();
@@ -288,9 +302,9 @@ TrainingApp.prototype.setupFormateurMode = async function() {
 
         // Nettoyage périodique des absences (stagiaires déconnectés depuis 5 minutes pour éviter les déconnexions en arrière-plan)
         const cleanOldPresences = async () => {
-            if (!this.supabase) return;
+            if (!this.supabase || !this.sessionId) return;
             const cutoff = new Date(Date.now() - 300 * 1000).toISOString();
-            await this.supabase.from('presences').delete().lt('last_seen_at', cutoff);
+            await this.supabase.from('presences').delete().eq('session_id', this.sessionId).lt('last_seen_at', cutoff);
         };
         cleanOldPresences();
         setInterval(cleanOldPresences, 15000);
@@ -301,6 +315,9 @@ TrainingApp.prototype.setupFormateurMode = async function() {
                 this.activePoll = null;
                 this.activeExercise = null;
                 this.revealState = 'hidden';
+                this.currentZoomedPrenom = null;
+                this.currentZoomedOption = null;
+                this.sessionState.show_results = false;
                 
                 // Fermer le panneau sur changement de slide
                 const panel = document.getElementById('interactivity-panel');
@@ -335,6 +352,9 @@ TrainingApp.prototype.setupStagiaireMode = function() {
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
                 this.updateHeartbeat();
+                if (typeof this.updateStagiaireReopenButton === 'function') {
+                    this.updateStagiaireReopenButton();
+                }
             }
         });
 
@@ -355,29 +375,123 @@ TrainingApp.prototype.setupPublicMode = function() {
         // Ne PAS s'abonner aux canaux temps réel Supabase en mode public autonome
     }
 
-TrainingApp.prototype.syncSessionState = async function() {
-        if (!this.supabase || this.role !== 'formateur') return;
+TrainingApp.prototype.buildSessionStateObject = function(overrides = {}) {
         const theme = this.currentThemeIndex === -1 ? null : THEMES[this.currentThemeIndex];
         const activeThemeId = theme ? theme.id : 'home';
 
-        // Charger l'état actuel de show_results pour conserver la valeur en base de données
-        const { data } = await this.supabase.from('sessions').select('show_results').eq('id', this.sessionId).single();
-        const showResults = data ? data.show_results : false;
-        this.sessionState.show_results = showResults;
-
-        let activePollIdVal = null;
+        let pollPayload = null;
         if (this.activePoll) {
-            const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
-            activePollIdVal = `${this.activePoll.id}${suffix}`;
+            if (this.activePoll.type === 'test-libre') {
+                pollPayload = {
+                    kind: 'test-libre',
+                    baseId: this.activePoll.baseId,
+                    mode: this.activePoll.mode || 'text',
+                    question: this.activePoll.question,
+                    options: this.activePoll.options || null
+                };
+            } else if (this.activePoll.type === 'test-complet') {
+                pollPayload = {
+                    kind: 'test-complet',
+                    id: this.activePoll.id,
+                    maxThemeIdx: parseInt(String(this.activePoll.id).replace('test-idx-', ''), 10)
+                };
+            } else {
+                pollPayload = {
+                    kind: this.activePoll.type || 'quiz',
+                    id: this.activePoll.id
+                };
+            }
         }
 
-        await this.supabase.from('sessions').update({
-            active_theme_id: activeThemeId,
-            active_slide_index: this.currentSlideIndex,
-            active_poll_id: activePollIdVal,
-            active_exercise_id: this.activeExercise ? this.activeExercise.id : null,
-            show_results: this.activePoll || this.activeExercise ? showResults : false
-        }).eq('id', this.sessionId);
+        const base = {
+            themeId: activeThemeId,
+            slideIndex: this.currentThemeIndex === -1 ? 0 : this.currentSlideIndex,
+            closed: false,
+            showResults: !!this.sessionState.show_results,
+            revealState: this.revealState || 'hidden',
+            poll: pollPayload,
+            exerciseId: this.activeExercise ? this.activeExercise.id : null,
+            zoomPrenom: this.currentZoomedPrenom || null,
+            zoomOption: this.currentZoomedOption || null,
+            projectedHtml: this.activeProjectedHtml || null
+        };
+
+        return Object.assign(base, overrides);
+    };
+
+TrainingApp.prototype.buildLegacyPollIdFromState = function(stateObj) {
+        if (stateObj.closed) return 'session-closed';
+        if (stateObj.projectedHtml) return 'html-projector-active';
+
+        if (stateObj.poll) {
+            if (stateObj.poll.kind === 'test-libre') {
+                const legacyPayload = {
+                    baseId: stateObj.poll.baseId,
+                    mode: stateObj.poll.mode || 'text',
+                    q: stateObj.poll.question,
+                    options: stateObj.poll.options || null,
+                    rev: stateObj.revealState || 'hidden',
+                    zoom: stateObj.zoomPrenom || null,
+                    zoomOpt: stateObj.zoomOption || null
+                };
+                return `test-libre-json:${encodeURIComponent(JSON.stringify(legacyPayload))}`;
+            }
+
+            const baseId = stateObj.poll.id;
+            const rev = stateObj.revealState || 'hidden';
+            if (stateObj.zoomOption) {
+                return `${baseId}:${rev}:opt:${stateObj.zoomOption}`;
+            }
+            if (stateObj.zoomPrenom) {
+                const suffix = rev !== 'hidden' ? `:${rev}` : '';
+                return `${baseId}${suffix}:zoom:${stateObj.zoomPrenom}`;
+            }
+            return rev !== 'hidden' ? `${baseId}:${rev}` : baseId;
+        }
+
+        if (stateObj.exerciseId && stateObj.zoomPrenom) {
+            return `exercise-zoom:${stateObj.zoomPrenom}`;
+        }
+
+        return null;
+    };
+
+TrainingApp.prototype.persistSessionState = async function(overrides = {}, upsertMode = false) {
+        if (!this.supabase || this.role !== 'formateur' || !this.sessionId) return;
+        const stateObj = this.buildSessionStateObject(overrides);
+        const legacyPollId = this.buildLegacyPollIdFromState(stateObj);
+
+        const rowPayload = {
+            active_theme_id: stateObj.themeId,
+            active_slide_index: stateObj.slideIndex,
+            active_poll_id: legacyPollId,
+            active_exercise_id: stateObj.exerciseId,
+            show_results: !!(stateObj.poll || stateObj.exerciseId) && !!stateObj.showResults
+        };
+
+        if (this.supportsJsonState) {
+            rowPayload.state = stateObj;
+        }
+
+        const runQuery = async (payload) => {
+            if (upsertMode) {
+                return await this.supabase.from('sessions').upsert({ id: this.sessionId, ...payload });
+            }
+            return await this.supabase.from('sessions').update(payload).eq('id', this.sessionId);
+        };
+
+        const { error } = await runQuery(rowPayload);
+        if (error && this.supportsJsonState && (error.code === '42703' || error.code === 'PGRST204' || /state/i.test(String(error.message || '')))) {
+            console.warn("Colonne sessions.state absente, bascule automatique sur le mode legacy :", error.message);
+            this.supportsJsonState = false;
+            delete rowPayload.state;
+            await runQuery(rowPayload);
+        }
+    };
+
+TrainingApp.prototype.syncSessionState = async function() {
+        if (!this.supabase || this.role !== 'formateur') return;
+        await this.persistSessionState();
     }
 
 TrainingApp.prototype.updateHeartbeat = async function() {
@@ -438,7 +552,7 @@ TrainingApp.prototype.subscribeToSession = function() {
             try {
                 const activeChannels = this.supabase.getChannels();
                 activeChannels.forEach(ch => {
-                    if (ch.topic === 'realtime:presences-channel' || ch.topic === 'realtime:session-state-channel') {
+                    if (ch.topic === 'realtime:session-state-channel') {
                         this.supabase.removeChannel(ch);
                     }
                 });
@@ -456,23 +570,15 @@ TrainingApp.prototype.subscribeToSession = function() {
             this.sessionSubscription.subscribe((status, err) => {
                 if (err) console.log("Canal session en mode local/hors-ligne.");
             });
-
-            // S'abonner aux présences pour voir la liste de la classe
-            this.presenceChannel = this.supabase.channel('presences-channel')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'presences' }, () => {
-                this.refreshPresenceList();
-            });
-            this.presenceChannel.subscribe((status, err) => {
-                if (err) console.log("Canal presences en mode local/hors-ligne.");
-            });
         } catch (e) {
             console.log("Canaux temps réel Supabase réduits (mode local ou hors-ligne).");
         }
-        this.refreshPresenceList();
     }
 
 TrainingApp.prototype.syncToPresenterState = function(data) {
-        if (data.active_poll_id === 'session-closed') {
+        const jsonState = (data.state && typeof data.state === 'object' && Object.keys(data.state).length > 0) ? data.state : null;
+
+        if ((jsonState && jsonState.closed) || data.active_poll_id === 'session-closed') {
             if (this.role === 'stagiaire') {
                 localStorage.removeItem('stagiaire_session_id');
                 alert(`🔒 La session N° ${this.sessionId} a été clôturée par le formateur. Merci pour votre participation !`);
@@ -481,9 +587,9 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
             }
         }
 
-        const themeId = data.active_theme_id;
-        const slideIdx = data.active_slide_index;
-        this.sessionState.show_results = data.show_results;
+        const themeId = jsonState ? jsonState.themeId : data.active_theme_id;
+        const slideIdx = jsonState ? jsonState.slideIndex : data.active_slide_index;
+        this.sessionState.show_results = jsonState ? !!jsonState.showResults : data.show_results;
 
         // 1. Synchroniser le positionnement
         if (themeId === 'home') {
@@ -505,7 +611,18 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
         }
 
         // Synchronisation de la projection index.html
-        if (data.active_poll_id === 'html-projector-active') {
+        if (jsonState) {
+            if (jsonState.projectedHtml) {
+                if (this.role === 'stagiaire') {
+                    this.displayProjectedHtml(jsonState.projectedHtml, false);
+                }
+            } else {
+                const overlay = document.getElementById('html-projector-fullscreen-overlay');
+                if (overlay && overlay.style.display === 'flex' && this.role === 'stagiaire') {
+                    this.closeProjectedHtml();
+                }
+            }
+        } else if (data.active_poll_id === 'html-projector-active') {
             if (this.role === 'stagiaire') {
                 this.supabase.from('votes')
                     .select('reponse')
@@ -513,7 +630,7 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
                     .eq('poll_id', 'projector_index_html')
                     .eq('prenom', '__HOST__')
                     .maybeSingle()
-                    .then(({ data: vote, error }) => {
+                    .then(({ data: vote }) => {
                         if (vote && vote.reponse) {
                             this.displayProjectedHtml(vote.reponse, false);
                         }
@@ -530,6 +647,123 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
         this.activePoll = null;
         this.activeExercise = null;
         this.revealState = 'hidden';
+
+        if (jsonState) {
+            this.revealState = jsonState.revealState || 'hidden';
+            const zoomedPrenom = jsonState.zoomPrenom || null;
+            const zoomedOptionKey = jsonState.zoomOption || null;
+            const p = jsonState.poll;
+
+            if (p) {
+                if (p.kind === 'test-libre') {
+                    const testObj = {
+                        id: p.baseId || 'test-libre-general',
+                        baseId: p.baseId || 'test-libre-general',
+                        type: 'test-libre',
+                        mode: p.mode || 'text',
+                        title: p.mode === 'choice' ? `Sondage Express 📊` : `Atelier libre / Échanges improvisés ✏️`,
+                        question: p.question || "Proposez vos réponses ou remarques par écrit suite aux échanges en cours.",
+                        options: p.options || null,
+                        payload: {
+                            baseId: p.baseId || 'test-libre-general',
+                            mode: p.mode || 'text',
+                            q: p.question,
+                            options: p.options || null,
+                            rev: this.revealState,
+                            zoom: zoomedPrenom,
+                            zoomOpt: zoomedOptionKey
+                        }
+                    };
+                    this.activePoll = testObj;
+                    if (this.role === 'stagiaire') {
+                        this.showStagiaireFreeTestPanel(testObj, this.revealState);
+                    } else if (this.role === 'formateur') {
+                        this.refreshFormateurPanel();
+                    } else if (this.role === 'public') {
+                        this.showPublicFreeTestPanel(testObj, this.revealState);
+                    }
+                } else if (p.kind === 'test-complet') {
+                    const maxThemeIdx = isNaN(p.maxThemeIdx) ? parseInt(String(p.id || '').replace('test-idx-', ''), 10) : p.maxThemeIdx;
+                    const testQuestions = INTERACTIVE_QUESTIONS.filter(q => {
+                        const tIdx = THEMES.findIndex(t => t.id === q.themeId);
+                        return tIdx >= 0 && tIdx <= maxThemeIdx;
+                    });
+                    const testObj = {
+                        id: p.id || `test-idx-${maxThemeIdx}`,
+                        type: 'test-complet',
+                        title: `Test Général (Thèmes 1 à ${maxThemeIdx + 1})`,
+                        questions: testQuestions
+                    };
+                    this.activePoll = testObj;
+                    if (this.role === 'stagiaire') {
+                        this.showStagiaireTestPanel(testObj, this.revealState);
+                    } else if (this.role === 'formateur') {
+                        this.refreshFormateurPanel();
+                    } else if (this.role === 'public') {
+                        this.showPublicTestPanel(testObj, this.revealState);
+                    }
+                } else {
+                    const poll = INTERACTIVE_QUESTIONS.find(q => q.id === p.id);
+                    if (poll) {
+                        this.activePoll = poll;
+                        if (this.role === 'stagiaire') {
+                            this.showStagiairePollPanel(poll, this.revealState);
+                        } else if (this.role === 'formateur') {
+                            this.refreshFormateurPanel();
+                        } else if (this.role === 'public') {
+                            this.showPublicPollPanel(poll, this.revealState);
+                        }
+                    }
+                }
+            } else if (jsonState.exerciseId) {
+                const ex = EXERCISES_DATABASE.find(e => e.id === jsonState.exerciseId);
+                if (ex) {
+                    this.activeExercise = ex;
+                    if (this.role === 'stagiaire') {
+                        this.showStagiaireExercisePanel(ex, !!jsonState.showResults);
+                    } else if (this.role === 'formateur') {
+                        this.refreshFormateurPanel();
+                    } else if (this.role === 'public') {
+                        this.showPublicExercisePanel(ex, !!jsonState.showResults);
+                    }
+                }
+            } else {
+                this.closeInteractivityPanel();
+            }
+
+            if (zoomedOptionKey) {
+                this.showOptionZoomOverlay(this.activePoll, zoomedOptionKey, this.revealState);
+            } else if (zoomedPrenom) {
+                let pollIdForQuery = null;
+                if (this.activePoll && this.activePoll.type === 'test-libre') {
+                    pollIdForQuery = this.activePoll.baseId;
+                } else if (p && p.id) {
+                    pollIdForQuery = p.id;
+                } else if (jsonState.exerciseId) {
+                    pollIdForQuery = `ex-${jsonState.exerciseId}`;
+                }
+                if (pollIdForQuery) {
+                    this.supabase.from('votes')
+                        .select('reponse')
+                        .eq('session_id', this.sessionId)
+                        .eq('poll_id', pollIdForQuery)
+                        .eq('prenom', zoomedPrenom)
+                        .maybeSingle()
+                        .then(({ data: vote }) => {
+                            if (vote) {
+                                this.showZoomOverlay(zoomedPrenom, vote.reponse);
+                            }
+                        });
+                }
+            } else {
+                this.hideZoomOverlay();
+            }
+
+            if (typeof this.updateStagiaireReopenButton === 'function') {
+                this.updateStagiaireReopenButton();
+            }
+            return;
+        }
 
         let activePollId = data.active_poll_id;
         let zoomedPrenom = null;
@@ -727,16 +961,26 @@ TrainingApp.prototype.syncToPresenterState = function(data) {
         } else {
             this.hideZoomOverlay();
         }
+        if (typeof this.updateStagiaireReopenButton === 'function') {
+            this.updateStagiaireReopenButton();
+        }
     }
 TrainingApp.prototype.closeFormateurSession = async function() {
     if (!this.supabase || this.role !== 'formateur') return;
     if (confirm(`Êtes-vous sûr de vouloir clôturer la session de formation N° ${this.sessionId} ? Tous les stagiaires connectés seront basculés en mode public autonome.`)) {
         try {
-            await this.supabase.from('sessions').update({
-                active_theme_id: 'home',
-                active_poll_id: 'session-closed',
-                show_results: false
-            }).eq('id', this.sessionId);
+            await this.persistSessionState({
+                themeId: 'home',
+                slideIndex: 0,
+                closed: true,
+                showResults: false,
+                revealState: 'hidden',
+                poll: null,
+                exerciseId: null,
+                zoomPrenom: null,
+                zoomOption: null,
+                projectedHtml: null
+            });
             
             await this.supabase.from('presences').delete().eq('session_id', this.sessionId);
         } catch (e) {}
@@ -795,19 +1039,18 @@ TrainingApp.prototype.startHtmlProjection = async function(customCode) {
     // 1. Afficher immédiatement sur l'écran local du formateur
     this.displayProjectedHtml(code, true);
 
-    // 2. Persister dans la BDD Supabase (table votes + sessions)
+    // 2. Persister dans la BDD Supabase (sessions.state prioritaire, fallback votes si colonne state absente)
     if (this.supabase && this.role === 'formateur' && this.sessionId) {
         try {
-            await this.supabase.from('votes').upsert({
-                session_id: this.sessionId,
-                poll_id: 'projector_index_html',
-                prenom: '__HOST__',
-                reponse: code
-            }, { onConflict: 'session_id,poll_id,prenom' });
-
-            await this.supabase.from('sessions').update({
-                active_poll_id: 'html-projector-active'
-            }).eq('id', this.sessionId);
+            await this.persistSessionState();
+            if (!this.supportsJsonState) {
+                await this.supabase.from('votes').upsert({
+                    session_id: this.sessionId,
+                    poll_id: 'projector_index_html',
+                    prenom: '__HOST__',
+                    reponse: code
+                }, { onConflict: 'session_id,poll_id,prenom' });
+            }
         } catch(e) {
             console.warn("Erreur mise à jour Supabase pour index.html:", e);
         }
@@ -854,14 +1097,13 @@ TrainingApp.prototype.stopHtmlProjection = async function() {
     // 1. Nettoyer en base de données Supabase
     if (this.supabase && this.role === 'formateur' && this.sessionId) {
         try {
-            await this.supabase.from('votes').delete()
-                .eq('session_id', this.sessionId)
-                .eq('poll_id', 'projector_index_html')
-                .eq('prenom', '__HOST__');
-
-            await this.supabase.from('sessions').update({
-                active_poll_id: null
-            }).eq('id', this.sessionId);
+            await this.persistSessionState();
+            if (!this.supportsJsonState) {
+                await this.supabase.from('votes').delete()
+                    .eq('session_id', this.sessionId)
+                    .eq('poll_id', 'projector_index_html')
+                    .eq('prenom', '__HOST__');
+            }
         } catch(e) {
             console.warn("Erreur réinitialisation session index.html:", e);
         }

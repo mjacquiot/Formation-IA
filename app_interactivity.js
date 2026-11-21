@@ -4,8 +4,57 @@
 
 
 TrainingApp.prototype.closeInteractivityPanel = function() {
-        document.getElementById('interactivity-panel').classList.remove('open');
+        const panel = document.getElementById('interactivity-panel');
+        if (panel) panel.classList.remove('open');
+        if (typeof this.updateStagiaireReopenButton === 'function') {
+            this.updateStagiaireReopenButton();
+        }
     }
+
+TrainingApp.prototype.updateStagiaireReopenButton = function() {
+        const btnFloating = document.getElementById('btn-floating-poll');
+        if (!btnFloating || this.role !== 'stagiaire') return;
+
+        const panel = document.getElementById('interactivity-panel');
+        const isPanelOpen = panel && panel.classList.contains('open');
+        const hasActiveActivity = !!(this.activePoll || this.activeExercise);
+
+        if (hasActiveActivity && !isPanelOpen) {
+            let label = '📊 Revenir au sondage';
+            if (this.activeExercise) {
+                label = "✏️ Revenir à l'atelier";
+            } else if (this.activePoll) {
+                if (this.activePoll.type === 'test-complet') label = '📝 Revenir au test';
+                else if (this.activePoll.type === 'quiz') label = '🎯 Revenir au quiz';
+                else if (this.activePoll.type === 'test-libre' && this.activePoll.mode !== 'choice') label = '✏️ Revenir à la question';
+            }
+            btnFloating.innerHTML = `<span class="reopen-pill-dot"></span><span>${label}</span>`;
+            btnFloating.classList.add('stagiaire-reopen-pill');
+            btnFloating.title = 'Cliquer pour rouvrir le sondage ou l\'atelier en cours';
+            btnFloating.style.display = 'flex';
+            btnFloating.onclick = () => this.reopenStagiaireActivityPanel();
+        } else {
+            btnFloating.style.display = 'none';
+            btnFloating.classList.remove('stagiaire-reopen-pill');
+            btnFloating.innerHTML = '📊';
+        }
+    };
+
+TrainingApp.prototype.reopenStagiaireActivityPanel = function() {
+        if (this.role !== 'stagiaire') return;
+        if (this.activePoll) {
+            if (this.activePoll.type === 'test-complet') {
+                this.showStagiaireTestPanel(this.activePoll, this.revealState);
+            } else if (this.activePoll.type === 'test-libre') {
+                this.showStagiaireFreeTestPanel(this.activePoll, this.revealState);
+            } else {
+                this.showStagiairePollPanel(this.activePoll, this.revealState);
+            }
+        } else if (this.activeExercise) {
+            this.showStagiaireExercisePanel(this.activeExercise, !!this.sessionState.show_results);
+        }
+        this.updateStagiaireReopenButton();
+    };
 
 TrainingApp.prototype.zoomResponse = async function(prenom) {
     if (!this.supabase || this.role !== 'formateur') return;
@@ -14,49 +63,12 @@ TrainingApp.prototype.zoomResponse = async function(prenom) {
         this.clearZoom();
         return;
     }
-    
-    if (this.activePoll && this.activePoll.type === 'test-libre') {
-        this.currentZoomedPrenom = prenom;
-        let newPollId = this.activePoll.id;
-        if (this.activePoll.payload) {
-            const newPayload = { ...this.activePoll.payload, zoom: prenom, zoomOpt: null };
-            newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(newPayload))}`;
-            this.activePoll.id = newPollId;
-            this.activePoll.payload = newPayload;
-        } else if (this.activePoll.id && this.activePoll.id.startsWith('test-libre-json:')) {
-            try {
-                const payload = JSON.parse(decodeURIComponent(this.activePoll.id.replace('test-libre-json:', '')));
-                payload.zoom = prenom;
-                payload.zoomOpt = null;
-                newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(payload))}`;
-                this.activePoll.id = newPollId;
-                this.activePoll.payload = payload;
-            } catch(e) {}
-        }
-        await this.supabase.from('sessions').update({
-            active_poll_id: newPollId
-        }).eq('id', this.sessionId);
-        return;
-    }
-    
-    let targetPollId = null;
-    let pollIdForQuery = null;
-    if (this.activePoll) {
-        targetPollId = this.activePoll.id;
-        const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
-        targetPollId = `${targetPollId}${suffix}:zoom:${prenom}`;
-        pollIdForQuery = this.activePoll.id;
-    } else if (this.activeExercise) {
-        targetPollId = `exercise-zoom:${prenom}`;
-        pollIdForQuery = `ex-${this.activeExercise.id}`;
-    }
-    
-    if (targetPollId) {
-        this.currentZoomedPrenom = prenom;
-        await this.supabase.from('sessions').update({
-            active_poll_id: targetPollId
-        }).eq('id', this.sessionId);
-    }
+
+    if (!this.activePoll && !this.activeExercise) return;
+
+    this.currentZoomedPrenom = prenom;
+    this.currentZoomedOption = null;
+    await this.persistSessionState();
 };
 
 TrainingApp.prototype.clearZoom = async function() {
@@ -65,44 +77,7 @@ TrainingApp.prototype.clearZoom = async function() {
         this.hideZoomOverlay();
         return;
     }
-    
-    if (this.activePoll && this.activePoll.type === 'test-libre') {
-        let newPollId = this.activePoll.id;
-        if (this.activePoll.payload) {
-            const newPayload = { ...this.activePoll.payload, zoom: null, zoomOpt: null };
-            newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(newPayload))}`;
-            this.activePoll.id = newPollId;
-            this.activePoll.payload = newPayload;
-        } else if (this.activePoll.id && this.activePoll.id.startsWith('test-libre-json:')) {
-            try {
-                const payload = JSON.parse(decodeURIComponent(this.activePoll.id.replace('test-libre-json:', '')));
-                payload.zoom = null;
-                payload.zoomOpt = null;
-                newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(payload))}`;
-                this.activePoll.id = newPollId;
-                this.activePoll.payload = payload;
-            } catch(e) {}
-        }
-        await this.supabase.from('sessions').update({
-            active_poll_id: newPollId
-        }).eq('id', this.sessionId);
-        this.hideZoomOverlay();
-        return;
-    }
-    
-    let targetPollId = null;
-    if (this.activePoll) {
-        targetPollId = this.activePoll.id;
-        const suffix = this.revealState === 'answer' ? ':answer' : (this.revealState === 'votes' ? ':votes' : '');
-        targetPollId = `${targetPollId}${suffix}`;
-    } else if (this.activeExercise) {
-        targetPollId = null;
-    }
-    
-    await this.supabase.from('sessions').update({
-        active_poll_id: targetPollId
-    }).eq('id', this.sessionId);
-
+    await this.persistSessionState();
     this.hideZoomOverlay();
 };
 
@@ -164,38 +139,12 @@ TrainingApp.prototype.zoomOption = async function(key, poll) {
         return;
     }
     
-    this.currentZoomedOption = key;
-    
-    if (currentPoll.type === 'test-libre') {
-        let newPollId = currentPoll.id;
-        if (currentPoll.payload) {
-            const newPayload = { ...currentPoll.payload, zoomOpt: key, zoom: null };
-            newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(newPayload))}`;
-            this.activePoll.id = newPollId;
-            this.activePoll.payload = newPayload;
-        } else if (currentPoll.id && currentPoll.id.startsWith('test-libre-json:')) {
-            try {
-                const payload = JSON.parse(decodeURIComponent(currentPoll.id.replace('test-libre-json:', '')));
-                payload.zoomOpt = key;
-                payload.zoom = null;
-                newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(payload))}`;
-                this.activePoll.id = newPollId;
-                this.activePoll.payload = payload;
-            } catch(e) {}
-        }
-        await this.supabase.from('sessions').update({
-            active_poll_id: newPollId
-        }).eq('id', this.sessionId);
-        return;
+    if (!this.activePoll) {
+        this.activePoll = currentPoll;
     }
-    
-    const baseId = currentPoll.id;
-    const rev = this.revealState || 'hidden';
-    const newActivePollId = `${baseId}:${rev}:opt:${key}`;
-    
-    await this.supabase.from('sessions').update({
-        active_poll_id: newActivePollId
-    }).eq('id', this.sessionId);
+    this.currentZoomedOption = key;
+    this.currentZoomedPrenom = null;
+    await this.persistSessionState();
 };
 
 TrainingApp.prototype.closeOptionZoom = async function() {
@@ -204,42 +153,11 @@ TrainingApp.prototype.closeOptionZoom = async function() {
         this.hideZoomOverlay();
         return;
     }
-    const currentPoll = this.activePoll;
-    if (!currentPoll) {
+    if (!this.activePoll) {
         this.hideZoomOverlay();
         return;
     }
-    
-    if (currentPoll.type === 'test-libre') {
-        let newPollId = currentPoll.id;
-        if (currentPoll.payload) {
-            const newPayload = { ...currentPoll.payload, zoomOpt: null };
-            newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(newPayload))}`;
-            this.activePoll.id = newPollId;
-            this.activePoll.payload = newPayload;
-        } else if (currentPoll.id && currentPoll.id.startsWith('test-libre-json:')) {
-            try {
-                const payload = JSON.parse(decodeURIComponent(currentPoll.id.replace('test-libre-json:', '')));
-                payload.zoomOpt = null;
-                newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(payload))}`;
-                this.activePoll.id = newPollId;
-                this.activePoll.payload = payload;
-            } catch(e) {}
-        }
-        await this.supabase.from('sessions').update({
-            active_poll_id: newPollId
-        }).eq('id', this.sessionId);
-        this.hideZoomOverlay();
-        return;
-    }
-    
-    const baseId = currentPoll.id;
-    const rev = this.revealState || 'hidden';
-    const newActivePollId = (rev !== 'hidden') ? `${baseId}:${rev}` : baseId;
-    
-    await this.supabase.from('sessions').update({
-        active_poll_id: newActivePollId
-    }).eq('id', this.sessionId);
+    await this.persistSessionState();
     this.hideZoomOverlay();
 };
 
@@ -468,8 +386,8 @@ TrainingApp.prototype.refreshFormateurPanel = async function() {
             btnToggle.innerText = this.sessionState.show_results ? "👁️ Masquer les réponses" : "👁️ Afficher les réponses";
             btnToggle.onclick = async () => {
                 const nextShow = !this.sessionState.show_results;
-                await this.supabase.from('sessions').update({ show_results: nextShow }).eq('id', this.sessionId);
                 this.sessionState.show_results = nextShow;
+                await this.persistSessionState();
                 this.refreshFormateurPanel();
             };
             
@@ -558,10 +476,10 @@ TrainingApp.prototype.refreshFormateurPanel = async function() {
 
 TrainingApp.prototype.toggleRevealState = async function(poll) {
         if (!this.supabase || this.role !== 'formateur') return;
-        
+
+        let nextRev = 'hidden';
         if (poll.type === 'test-libre') {
             const isChoice = poll.mode === 'choice';
-            let nextRev = 'hidden';
             if (this.revealState === 'hidden') {
                 nextRev = 'votes';
             } else if (this.revealState === 'votes') {
@@ -569,90 +487,41 @@ TrainingApp.prototype.toggleRevealState = async function(poll) {
             } else {
                 nextRev = 'hidden';
             }
-            
-            let newPollId = poll.id;
-            if (poll.payload) {
-                const newPayload = { ...poll.payload, rev: nextRev, zoom: null, zoomOpt: null };
-                newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(newPayload))}`;
-                this.activePoll.id = newPollId;
-                this.activePoll.payload = newPayload;
-            } else if (poll.id && poll.id.startsWith('test-libre-json:')) {
-                try {
-                    const payload = JSON.parse(decodeURIComponent(poll.id.replace('test-libre-json:', '')));
-                    payload.rev = nextRev;
-                    payload.zoom = null;
-                    payload.zoomOpt = null;
-                    newPollId = `test-libre-json:${encodeURIComponent(JSON.stringify(payload))}`;
-                    this.activePoll.id = newPollId;
-                    this.activePoll.payload = payload;
-                } catch(e) {}
-            } else {
-                const baseWithoutRev = poll.id.split(':votes')[0].split(':answer')[0];
-                newPollId = (nextRev === 'hidden') ? baseWithoutRev : `${baseWithoutRev}:${nextRev}`;
-            }
-            
-            const nextShowResults = (nextRev !== 'hidden');
-            await this.supabase.from('sessions').update({
-                active_poll_id: newPollId,
-                show_results: nextShowResults
-            }).eq('id', this.sessionId);
-            
-            this.revealState = nextRev;
-            this.sessionState.show_results = nextShowResults;
-            this.refreshFormateurPanel();
-            return;
-        }
-        
-        let nextPollIdWithSuffix = poll.id;
-        let nextShowResults = false;
-        
-        if (poll.type === 'quiz' || poll.type === 'test-complet') {
+        } else if (poll.type === 'quiz' || poll.type === 'test-complet') {
             // Cycle à 3 états pour les quiz et tests : hidden -> votes -> answer -> hidden
-            if (this.revealState === 'hidden') {
-                nextPollIdWithSuffix = `${poll.id}:votes`;
-                nextShowResults = true;
-            } else if (this.revealState === 'votes') {
-                nextPollIdWithSuffix = `${poll.id}:answer`;
-                nextShowResults = true;
-            } else {
-                nextPollIdWithSuffix = poll.id;
-                nextShowResults = false;
-            }
+            if (this.revealState === 'hidden') nextRev = 'votes';
+            else if (this.revealState === 'votes') nextRev = 'answer';
+            else nextRev = 'hidden';
         } else {
             // Cycle à 2 états pour les sondages simples : hidden -> votes -> hidden
-            if (this.revealState === 'hidden') {
-                nextPollIdWithSuffix = `${poll.id}:votes`;
-                nextShowResults = true;
-            } else {
-                nextPollIdWithSuffix = poll.id;
-                nextShowResults = false;
-            }
+            nextRev = (this.revealState === 'hidden') ? 'votes' : 'hidden';
         }
-        
-        await this.supabase.from('sessions').update({
-            active_poll_id: nextPollIdWithSuffix,
-            show_results: nextShowResults
-        }).eq('id', this.sessionId);
-        
-        this.revealState = nextPollIdWithSuffix.includes(':') ? nextPollIdWithSuffix.split(':')[1] : 'hidden';
+
+        const nextShowResults = (nextRev !== 'hidden');
+        this.revealState = nextRev;
         this.sessionState.show_results = nextShowResults;
-        
+        this.currentZoomedPrenom = null;
+        this.currentZoomedOption = null;
+
+        if (this.activePoll && this.activePoll.type === 'test-libre' && this.activePoll.payload) {
+            this.activePoll.payload = { ...this.activePoll.payload, rev: nextRev, zoom: null, zoomOpt: null };
+        }
+
+        await this.persistSessionState();
         this.refreshFormateurPanel();
     }
 
 TrainingApp.prototype.startPoll = async function(poll) {
         if (!this.supabase || this.role !== 'formateur') return;
         this.activePoll = poll;
+        this.activeExercise = null;
         this.revealState = 'hidden';
         this.sessionState.show_results = false;
+        this.currentZoomedPrenom = null;
+        this.currentZoomedOption = null;
         
         await this.supabase.from('votes').delete().eq('session_id', this.sessionId).eq('poll_id', poll.id);
-        
-        await this.supabase.from('sessions').update({
-            active_poll_id: poll.id,
-            show_results: false,
-            active_exercise_id: null
-        }).eq('id', this.sessionId);
+        await this.persistSessionState();
 
         this.refreshFormateurPanel();
     }
@@ -661,11 +530,11 @@ TrainingApp.prototype.stopPoll = async function() {
         if (!this.supabase || this.role !== 'formateur') return;
         this.activePoll = null;
         this.revealState = 'hidden';
+        this.sessionState.show_results = false;
+        this.currentZoomedPrenom = null;
+        this.currentZoomedOption = null;
         
-        await this.supabase.from('sessions').update({
-            active_poll_id: null,
-            show_results: false
-        }).eq('id', this.sessionId);
+        await this.persistSessionState();
 
         this.refreshFormateurPanel();
     }
@@ -674,11 +543,11 @@ TrainingApp.prototype.stopActiveExercise = async function() {
         if (!this.supabase || this.role !== 'formateur') return;
         this.activeExercise = null;
         this.revealState = 'hidden';
+        this.sessionState.show_results = false;
+        this.currentZoomedPrenom = null;
+        this.currentZoomedOption = null;
         
-        await this.supabase.from('sessions').update({
-            active_exercise_id: null,
-            show_results: false
-        }).eq('id', this.sessionId);
+        await this.persistSessionState();
 
         this.refreshFormateurPanel();
     }
@@ -844,15 +713,13 @@ TrainingApp.prototype.launchLiveExercise = async function(ex) {
         this.activeExercise = ex;
         this.activePoll = null;
         this.revealState = 'hidden';
+        this.sessionState.show_results = false;
+        this.currentZoomedPrenom = null;
+        this.currentZoomedOption = null;
         
         const pollId = `ex-${ex.id}`;
         await this.supabase.from('votes').delete().eq('session_id', this.sessionId).eq('poll_id', pollId);
-        
-        await this.supabase.from('sessions').update({
-            active_exercise_id: ex.id,
-            active_poll_id: null,
-            show_results: false
-        }).eq('id', this.sessionId);
+        await this.persistSessionState();
 
         const panel = document.getElementById('interactivity-panel');
         panel.classList.add('open');
@@ -863,10 +730,23 @@ TrainingApp.prototype.listenToPresenceAndVotes = function() {
         if (!this.supabase) return;
         
         if (this.votesSubscription) this.supabase.removeChannel(this.votesSubscription);
+        if (this.presenceChannel) this.supabase.removeChannel(this.presenceChannel);
+        if (this.supabase.getChannels) {
+            try {
+                this.supabase.getChannels().forEach(ch => {
+                    if (ch.topic === 'realtime:votes-channel' || ch.topic === 'realtime:presences-channel') {
+                        this.supabase.removeChannel(ch);
+                    }
+                });
+            } catch (e) {}
+        }
 
         this.votesSubscription = this.supabase.channel('votes-channel')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'votes' }, (payload) => {
-            // Détection en direct de la projection index.html par le formateur
+            if (payload && payload.new && payload.new.session_id && payload.new.session_id !== this.sessionId) {
+                return;
+            }
+            // Détection en direct de la projection index.html par le formateur (mode legacy fallback)
             if (payload && payload.new && payload.new.poll_id === 'projector_index_html' && payload.new.session_id === this.sessionId) {
                 if (this.role === 'stagiaire') {
                     this.displayProjectedHtml(payload.new.reponse, false);
@@ -923,9 +803,12 @@ TrainingApp.prototype.listenToPresenceAndVotes = function() {
         })
         .subscribe();
 
-        // Écouter les présences stagiaires
-        this.supabase.channel('presences-channel')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'presences' }, () => {
+        // Écouter les présences stagiaires (sans filtre serveur pour ne pas manquer les DELETE, filtré en base lors du fetch)
+        this.presenceChannel = this.supabase.channel('presences-channel')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'presences' }, (payload) => {
+            if (payload && payload.new && payload.new.session_id && payload.new.session_id !== this.sessionId) {
+                return;
+            }
             this.refreshPresenceList();
         })
         .subscribe();
@@ -933,8 +816,11 @@ TrainingApp.prototype.listenToPresenceAndVotes = function() {
     }
 
 TrainingApp.prototype.refreshPresenceList = async function() {
-        if (!this.supabase) return;
-        const { data } = await this.supabase.from('presences').select('prenom');
+        if (!this.supabase || !this.sessionId) return;
+        const { data } = await this.supabase
+            .from('presences')
+            .select('prenom')
+            .eq('session_id', this.sessionId);
         if (data) {
             const countEl = document.getElementById('voters-count');
             const listEl = document.getElementById('voters-names-list');
@@ -981,6 +867,9 @@ TrainingApp.prototype.refreshPresenceList = async function() {
 TrainingApp.prototype.showStagiairePollPanel = async function(poll, revealState) {
         const panel = document.getElementById('interactivity-panel');
         panel.classList.add('open');
+        if (typeof this.updateStagiaireReopenButton === 'function') {
+            this.updateStagiaireReopenButton();
+        }
 
         const panelTitle = document.getElementById('panel-title');
         panelTitle.innerText = poll.type === 'quiz' ? "Quiz de Validation 🎯" : "Sondage d'Opinion 📊";
@@ -1015,13 +904,13 @@ TrainingApp.prototype.showStagiairePollPanel = async function(poll, revealState)
                 btn.onclick = async () => {
                     const key = btn.dataset.key;
                     const isCorrect = poll.type === 'quiz' ? (key === poll.correct) : null;
-                    await this.supabase.from('votes').insert({
+                    await this.supabase.from('votes').upsert({
                         session_id: this.sessionId,
                         poll_id: poll.id,
                         prenom: this.prenom,
                         reponse: key,
                         is_correct: isCorrect
-                    });
+                    }, { onConflict: 'session_id,poll_id,prenom' });
                     this.showStagiairePollPanel(poll, revealState);
                 };
             });
@@ -1107,6 +996,9 @@ TrainingApp.prototype.showStagiairePollPanel = async function(poll, revealState)
 TrainingApp.prototype.showStagiaireExercisePanel = async function(ex, showResults) {
         const panel = document.getElementById('interactivity-panel');
         panel.classList.add('open');
+        if (typeof this.updateStagiaireReopenButton === 'function') {
+            this.updateStagiaireReopenButton();
+        }
 
         const panelTitle = document.getElementById('panel-title');
         panelTitle.innerText = `Atelier : ${ex.title}`;
@@ -1165,6 +1057,17 @@ TrainingApp.prototype.showStagiaireExercisePanel = async function(ex, showResult
                     </div>
                 `;
                 
+                this.draftResponses = this.draftResponses || {};
+                const exTextarea = document.getElementById('ex-student-input');
+                if (exTextarea) {
+                    if (this.draftResponses[pollId]) {
+                        exTextarea.value = this.draftResponses[pollId];
+                    }
+                    exTextarea.oninput = () => {
+                        this.draftResponses[pollId] = exTextarea.value;
+                    };
+                }
+
                 document.getElementById('btn-submit-ex').onclick = async () => {
                     const textVal = document.getElementById('ex-student-input').value.trim();
                     if (!textVal) {
@@ -1172,13 +1075,14 @@ TrainingApp.prototype.showStagiaireExercisePanel = async function(ex, showResult
                         return;
                     }
                     
-                    await this.supabase.from('votes').insert({
+                    await this.supabase.from('votes').upsert({
                         session_id: this.sessionId,
                         poll_id: pollId,
                         prenom: this.prenom,
                         reponse: textVal
-                    });
+                    }, { onConflict: 'session_id,poll_id,prenom' });
                     
+                    delete this.draftResponses[pollId];
                     this.showStagiaireExercisePanel(ex, showResults);
                 };
             } else {
@@ -1233,6 +1137,9 @@ TrainingApp.prototype.startGeneralTest = async function(maxThemeIdx) {
         
         this.sessionState.show_results = false;
         this.revealState = 'hidden';
+        this.activeExercise = null;
+        this.currentZoomedPrenom = null;
+        this.currentZoomedOption = null;
         
         this.activePoll = {
             id: testId,
@@ -1241,11 +1148,7 @@ TrainingApp.prototype.startGeneralTest = async function(maxThemeIdx) {
             questions: testQuestions
         };
         
-        await this.supabase.from('sessions').update({
-            active_poll_id: testId,
-            show_results: false,
-            active_exercise_id: null
-        }).eq('id', this.sessionId);
+        await this.persistSessionState();
 
         this.refreshFormateurPanel();
     }
@@ -1362,6 +1265,9 @@ TrainingApp.prototype.loadTestResults = async function(testObj) {
 TrainingApp.prototype.showStagiaireTestPanel = async function(testObj, revealState) {
         const panel = document.getElementById('interactivity-panel');
         if (panel) panel.classList.add('open');
+        if (typeof this.updateStagiaireReopenButton === 'function') {
+            this.updateStagiaireReopenButton();
+        }
 
         const panelTitle = document.getElementById('panel-title');
         if (panelTitle) panelTitle.innerText = testObj.title;
@@ -1451,13 +1357,13 @@ TrainingApp.prototype.showStagiaireTestPanel = async function(testObj, revealSta
                     const question = testObj.questions.find(q => q.id === qid);
                     const isCorrect = question.type === 'quiz' ? (key === question.correct) : null;
                     
-                    await this.supabase.from('votes').insert({
+                    await this.supabase.from('votes').upsert({
                         session_id: this.sessionId,
                         poll_id: qid,
                         prenom: this.prenom,
                         reponse: key,
                         is_correct: isCorrect
-                    });
+                    }, { onConflict: 'session_id,poll_id,prenom' });
                     
                     this.showStagiaireTestPanel(testObj, revealState);
                 };
@@ -1837,12 +1743,9 @@ TrainingApp.prototype.executeStartFreeTest = async function(questionText, mode =
         options: finalOptions,
         payload: payload
     };
+    this.activeExercise = null;
     
-    await this.supabase.from('sessions').update({
-        active_poll_id: fullActivePollId,
-        show_results: false,
-        active_exercise_id: null
-    }).eq('id', this.sessionId);
+    await this.persistSessionState();
 
     this.refreshFormateurPanel();
 };
@@ -1968,6 +1871,9 @@ TrainingApp.prototype.loadFreeTestResults = async function(testObj) {
 TrainingApp.prototype.showStagiaireFreeTestPanel = async function(testObj, revealState) {
     const panel = document.getElementById('interactivity-panel');
     if (panel) panel.classList.add('open');
+    if (typeof this.updateStagiaireReopenButton === 'function') {
+        this.updateStagiaireReopenButton();
+    }
 
     const isChoice = (testObj.mode === 'choice');
     const panelTitle = document.getElementById('panel-title');
@@ -2119,6 +2025,15 @@ TrainingApp.prototype.showStagiaireFreeTestPanel = async function(testObj, revea
             
             const btnSubmit = resultsSection.querySelector('#btn-submit-free-test');
             const textarea = resultsSection.querySelector('#free-test-response-input');
+            this.draftResponses = this.draftResponses || {};
+            if (textarea) {
+                if (this.draftResponses[baseQueryId]) {
+                    textarea.value = this.draftResponses[baseQueryId];
+                }
+                textarea.oninput = () => {
+                    this.draftResponses[baseQueryId] = textarea.value;
+                };
+            }
             btnSubmit.onclick = async () => {
                 const responseText = textarea.value.trim();
                 if (!responseText) return;
@@ -2131,6 +2046,7 @@ TrainingApp.prototype.showStagiaireFreeTestPanel = async function(testObj, revea
                     is_correct: null
                 }, { onConflict: 'session_id,poll_id,prenom' });
                 
+                delete this.draftResponses[baseQueryId];
                 this.showStagiaireFreeTestPanel(testObj, revealState);
             };
         } else {
