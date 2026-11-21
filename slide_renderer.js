@@ -2491,6 +2491,218 @@ function getSlideHTML(slide, theme) {
                         </div>
                     ` : ''}
                 `;
+            } else if (slide.type === 'ai-breakthroughs-timeline') {
+                const cats = slide.categories || [];
+                const items = slide.items || [];
+                html += `
+                    <p class="bt-intro">${slide.desc || ''}</p>
+                    <div class="breakthrough-filters" id="bt-filters">
+                        ${cats.map((c, idx) => `
+                            <button type="button" class="breakthrough-filter-btn ${idx === 0 ? 'active' : ''}" data-cat="${c.id}">
+                                ${c.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="breakthrough-grid" id="breakthrough-grid">
+                        ${items.map(item => `
+                            <article class="breakthrough-card" data-cat="${item.category}" style="--bt-accent: ${item.color || 'var(--accent-blue)'};">
+                                <div class="bt-card-top">
+                                    <span class="bt-date">${item.date}</span>
+                                    <span class="bt-badge">${item.badge}</span>
+                                </div>
+                                <h4 class="bt-title">${item.title}</h4>
+                                <div class="bt-block"><strong>🎯 Défi initial :</strong> ${item.challenge}</div>
+                                <div class="bt-block"><strong>🔬 Percée / Fait marquant :</strong> ${item.event}</div>
+                                <div class="bt-apps"><strong>🏛️ Applications & Leçons :</strong> ${item.applications}</div>
+                            </article>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (slide.type === 'next-token-simulator') {
+                const prompts = slide.prompts || [];
+                html += `
+                    <p class="nts-intro">${slide.desc || ''}</p>
+                    <div class="nts-prompts-bar" id="nts-prompts-bar">
+                        ${prompts.map((p, idx) => `
+                            <button type="button" class="nts-prompt-btn ${idx === 0 ? 'active' : ''}" data-prompt-idx="${idx}">
+                                ${p.label}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div class="nts-sentence-box">
+                        <div class="nts-sentence-label">Phrase en cours de génération (mot par mot) :</div>
+                        <div class="nts-sentence-line">
+                            <span id="nts-base-text">${prompts[0] ? this.escapeHtml(prompts[0].baseText) : ''}</span>
+                            <span id="nts-generated-tokens" class="nts-generated-tokens"></span>
+                            <span class="nts-cursor">▍</span>
+                        </div>
+                    </div>
+
+                    <div class="nts-workspace">
+                        <div class="nts-controls-card">
+                            <div class="nts-temp-header">
+                                <label for="nts-temp-slider">🌡️ Température : <strong id="nts-temp-val">0.20</strong></label>
+                                <span class="nts-temp-badge" id="nts-temp-badge">Factuel & Prudent</span>
+                            </div>
+                            <input type="range" id="nts-temp-slider" class="nts-slider" min="0" max="1.5" step="0.05" value="0.2">
+                            <div class="nts-slider-scale">
+                                <span>0.0 (Rigide)</span>
+                                <span>0.3 (Admin)</span>
+                                <span>0.8 (Créatif)</span>
+                                <span>1.5 (Délire)</span>
+                            </div>
+
+                            <div class="nts-step-status" id="nts-step-status">Étape 1 / 3 — Prêt à prédire le mot suivant</div>
+
+                            <div class="nts-action-buttons">
+                                <button type="button" class="btn btn-primary" id="btn-nts-sample">🎲 Tirer le mot suivant (Softmax)</button>
+                                <button type="button" class="btn btn-secondary" id="btn-nts-greedy">🎯 Prendre le n°1 (Déterministe)</button>
+                                <button type="button" class="btn btn-secondary" id="btn-nts-reset">↺ Réinitialiser la phrase</button>
+                            </div>
+                        </div>
+
+                        <div class="nts-probs-card">
+                            <div class="nts-probs-title">Top 5 des mots candidats & probabilités Softmax en direct :</div>
+                            <div id="nts-candidates-list" class="nts-candidates-list">
+                                <!-- Injecté dynamiquement par JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nts-takeaway">
+                        💡 <strong>À retenir :</strong> À <strong>T = 0.2</strong>, le mot n°1 capte presque toute la probabilité (style administratif fiable). À <strong>T = 1.4</strong>, la courbe s'aplatit : des mots rares ou absurdes deviennent tirables au sort, expliquant les dérapages créatifs et hallucinations.
+                    </div>
+                `;
+            } else if (slide.type === 'context-window-crashtest') {
+                const windows = slide.windows || [];
+                const docs = slide.documents || [];
+                html += `
+                    <p class="cw-intro">${slide.desc || ''}</p>
+
+                    <div class="cw-top-controls">
+                        <div class="cw-window-selector">
+                            <span class="cw-section-label">1. Choisissez la taille de fenêtre du modèle :</span>
+                            <div class="cw-window-pills" id="cw-window-pills">
+                                ${windows.map((w, idx) => `
+                                    <button type="button" class="cw-window-btn ${idx === 1 ? 'active' : ''}" data-window-id="${w.id}" data-tokens="${w.tokens}">
+                                        <strong>${w.label}</strong>
+                                        <span>${w.desc}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" id="btn-cw-clear">🧹 Nouveau Chat Propre</button>
+                    </div>
+
+                    <div class="cw-docs-section">
+                        <span class="cw-section-label">2. Cliquez pour empiler des documents & échanges dans la conversation :</span>
+                        <div class="cw-docs-grid" id="cw-docs-grid">
+                            ${docs.map(d => `
+                                <button type="button" class="cw-doc-chip" data-doc-id="${d.id}" data-tokens="${d.tokens}">
+                                    <span class="cw-doc-icon">${d.icon}</span>
+                                    <div class="cw-doc-info">
+                                        <strong>${d.title}</strong>
+                                        <span>${d.detail}</span>
+                                    </div>
+                                    <span class="cw-doc-order" id="cw-order-${d.id}" style="display:none;"></span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="cw-meter-card">
+                        <div class="cw-meter-header">
+                            <span>Occupation de la mémoire (Fenêtre de contexte)</span>
+                            <strong id="cw-meter-label">0 / 128 000 tokens (0%)</strong>
+                        </div>
+                        <div class="cw-meter-track">
+                            <div class="cw-meter-fill" id="cw-meter-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="cw-overflow-banner" id="cw-overflow-banner" style="display:none;">
+                            ⚠️ <strong>Saturation dépassée (&gt;100%) !</strong> Les premiers éléments (consignes initiales ou début du dossier) sont purement et simplement tronqués de la mémoire de l'IA.
+                        </div>
+                    </div>
+
+                    <div class="cw-kpis-grid">
+                        <div class="cw-kpi-box">
+                            <span class="cw-kpi-label">Rappel en zone centrale</span>
+                            <strong class="cw-kpi-val" id="cw-kpi-middle">98 %</strong>
+                            <span class="cw-kpi-sub">Précision sur un détail enfoui au milieu</span>
+                        </div>
+                        <div class="cw-kpi-box">
+                            <span class="cw-kpi-label">Coût & Énergie / message</span>
+                            <strong class="cw-kpi-val" id="cw-kpi-cost">1× (Minimal)</strong>
+                            <span class="cw-kpi-sub">Tout le fil est recalculé à chaque question</span>
+                        </div>
+                        <div class="cw-kpi-box">
+                            <span class="cw-kpi-label">Diagnostic Session</span>
+                            <strong class="cw-kpi-val" id="cw-kpi-status">🟢 Optimale</strong>
+                            <span class="cw-kpi-sub" id="cw-kpi-advice">Conversation courte & précise</span>
+                        </div>
+                    </div>
+
+                    <div class="cw-ucurve-card">
+                        <div class="cw-ucurve-header">
+                            <strong>📉 Effet « Lost in the Middle » (Courbe d'attention du Transformer)</strong>
+                            <span>L'IA retient très bien le début et la fin du fil, mais oublie facilement les informations noyées au milieu.</span>
+                        </div>
+                        <div id="cw-ucurve-svg-wrap" class="cw-ucurve-svg-wrap">
+                            <!-- SVG généré dynamiquement par JS -->
+                        </div>
+                    </div>
+                `;
+            } else if (slide.type === 'cgct-truth-game') {
+                html += `
+                    <p class="cgct-intro">${slide.desc || ''}</p>
+                    <div class="cgct-topbar">
+                        <div class="cgct-badges">
+                            <span class="cgct-pill" id="cgct-progress">Extrait 1 / ${(slide.cards || []).length}</span>
+                            <span class="cgct-pill cgct-pill-score" id="cgct-score">Score : 0 / 0</span>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" id="btn-cgct-reveal-only">👁️ Révéler sans voter (Animation salle)</button>
+                    </div>
+                    <div id="cgct-card-stage" class="cgct-card-stage">
+                        <!-- Injecté dynamiquement par JS -->
+                    </div>
+                `;
+            } else if (slide.type === 'prompt-refinement-methods') {
+                const methods = slide.methods || [];
+                html += `
+                    <p class="refinement-intro">${slide.intro || ''}</p>
+                    <div class="refinement-cards-grid">
+                        ${methods.map(m => `
+                            <div class="refinement-card" style="--ref-accent: ${m.color || 'var(--accent-blue)'};">
+                                <div class="refinement-card-header">
+                                    <span class="refinement-num">${m.icon} Réflexe ${m.num}</span>
+                                    <span class="refinement-badge">${m.badge}</span>
+                                </div>
+                                <h4 class="refinement-title">${m.title}</h4>
+                                <p class="refinement-why"><strong>Pourquoi ?</strong> ${m.why}</p>
+                                <p class="refinement-usecase"><strong>Cas concret :</strong> ${m.useCase}</p>
+                                <div class="gabarit-box refinement-prompt-box">
+                                    <div class="gabarit-header">
+                                        <span>Prompt prêt à l'emploi</span>
+                                        <button type="button" class="gabarit-copy-btn btn-copy-code">📋 Copier</button>
+                                    </div>
+                                    <pre class="gabarit-pre"><code>${this.escapeHtml(m.prompt)}</code></pre>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${slide.comboPrompt ? `
+                        <div class="refinement-combo-box">
+                            <div class="refinement-combo-title">${slide.comboPromptTitle || 'Clause combinée :'}</div>
+                            <div class="gabarit-box">
+                                <div class="gabarit-header">
+                                    <span>Clause « Turbo Précision » (à coller en fin de prompt)</span>
+                                    <button type="button" class="gabarit-copy-btn btn-copy-code">📋 Copier la clause complète</button>
+                                </div>
+                                <pre class="gabarit-pre"><code>${this.escapeHtml(slide.comboPrompt)}</code></pre>
+                            </div>
+                        </div>
+                    ` : ''}
+                `;
             }
     return html;
 }

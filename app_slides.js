@@ -804,6 +804,488 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
             });
         }
 
+        if (slide.type === 'ai-breakthroughs-timeline') {
+            const filterBtns = this.slideContainer.querySelectorAll('.breakthrough-filter-btn');
+            const cards = this.slideContainer.querySelectorAll('.breakthrough-card');
+            filterBtns.forEach(btn => {
+                btn.onclick = () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const cat = btn.dataset.cat;
+                    cards.forEach(card => {
+                        card.style.display = (cat === 'all' || card.dataset.cat === cat) ? 'flex' : 'none';
+                    });
+                };
+            });
+        }
+
+        if (slide.type === 'next-token-simulator') {
+            const prompts = slide.prompts || [];
+            let promptIdx = 0;
+            let stepIdx = 0;
+            let chosenTokens = [];
+
+            const promptBtns = this.slideContainer.querySelectorAll('.nts-prompt-btn');
+            const baseTextEl = this.slideContainer.querySelector('#nts-base-text');
+            const generatedEl = this.slideContainer.querySelector('#nts-generated-tokens');
+            const tempSlider = this.slideContainer.querySelector('#nts-temp-slider');
+            const tempValEl = this.slideContainer.querySelector('#nts-temp-val');
+            const tempBadgeEl = this.slideContainer.querySelector('#nts-temp-badge');
+            const stepStatusEl = this.slideContainer.querySelector('#nts-step-status');
+            const candidatesListEl = this.slideContainer.querySelector('#nts-candidates-list');
+            const btnSample = this.slideContainer.querySelector('#btn-nts-sample');
+            const btnGreedy = this.slideContainer.querySelector('#btn-nts-greedy');
+            const btnReset = this.slideContainer.querySelector('#btn-nts-reset');
+
+            const getTempLabel = (t) => {
+                if (t <= 0.05) return { text: 'Déterministe (Rigide)', color: '#0284c7' };
+                if (t <= 0.35) return { text: 'Factuel & Administratif', color: '#10b981' };
+                if (t <= 0.85) return { text: 'Équilibré / Créatif', color: '#f59e0b' };
+                return { text: 'Audacieux (Risque d\'hallucination)', color: '#ef4444' };
+            };
+
+            const renderSimulator = () => {
+                const currentPrompt = prompts[promptIdx];
+                if (!currentPrompt) return;
+                const steps = currentPrompt.steps || [];
+                const temp = parseFloat(tempSlider ? tempSlider.value : '0.2');
+
+                if (tempValEl) tempValEl.innerText = temp.toFixed(2);
+                if (tempBadgeEl) {
+                    const info = getTempLabel(temp);
+                    tempBadgeEl.innerText = info.text;
+                    tempBadgeEl.style.background = `${info.color}22`;
+                    tempBadgeEl.style.color = info.color;
+                    tempBadgeEl.style.borderColor = `${info.color}55`;
+                }
+
+                if (baseTextEl) baseTextEl.innerText = currentPrompt.baseText;
+                if (generatedEl) {
+                    generatedEl.innerHTML = chosenTokens.map(tok =>
+                        `<span class="nts-token-chip tone-${tok.tone}">${this.escapeHtml(tok.token)}</span>`
+                    ).join(' ');
+                }
+
+                const isFinished = stepIdx >= steps.length;
+                if (btnSample) btnSample.disabled = isFinished;
+                if (btnGreedy) btnGreedy.disabled = isFinished;
+
+                if (stepStatusEl) {
+                    stepStatusEl.innerText = isFinished
+                        ? `✅ Phrase complète (${steps.length} / ${steps.length} mots générés) — Réinitialisez ou changez la température`
+                        : `Étape ${stepIdx + 1} / ${steps.length} — Probabilités calculées pour le mot suivant`;
+                }
+
+                if (!candidatesListEl) return;
+                if (isFinished) {
+                    candidatesListEl.innerHTML = `
+                        <div class="nts-done-box">
+                            🏁 Génération terminée !<br>
+                            <span>Changez de phrase ci-dessus ou cliquez sur <strong>Réinitialiser</strong> pour comparer avec une autre température.</span>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const candidates = steps[stepIdx] || [];
+                const probs = this.computeTokenSoftmax(candidates, temp);
+
+                candidatesListEl.innerHTML = probs.map((item, idx) => `
+                    <button type="button" class="nts-candidate-row tone-${item.tone}" data-cand-idx="${idx}" title="Cliquer pour injecter manuellement ce mot">
+                        <div class="nts-cand-top">
+                            <span class="nts-cand-token">${idx + 1}. ${this.escapeHtml(item.token)}</span>
+                            <span class="nts-cand-meta">logit ${item.logit.toFixed(1)} • <strong>${item.prob.toFixed(1)} %</strong></span>
+                        </div>
+                        <div class="nts-cand-track">
+                            <div class="nts-cand-bar tone-${item.tone}" style="width: ${Math.max(1.5, item.prob).toFixed(1)}%;"></div>
+                        </div>
+                    </button>
+                `).join('');
+
+                candidatesListEl.querySelectorAll('.nts-candidate-row').forEach(row => {
+                    row.onclick = () => {
+                        const cIdx = parseInt(row.dataset.candIdx, 10);
+                        if (!isNaN(cIdx) && probs[cIdx]) {
+                            chosenTokens.push(probs[cIdx]);
+                            stepIdx++;
+                            renderSimulator();
+                        }
+                    };
+                });
+            };
+
+            promptBtns.forEach(btn => {
+                btn.onclick = () => {
+                    promptBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    promptIdx = parseInt(btn.dataset.promptIdx, 10) || 0;
+                    stepIdx = 0;
+                    chosenTokens = [];
+                    renderSimulator();
+                };
+            });
+
+            if (tempSlider) tempSlider.oninput = renderSimulator;
+
+            if (btnSample) {
+                btnSample.onclick = () => {
+                    const currentPrompt = prompts[promptIdx];
+                    const candidates = (currentPrompt && currentPrompt.steps && currentPrompt.steps[stepIdx]) || [];
+                    if (!candidates.length) return;
+                    const temp = parseFloat(tempSlider ? tempSlider.value : '0.2');
+                    const probs = this.computeTokenSoftmax(candidates, temp);
+                    let r = Math.random() * 100;
+                    let picked = probs[0];
+                    for (let i = 0; i < probs.length; i++) {
+                        r -= probs[i].prob;
+                        if (r <= 0) {
+                            picked = probs[i];
+                            break;
+                        }
+                    }
+                    chosenTokens.push(picked);
+                    stepIdx++;
+                    renderSimulator();
+                };
+            }
+
+            if (btnGreedy) {
+                btnGreedy.onclick = () => {
+                    const currentPrompt = prompts[promptIdx];
+                    const candidates = (currentPrompt && currentPrompt.steps && currentPrompt.steps[stepIdx]) || [];
+                    if (!candidates.length) return;
+                    const probs = this.computeTokenSoftmax(candidates, 0);
+                    chosenTokens.push(probs[0]);
+                    stepIdx++;
+                    renderSimulator();
+                };
+            }
+
+            if (btnReset) {
+                btnReset.onclick = () => {
+                    stepIdx = 0;
+                    chosenTokens = [];
+                    renderSimulator();
+                };
+            }
+
+            renderSimulator();
+        }
+
+        if (slide.type === 'context-window-crashtest') {
+            const docs = slide.documents || [];
+            const windowBtns = this.slideContainer.querySelectorAll('.cw-window-btn');
+            const docChips = this.slideContainer.querySelectorAll('.cw-doc-chip');
+            const btnClear = this.slideContainer.querySelector('#btn-cw-clear');
+            const meterLabel = this.slideContainer.querySelector('#cw-meter-label');
+            const meterFill = this.slideContainer.querySelector('#cw-meter-fill');
+            const overflowBanner = this.slideContainer.querySelector('#cw-overflow-banner');
+            const kpiMiddle = this.slideContainer.querySelector('#cw-kpi-middle');
+            const kpiCost = this.slideContainer.querySelector('#cw-kpi-cost');
+            const kpiStatus = this.slideContainer.querySelector('#cw-kpi-status');
+            const kpiAdvice = this.slideContainer.querySelector('#cw-kpi-advice');
+            const svgWrap = this.slideContainer.querySelector('#cw-ucurve-svg-wrap');
+
+            let maxTokens = 128000;
+            let selectedOrder = ['mail', 'delib'];
+
+            const renderContextCrashTest = () => {
+                const selectedDocs = selectedOrder
+                    .map(id => docs.find(d => d.id === id))
+                    .filter(Boolean);
+                const usedTokens = selectedDocs.reduce((acc, d) => acc + d.tokens, 0);
+                const ratio = maxTokens > 0 ? (usedTokens / maxTokens) : 0;
+                const pct = Math.round(ratio * 100);
+
+                docChips.forEach(chip => {
+                    const id = chip.dataset.docId;
+                    const pos = selectedOrder.indexOf(id);
+                    const badge = chip.querySelector(`#cw-order-${id}`);
+                    if (pos !== -1) {
+                        chip.classList.add('active');
+                        if (badge) {
+                            badge.style.display = 'inline-flex';
+                            badge.innerText = `#${pos + 1}`;
+                        }
+                    } else {
+                        chip.classList.remove('active');
+                        if (badge) badge.style.display = 'none';
+                    }
+                });
+
+                if (meterLabel) {
+                    meterLabel.innerText = `${usedTokens.toLocaleString('fr-FR')} / ${maxTokens.toLocaleString('fr-FR')} tokens (${pct} %)`;
+                }
+                if (meterFill) {
+                    meterFill.style.width = `${Math.min(100, pct)}%`;
+                    if (pct > 100) {
+                        meterFill.style.background = 'linear-gradient(90deg, #ef4444, #b91c1c)';
+                    } else if (pct >= 70) {
+                        meterFill.style.background = 'linear-gradient(90deg, #f59e0b, #ef4444)';
+                    } else {
+                        meterFill.style.background = 'linear-gradient(90deg, #0ea5e9, #6366f1)';
+                    }
+                }
+                if (overflowBanner) {
+                    overflowBanner.style.display = pct > 100 ? 'block' : 'none';
+                }
+
+                let middleRecall = 98;
+                if (ratio > 1) {
+                    middleRecall = Math.max(12, Math.round(35 - (ratio - 1) * 20));
+                } else if (ratio > 0.25) {
+                    middleRecall = Math.round(92 - ((ratio - 0.25) / 0.75) * 48);
+                } else if (ratio > 0) {
+                    middleRecall = Math.round(98 - ratio * 24);
+                }
+
+                const costMult = (1 + usedTokens / 4000).toFixed(1);
+
+                if (kpiMiddle) {
+                    kpiMiddle.innerText = `${middleRecall} %`;
+                    kpiMiddle.style.color = middleRecall < 60 ? 'var(--accent-red)' : (middleRecall < 80 ? 'var(--accent-gold)' : 'var(--accent-green)');
+                }
+                if (kpiCost) {
+                    kpiCost.innerText = `${costMult}×`;
+                }
+                if (kpiStatus && kpiAdvice) {
+                    if (pct > 100) {
+                        kpiStatus.innerText = '🔴 Troncature';
+                        kpiStatus.style.color = 'var(--accent-red)';
+                        kpiAdvice.innerText = 'Oubli garanti du début : découpez le dossier !';
+                    } else if (pct >= 65) {
+                        kpiStatus.innerText = '🟠 Noyade centrale';
+                        kpiStatus.style.color = 'var(--accent-gold)';
+                        kpiAdvice.innerText = 'Risque fort d\'effet Lost in the Middle';
+                    } else if (usedTokens === 0) {
+                        kpiStatus.innerText = '⚪ Chat vierge';
+                        kpiStatus.style.color = 'var(--text-title)';
+                        kpiAdvice.innerText = 'Prêt pour une nouvelle tâche ciblée';
+                    } else {
+                        kpiStatus.innerText = '🟢 Optimale';
+                        kpiStatus.style.color = 'var(--accent-green)';
+                        kpiAdvice.innerText = 'Mémoire fluide & coût maîtrisé';
+                    }
+                }
+
+                if (svgWrap) {
+                    const dipY = ratio === 0 ? 55 : Math.min(148, Math.round(62 + Math.min(1.2, ratio) * 72));
+                    const startX = 40;
+                    const endX = 560;
+                    const widthX = endX - startX;
+
+                    let cumul = 0;
+                    const denom = Math.max(usedTokens, maxTokens);
+                    const markersHtml = selectedDocs.map((d, idx) => {
+                        const midTok = cumul + d.tokens / 2;
+                        const normX = Math.min(1, midTok / denom);
+                        const cx = Math.round(startX + normX * widthX);
+                        const isTruncated = usedTokens > maxTokens && (usedTokens - cumul) > maxTokens;
+                        cumul += d.tokens;
+                        const fill = isTruncated ? '#ef4444' : (normX > 0.25 && normX < 0.75 && ratio > 0.45 ? '#f59e0b' : '#38bdf8');
+                        return `
+                            <g>
+                                <line x1="${cx}" y1="22" x2="${cx}" y2="152" stroke="${fill}" stroke-dasharray="3 3" stroke-width="1.5" opacity="0.55"/>
+                                <circle cx="${cx}" cy="152" r="11" fill="${fill}" stroke="#0f172a" stroke-width="2"/>
+                                <text x="${cx}" y="156" text-anchor="middle" fill="#ffffff" font-size="9.5" font-weight="800">#${idx + 1}</text>
+                            </g>
+                        `;
+                    }).join('');
+
+                    svgWrap.innerHTML = `
+                        <svg viewBox="0 0 600 178" class="cw-ucurve-svg" role="img" aria-label="Courbe d'attention U-Shape">
+                            <rect x="175" y="18" width="250" height="136" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.25)" stroke-dasharray="4 4"/>
+                            <text x="300" y="34" text-anchor="middle" fill="#f59e0b" font-size="10.5" font-weight="700">Zone « Lost in the Middle » (Attention réduite)</text>
+                            <path d="M 40 38 C 145 38, 180 ${dipY}, 300 ${dipY} C 420 ${dipY}, 455 38, 560 38" fill="none" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round"/>
+                            <text x="40" y="24" text-anchor="start" fill="#10b981" font-size="10.5" font-weight="700">Début (Rôle & Consignes)</text>
+                            <text x="560" y="24" text-anchor="end" fill="#10b981" font-size="10.5" font-weight="700">Fin (Question actuelle)</text>
+                            <line x1="32" y1="152" x2="568" y2="152" stroke="rgba(148,163,184,0.35)" stroke-width="1.5"/>
+                            ${markersHtml}
+                        </svg>
+                    `;
+                }
+            };
+
+            windowBtns.forEach(btn => {
+                btn.onclick = () => {
+                    windowBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    maxTokens = parseInt(btn.dataset.tokens, 10) || 128000;
+                    renderContextCrashTest();
+                };
+            });
+
+            docChips.forEach(chip => {
+                chip.onclick = () => {
+                    const id = chip.dataset.docId;
+                    const idx = selectedOrder.indexOf(id);
+                    if (idx !== -1) {
+                        selectedOrder.splice(idx, 1);
+                    } else {
+                        selectedOrder.push(id);
+                    }
+                    renderContextCrashTest();
+                };
+            });
+
+            if (btnClear) {
+                btnClear.onclick = () => {
+                    selectedOrder = [];
+                    renderContextCrashTest();
+                };
+            }
+
+            renderContextCrashTest();
+        }
+
+        if (slide.type === 'cgct-truth-game') {
+            const cards = slide.cards || [];
+            const progressEl = this.slideContainer.querySelector('#cgct-progress');
+            const scoreEl = this.slideContainer.querySelector('#cgct-score');
+            const stageEl = this.slideContainer.querySelector('#cgct-card-stage');
+            const btnRevealOnly = this.slideContainer.querySelector('#btn-cgct-reveal-only');
+
+            let currentIdx = 0;
+            let showSummary = false;
+            const resultsMap = {}; // idx -> { voted: boolean, userGuess: boolean|null, isCorrect: boolean }
+
+            const getScoreStats = () => {
+                const entries = Object.values(resultsMap).filter(r => r.voted);
+                const correctCount = entries.filter(r => r.isCorrect).length;
+                return { correctCount, totalVoted: entries.length };
+            };
+
+            const renderGame = () => {
+                const stats = getScoreStats();
+                if (scoreEl) scoreEl.innerText = `Score : ${stats.correctCount} / ${stats.totalVoted}`;
+                if (progressEl) {
+                    progressEl.innerText = showSummary ? `Bilan final` : `Extrait ${currentIdx + 1} / ${cards.length}`;
+                }
+                if (btnRevealOnly) {
+                    btnRevealOnly.style.display = showSummary ? 'none' : 'inline-flex';
+                }
+                if (!stageEl) return;
+
+                if (showSummary) {
+                    const pct = cards.length > 0 ? Math.round((stats.correctCount / cards.length) * 100) : 0;
+                    const verdictMsg = stats.correctCount >= 4
+                        ? '🏆 Excellent réflexe critique ! Vous ne vous laissez pas piéger par le style juridique fluide des LLM.'
+                        : '⚠️ Vigilance renforcée requise : la forme impeccable d’un texte IA masque parfois des numéros d’articles ou arrêts inventés.';
+
+                    stageEl.innerHTML = `
+                        <div class="cgct-summary-card">
+                            <div class="cgct-summary-score">${stats.correctCount} / ${cards.length} <span>(${pct} %)</span></div>
+                            <p class="cgct-summary-msg">${verdictMsg}</p>
+                            <div class="cgct-summary-actions">
+                                <button type="button" class="btn btn-primary" id="btn-cgct-replay">↺ Rejouer les 5 extraits</button>
+                            </div>
+                        </div>
+                    `;
+                    const btnReplay = stageEl.querySelector('#btn-cgct-replay');
+                    if (btnReplay) {
+                        btnReplay.onclick = () => {
+                            currentIdx = 0;
+                            showSummary = false;
+                            Object.keys(resultsMap).forEach(k => delete resultsMap[k]);
+                            renderGame();
+                        };
+                    }
+                    return;
+                }
+
+                const card = cards[currentIdx];
+                if (!card) return;
+                const res = resultsMap[currentIdx];
+
+                let feedbackHtml = '';
+                if (res) {
+                    let bannerClass = 'cgct-banner-neutral';
+                    let bannerTitle = '👁️ Correction révélée pour la salle';
+                    if (res.voted) {
+                        bannerClass = res.isCorrect ? 'cgct-banner-ok' : 'cgct-banner-ko';
+                        bannerTitle = res.isCorrect
+                            ? '🎉 Bonne détection !'
+                            : '❌ Piégé par le style juridique de l\'IA !';
+                    }
+                    feedbackHtml = `
+                        <div class="cgct-feedback-box ${bannerClass}">
+                            <div class="cgct-feedback-title">${bannerTitle}</div>
+                            <div class="cgct-clue"><strong>🔍 Indice clé :</strong> ${this.escapeHtml(card.clue)}</div>
+                            <div class="cgct-explanation">${card.explanation}</div>
+                        </div>
+                    `;
+                }
+
+                stageEl.innerHTML = `
+                    <div class="cgct-card">
+                        <div class="cgct-card-ref">⚖️ Référence citée par l'IA : <strong>${this.escapeHtml(card.reference)}</strong></div>
+                        <blockquote class="cgct-excerpt">${this.escapeHtml(card.excerpt)}</blockquote>
+
+                        ${!res ? `
+                            <div class="cgct-vote-buttons">
+                                <button type="button" class="btn cgct-btn-true" id="btn-cgct-true">✅ Authentique (Vrai droit)</button>
+                                <button type="button" class="btn cgct-btn-fake" id="btn-cgct-fake">🎭 Hallucination IA</button>
+                            </div>
+                        ` : feedbackHtml}
+
+                        <div class="cgct-nav-row">
+                            <button type="button" class="btn btn-secondary btn-sm" id="btn-cgct-prev" ${currentIdx === 0 ? 'disabled' : ''}>◀ Précédent</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btn-cgct-next">
+                                ${currentIdx === cards.length - 1 ? '📊 Voir le bilan final' : 'Extrait suivant ➔'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                const btnTrue = stageEl.querySelector('#btn-cgct-true');
+                const btnFake = stageEl.querySelector('#btn-cgct-fake');
+                const btnPrev = stageEl.querySelector('#btn-cgct-prev');
+                const btnNext = stageEl.querySelector('#btn-cgct-next');
+
+                if (btnTrue) {
+                    btnTrue.onclick = () => {
+                        resultsMap[currentIdx] = { voted: true, userGuess: true, isCorrect: card.isTrue === true };
+                        renderGame();
+                    };
+                }
+                if (btnFake) {
+                    btnFake.onclick = () => {
+                        resultsMap[currentIdx] = { voted: true, userGuess: false, isCorrect: card.isTrue === false };
+                        renderGame();
+                    };
+                }
+                if (btnPrev) {
+                    btnPrev.onclick = () => {
+                        if (currentIdx > 0) {
+                            currentIdx--;
+                            renderGame();
+                        }
+                    };
+                }
+                if (btnNext) {
+                    btnNext.onclick = () => {
+                        if (currentIdx < cards.length - 1) {
+                            currentIdx++;
+                        } else {
+                            showSummary = true;
+                        }
+                        renderGame();
+                    };
+                }
+            };
+
+            if (btnRevealOnly) {
+                btnRevealOnly.onclick = () => {
+                    if (!resultsMap[currentIdx]) {
+                        resultsMap[currentIdx] = { voted: false, userGuess: null, isCorrect: false };
+                    }
+                    renderGame();
+                };
+            }
+
+            renderGame();
+        }
+
         // Bind poll opening from slides
         const btnOpenPoll = this.slideContainer.querySelector('.btn-open-poll-from-slide');
         if (btnOpenPoll) {
@@ -866,8 +1348,26 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
 };
 
 // ==========================================
-// OUTILS INTERACTIFS (VRAM, ECO, HALLUCINATIONS)
+// OUTILS INTERACTIFS (VRAM, ECO, HALLUCINATIONS, SOFTMAX)
 // ==========================================
+
+TrainingApp.prototype.computeTokenSoftmax = function(candidates, temp) {
+    if (!Array.isArray(candidates) || candidates.length === 0) return [];
+    if (temp <= 0) {
+        let bestIdx = 0;
+        for (let i = 1; i < candidates.length; i++) {
+            if (candidates[i].logit > candidates[bestIdx].logit) bestIdx = i;
+        }
+        return candidates.map((c, idx) => ({ ...c, prob: idx === bestIdx ? 100 : 0 }));
+    }
+    const maxLogit = Math.max(...candidates.map(c => c.logit));
+    const exps = candidates.map(c => Math.exp((c.logit - maxLogit) / temp));
+    const sum = exps.reduce((a, b) => a + b, 0) || 1;
+    return candidates.map((c, idx) => ({
+        ...c,
+        prob: (exps[idx] / sum) * 100
+    }));
+};
 
 TrainingApp.prototype.runVramCalculator = function() {
     const modelParams = parseFloat(document.getElementById('vram-select-model')?.value || 12);

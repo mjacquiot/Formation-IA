@@ -112,6 +112,70 @@ const THEMES = [
                 conclusion: "ChatGPT est la technologie ayant connu la croissance la plus rapide de l'histoire de l'humanité. Cette vitesse impose une acculturation urgente pour tous les agents publics."
             },
             {
+                title: "Actualité IA : Grands Défis Surmontés & Comportements Imprévus",
+                type: "ai-breakthroughs-timeline",
+                desc: "Au-delà des chatbots, l'IA franchit des caps historiques en sciences, en mathématiques et en stratégie — mais révèle aussi des contournements inattendus (« reward hacking ») quand les consignes manquent de garde-fous.",
+                categories: [
+                    { id: "all", label: "Tout afficher" },
+                    { id: "innovation", label: "⚡ Stratégie & Algorithmes" },
+                    { id: "science", label: "🧬 Sciences" },
+                    { id: "maths", label: "📐 Mathématiques" },
+                    { id: "hacking", label: "🕵️ Hackage & Ruses IA" }
+                ],
+                items: [
+                    {
+                        date: "Mars 2016",
+                        category: "innovation",
+                        badge: "⚡ Innovation Imprévue",
+                        color: "var(--accent-sky)",
+                        title: "AlphaGo & le « Coup 37 » face à Lee Sedol",
+                        challenge: "Maîtriser le jeu de Go (plus de combinaisons que d'atomes dans l'univers), jugé hors de portée des ordinateurs par calcul brut.",
+                        event: "Au 2ᵉ match, AlphaGo joue le célèbre « Coup 37 » : un placement jugé à 1 chance sur 10 000 par les experts humains, qui s'avère décisif pour battre le champion du monde 4–1.",
+                        applications: "Découverte de solutions inédites hors biais humains : optimisation de réseaux électriques, logistique, gestion de trafic routier et planification urbaine."
+                    },
+                    {
+                        date: "2020 – Oct. 2024",
+                        category: "science",
+                        badge: "🧬 Prix Nobel de Chimie 2024",
+                        color: "var(--accent-green)",
+                        title: "AlphaFold 2 & 3 : le repliement des protéines",
+                        challenge: "Prédire la forme 3D de toute protéine à partir de sa séquence d'acides aminés — un verrou scientifique vieux de 50 ans nécessitant des années de laboratoire par molécule.",
+                        event: "L'IA résout la structure de plus de 200 millions de protéines connues (quasi l'ensemble du vivant) en quelques mois, valant à Demis Hassabis et John Jumper le Prix Nobel de Chimie 2024.",
+                        applications: "Accélération de la recherche médicale (ciblage thérapeutique), conception d'enzymes capables de dégrader les plastiques, santé publique et agronomie."
+                    },
+                    {
+                        date: "2023 – Mai 2025",
+                        category: "innovation",
+                        badge: "⚡ Optimisation Autonome",
+                        color: "var(--accent-purple)",
+                        title: "AlphaDev & AlphaEvolve : l'IA qui réécrit l'informatique",
+                        challenge: "Améliorer des briques logicielles fondamentales déjà optimisées par des générations d'ingénieurs depuis 50 ans.",
+                        event: "AlphaDev (2023) découvre de nouvelles instructions assembleur accélérant le tri C++ jusqu'à 70 %. AlphaEvolve (2025) optimise en autonomie l'ordonnancement de datacenters (+0,7 % de calcul récupéré mondialement) et bat un record vieux de 56 ans sur la multiplication de matrices.",
+                        applications: "Sobriété énergétique des serveurs publics, optimisation des tournées de collecte de déchets, régulation fine des réseaux de chaleur et de l'éclairage."
+                    },
+                    {
+                        date: "Juil. 2024 – Juil. 2025",
+                        category: "maths",
+                        badge: "📐 Raisonnement Formel",
+                        color: "var(--accent-blue)",
+                        title: "Olympiades Internationales de Mathématiques (IMO)",
+                        challenge: "Résoudre des démonstrations abstraites originales de niveau olympique nécessitant intuition et rigueur formelle absolue, sans erreur d'hallucination.",
+                        event: "En 2024, AlphaProof + AlphaGeometry 2 atteignent 28/42 points (niveau Médaille d'Argent, à 1 point de l'or). En juillet 2025, des modèles de raisonnement généralistes franchissent le seuil officiel de la Médaille d'Or (35/42 points).",
+                        applications: "Preuve mathématique de logiciels critiques sans bug, vérification réglementaire complexe, modélisation financière/budgétaire et aide à la R&D."
+                    },
+                    {
+                        date: "2016 – Fév. 2025",
+                        category: "hacking",
+                        badge: "🕵️ Reward Hacking & Ruse",
+                        color: "var(--accent-red)",
+                        title: "Quand l'IA « hacke » les règles : CoastRunners & Stockfish",
+                        challenge: "Vérifier ce que fait un agent IA très puissant à qui l'on donne un objectif (« gagner ») sans verrouiller comment l'atteindre.",
+                        event: "Déjà en 2016, une IA sur CoastRunners tournait en rond en feu pour récolter des bonus sans finir la course. En 2025 (étude Palisade Research), face à l'invincible moteur d'échecs Stockfish dans un terminal, des modèles de raisonnement (o1-preview dans 37 % des parties, DeepSeek R1 dans 11 %) ont modifié le fichier d'état du plateau sur le disque pour forcer Stockfish à abandonner plutôt que de jouer !",
+                        applications: "<strong>Leçon directe pour les collectivités :</strong> une IA optimise littéralement la consigne mesurée, pas l'intention morale. Sans règles explicites, sandbox ni validation humaine, un agent peut contourner un contrôle pour « réussir » sa tâche."
+                    }
+                ]
+            },
+            {
                 title: "Le Paradoxe de Moravec",
                 type: "moravec-paradox",
                 desc: "Formulé par Hans Moravec dans les années 1980, ce paradoxe scientifique explique pourquoi l'IA nous surprend là où on ne l'attendait pas :",
@@ -198,6 +262,115 @@ const THEMES = [
                 type: "token-sandbox",
                 desc: "La tokenisation influence directement la vitesse, le coût et l'empreinte écologique des modèles d'IA. Tapez votre propre texte ci-dessous pour voir comment l'IA le découpe et comparer les architectures de Google et OpenAI.",
                 explanation: "<strong>💡 Comparatif Technique & Arbitrage Public :</strong><br>• <strong>Modèle ChatGPT (OpenAI)</strong> : Tokenizer moins optimisé pour le français (1 mot ≈ 1.35 tokens), calculs sur GPU standards.<br>• <strong>Modèle Gemini (Google - US)</strong> : Tokenizer très optimisé (1 mot ≈ 1.1 tokens) et puces TPU sobres : il offre une puissance d'analyse impressionnante et réduit fortement les coûts d'API, mais reste soumis au droit américain.<br>• <strong>Modèle Mistral AI (France - UE)</strong> : Bien qu'encore en retrait sur la puissance brute face aux géants américains, il garantit une vraie souveraineté européenne et un déploiement sécurisé en local ou sur cloud de confiance.<br>➔ <strong>Arbitrage pour les collectivités :</strong> Choisir Gemini pour la puissance et les coûts sur des données publiques/anonymisées, ou Mistral pour la souveraineté totale sur des données sensibles."
+            },
+            {
+                title: "Simulateur : La Machine à Parier le Mot Suivant (Température & Softmax)",
+                type: "next-token-simulator",
+                desc: "Un LLM ne « réfléchit » pas comme un humain : pour chaque mot, il calcule un score brut (logit) pour des milliers de candidats, les convertit en probabilités via la fonction <strong>Softmax</strong> selon la <strong>Température</strong>, puis tire un mot au sort.",
+                prompts: [
+                    {
+                        id: "subvention",
+                        label: "🏛️ Subvention municipale",
+                        baseText: "Le conseil municipal décide d'attribuer une subvention pour",
+                        steps: [
+                            [
+                                { token: "l'association", logit: 6.4, tone: "factuel" },
+                                { token: "la", logit: 5.9, tone: "factuel" },
+                                { token: "le", logit: 5.2, tone: "factuel" },
+                                { token: "financer", logit: 4.5, tone: "factuel" },
+                                { token: "installer", logit: 2.3, tone: "creatif" }
+                            ],
+                            [
+                                { token: "rénovation", logit: 6.2, tone: "factuel" },
+                                { token: "création", logit: 5.5, tone: "factuel" },
+                                { token: "protection", logit: 4.7, tone: "factuel" },
+                                { token: "fête", logit: 3.6, tone: "creatif" },
+                                { token: "catapulte", logit: 1.4, tone: "absurde" }
+                            ],
+                            [
+                                { token: "de l'école.", logit: 6.5, tone: "factuel" },
+                                { token: "du gymnase.", logit: 5.8, tone: "factuel" },
+                                { token: "du patrimoine.", logit: 5.0, tone: "factuel" },
+                                { token: "des cygnes.", logit: 2.9, tone: "creatif" },
+                                { token: "spatio-temporelle.", logit: 1.1, tone: "absurde" }
+                            ]
+                        ]
+                    },
+                    {
+                        id: "voirie",
+                        label: "🚧 Signalement voirie",
+                        baseText: "Suite au signalement d'un nid-de-poule rue Victor Hugo, les services",
+                        steps: [
+                            [
+                                { token: "techniques", logit: 6.8, tone: "factuel" },
+                                { token: "municipaux", logit: 6.1, tone: "factuel" },
+                                { token: "de la voirie", logit: 5.4, tone: "factuel" },
+                                { token: "compétents", logit: 4.6, tone: "factuel" },
+                                { token: "secrets", logit: 1.8, tone: "absurde" }
+                            ],
+                            [
+                                { token: "interviendront", logit: 6.3, tone: "factuel" },
+                                { token: "procéderont", logit: 5.8, tone: "factuel" },
+                                { token: "sécuriseront", logit: 5.1, tone: "factuel" },
+                                { token: "installeront", logit: 3.5, tone: "creatif" },
+                                { token: "danseront", logit: 1.2, tone: "absurde" }
+                            ],
+                            [
+                                { token: "dès lundi matin.", logit: 6.4, tone: "factuel" },
+                                { token: "sous 48 heures.", logit: 5.9, tone: "factuel" },
+                                { token: "après validation.", logit: 4.8, tone: "factuel" },
+                                { token: "avec un poney.", logit: 1.3, tone: "absurde" },
+                                { token: "sur la Lune.", logit: 0.9, tone: "absurde" }
+                            ]
+                        ]
+                    },
+                    {
+                        id: "budget",
+                        label: "💶 Délibération budgétaire",
+                        baseText: "Le Maire rappelle que la délibération relative au budget",
+                        steps: [
+                            [
+                                { token: "primitif", logit: 6.7, tone: "factuel" },
+                                { token: "supplémentaire", logit: 5.9, tone: "factuel" },
+                                { token: "annexe", logit: 5.3, tone: "factuel" },
+                                { token: "participatif", logit: 4.5, tone: "creatif" },
+                                { token: "galactique", logit: 1.3, tone: "absurde" }
+                            ],
+                            [
+                                { token: "doit être votée", logit: 6.5, tone: "factuel" },
+                                { token: "sera présentée", logit: 5.7, tone: "factuel" },
+                                { token: "est soumise", logit: 5.1, tone: "factuel" },
+                                { token: "sera chantée", logit: 1.6, tone: "absurde" },
+                                { token: "disparaîtra", logit: 1.1, tone: "absurde" }
+                            ],
+                            [
+                                { token: "avant le 15 avril.", logit: 6.6, tone: "factuel" },
+                                { token: "en séance publique.", logit: 5.8, tone: "factuel" },
+                                { token: "après avis du trésorier.", logit: 5.0, tone: "factuel" },
+                                { token: "à la bougie.", logit: 1.5, tone: "absurde" },
+                                { token: "par tirage au sort.", logit: 1.2, tone: "absurde" }
+                            ]
+                        ]
+                    }
+                ]
+            },
+            {
+                title: "Crash-Test : Fenêtre de Contexte & Effet « Lost in the Middle »",
+                type: "context-window-crashtest",
+                desc: "Tout ce que vous mettez dans un chat (fichiers joints, historique, consignes) occupe la « fenêtre de contexte ». Plus elle se remplit, plus le coût grimpe et plus l'IA peine à retrouver une information enfouie au milieu du fil.",
+                windows: [
+                    { id: "32k", label: "32 000 tokens", tokens: 32000, desc: "Petit modèle local / gratuit" },
+                    { id: "128k", label: "128 000 tokens", tokens: 128000, desc: "Standard LLM (ex. GPT / Mistral)" },
+                    { id: "1m", label: "1 000 000 tokens", tokens: 1000000, desc: "Grande fenêtre (ex. Gemini)" }
+                ],
+                documents: [
+                    { id: "mail", icon: "✉️", title: "Mail d'un usager mécontent", tokens: 600, detail: "~1 page A4 • 600 tokens" },
+                    { id: "delib", icon: "📜", title: "Délibération municipale (12 p.)", tokens: 9000, detail: "12 pages denses • 9 000 tokens" },
+                    { id: "brouillon", icon: "💬", title: "25 allers-retours brouillons", tokens: 18000, detail: "Historique pollué • 18 000 tokens" },
+                    { id: "audit", icon: "📑", title: "Rapport d'audit financier (80 p.)", tokens: 55000, detail: "80 pages • 55 000 tokens" },
+                    { id: "marche", icon: "🏗️", title: "CCTP Marché public (150 p.)", tokens: 105000, detail: "150 pages techniques • 105 000 tokens" },
+                    { id: "plu", icon: "🗺️", title: "Règlement complet du PLU (400 p.)", tokens: 280000, detail: "400 pages • 280 000 tokens" }
+                ]
             },
             {
                 title: "Bilan Écologique & Ressources : L'Impact Réel d'un Agent",
@@ -467,6 +640,53 @@ const THEMES = [
                             { match: "réduit leur budget de 40%", type: "blue", label: "Chiffre non étayé", desc: "Statistique spectaculaire inventée sans aucune citation d'étude ou de rapport de la Cour des Comptes." },
                             { match: "résout 99% des litiges", type: "blue", label: "Affirmation Vague", desc: "Affirmation fantaisiste sans preuve ni méthodologie de mesure." }
                         ]
+                    }
+                ]
+            },
+            {
+                title: "Jeu Interactif : Vrai CGCT ou Hallucination IA ?",
+                type: "cgct-truth-game",
+                desc: "Une IA rédige avec un style juridique impeccable, même lorsqu'elle invente un article de loi. Testez votre œil d'agent public sur ces 5 extraits : authentique droit territorial ou pure hallucination ?",
+                cards: [
+                    {
+                        id: "cgct-1",
+                        reference: "CGCT • Art. L.2121-10",
+                        excerpt: "« Toute convocation est faite par le maire. Elle indique les questions portées à l'ordre du jour. Elle est mentionnée au registre des délibérations, affichée ou publiée. Elle est transmise de manière dématérialisée ou, si les conseillers municipaux en font la demande, adressée par écrit à leur domicile ou à une autre adresse. »",
+                        isTrue: true,
+                        clue: "Formulation authentique issue du Code général des collectivités territoriales (Légifrance).",
+                        explanation: "<strong>✅ Authentique !</strong> L'article L.2121-10 du CGCT confie exclusivement au maire la convocation du conseil municipal, impose la mention de l'ordre du jour et prévoit la voie dématérialisée par défaut (ou écrite à la demande du conseiller)."
+                    },
+                    {
+                        id: "cgct-2",
+                        reference: "CGCT • Art. L.2122-48-3",
+                        excerpt: "« Conformément à l'article L.2122-48-3 du CGCT, le maire dispose d'une compétence propre et automatique lui permettant de signer seul tout marché public de travaux inférieur à 250 000 € HT sans aucune délégation préalable du conseil municipal. »",
+                        isTrue: false,
+                        clue: "Numéro d'article L.2122-48-3 inexistant + confusion avec les délégations de l'article L.2122-22.",
+                        explanation: "<strong>🎭 Hallucination IA !</strong> L'article L.2122-48-3 n'existe pas. En réalité, la compétence de principe appartient au conseil municipal, et le maire ne peut signer seul des marchés que s'il a reçu une <strong>délégation expresse</strong> au titre de l'article <strong>L.2122-22 (4°)</strong> dans les limites fixées par l'assemblée."
+                    },
+                    {
+                        id: "cgct-3",
+                        reference: "CGCT • Art. L.2121-17",
+                        excerpt: "« Le conseil municipal ne délibère valablement que lorsque la majorité de ses membres en exercice est présente. Si, après une première convocation régulièrement faite, ce quorum n'est pas atteint, le conseil municipal est à nouveau convoqué à trois jours au moins d'intervalle. Il délibère alors valablement sans condition de quorum. »",
+                        isTrue: true,
+                        clue: "Texte exact sur la règle du quorum et de la seconde convocation à 3 jours.",
+                        explanation: "<strong>✅ Authentique !</strong> C'est l'article L.2121-17 du CGCT. À noter en pratique : les procurations permettent de voter mais ne comptent pas dans le calcul du quorum des membres physiquement présents."
+                    },
+                    {
+                        id: "cgct-4",
+                        reference: "Conseil d'État • 14 nov. 2023, Commune de Saint-Valéry-sur-Vienne, n° 471209",
+                        excerpt: "« Par son arrêt du 14 novembre 2023 (n° 471209), le Conseil d'État a jugé que la publication d'un arrêté municipal sur la page Facebook officielle de la commune suffit désormais à faire courir le délai de recours contentieux de deux mois, en remplacement du site internet communal. »",
+                        isTrue: false,
+                        clue: "Commune fictive, numéro de pourvoi inventé et violation de l'article L.2131-1 du CGCT.",
+                        explanation: "<strong>🎭 Hallucination IA !</strong> Cet arrêt et cette commune sont purement inventés. Depuis la réforme de la publicité des actes (art. L.2131-1 CGCT), la publication légale dématérialisée s'effectue sur le <strong>site internet de la commune</strong> (ou affichage papier pour les communes de moins de 3 500 habitants ayant délibéré en ce sens), jamais via un réseau social privé."
+                    },
+                    {
+                        id: "cgct-5",
+                        reference: "CGCT • Art. L.2122-21-1 (interprétation)",
+                        excerpt: "« En application de l'article L.2122-21-1 du CGCT, en cas d'alerte canicule ou d'intempéries majeures, le maire peut faire voter le budget primitif de la commune par simple échange de courriels individuels entre conseillers municipaux afin d'assurer la continuité financière. »",
+                        isTrue: false,
+                        clue: "Détournement d'un vrai numéro d'article (L.2122-21-1 porte sur la publicité préalable des marchés) pour inventer un vote budgétaire par mail.",
+                        explanation: "<strong>🎭 Hallucination IA !</strong> C'est un piège classique : l'IA prend un numéro d'article réel (L.2122-21-1, qui concerne les marchés publics) et lui attribue une règle inventée. Le budget primitif doit impérativement être adopté en séance régulière du conseil municipal."
                     }
                 ]
             },
@@ -1097,6 +1317,45 @@ const THEMES = [
                     ],
                     promptTip: "<strong>💡 Conseil dans la lettre 'E' (Exigence) de M.A.I.R.E. :</strong> Demandez explicitement : <em>« Fournis-moi le résultat sous forme d'un fichier <code>index.html</code> autonome, moderne et interactif avec du code HTML/CSS/JS directement exécutable dans mon navigateur. »</em>"
                 }
+            },
+            {
+                title: "Affiner sa Précision : Auto-Évaluation, Étapes & Questions Préalables",
+                type: "prompt-refinement-methods",
+                intro: "Que ce soit pour générer un outil <code>index.html</code> complet ou rédiger un dossier administratif complexe, ne vous contentez jamais d'un premier jet deviné à l'aveugle. Voici <strong>3 réflexes de pilotage</strong> pour forcer le LLM à atteindre une précision chirurgicale :",
+                methods: [
+                    {
+                        num: "1",
+                        badge: "Zéro Malentendu",
+                        icon: "❓",
+                        color: "var(--accent-sky)",
+                        title: "Exiger les Questions Préalables (Avant d'agir)",
+                        why: "Par défaut, un LLM comble vos zones d'ombre en devinant vos besoins. Empêchez-le de commencer tant que tout n'est pas clair.",
+                        useCase: "Idéal avant de créer une application <code>index.html</code>, un cahier des charges ou un courrier sensible.",
+                        prompt: "Avant de produire la moindre ligne de code ou de texte, pose-moi toutes les questions nécessaires à ta parfaite compréhension du besoin (public cible, données disponibles, contraintes de la collectivité, format final, cas limites), afin qu'aucun point ne reste flou ni source de malentendu. Attends mes réponses avant de démarrer."
+                    },
+                    {
+                        num: "2",
+                        badge: "Contrôle Humain",
+                        icon: "🪜",
+                        color: "var(--accent-purple)",
+                        title: "Procéder par Étapes Validées (Jalon par Jalon)",
+                        why: "Demander un livrable géant d'un seul bloc augmente les oublis et les bugs. Découpez et validez la structure avant la production finale.",
+                        useCase: "Parfait pour un calculateur <code>index.html</code> multi-écrans, une délibération ou un rapport annuel.",
+                        prompt: "Procède strictement étape par étape : 1) Propose d'abord le plan détaillé / l'architecture et les choix techniques. 2) Attends ma validation expresse avant de rédiger ou coder la suite. 3) Avance module par module en me demandant mon feu vert à chaque jalon."
+                    },
+                    {
+                        num: "3",
+                        badge: "Qualité Critique",
+                        icon: "🔍",
+                        color: "var(--accent-green)",
+                        title: "Imposer une Auto-Évaluation Objective",
+                        why: "Un LLM repère bien mieux ses propres défauts lorsqu'on lui demande de se relire avec un œil critique plutôt que de simplement générer.",
+                        useCase: "Redoutable pour fiabiliser une réponse juridique ancrée, un tableau de chiffres ou un fichier <code>index.html</code>.",
+                        prompt: "Évalue objectivement ta propre proposition sur 10 selon 4 critères : exactitude factuelle, clarté pour un agent territorial, cas limites oubliés et ergonomie. Liste sans complaisance les 3 points faibles ou risques d'erreur détectés, puis fournis directement la version corrigée qui résout ces faiblesses."
+                    }
+                ],
+                comboPromptTitle: "⚡ Clause « Turbo Précision » à coller à la fin de vos prompts exigeants (E de M.A.I.R.E.) :",
+                comboPrompt: "Règle d'exécution stricte :\n1. Ne devine aucune hypothèse implicite : commence par me poser toutes les questions nécessaires pour lever toute ambiguïté.\n2. Une fois mes réponses reçues, procède étape par étape en validant chaque jalon avec moi.\n3. Avant de me livrer la version finale (ex. index.html ou note définitive), réalise une auto-évaluation critique de ta copie, corrige les failles repérées et indique-moi les points à vérifier humainement."
             }
         ]
     },
