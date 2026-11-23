@@ -3,32 +3,7 @@
 // ==========================================
 function getSlideHTML(slide, theme) {
     let html = '';
-    if (slide.type === 'intellect-debate') {
-        html += `
-            <p style="margin-bottom:1.5rem; font-size:1.05rem; line-height:1.6;">${slide.intro || ''}</p>
-            <div class="intellect-debate-grid">
-                <div class="intellect-card card-risk">
-                    <div class="intellect-card-header">
-                        <h3>${(slide.riskCard && slide.riskCard.title) || ''}</h3>
-                        <div class="intellect-card-sub">${(slide.riskCard && slide.riskCard.subtitle) || ''}</div>
-                    </div>
-                    <ul class="intellect-list">
-                        ${((slide.riskCard && slide.riskCard.items) || []).map(item => `<li><span class="bullet">⚠️</span> <span>${item}</span></li>`).join('')}
-                    </ul>
-                </div>
-                <div class="intellect-card card-gain">
-                    <div class="intellect-card-header">
-                        <h3>${(slide.gainCard && slide.gainCard.title) || ''}</h3>
-                        <div class="intellect-card-sub">${(slide.gainCard && slide.gainCard.subtitle) || ''}</div>
-                    </div>
-                    <ul class="intellect-list">
-                        ${((slide.gainCard && slide.gainCard.items) || []).map(item => `<li><span class="bullet">💡</span> <span>${item}</span></li>`).join('')}
-                    </ul>
-                </div>
-            </div>
-            ${slide.takeaway ? `<div class="maire-example-box" style="margin-top:1.5rem; border-left-color: var(--accent-purple);">${slide.takeaway}</div>` : ''}
-        `;
-    } else if (slide.type === 'philosophy-pharmakon') {
+    if (slide.type === 'philosophy-pharmakon') {
         const pConcept = slide.pharmakonConcept || {};
         const plato = slide.plato || {};
         const stiegler = slide.stiegler || {};
@@ -2485,6 +2460,35 @@ function getSlideHTML(slide, theme) {
                         `).join('')}
                     </div>
 
+                    ${slide.handoffMd ? `
+                        <div class="hygiene-md-handoff">
+                            <div class="hygiene-md-header">
+                                <h4>${slide.handoffMd.title}</h4>
+                                <p class="hygiene-md-sub">${slide.handoffMd.subtitle}</p>
+                            </div>
+                            <div class="hygiene-md-grid">
+                                <div class="gabarit-box">
+                                    <div class="gabarit-header">
+                                        <span>${slide.handoffMd.promptTitle}</span>
+                                        <button type="button" class="gabarit-copy-btn btn-copy-code">📋 Copier le prompt</button>
+                                    </div>
+                                    <pre class="gabarit-pre hygiene-md-pre"><code>${this.escapeHtml(slide.handoffMd.promptToGenerate)}</code></pre>
+                                </div>
+                                <div class="gabarit-box">
+                                    <div class="gabarit-header">
+                                        <span>${slide.handoffMd.templateTitle}</span>
+                                        <div class="hygiene-md-actions">
+                                            <button type="button" class="gabarit-copy-btn btn-copy-code">📋 Copier</button>
+                                            <button type="button" class="gabarit-copy-btn btn-download-md" id="btn-download-handoff-md">⬇️ .md</button>
+                                        </div>
+                                    </div>
+                                    <pre class="gabarit-pre hygiene-md-pre"><code>${this.escapeHtml(slide.handoffMd.mdTemplate)}</code></pre>
+                                </div>
+                            </div>
+                            ${slide.handoffMd.restartFormula ? `<div class="hygiene-md-formula">${slide.handoffMd.restartFormula}</div>` : ''}
+                        </div>
+                    ` : ''}
+
                     ${slide.takeaway ? `
                         <div class="hygiene-takeaway-bar">
                             ${slide.takeaway}
@@ -2511,9 +2515,9 @@ function getSlideHTML(slide, theme) {
                                     <span class="bt-badge">${item.badge}</span>
                                 </div>
                                 <h4 class="bt-title">${item.title}</h4>
-                                <div class="bt-block"><strong>🎯 Défi initial :</strong> ${item.challenge}</div>
-                                <div class="bt-block"><strong>🔬 Percée / Fait marquant :</strong> ${item.event}</div>
-                                <div class="bt-apps"><strong>🏛️ Applications & Leçons :</strong> ${item.applications}</div>
+                                ${item.challenge ? `<div class="bt-block"><strong>🎯 Défi :</strong> ${item.challenge}</div>` : ''}
+                                <div class="bt-block">${item.event}</div>
+                                <div class="bt-apps"><strong>🏛️ Leçon :</strong> ${item.applications}</div>
                             </article>
                         `).join('')}
                     </div>
@@ -2650,20 +2654,6 @@ function getSlideHTML(slide, theme) {
                         <div id="cw-ucurve-svg-wrap" class="cw-ucurve-svg-wrap">
                             <!-- SVG généré dynamiquement par JS -->
                         </div>
-                    </div>
-                `;
-            } else if (slide.type === 'cgct-truth-game') {
-                html += `
-                    <p class="cgct-intro">${slide.desc || ''}</p>
-                    <div class="cgct-topbar">
-                        <div class="cgct-badges">
-                            <span class="cgct-pill" id="cgct-progress">Extrait 1 / ${(slide.cards || []).length}</span>
-                            <span class="cgct-pill cgct-pill-score" id="cgct-score">Score : 0 / 0</span>
-                        </div>
-                        <button type="button" class="btn btn-secondary btn-sm" id="btn-cgct-reveal-only">👁️ Révéler sans voter (Animation salle)</button>
-                    </div>
-                    <div id="cgct-card-stage" class="cgct-card-stage">
-                        <!-- Injecté dynamiquement par JS -->
                     </div>
                 `;
             } else if (slide.type === 'prompt-refinement-methods') {

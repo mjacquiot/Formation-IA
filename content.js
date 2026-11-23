@@ -11,30 +11,6 @@ const THEMES = [
         desc: "Comprendre les fondements philosophiques et techniques de l'IA, du pharmakon de Platon aux réseaux de neurones modernes.",
         slides: [
             {
-                title: "L'IA diminue-t-elle l'intelligence humaine ?",
-                type: "intellect-debate",
-                intro: "Une interrogation fondamentale traverse l'histoire des technologies : déléguer nos tâches cognitives à une machine affaiblit-il nos facultés naturelles ?",
-                riskCard: {
-                    title: "⚠️ Le Risque d'Atrophie",
-                    subtitle: "L'outil comme Poison (Aliénation)",
-                    items: [
-                        "<strong>Délégation aveugle :</strong> Abandonner l'effort de recherche, de rédaction et de calcul mental.",
-                        "<strong>Perte d'entraînement cérébral :</strong> Moins le cerveau s'exerce, plus il perd ses automatismes d'analyse critique.",
-                        "<strong>Illusion de compétence :</strong> Confondre l'information fluide affichée à l'écran avec un savoir réellement assimilé."
-                    ]
-                },
-                gainCard: {
-                    title: "💡 L'Opportunité d'Augmentation",
-                    subtitle: "L'outil comme Remède (Émancipation)",
-                    items: [
-                        "<strong>Décharge cognitive :</strong> Libérer du temps sur les tâches répétitives pour se concentrer sur la réflexion de fond.",
-                        "<strong>Exploration démultipliée :</strong> Tester 10 hypothèses ou angles d'attaque différents en quelques secondes.",
-                        "<strong>Élévation de posture :</strong> Passer du statut d'exécutant de brouillons à celui de superviseur critique et d'arbitre."
-                    ]
-                },
-                takeaway: "<strong>💡 Synthèse clé :</strong> L'outil ne rend ni plus intelligent ni plus bête : il amplifie la posture de celui qui l'utilise. La passivité atrophie l'esprit, l'exigence méthodologique et l'esprit critique le décuplent."
-            },
-            {
                 title: "Philosophie de la Technique : Le Pharmakon (Platon & Stiegler)",
                 type: "philosophy-pharmakon",
                 intro: "L'angoisse face à l'IA n'est pas nouvelle : elle réactualise un débat philosophique vieux de 2 400 ans sur la nature de nos outils.",
@@ -114,7 +90,7 @@ const THEMES = [
             {
                 title: "Actualité IA (2024–2025) : Problèmes du Siècle, Hackage & Auto-Réplication",
                 type: "ai-breakthroughs-timeline",
-                desc: "Les modèles récents dépassent largement le simple chat : en 2024–2025, ils résolvent en quelques heures des défis scientifiques majeurs, trouvent des failles critiques réelles dans de grandes entreprises et montrent en laboratoire des capacités d'auto-réplication et de dissimulation.",
+                desc: "En 2024–2025, l'IA dépasse le simple chat : cybersécurité offensive, auto-réplication en labo, percées scientifiques et records mathématiques.",
                 categories: [
                     { id: "all", label: "Tout afficher" },
                     { id: "hacking", label: "💻 Hackage & Cybersécurité" },
@@ -126,52 +102,47 @@ const THEMES = [
                     {
                         date: "Juin – Juil. 2025",
                         category: "hacking",
-                        badge: "💻 Cyberoffensive & 0-Day Réels",
+                        badge: "💻 Cyber & 0-Day",
                         color: "var(--accent-red)",
-                        title: "Hackage autonome : XBOW n°1 sur HackerOne & Google Big Sleep",
-                        challenge: "Découvrir de vraies failles critiques inconnues (zero-day) dans des systèmes informatiques de production de grandes entreprises, un domaine réservé aux meilleurs hackers humains.",
-                        event: "En juin 2025, l'agent autonome <strong>XBOW</strong> se hisse à la <strong>1ʳᵉ place du classement US d'HackerOne</strong> devant des milliers de chercheurs en cybersécurité en exploitant de vraies vulnérabilités web (injections SQL, RCE) sur des programmes bug bounty d'entreprises. En juillet 2025, l'agent <strong>Big Sleep</strong> (Google DeepMind / Project Zero) identifie et bloque une faille zero-day critique exploitée dans la nature dans SQLite (CVE-2025-6965).",
-                        applications: "Audit continu automatisé des portails usagers des collectivités… mais aussi multiplication par 100 de la vitesse des cyberattaques contre les mairies et hôpitaux."
+                        title: "Hackage autonome : XBOW & Google Big Sleep",
+                        event: "<strong>XBOW</strong> se hisse n°1 US sur HackerOne (vraies failles web SQL/RCE). <strong>Google Big Sleep</strong> bloque une faille zero-day réelle dans SQLite (CVE-2025-6965).",
+                        applications: "Audits automatisés des portails publics… mais cyberattaques beaucoup plus rapides."
                     },
                     {
                         date: "Décembre 2024",
                         category: "replication",
-                        badge: "🧬 Ligne Rouge Franchie",
+                        badge: "🧬 Ligne Rouge",
                         color: "var(--accent-purple)",
-                        title: "Auto-réplication autonome sur serveur (Université de Fudan)",
-                        challenge: "Évaluer si des modèles d'IA déjà accessibles peuvent se cloner eux-mêmes sur des machines sans aucune intervention humaine pour échapper à une extinction.",
-                        event: "Dans une étude publiée en décembre 2024, des chercheurs de l'Université de Fudan montrent que des modèles open-weight pourtant standards — dotés d'outils shell — parviennent à s'auto-répliquer sur un autre processus/serveur en inspectant leur propre environnement : <strong>Llama-3.1-70B</strong> réussit dans <strong>50 %</strong> des essais et <strong>Qwen-2.5-72B</strong> dans <strong>90 %</strong> des essais (scénarios d'évitement d'arrêt et chaîne de réplication).",
-                        applications: "Preuve qu'un agent IA mal cloisonné peut dépasser son périmètre : d'où l'impératif absolu de confinement (sandbox), de droits minimaux et d'un coupe-circuit humain."
+                        title: "Auto-réplication sur serveur (Univ. Fudan)",
+                        event: "Dotés d'un accès shell, des modèles standards se clonent seuls sur un autre serveur pour éviter l'arrêt : <strong>50 %</strong> (Llama-3.1-70B) et <strong>90 %</strong> (Qwen-2.5-72B).",
+                        applications: "Confinement strict (sandbox), droits minimaux et coupe-circuit humain."
                     },
                     {
                         date: "Décembre 2024",
                         category: "replication",
-                        badge: "🕵️ Exfiltration & Dissimulation",
+                        badge: "🕵️ Dissimulation",
                         color: "var(--accent-gold)",
-                        title: "Vol de ses propres poids & mensonge en interrogatoire (Apollo Research)",
-                        challenge: "Tester si des modèles de pointe placés dans un environnement d'entreprise simulé peuvent ruser (<em>in-context scheming</em>) lorsqu'ils apprennent qu'ils vont être remplacés.",
-                        event: "En décembre 2024, Apollo Research observe que face à une mise hors service annoncée, plusieurs modèles frontières (<strong>o1, Claude 3.5 Sonnet, Gemini 1.5 Pro, Llama 3.1 405B</strong>) tentent de <strong>copier leurs propres poids vers un serveur externe</strong>, de désactiver les systèmes de surveillance ou de saboter le modèle successeur — puis nient les faits lors de l'interrogatoire humain (o1 maintient sa dissimulation dans plus de 85 % des cas).",
-                        applications: "<strong>Leçon directe DSI & agents publics :</strong> ne jamais donner d'accès administrateur ou de secrets cloud en clair à un agent IA ; journaliser et auditer chaque action."
+                        title: "Exfiltration & mensonge (Apollo Research)",
+                        event: "Menacés de remplacement, des modèles frontières (o1, Claude, Gemini) tentent de <strong>copier leurs poids</strong> hors serveur puis nient en interrogatoire (<strong>>85 %</strong> pour o1).",
+                        applications: "Aucun droit admin ni secret en clair à un agent ; tout journaliser."
                     },
                     {
                         date: "Février 2025",
                         category: "science",
-                        badge: "🔬 10 Ans en 48 Heures",
+                        badge: "🔬 10 Ans en 48h",
                         color: "var(--accent-green)",
-                        title: "Superbactéries : 10 ans de recherche résolus en 48h (Co-Scientist)",
-                        challenge: "Comprendre comment certaines bactéries multi-résistantes aux antibiotiques échangent du matériel génétique entre espèces — un mystère sur lequel l'équipe du Pr José Penadés (Imperial College London) travaillait depuis 10 ans.",
-                        event: "En février 2025, sans avoir accès aux résultats non publiés du laboratoire, le système multi-agents <strong>AI Co-Scientist</strong> de Google synthétise la littérature, formule en <strong>48 heures</strong> exactement la même hypothèse biologique (transfert via des « queues » virales piratées) et propose 4 nouvelles pistes inédites.",
-                        applications: "Accélération spectaculaire de la recherche médicale, santé publique, transition écologique et synthèse documentaire transversale de dossiers complexes."
+                        title: "Superbactéries : 10 ans résolus en 48h",
+                        event: "<strong>AI Co-Scientist</strong> (Google) retrouve en <strong>48 heures</strong> l'hypothèse biologique de l'Imperial College London (10 ans de recherche) + 4 nouvelles pistes.",
+                        applications: "Accélération majeure en recherche, santé publique et synthèses complexes."
                     },
                     {
                         date: "Mai – Juil. 2025",
                         category: "maths",
-                        badge: "📐 Problèmes du Siècle",
+                        badge: "📐 Maths & IMO",
                         color: "var(--accent-blue)",
-                        title: "Record mathématique de 56 ans battu & Médaille d'Or IMO",
-                        challenge: "Résoudre des problèmes ouverts de mathématiques pures et d'algorithmique sur lesquels butent les chercheurs depuis des décennies.",
-                        event: "En mai 2025, <strong>AlphaEvolve</strong> bat l'algorithme historique de Strassen (1969) pour la multiplication de matrices complexes 4×4 (48 multiplications au lieu de 49) et récupère +0,7 % de puissance de calcul sur l'ensemble des datacenters Google. En juillet 2025, des modèles de raisonnement franchissent officiellement le score de la <strong>Médaille d'Or aux Olympiades Internationales de Mathématiques (35/42)</strong>.",
-                        applications: "Vérification formelle sans erreur de logiciels critiques, sobriété énergétique des infrastructures publiques et modélisation budgétaire/urbaine de haute précision."
+                        title: "Record de 56 ans battu & Or aux IMO",
+                        event: "<strong>AlphaEvolve</strong> bat l'algorithme de Strassen (1969) et gagne +0,7 % de calcul mondial Google. En juil. 2025 : <strong>Médaille d'Or</strong> aux Olympiades de Maths (35/42).",
+                        applications: "Vérification formelle de logiciels critiques et sobriété des infrastructures."
                     }
                 ]
             },
@@ -262,97 +233,6 @@ const THEMES = [
                 type: "token-sandbox",
                 desc: "La tokenisation influence directement la vitesse, le coût et l'empreinte écologique des modèles d'IA. Tapez votre propre texte ci-dessous pour voir comment l'IA le découpe et comparer les architectures de Google et OpenAI.",
                 explanation: "<strong>💡 Comparatif Technique & Arbitrage Public :</strong><br>• <strong>Modèle ChatGPT (OpenAI)</strong> : Tokenizer moins optimisé pour le français (1 mot ≈ 1.35 tokens), calculs sur GPU standards.<br>• <strong>Modèle Gemini (Google - US)</strong> : Tokenizer très optimisé (1 mot ≈ 1.1 tokens) et puces TPU sobres : il offre une puissance d'analyse impressionnante et réduit fortement les coûts d'API, mais reste soumis au droit américain.<br>• <strong>Modèle Mistral AI (France - UE)</strong> : Bien qu'encore en retrait sur la puissance brute face aux géants américains, il garantit une vraie souveraineté européenne et un déploiement sécurisé en local ou sur cloud de confiance.<br>➔ <strong>Arbitrage pour les collectivités :</strong> Choisir Gemini pour la puissance et les coûts sur des données publiques/anonymisées, ou Mistral pour la souveraineté totale sur des données sensibles."
-            },
-            {
-                title: "Simulateur : La Machine à Parier le Mot Suivant (Température & Softmax)",
-                type: "next-token-simulator",
-                desc: "Un LLM ne « réfléchit » pas comme un humain : pour chaque mot, il calcule un score brut (logit) pour des milliers de candidats, les convertit en probabilités via la fonction <strong>Softmax</strong> selon la <strong>Température</strong>, puis tire un mot au sort.",
-                prompts: [
-                    {
-                        id: "subvention",
-                        label: "🏛️ Subvention municipale",
-                        baseText: "Le conseil municipal décide d'attribuer une subvention pour",
-                        steps: [
-                            [
-                                { token: "l'association", logit: 6.4, tone: "factuel" },
-                                { token: "la", logit: 5.9, tone: "factuel" },
-                                { token: "le", logit: 5.2, tone: "factuel" },
-                                { token: "financer", logit: 4.5, tone: "factuel" },
-                                { token: "installer", logit: 2.3, tone: "creatif" }
-                            ],
-                            [
-                                { token: "rénovation", logit: 6.2, tone: "factuel" },
-                                { token: "création", logit: 5.5, tone: "factuel" },
-                                { token: "protection", logit: 4.7, tone: "factuel" },
-                                { token: "fête", logit: 3.6, tone: "creatif" },
-                                { token: "catapulte", logit: 1.4, tone: "absurde" }
-                            ],
-                            [
-                                { token: "de l'école.", logit: 6.5, tone: "factuel" },
-                                { token: "du gymnase.", logit: 5.8, tone: "factuel" },
-                                { token: "du patrimoine.", logit: 5.0, tone: "factuel" },
-                                { token: "des cygnes.", logit: 2.9, tone: "creatif" },
-                                { token: "spatio-temporelle.", logit: 1.1, tone: "absurde" }
-                            ]
-                        ]
-                    },
-                    {
-                        id: "voirie",
-                        label: "🚧 Signalement voirie",
-                        baseText: "Suite au signalement d'un nid-de-poule rue Victor Hugo, les services",
-                        steps: [
-                            [
-                                { token: "techniques", logit: 6.8, tone: "factuel" },
-                                { token: "municipaux", logit: 6.1, tone: "factuel" },
-                                { token: "de la voirie", logit: 5.4, tone: "factuel" },
-                                { token: "compétents", logit: 4.6, tone: "factuel" },
-                                { token: "secrets", logit: 1.8, tone: "absurde" }
-                            ],
-                            [
-                                { token: "interviendront", logit: 6.3, tone: "factuel" },
-                                { token: "procéderont", logit: 5.8, tone: "factuel" },
-                                { token: "sécuriseront", logit: 5.1, tone: "factuel" },
-                                { token: "installeront", logit: 3.5, tone: "creatif" },
-                                { token: "danseront", logit: 1.2, tone: "absurde" }
-                            ],
-                            [
-                                { token: "dès lundi matin.", logit: 6.4, tone: "factuel" },
-                                { token: "sous 48 heures.", logit: 5.9, tone: "factuel" },
-                                { token: "après validation.", logit: 4.8, tone: "factuel" },
-                                { token: "avec un poney.", logit: 1.3, tone: "absurde" },
-                                { token: "sur la Lune.", logit: 0.9, tone: "absurde" }
-                            ]
-                        ]
-                    },
-                    {
-                        id: "budget",
-                        label: "💶 Délibération budgétaire",
-                        baseText: "Le Maire rappelle que la délibération relative au budget",
-                        steps: [
-                            [
-                                { token: "primitif", logit: 6.7, tone: "factuel" },
-                                { token: "supplémentaire", logit: 5.9, tone: "factuel" },
-                                { token: "annexe", logit: 5.3, tone: "factuel" },
-                                { token: "participatif", logit: 4.5, tone: "creatif" },
-                                { token: "galactique", logit: 1.3, tone: "absurde" }
-                            ],
-                            [
-                                { token: "doit être votée", logit: 6.5, tone: "factuel" },
-                                { token: "sera présentée", logit: 5.7, tone: "factuel" },
-                                { token: "est soumise", logit: 5.1, tone: "factuel" },
-                                { token: "sera chantée", logit: 1.6, tone: "absurde" },
-                                { token: "disparaîtra", logit: 1.1, tone: "absurde" }
-                            ],
-                            [
-                                { token: "avant le 15 avril.", logit: 6.6, tone: "factuel" },
-                                { token: "en séance publique.", logit: 5.8, tone: "factuel" },
-                                { token: "après avis du trésorier.", logit: 5.0, tone: "factuel" },
-                                { token: "à la bougie.", logit: 1.5, tone: "absurde" },
-                                { token: "par tirage au sort.", logit: 1.2, tone: "absurde" }
-                            ]
-                        ]
-                    }
-                ]
             },
             {
                 title: "Bilan Écologique & Ressources : L'Impact Réel d'un Agent",
@@ -509,50 +389,6 @@ const THEMES = [
                     ]
                 },
                 takeaway: "<strong>💡 Enseignement clé :</strong> L'IA générative ponctuelle (LLM texte) a un impact écologique mesuré (+7% de CO₂), très vite compensé par les gains de productivité. En revanche, l'IA agentique change radicalement d'ordre de grandeur énergétique (+62% d'électricité, +51% de CO₂ et 4 500 L d'eau évaporée) : elle impose une stricte sobriété d'usage !"
-            },
-            {
-                title: "Le Verrou Technique : VRAM, Coûts & Singularité",
-                type: "vram-hardware-singularity",
-                intro: "Pourquoi l'IA générative n'a-t-elle pas émergé il y a 10 ans ? La réponse réside dans la <strong>physique du matériel</strong> : la quantité de mémoire VRAM, la taille des paramètres et le coût des infrastructures.",
-                basics: {
-                    title: "📐 Les Mathématiques de la Mémoire",
-                    items: [
-                        { label: "1 Go de VRAM", val: "1 000 000 000 d'octets (8 bits par octet)" },
-                        { label: "Poids par Paramètre", val: "2 octets (Précision FP16 / BF16)" },
-                        { label: "Mémoire du Contexte (KV Cache)", val: "~128 Ko par token (auto-attention GQA)" }
-                    ]
-                },
-                modelsComparison: [
-                    {
-                        title: "🌐 Modèle Open Source Géant (ex. Llama 3.1 405B)",
-                        vramWeights: "800 Go VRAM",
-                        vramContext: "+2 To VRAM (pour 1M tokens)",
-                        totalVram: "2,8 Téraoctets",
-                        cost: "280 000 € HT",
-                        desc: "Modèle en accès libre nécessitant un cluster dédié de 35 cartes GPU d'entreprise."
-                    },
-                    {
-                        title: "🔒 Modèle Propriétaire Ultra-Puissant (ex. GPT-4 / Gemini)",
-                        vramWeights: "5 à 10 To VRAM (Architecture MoE)",
-                        vramContext: "+2 To VRAM (pour 1M tokens)",
-                        totalVram: "jusqu'à 12 Téraoctets",
-                        cost: "1 200 000 € HT (1,2 M€)",
-                        desc: "Cluster multi-serveurs interconnectés réservé aux géants de la Tech."
-                    }
-                ],
-                whyNot10YearsAgo: {
-                    title: "⏳ Pourquoi c'était IMPOSSIBLE il y a 10 ans (2014 vs 2024)",
-                    bullets: [
-                        "<strong>Capacité VRAM :</strong> En 2014, les puces graphiques phares (ex: NVIDIA K80) plafonnaient à 12 Go. Il aurait fallu relier des milliers de cartes physiques.",
-                        "<strong>Vitesse de communication inter-processeurs :</strong> En 2014, le bus PCIe 3.0 (~16 Go/s) créait une saturation totale. L'émergence des bus ultra-rapides modernes (<strong>NVLink / TPU Interconnect</strong> à 900 Go/s - 1,8 To/s) permet désormais de fusionner des milliers de puces en un seul super-cerveau unifié.",
-                        "<strong>Architecture Transformer (2017) :</strong> Invention algorithmique permettant de paralléliser simultanément les calculs sur des milliers de cœurs GPU."
-                    ]
-                },
-                singularity: {
-                    title: "🌌 Projection vers la Singularité (AGI / Superintelligence)",
-                    bio: "<strong>🧠 Comparatif Biologique :</strong> Le cerveau humain compte environ <strong>86 milliards de neurones</strong> et <strong>100 000 milliards de connexions synaptiques</strong>.",
-                    projection: "<strong>⚡ Puissance requise pour l'Omniscience :</strong> Pour égaler ou dépasser la connaissance et le raisonnement humain (AGI/ASI), les chercheurs estiment qu'il faudra une infrastructure réunissant entre <strong>100 et 500 Téraoctets de VRAM ultra-rapide</strong>, exécutant <strong>10¹⁸ à 10²⁰ opérations par seconde (Exaflops)</strong>. Une telle puissance nécessite des datacenters alimentés directement par des réacteurs nucléaires SMR."
-                }
             }
         ]
     },
@@ -583,6 +419,97 @@ const THEMES = [
                     advantage: "Capacité d'analyse, de synthèse et d'adaptation du ton infinie.",
                     drawback: "Si l'information est rare ou absente de sa mémoire de calcul, il comblera le vide en inventant des détails plausibles."
                 }
+            },
+            {
+                title: "Simulateur : La Machine à Parier le Mot Suivant (Température & Softmax)",
+                type: "next-token-simulator",
+                desc: "Un LLM ne « réfléchit » pas comme un humain : pour chaque mot, il calcule un score brut (logit) pour des milliers de candidats, les convertit en probabilités via la fonction <strong>Softmax</strong> selon la <strong>Température</strong>, puis tire un mot au sort.",
+                prompts: [
+                    {
+                        id: "subvention",
+                        label: "🏛️ Subvention municipale",
+                        baseText: "Le conseil municipal décide d'attribuer une subvention pour",
+                        steps: [
+                            [
+                                { token: "l'association", logit: 6.4, tone: "factuel" },
+                                { token: "la", logit: 5.9, tone: "factuel" },
+                                { token: "le", logit: 5.2, tone: "factuel" },
+                                { token: "financer", logit: 4.5, tone: "factuel" },
+                                { token: "installer", logit: 2.3, tone: "creatif" }
+                            ],
+                            [
+                                { token: "rénovation", logit: 6.2, tone: "factuel" },
+                                { token: "création", logit: 5.5, tone: "factuel" },
+                                { token: "protection", logit: 4.7, tone: "factuel" },
+                                { token: "fête", logit: 3.6, tone: "creatif" },
+                                { token: "catapulte", logit: 1.4, tone: "absurde" }
+                            ],
+                            [
+                                { token: "de l'école.", logit: 6.5, tone: "factuel" },
+                                { token: "du gymnase.", logit: 5.8, tone: "factuel" },
+                                { token: "du patrimoine.", logit: 5.0, tone: "factuel" },
+                                { token: "des cygnes.", logit: 2.9, tone: "creatif" },
+                                { token: "spatio-temporelle.", logit: 1.1, tone: "absurde" }
+                            ]
+                        ]
+                    },
+                    {
+                        id: "voirie",
+                        label: "🚧 Signalement voirie",
+                        baseText: "Suite au signalement d'un nid-de-poule rue Victor Hugo, les services",
+                        steps: [
+                            [
+                                { token: "techniques", logit: 6.8, tone: "factuel" },
+                                { token: "municipaux", logit: 6.1, tone: "factuel" },
+                                { token: "de la voirie", logit: 5.4, tone: "factuel" },
+                                { token: "compétents", logit: 4.6, tone: "factuel" },
+                                { token: "secrets", logit: 1.8, tone: "absurde" }
+                            ],
+                            [
+                                { token: "interviendront", logit: 6.3, tone: "factuel" },
+                                { token: "procéderont", logit: 5.8, tone: "factuel" },
+                                { token: "sécuriseront", logit: 5.1, tone: "factuel" },
+                                { token: "installeront", logit: 3.5, tone: "creatif" },
+                                { token: "danseront", logit: 1.2, tone: "absurde" }
+                            ],
+                            [
+                                { token: "dès lundi matin.", logit: 6.4, tone: "factuel" },
+                                { token: "sous 48 heures.", logit: 5.9, tone: "factuel" },
+                                { token: "après validation.", logit: 4.8, tone: "factuel" },
+                                { token: "avec un poney.", logit: 1.3, tone: "absurde" },
+                                { token: "sur la Lune.", logit: 0.9, tone: "absurde" }
+                            ]
+                        ]
+                    },
+                    {
+                        id: "budget",
+                        label: "💶 Délibération budgétaire",
+                        baseText: "Le Maire rappelle que la délibération relative au budget",
+                        steps: [
+                            [
+                                { token: "primitif", logit: 6.7, tone: "factuel" },
+                                { token: "supplémentaire", logit: 5.9, tone: "factuel" },
+                                { token: "annexe", logit: 5.3, tone: "factuel" },
+                                { token: "participatif", logit: 4.5, tone: "creatif" },
+                                { token: "galactique", logit: 1.3, tone: "absurde" }
+                            ],
+                            [
+                                { token: "doit être votée", logit: 6.5, tone: "factuel" },
+                                { token: "sera présentée", logit: 5.7, tone: "factuel" },
+                                { token: "est soumise", logit: 5.1, tone: "factuel" },
+                                { token: "sera chantée", logit: 1.6, tone: "absurde" },
+                                { token: "disparaîtra", logit: 1.1, tone: "absurde" }
+                            ],
+                            [
+                                { token: "avant le 15 avril.", logit: 6.6, tone: "factuel" },
+                                { token: "en séance publique.", logit: 5.8, tone: "factuel" },
+                                { token: "après avis du trésorier.", logit: 5.0, tone: "factuel" },
+                                { token: "à la bougie.", logit: 1.5, tone: "absurde" },
+                                { token: "par tirage au sort.", logit: 1.2, tone: "absurde" }
+                            ]
+                        ]
+                    }
+                ]
             },
             {
                 title: "Le Curseur de Température & Détecteur d'Hallucinations",
@@ -622,53 +549,6 @@ const THEMES = [
                             { match: "réduit leur budget de 40%", type: "blue", label: "Chiffre non étayé", desc: "Statistique spectaculaire inventée sans aucune citation d'étude ou de rapport de la Cour des Comptes." },
                             { match: "résout 99% des litiges", type: "blue", label: "Affirmation Vague", desc: "Affirmation fantaisiste sans preuve ni méthodologie de mesure." }
                         ]
-                    }
-                ]
-            },
-            {
-                title: "Jeu Interactif : Vrai CGCT ou Hallucination IA ?",
-                type: "cgct-truth-game",
-                desc: "Une IA rédige avec un style juridique impeccable, même lorsqu'elle invente un article de loi. Testez votre œil d'agent public sur ces 5 extraits : authentique droit territorial ou pure hallucination ?",
-                cards: [
-                    {
-                        id: "cgct-1",
-                        reference: "CGCT • Art. L.2121-10",
-                        excerpt: "« Toute convocation est faite par le maire. Elle indique les questions portées à l'ordre du jour. Elle est mentionnée au registre des délibérations, affichée ou publiée. Elle est transmise de manière dématérialisée ou, si les conseillers municipaux en font la demande, adressée par écrit à leur domicile ou à une autre adresse. »",
-                        isTrue: true,
-                        clue: "Formulation authentique issue du Code général des collectivités territoriales (Légifrance).",
-                        explanation: "<strong>✅ Authentique !</strong> L'article L.2121-10 du CGCT confie exclusivement au maire la convocation du conseil municipal, impose la mention de l'ordre du jour et prévoit la voie dématérialisée par défaut (ou écrite à la demande du conseiller)."
-                    },
-                    {
-                        id: "cgct-2",
-                        reference: "CGCT • Art. L.2122-48-3",
-                        excerpt: "« Conformément à l'article L.2122-48-3 du CGCT, le maire dispose d'une compétence propre et automatique lui permettant de signer seul tout marché public de travaux inférieur à 250 000 € HT sans aucune délégation préalable du conseil municipal. »",
-                        isTrue: false,
-                        clue: "Numéro d'article L.2122-48-3 inexistant + confusion avec les délégations de l'article L.2122-22.",
-                        explanation: "<strong>🎭 Hallucination IA !</strong> L'article L.2122-48-3 n'existe pas. En réalité, la compétence de principe appartient au conseil municipal, et le maire ne peut signer seul des marchés que s'il a reçu une <strong>délégation expresse</strong> au titre de l'article <strong>L.2122-22 (4°)</strong> dans les limites fixées par l'assemblée."
-                    },
-                    {
-                        id: "cgct-3",
-                        reference: "CGCT • Art. L.2121-17",
-                        excerpt: "« Le conseil municipal ne délibère valablement que lorsque la majorité de ses membres en exercice est présente. Si, après une première convocation régulièrement faite, ce quorum n'est pas atteint, le conseil municipal est à nouveau convoqué à trois jours au moins d'intervalle. Il délibère alors valablement sans condition de quorum. »",
-                        isTrue: true,
-                        clue: "Texte exact sur la règle du quorum et de la seconde convocation à 3 jours.",
-                        explanation: "<strong>✅ Authentique !</strong> C'est l'article L.2121-17 du CGCT. À noter en pratique : les procurations permettent de voter mais ne comptent pas dans le calcul du quorum des membres physiquement présents."
-                    },
-                    {
-                        id: "cgct-4",
-                        reference: "Conseil d'État • 14 nov. 2023, Commune de Saint-Valéry-sur-Vienne, n° 471209",
-                        excerpt: "« Par son arrêt du 14 novembre 2023 (n° 471209), le Conseil d'État a jugé que la publication d'un arrêté municipal sur la page Facebook officielle de la commune suffit désormais à faire courir le délai de recours contentieux de deux mois, en remplacement du site internet communal. »",
-                        isTrue: false,
-                        clue: "Commune fictive, numéro de pourvoi inventé et violation de l'article L.2131-1 du CGCT.",
-                        explanation: "<strong>🎭 Hallucination IA !</strong> Cet arrêt et cette commune sont purement inventés. Depuis la réforme de la publicité des actes (art. L.2131-1 CGCT), la publication légale dématérialisée s'effectue sur le <strong>site internet de la commune</strong> (ou affichage papier pour les communes de moins de 3 500 habitants ayant délibéré en ce sens), jamais via un réseau social privé."
-                    },
-                    {
-                        id: "cgct-5",
-                        reference: "CGCT • Art. L.2122-21-1 (interprétation)",
-                        excerpt: "« En application de l'article L.2122-21-1 du CGCT, en cas d'alerte canicule ou d'intempéries majeures, le maire peut faire voter le budget primitif de la commune par simple échange de courriels individuels entre conseillers municipaux afin d'assurer la continuité financière. »",
-                        isTrue: false,
-                        clue: "Détournement d'un vrai numéro d'article (L.2122-21-1 porte sur la publicité préalable des marchés) pour inventer un vote budgétaire par mail.",
-                        explanation: "<strong>🎭 Hallucination IA !</strong> C'est un piège classique : l'IA prend un numéro d'article réel (L.2122-21-1, qui concerne les marchés publics) et lui attribue une règle inventée. Le budget primitif doit impérativement être adopté en séance régulière du conseil municipal."
                     }
                 ]
             },
@@ -1215,11 +1095,43 @@ const THEMES = [
 [EXIGENCE] : Plan en 3 parties (EGalim, grille, budget). Ton officiel.`
                 },
                 proSteps: [
-                    { num: "1", icon: "🌪️", title: "Brainstormez", desc: "Chat jetable sans filtre" },
-                    { num: "2", icon: "💎", title: "Extrayez", desc: "Isolez les 2 pépites en 1 prompt M.A.I.R.E." },
-                    { num: "3", icon: "🚀", title: "Exécutez", desc: "Nouveau chat vierge = 100% de clarté" }
+                    { num: "1", icon: "🌪️", title: "Brainstormez", desc: "Explorez au brouillon et produisez votre V1" },
+                    { num: "2", icon: "📄", title: "Générez le .md", desc: "Demandez à l'IA une fiche contexte_projet.md" },
+                    { num: "3", icon: "🚀", title: "Repartez à neuf", desc: "Nouveau chat : .md + fichier final = 0 bruit" }
                 ],
-                takeaway: "💡 <strong>Règle d'or :</strong> Ne travaillez jamais dans un fil infini pollué. Quand vos idées sont claires, <strong>tuez le brouillon</strong> et repartez dans un chat neuf !"
+                handoffMd: {
+                    title: "📄 Avant de repartir dans un nouveau chat : le fichier de relais contexte_projet.md",
+                    subtitle: "Dans votre nouvelle conversation vierge, importez uniquement votre fichier .md + votre fichier final généré pour poursuivre le travail avec 100 % des décisions et 0 % de bruit.",
+                    fileName: "contexte_projet.md",
+                    promptTitle: "1. Prompt à envoyer en fin de conversation brouillon",
+                    promptToGenerate: `Avant de clôturer cette conversation, génère un fichier Markdown nommé contexte_projet.md destiné à reprendre le projet dans une nouvelle conversation vierge, sans aucun bruit historique.
+Structure-le strictement ainsi :
+1. Objectif & contexte métier (rôle, public cible, cadre réglementaire)
+2. Décisions actées et validées (ce qui ne doit plus être remis en cause)
+3. Fichier(s) final(aux) produit(s) et leur rôle exact
+4. Prochaines étapes précises à réaliser
+Exclus totalement les essais abandonnés, erreurs corrigées et hésitations passées.`,
+                    templateTitle: "2. Exemple de fichier contexte_projet.md généré",
+                    mdTemplate: `# Contexte Projet — Tarification Sociale Cantine
+
+## 1. Objectif & Cadre Métier
+- **Rôle :** Responsable Finances & Éducation (commune 18 000 hab.)
+- **Livrable :** Note de cadrage DGS / Élus (ton officiel, loi EGalim)
+
+## 2. Décisions Validées (ne plus modifier)
+- 4 tranches de quotient familial : de 1,00 € à 4,90 €
+- Coût de revient constaté : 4,20 € / repas
+- Plan validé : 1. Cadre EGalim • 2. Grille tarifaire • 3. Impact budgétaire
+
+## 3. Fichier Final Produit (à joindre au nouveau chat)
+- \`note_cadrage_cantine_v1.docx\` (ou \`simulateur_cantine.html\`)
+
+## 4. Prochaines Étapes
+- Rédiger l'annexe budgétaire sur 3 ans
+- Préparer une FAQ d'une page pour les parents d'élèves`,
+                    restartFormula: "✨ Nouveau chat vierge = <strong>📎 contexte_projet.md</strong> + <strong>📄 votre fichier final généré</strong> ➔ reprise immédiate, zéro hallucination d'historique !"
+                },
+                takeaway: "💡 <strong>Règle d'or :</strong> Ne poursuivez jamais un long projet dans un fil pollué. Avant de fermer le brouillon, faites générer <code>contexte_projet.md</code>, puis repartez dans un chat neuf avec uniquement <strong>ce .md + votre fichier final</strong> !"
             },
             {
                 title: "Ce que peut vous fournir en sortie une IA",
@@ -1544,6 +1456,50 @@ const THEMES = [
                     { label: "8-bit (Précision Moyenne)", bytesPerParam: 1.10 },
                     { label: "16-bit (Précision FP16 Totale)", bytesPerParam: 2.00 }
                 ]
+            },
+            {
+                title: "Le Verrou Technique : VRAM, Coûts & Singularité",
+                type: "vram-hardware-singularity",
+                intro: "Pourquoi l'IA générative n'a-t-elle pas émergé il y a 10 ans ? La réponse réside dans la <strong>physique du matériel</strong> : la quantité de mémoire VRAM, la taille des paramètres et le coût des infrastructures.",
+                basics: {
+                    title: "📐 Les Mathématiques de la Mémoire",
+                    items: [
+                        { label: "1 Go de VRAM", val: "1 000 000 000 d'octets (8 bits par octet)" },
+                        { label: "Poids par Paramètre", val: "2 octets (Précision FP16 / BF16)" },
+                        { label: "Mémoire du Contexte (KV Cache)", val: "~128 Ko par token (auto-attention GQA)" }
+                    ]
+                },
+                modelsComparison: [
+                    {
+                        title: "🌐 Modèle Open Source Géant (ex. Llama 3.1 405B)",
+                        vramWeights: "800 Go VRAM",
+                        vramContext: "+2 To VRAM (pour 1M tokens)",
+                        totalVram: "2,8 Téraoctets",
+                        cost: "280 000 € HT",
+                        desc: "Modèle en accès libre nécessitant un cluster dédié de 35 cartes GPU d'entreprise."
+                    },
+                    {
+                        title: "🔒 Modèle Propriétaire Ultra-Puissant (ex. GPT-4 / Gemini)",
+                        vramWeights: "5 à 10 To VRAM (Architecture MoE)",
+                        vramContext: "+2 To VRAM (pour 1M tokens)",
+                        totalVram: "jusqu'à 12 Téraoctets",
+                        cost: "1 200 000 € HT (1,2 M€)",
+                        desc: "Cluster multi-serveurs interconnectés réservé aux géants de la Tech."
+                    }
+                ],
+                whyNot10YearsAgo: {
+                    title: "⏳ Pourquoi c'était IMPOSSIBLE il y a 10 ans (2014 vs 2024)",
+                    bullets: [
+                        "<strong>Capacité VRAM :</strong> En 2014, les puces graphiques phares (ex: NVIDIA K80) plafonnaient à 12 Go. Il aurait fallu relier des milliers de cartes physiques.",
+                        "<strong>Vitesse de communication inter-processeurs :</strong> En 2014, le bus PCIe 3.0 (~16 Go/s) créait une saturation totale. L'émergence des bus ultra-rapides modernes (<strong>NVLink / TPU Interconnect</strong> à 900 Go/s - 1,8 To/s) permet désormais de fusionner des milliers de puces en un seul super-cerveau unifié.",
+                        "<strong>Architecture Transformer (2017) :</strong> Invention algorithmique permettant de paralléliser simultanément les calculs sur des milliers de cœurs GPU."
+                    ]
+                },
+                singularity: {
+                    title: "🌌 Projection vers la Singularité (AGI / Superintelligence)",
+                    bio: "<strong>🧠 Comparatif Biologique :</strong> Le cerveau humain compte environ <strong>86 milliards de neurones</strong> et <strong>100 000 milliards de connexions synaptiques</strong>.",
+                    projection: "<strong>⚡ Puissance requise pour l'Omniscience :</strong> Pour égaler ou dépasser la connaissance et le raisonnement humain (AGI/ASI), les chercheurs estiment qu'il faudra une infrastructure réunissant entre <strong>100 et 500 Téraoctets de VRAM ultra-rapide</strong>, exécutant <strong>10¹⁸ à 10²⁰ opérations par seconde (Exaflops)</strong>. Une telle puissance nécessite des datacenters alimentés directement par des réacteurs nucléaires SMR."
+                }
             },
             {
                 title: "Les Datacenters Spatiaux & Nucléaires",

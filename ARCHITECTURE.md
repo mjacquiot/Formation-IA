@@ -27,12 +27,12 @@ graph TD
 | :--- | :--- | :--- |
 | [index.html](./index.html) | Structure | Squelette HTML5 (Sidebar, Visionneuse de slides, Overlays d'authentification, Projecteur HTML sandboxé, Panneau d'interactivité). |
 | [style.css](./style.css) | Style | Feuilles de styles complètes (Thèmes par catégorie, responsive mobile, animations, pillule de ré-entrée stagiaire). |
-| [content.js](./content.js) | Données (Slides) | Base de cours `THEMES` (**12 thèmes**, **60 diapositives**, **55 types de rendus**), évaluation finale (`eval-stage` à 5 questions) et banque `INTERACTIVE_QUESTIONS` (**10 quiz interactifs** à 4 options A/B/C/D). |
+| [content.js](./content.js) | Données (Slides) | Base de cours `THEMES` (**12 thèmes**, **58 diapositives**, **53 types de rendus**), évaluation finale (`eval-stage` à 5 questions) et banque `INTERACTIVE_QUESTIONS` (**10 quiz interactifs** à 4 options A/B/C/D). |
 | [exercises.js](./exercises.js) | Données (Exercices) | Banque de **60 exercices pratiques** (`EXERCISES_DATABASE` : 30 PC / 30 Papier, 35 individuels / 25 groupes) avec énoncés, corrigés et buts pédagogiques. |
 | [slide_renderer.js](./slide_renderer.js) | Rendu UI | Moteur de génération HTML dynamique (`getSlideHTML()`) selon `slide.type`. |
 | [qrcode_local.js](./qrcode_local.js) | QR Code Local | Générateur de QR Code 100 % autonome en JavaScript pur (SVG local, zéro appel réseau externe). |
 | [app.js](./app.js) | Noyau Applicatif | Cycle de vie de la classe `TrainingApp`, routage des diapositives, navigation clavier protégée pendant la saisie, barre latérale et progression. |
-| [app_slides.js](./app_slides.js) | Outils Diapos | Évènements et simulateurs des diapositives (Tokenisation, Mot suivant Softmax, Crash-test Fenêtre de Contexte, Jeu CGCT, Grands défis IA, Anonymiseur, Calculateur VRAM & Singularité, Calculateur TCO SecNumCloud, Matrice Modèles, Filtres catalogue). |
+| [app_slides.js](./app_slides.js) | Outils Diapos | Évènements et simulateurs des diapositives (Tokenisation, Mot suivant Softmax, Crash-test Fenêtre de Contexte, Grands défis IA, Anonymiseur, Calculateur VRAM & Singularité, Calculateur TCO SecNumCloud, Matrice Modèles, Filtres catalogue). |
 | [app_supabase.js](./app_supabase.js) | Synchro Base | Client Supabase, détection des rôles, état atomique `sessions.state` (JSONB avec repli legacy automatique), heartbeats de présence et projecteur `index.html`. |
 | [app_interactivity.js](./app_interactivity.js) | Drawer d'Interaction | Pilotage formateur et participation stagiaire (Quiz, Tests Généraux, Tests Libres / Sondages Express, Ateliers, Zoom Grand Écran, bouton de ré-entrée stagiaire). |
 | [supabase_setup.sql](./supabase_setup.sql) | Schéma BDD | Script complet d'installation des tables `sessions`, `presences`, `votes`, Realtime et politiques RLS durcies. |

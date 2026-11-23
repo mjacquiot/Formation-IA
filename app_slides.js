@@ -353,6 +353,22 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
                 vClean.style.display = 'none';
             };
         }
+
+        const btnDownloadMd = this.slideContainer.querySelector('#btn-download-handoff-md');
+        if (btnDownloadMd && slide.handoffMd && slide.handoffMd.mdTemplate) {
+            btnDownloadMd.onclick = () => {
+                const fileName = slide.handoffMd.fileName || 'contexte_projet.md';
+                const blob = new Blob([slide.handoffMd.mdTemplate], { type: 'text/markdown;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+        }
     }
 
     // Post-render bindings
@@ -1136,154 +1152,6 @@ TrainingApp.prototype.bindSlideInteractivity = function(slide) {
             }
 
             renderContextCrashTest();
-        }
-
-        if (slide.type === 'cgct-truth-game') {
-            const cards = slide.cards || [];
-            const progressEl = this.slideContainer.querySelector('#cgct-progress');
-            const scoreEl = this.slideContainer.querySelector('#cgct-score');
-            const stageEl = this.slideContainer.querySelector('#cgct-card-stage');
-            const btnRevealOnly = this.slideContainer.querySelector('#btn-cgct-reveal-only');
-
-            let currentIdx = 0;
-            let showSummary = false;
-            const resultsMap = {}; // idx -> { voted: boolean, userGuess: boolean|null, isCorrect: boolean }
-
-            const getScoreStats = () => {
-                const entries = Object.values(resultsMap).filter(r => r.voted);
-                const correctCount = entries.filter(r => r.isCorrect).length;
-                return { correctCount, totalVoted: entries.length };
-            };
-
-            const renderGame = () => {
-                const stats = getScoreStats();
-                if (scoreEl) scoreEl.innerText = `Score : ${stats.correctCount} / ${stats.totalVoted}`;
-                if (progressEl) {
-                    progressEl.innerText = showSummary ? `Bilan final` : `Extrait ${currentIdx + 1} / ${cards.length}`;
-                }
-                if (btnRevealOnly) {
-                    btnRevealOnly.style.display = showSummary ? 'none' : 'inline-flex';
-                }
-                if (!stageEl) return;
-
-                if (showSummary) {
-                    const pct = cards.length > 0 ? Math.round((stats.correctCount / cards.length) * 100) : 0;
-                    const verdictMsg = stats.correctCount >= 4
-                        ? '🏆 Excellent réflexe critique ! Vous ne vous laissez pas piéger par le style juridique fluide des LLM.'
-                        : '⚠️ Vigilance renforcée requise : la forme impeccable d’un texte IA masque parfois des numéros d’articles ou arrêts inventés.';
-
-                    stageEl.innerHTML = `
-                        <div class="cgct-summary-card">
-                            <div class="cgct-summary-score">${stats.correctCount} / ${cards.length} <span>(${pct} %)</span></div>
-                            <p class="cgct-summary-msg">${verdictMsg}</p>
-                            <div class="cgct-summary-actions">
-                                <button type="button" class="btn btn-primary" id="btn-cgct-replay">↺ Rejouer les 5 extraits</button>
-                            </div>
-                        </div>
-                    `;
-                    const btnReplay = stageEl.querySelector('#btn-cgct-replay');
-                    if (btnReplay) {
-                        btnReplay.onclick = () => {
-                            currentIdx = 0;
-                            showSummary = false;
-                            Object.keys(resultsMap).forEach(k => delete resultsMap[k]);
-                            renderGame();
-                        };
-                    }
-                    return;
-                }
-
-                const card = cards[currentIdx];
-                if (!card) return;
-                const res = resultsMap[currentIdx];
-
-                let feedbackHtml = '';
-                if (res) {
-                    let bannerClass = 'cgct-banner-neutral';
-                    let bannerTitle = '👁️ Correction révélée pour la salle';
-                    if (res.voted) {
-                        bannerClass = res.isCorrect ? 'cgct-banner-ok' : 'cgct-banner-ko';
-                        bannerTitle = res.isCorrect
-                            ? '🎉 Bonne détection !'
-                            : '❌ Piégé par le style juridique de l\'IA !';
-                    }
-                    feedbackHtml = `
-                        <div class="cgct-feedback-box ${bannerClass}">
-                            <div class="cgct-feedback-title">${bannerTitle}</div>
-                            <div class="cgct-clue"><strong>🔍 Indice clé :</strong> ${this.escapeHtml(card.clue)}</div>
-                            <div class="cgct-explanation">${card.explanation}</div>
-                        </div>
-                    `;
-                }
-
-                stageEl.innerHTML = `
-                    <div class="cgct-card">
-                        <div class="cgct-card-ref">⚖️ Référence citée par l'IA : <strong>${this.escapeHtml(card.reference)}</strong></div>
-                        <blockquote class="cgct-excerpt">${this.escapeHtml(card.excerpt)}</blockquote>
-
-                        ${!res ? `
-                            <div class="cgct-vote-buttons">
-                                <button type="button" class="btn cgct-btn-true" id="btn-cgct-true">✅ Authentique (Vrai droit)</button>
-                                <button type="button" class="btn cgct-btn-fake" id="btn-cgct-fake">🎭 Hallucination IA</button>
-                            </div>
-                        ` : feedbackHtml}
-
-                        <div class="cgct-nav-row">
-                            <button type="button" class="btn btn-secondary btn-sm" id="btn-cgct-prev" ${currentIdx === 0 ? 'disabled' : ''}>◀ Précédent</button>
-                            <button type="button" class="btn btn-primary btn-sm" id="btn-cgct-next">
-                                ${currentIdx === cards.length - 1 ? '📊 Voir le bilan final' : 'Extrait suivant ➔'}
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                const btnTrue = stageEl.querySelector('#btn-cgct-true');
-                const btnFake = stageEl.querySelector('#btn-cgct-fake');
-                const btnPrev = stageEl.querySelector('#btn-cgct-prev');
-                const btnNext = stageEl.querySelector('#btn-cgct-next');
-
-                if (btnTrue) {
-                    btnTrue.onclick = () => {
-                        resultsMap[currentIdx] = { voted: true, userGuess: true, isCorrect: card.isTrue === true };
-                        renderGame();
-                    };
-                }
-                if (btnFake) {
-                    btnFake.onclick = () => {
-                        resultsMap[currentIdx] = { voted: true, userGuess: false, isCorrect: card.isTrue === false };
-                        renderGame();
-                    };
-                }
-                if (btnPrev) {
-                    btnPrev.onclick = () => {
-                        if (currentIdx > 0) {
-                            currentIdx--;
-                            renderGame();
-                        }
-                    };
-                }
-                if (btnNext) {
-                    btnNext.onclick = () => {
-                        if (currentIdx < cards.length - 1) {
-                            currentIdx++;
-                        } else {
-                            showSummary = true;
-                        }
-                        renderGame();
-                    };
-                }
-            };
-
-            if (btnRevealOnly) {
-                btnRevealOnly.onclick = () => {
-                    if (!resultsMap[currentIdx]) {
-                        resultsMap[currentIdx] = { voted: false, userGuess: null, isCorrect: false };
-                    }
-                    renderGame();
-                };
-            }
-
-            renderGame();
         }
 
         // Bind poll opening from slides
